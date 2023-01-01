@@ -12,14 +12,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .email import ActivationEmail, ConfirmationEmail, PasswordChangedConfirmationEmail, PasswordResetEmail
 from .serializers import (
+    AccountActivationSerializer,
     AccountRedSerializer,
+    AccountRegistrationSerializer,
     AccountWriteSerializer,
     ChangePasswordSerializer,
     CheckAccountSerializer,
     LoginTokenObtainSerializer,
     ResetPasswordSerializer,
-    AccountActivationSerializer,
-    AccountRegistrationSerializer,
 )
 from .utils import account_activation_token, get_user_email
 
@@ -82,7 +82,7 @@ def profileUser(request):
     except Account.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == "GET":
-        serializer = AccountRedSerializer(user,context={"request": request})
+        serializer = AccountRedSerializer(user, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -98,7 +98,6 @@ def updateprofileUser(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == "PUT":
         serializer = AccountWriteSerializer(user, data=request.data, partial=True)
-        context = {}
         if serializer.is_valid():
             account = serializer.save()
             new_serializer = AccountRedSerializer(account, context={"request": request})
