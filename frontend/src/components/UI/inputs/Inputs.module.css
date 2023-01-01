@@ -1,0 +1,13 @@
+.inputs {
+  padding: 6px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inputs input {
+  width: 332px;
+  padding: 14px 16px;
+  background-color: transparent;
+  border-radius: 6px;
+  border: 1px solid #dddfe2;
+}

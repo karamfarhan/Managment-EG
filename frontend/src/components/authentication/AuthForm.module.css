@@ -1,0 +1,22 @@
+.form_container {
+  width: 396px;
+  height: 350px;
+  margin: 120px auto;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+  border-radius: 8px;
+  padding-top: 10px;
+  background-color: #fff;
+}
+.action_submit {
+  text-align: center;
+}
+.action_submit button {
+  background-color: #1877f2;
+  border: none;
+  border-radius: 6px;
+  font-size: 21px;
+  line-height: 48px;
+  padding: 0 16px;
+  width: 332px;
+  color: #fff;
+}
