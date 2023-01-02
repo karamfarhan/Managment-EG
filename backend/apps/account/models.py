@@ -1,13 +1,12 @@
 import uuid
-from PIL import Image
+
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from PIL import Image
 
 from .managers import MyAccountManager
-from .utils import (
-    get_default_profile_image,
-    get_profile_image_filepath,
-)
+from .utils import get_default_profile_image, get_profile_image_filepath
+
 # from .utils import EmailThread
 
 
@@ -15,8 +14,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     email = models.EmailField(verbose_name="email address", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=30, blank=True, null=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="last update", auto_now=True)
 
@@ -49,7 +48,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     def save(self, *args, **kwargs):
-        super(Account, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         img = Image.open(self.profile_image.path)
 
@@ -69,9 +68,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     #     EmailThread(email).start()
 
     def get_profile_image_filename(self):
-        return str(self.profile_image)[
-            str(self.profile_image).index(f"profile_images/{str(self.pk)}/") :
-        ]
+        return str(self.profile_image)[str(self.profile_image).index(f"profile_images/{str(self.pk)}/") :]
 
     # For checking permissions. to keep it simple all admin have ALL permissons
     def has_perm(self, perm, obj=None):
