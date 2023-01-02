@@ -1,15 +1,15 @@
 version: "3.9"
 services:
-  # frontend:
-  #   build:
-  #     context: .
-  #     dockerfile: ./frontend/Dockerfile
-  #   volumes:
-  #     - ./frontend/src:/app/src
-  #   container_name: frontend
-  #   ports:
-  #     - 3000:3000
-  #   command: npm start
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    volumes:
+      - ./frontend/src:/app/src
+    container_name: frontend
+    ports:
+      - 3000:3000
+    command: npm start
 
   django:
     build:
