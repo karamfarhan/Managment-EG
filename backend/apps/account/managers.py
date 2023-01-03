@@ -23,7 +23,7 @@ class MyAccountManager(BaseUserManager):
             username=username,
             **other_fields,
         )
-        user.is_admin = True
+        # user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
         user.is_active = True

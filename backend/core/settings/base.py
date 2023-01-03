@@ -230,6 +230,7 @@ EMAIL_HOST_PASSWORD = ""
 JAZZMIN_SETTINGS = {"show_ui_builder": True}
 
 
+
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Mountain For Construction",

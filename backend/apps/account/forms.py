@@ -1,11 +1,16 @@
 from apps.account.models import Account
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 
 class RegistrationForm(UserCreationForm):
-
-    email = forms.EmailField(max_length=254, help_text="Required. Add a valid email address.")
+    email = forms.EmailField(
+        max_length=254,
+        help_text="Required. Add a valid email address.",
+    )
+    username = forms.CharField(max_length=50, help_text="Required. Add a valid username.", required=True)
+    password1 = forms.CharField(min_length=8, help_text="Required. Enter a password with at least 8 characters.")
+    password2 = forms.CharField(min_length=8, help_text="Required. Enter the same password as before.")
 
     class Meta:
         model = Account
@@ -16,25 +21,61 @@ class RegistrationForm(UserCreationForm):
             "password2",
         )
 
-        # over the orjinal method for validate the email
-        # you can overwrite any filed validate method by type (clean_fieldname)
-        #  to return any response you want like errors
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        email = email.lower()
+        return email
+
+
+class UpdateAccountForm(UserChangeForm):
+    email = forms.EmailField(max_length=254, help_text="Required. Add a valid email address.", required=True)
+    username = forms.CharField(max_length=50, help_text="Required. Add a valid username.", required=True)
+
+    class Meta:
+        model = Account
+        fields = (
+            "email",
+            "username",
+        )
 
     def clean_email(self):
-        email = self.cleaned_data["email"].lower()
-        try:
-            _ = Account.objects.exclude(pk=self.instance.pk).get(email=email)
-        except Account.DoesNotExist:
-            return email
-        raise forms.ValidationError(f'Email "{email}" is already in use.')
+        email = self.cleaned_data["email"]
+        email = email.lower()
+        return email
 
-    def clean_username(self):
-        username = self.cleaned_data["username"]
-        try:
-            _ = Account.objects.exclude(pk=self.instance.pk).get(username=username)
-        except Account.DoesNotExist:
-            return username
-        raise forms.ValidationError(f'Username "{username}" is already in use.')
+
+# class RegistrationForm(UserCreationForm):
+#     email = forms.EmailField(max_length=254, help_text="Required. Add a valid email address.")
+#     username = forms.CharField(max_length=50, help_text="Required. Add a valid username.")
+
+#     class Meta:
+#         model = Account
+#         fields = (
+#             "email",
+#             "username",
+#             "password1",
+#             "password2",
+#         )
+
+# over the orjinal method for validate the email
+# you can overwrite any filed validate method by type (clean_fieldname)
+#  to return any response you want like errors
+
+# def clean_email(self):
+#     email = self.cleaned_data["email"]
+#     try:
+#         _ = Account.objects.exclude(pk=self.instance.pk).get(email=email)
+#     except Account.DoesNotExist:
+#         return email
+#     raise forms.ValidationError(f'This Email is already in use.')
+
+# def clean_username(self):
+#     username = self.cleaned_data["username"]
+#     try:
+#         _ = Account.objects.exclude(pk=self.instance.pk).get(username=username)
+#     except Account.DoesNotExist:
+#         return username
+#     raise forms.ValidationError(f'Username "{username}" is already in use.')
 
 
 # # LOGIN FORM

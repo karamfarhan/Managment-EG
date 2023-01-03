@@ -22,7 +22,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
 
-    is_admin = models.BooleanField(default=False)
+    # is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     hide_email = models.BooleanField(default=True)
@@ -71,9 +71,9 @@ class Account(AbstractBaseUser, PermissionsMixin):
         return str(self.profile_image)[str(self.profile_image).index(f"profile_images/{str(self.pk)}/") :]
 
     # For checking permissions. to keep it simple all admin have ALL permissons
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
+    # def has_perm(self, perm, obj=None):
+    #     return self.is_admin
 
     # Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
-    def has_module_perms(self, app_label):
-        return True
+    # def has_module_perms(self, app_label):
+    #     return True
