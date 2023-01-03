@@ -13,6 +13,7 @@ cryptography==38.0.3
 cssselect2==0.7.0
 Django==4.0
 django-cors-headers==3.10.1
+django-jazzmin==2.6.0
 djangorestframework==3.13.1
 djangorestframework-simplejwt==5.2.2
 drf-extra-fields==3.4.1
