@@ -56,10 +56,10 @@ const registerApi = async()=> {
 
 
 
-    return <> <Inputs type = "email" placeholder="البريد الالكتروني" value = {email} id = "email" onChange = {handleChange} />
-    <Inputs type = "email" placeholder="اسم المستخدم"  value = {username} id = "user_name" onChange = {handleChange}/>
-    <Inputs type = "password" placeholder="الرقم السري" value = {password} onChange = {handleChange}/>
-    <Inputs type = "password" placeholder="أعد كتابة كلمة السر" value = {repeat_password} onChange = {handleChange}/>
+    return <> <Inputs type = "email" placeholder="البريد الالكتروني" value = {email} id = "email" onChange = {(e)=> setSignUpData({...signUpData, email : e.target.value })} />
+    <Inputs type = "text" placeholder="اسم المستخدم"  value = {username} id = "user_name" onChange = {(e)=> setSignUpData({...signUpData, username : e.target.value })}/>
+    <Inputs type = "password" placeholder="الرقم السري" value = {password} onChange = {(e)=> setSignUpData({...signUpData, password : e.target.value })}/>
+    <Inputs type = "password" placeholder="أعد كتابة كلمة السر" value = {repeat_password} onChange = {(e)=> setSignUpData({...signUpData, repeat_password : e.target.value })}/>
 
     <button type="submit" className={classes.createNewAccBtn} onClick={registerApi}> انشاء حساب </button>
 
