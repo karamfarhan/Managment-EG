@@ -18,3 +18,10 @@ body {
   background-color: #f0f2f5;
   font-family: "Roboto", sans-serif;
 }
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
