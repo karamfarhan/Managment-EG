@@ -8,6 +8,7 @@ urlpatterns = [
     # path('',home_screen_view, name="home"),
     path("admin/", admin.site.urls),
     path("account/", include("apps.account.urls")),
+    path("", include("apps.store.urls")),
 ]
 
 
