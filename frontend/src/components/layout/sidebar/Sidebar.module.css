@@ -1,11 +1,11 @@
 .sidebar {
-  background-color: #4e73df;
+  background-color: #2150d8;
   min-height: calc(100vh);
   width: var(--side-width);
   position: fixed;
   right: 0;
   top: 0;
-  z-index: -1;
+  z-index: s;
   padding-top: var(--header-height);
 }
 
@@ -29,14 +29,17 @@
   align-items: center;
   gap: 20px;
   color: rgba(255, 255, 255, 0.8);
-  padding: 20px 10px;
+  padding: 10px;
   cursor: pointer;
   font-size: 25px;
   text-decoration: none;
 }
-.sidebar li:hover {
-  color: #fff;
-  background-color: #9291db;
+.active {
+}
+.sidebar li:hover a {
+  background: "#fff";
+  color: "#2150d8";
+  border-radius: "58px 40px 40px 7px";
 }
 .sidebar li a span {
   width: 30px;

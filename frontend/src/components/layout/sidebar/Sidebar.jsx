@@ -9,6 +9,12 @@ import { FaCarSide } from "react-icons/fa";
 import classes from "./Sidebar.module.css";
 import { GalleryIcon } from "../../icons/GalleryIcon";
 
+const activeClass = {
+  background: "#fff",
+  color: "#2150d8",
+  " border-radius": "58px 40px 40px 7px",
+};
+
 const Sidebar = () => {
   return (
     <aside dir="rtl" className={classes.sidebar}>
@@ -18,9 +24,12 @@ const Sidebar = () => {
             to="/staff"
             style={({ isActive }) => {
               return {
-                background: isActive ? "#9291db" : "inherit",
+                background: isActive ? "#fff" : "inherit",
+                color: isActive ? "#2150d8" : "#fff",
+                borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
               };
-            }}>
+            }}
+          >
             <span>
               <StaffIcon />
             </span>
@@ -32,9 +41,12 @@ const Sidebar = () => {
             to="/store"
             style={({ isActive }) => {
               return {
-                background: isActive ? "#9291db" : "inherit",
+                background: isActive ? "#fff" : "inherit",
+                color: isActive ? "#2150d8" : "#fff",
+                borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
               };
-            }}>
+            }}
+          >
             <span>
               <StoreIcon />
             </span>
@@ -46,9 +58,12 @@ const Sidebar = () => {
             to="/gallery"
             style={({ isActive }) => {
               return {
-                background: isActive ? "#9291db" : "inherit",
+                background: isActive ? "#fff" : "inherit",
+                color: isActive ? "#2150d8" : "#fff",
+                borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
               };
-            }}>
+            }}
+          >
             <span>
               <GalleryIcon />
             </span>
@@ -61,9 +76,12 @@ const Sidebar = () => {
             to="/cars"
             style={({ isActive }) => {
               return {
-                background: isActive ? "#9291db" : "inherit",
+                background: isActive ? "#fff" : "inherit",
+                color: isActive ? "#2150d8" : "#fff",
+                borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
               };
-            }}>
+            }}
+          >
             <span>
               <FaCarSide />
             </span>
