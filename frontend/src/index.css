@@ -25,3 +25,10 @@ button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+/* error msg */
+
+.err-msg {
+  color: red;
+  font-size: 12px;
+}

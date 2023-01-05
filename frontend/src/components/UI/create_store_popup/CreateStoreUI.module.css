@@ -1,0 +1,56 @@
+.backdrop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 11;
+}
+
+.formContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 30px;
+  transform: translate(-50%, -50%);
+  z-index: 111;
+  background: #fff;
+  width: 70%;
+  padding: 30px 60px;
+}
+.formContent form > div:first-of-type {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.formContent ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 20px;
+  border-top: 1px solid #777;
+}
+.formContent li {
+  text-align: center;
+}
+.itemsContent input {
+  width: auto;
+  padding: 5px;
+}
+.formContent select {
+  width: 60px;
+}
+
+.formContent button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #2a4bf7;
+  background-color: #2a4bf7;
+  color: #fff;
+  font-size: 17px;
+  margin-top: 30px;
+}

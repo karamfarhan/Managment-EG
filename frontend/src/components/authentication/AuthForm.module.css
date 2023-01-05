@@ -9,11 +9,11 @@
   font-size: 60px;
   text-align: center;
 }
-@media(max-width : 991px) {
+@media (max-width: 991px) {
   .main h1 {
-    display: none
+    display: none;
   }
-} 
+}
 .form_container {
   width: 368px;
   min-height: 350px;
@@ -52,12 +52,12 @@
   color: #fff;
 }
 
-.alreadyHaveAcc{
+.alreadyHaveAcc {
   background-color: transparent;
   font-size: 15px !important;
   color: blue;
 }
-.forgetPass{
+.forgetPass {
   background-color: transparent;
   color: blue;
   text-decoration: underline;
@@ -66,16 +66,19 @@
   cursor: pointer;
   margin-bottom: 10px;
 }
-.submitBtn:hover{
+.submitBtn:hover {
   background-color: #1876f2c9;
-  
 }
 .createNewAccBtn {
-  background-color:#42b72a ;
+  background-color: #42b72a;
   color: #fff;
-
 }
 .createNewAccBtn:hover {
-  background-color:#42b72ace ;
+  background-color: #42b72ace;
+}
 
-} 
+/* unauth class */
+.unauth button[type="submit"] {
+  border: 1px solid red;
+  background-color: red;
+}

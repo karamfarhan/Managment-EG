@@ -6,6 +6,7 @@
   right: 0;
   top: 0;
   z-index: s;
+  text-align: center;
   padding-top: var(--header-height);
 }
 
@@ -23,6 +24,7 @@
 }
 .sidebar ul {
   padding-top: 60px;
+  margin-bottom: 200px;
 }
 .sidebar li a {
   display: flex;
@@ -43,4 +45,20 @@
 }
 .sidebar li a span {
   width: 30px;
+}
+
+/* logout button */
+.logoutBtn {
+  background: #f14f4c;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  font-size: 22px;
+}
+@media (max-width: 767px) {
+  .logoutBtn {
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
+  }
 }

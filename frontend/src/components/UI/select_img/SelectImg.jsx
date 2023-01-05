@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import ReactDOM from "react-dom";
-import { AiOutlineFileImage } from "react-icons/ai";
-
+import { AiOutlineFileImage, AiOutlineDelete } from "react-icons/ai";
 import classes from "./SelectImg.module.css";
 
 export const Backdrop = ({ hideImageHandler }) => {
@@ -31,7 +30,6 @@ export const ImgSelect = ({
           return URL.createObjectURL(file);
         }
       });
-
       setImgSrc((prevImg) => prevImg.concat(imagesArr));
     }
   }
@@ -94,9 +92,20 @@ export const ImgSelect = ({
             {imgSrc &&
               imgSrc.map((el, index) => {
                 return (
-                  <figure key={index}>
-                    <img src={el} alt="f" />
-                  </figure>
+                  <div key={index}>
+                    <figure>
+                      <img src={el} alt="title" />
+                    </figure>
+                    <div className={classes.prev}>
+                      <p> {index + 1} </p>
+                      <button
+                        onClick={() =>
+                          setImgSrc(imgSrc.filter((e) => e != el))
+                        }>
+                        {<AiOutlineDelete />}
+                      </button>
+                    </div>
+                  </div>
                 );
               })}
           </div>
@@ -106,7 +115,7 @@ export const ImgSelect = ({
           <button disabled={isDisable} onClick={addImgsHandler}>
             تأكيد
           </button>
-          <button>الغاء</button>
+          <button onClick={hideImageHandler}>الغاء</button>
         </div>
       </div>
     </Fragment>
