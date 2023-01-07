@@ -248,3 +248,16 @@ class UserActivationView(APIView):
         else:
             response_date["response"] = serializer.errors["non_field_errors"][0]
             return render(request, "email/account_activation_message.html", response_date)
+
+
+@api_view(["POST"])
+@permission_classes([])
+@authentication_classes([])
+def activate_for_testing(request):
+    if request.method == "POST":
+        account = Account.objects.get(email=request.data["email"])
+        account.is_active = True
+        account.email_verified = True
+        account.save()
+        return Response({"message": "activation success"}, status=status.HTTP_201_CREATED)
+    return Response({"message": " activation failed"}, status=status.HTTP_400_BAD_REQUEST)

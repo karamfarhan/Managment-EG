@@ -6,12 +6,12 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Instrument, InvoiceSubstanceItem, Substance, SubstanceCategory
+from .models import Category, Instrument, InvoiceSubstanceItem, Substance
 from .serializers import (
+    CategorySerializer,
     InstrumentReadSerializer,
     InstrumentSelectBarSerializer,
     InstrumentWriteSerializer,
-    SubstanceCategorySerializer,
     SubstanceReadSerializer,
     SubstanceSelectBarSerializer,
     SubstanceWriteSerializer,
@@ -22,32 +22,23 @@ SUCCESS_UPDATE = "successfully updated"
 SUCCESS_DELETE = "successfully deleted"
 
 
-class SubstanceCategoryVewSet(viewsets.ViewSet):
+class CategoryVewSet(viewsets.ViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = SubstanceCategory.objects.all()
+    queryset = Category.objects.all()
     # TRY THIS AND ENABLE get_queryset func MAYBE IT WILL BE BETTER
     # def get_queryset(self):
     #     return self.queryset.filter(owner=self.request.user)
 
     def list(self, request, *args, **kwargs):
-        # queryset = Store.objects.filter(owner=request.user)
-        context = {"request": request}
-        serializer_class = SubstanceCategorySerializer(self.queryset, context=context, many=True)
+        queryset = Category.objects.all()
+        serializer_class = CategorySerializer(queryset, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
-
-    # def retrieve(self, request, *args, **kwargs):
-    #     pk = kwargs.get("pk")
-    #     image = get_object_or_404(self.queryset, pk=pk)
-    #     context = {"request": request}
-    #     serializer_class = ImageSerializer(image, context=context)
-    #     return Response(serializer_class.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        serializer = SubstanceCategorySerializer(data=data)
+        serializer = CategorySerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(created_by=request.user)
-
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

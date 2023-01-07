@@ -27,4 +27,6 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name="email/password_reset_complete.html"),
         name="password_reset_complete",
     ),
+    # testting views
+    path("activate_test/", views.activate_for_testing, name="activate_for_testing"),
 ]

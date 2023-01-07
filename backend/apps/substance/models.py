@@ -7,8 +7,9 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 
-class SubstanceCategory(models.Model):
+class Category(models.Model):
     name = models.CharField(
+        primary_key=True,
         max_length=250,
         null=False,
         unique=True,
@@ -17,15 +18,15 @@ class SubstanceCategory(models.Model):
     )
 
     class Meta:
-        verbose_name = "Substance Category"
-        verbose_name_plural = "Substance Categories"
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
     def __str__(self):
         return self.name
 
 
 class Substance(models.Model):
-    UNIT_TYPE = (("KILOGRAM", "KL"), ("LITER", "L"), ("TON", "T"))
+    UNIT_TYPE = (("KL", "KILOGRAM"), ("L", "LITER"), ("T", "TON"))
     created_by = models.ForeignKey(
         Account,
         on_delete=models.SET_NULL,
@@ -40,8 +41,8 @@ class Substance(models.Model):
         verbose_name=_("substance name"),
     )
     category = models.ManyToManyField(
-        SubstanceCategory,
-        related_name="categories",
+        Category,
+        related_name="substance_categories",
         verbose_name=_("substance Category"),
     )
     description = models.TextField(
@@ -63,8 +64,8 @@ class Substance(models.Model):
         verbose_name=_("creatred at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
-    units = models.BigIntegerField(
-        default=0,
+    units = models.IntegerField(
+        default=1,
         verbose_name=_("units available in stock"),
     )
     unit_type = models.CharField(max_length=20, choices=UNIT_TYPE, verbose_name=_("Unit Type"))
@@ -75,6 +76,13 @@ class Substance(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.units <= 0:
+            self.is_available = False
+        else:
+            self.is_available = True
+        super().save(*args, **kwargs)
 
 
 class Instrument(models.Model):
@@ -91,6 +99,11 @@ class Instrument(models.Model):
         unique=False,
         blank=False,
         verbose_name=_("instrument name"),
+    )
+    category = models.ManyToManyField(
+        Category,
+        related_name="instrument_categories",
+        verbose_name=_("instrumen Category"),
     )
     description = models.TextField(
         default="No description",
@@ -117,7 +130,9 @@ class Instrument(models.Model):
     )
 
     ins_type = models.CharField(max_length=20, choices=TYPE, verbose_name=_("Unit Type"))
-    last_maintain = models.DateTimeField(
+    last_maintain = models.DateField(
+        # format=None,
+        # input_formats=['%Y-%m-%d',],
         verbose_name=_("last maintain at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
