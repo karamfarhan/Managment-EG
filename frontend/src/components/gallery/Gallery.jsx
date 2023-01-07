@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import { AiOutlineFileImage } from "react-icons/ai";
+import Bar from "../UI/bars/Bar";
 import ImgModel from "../UI/imgModel/ImgModel";
 import SelectImg from "../UI/select_img/SelectImg";
 import classes from "./Gallery.module.css";
@@ -71,35 +72,34 @@ const Gallery = () => {
         />
       )}
 
-      <div>
+      <Bar>
         <button className={classes.addImg} onClick={selectImgModelHandler}>
           <span>
             <AiOutlineFileImage />
           </span>
           اضافة صور
         </button>
+      </Bar>
+      <div className={classes.preview}>
+        {dateToday !== "" && addImgs && (
+          <p className={classes.date}> {dateToday} </p>
+        )}
 
-        <div className={classes.preview}>
-          {dateToday !== "" && addImgs && (
-            <p className={classes.date}> {dateToday} </p>
-          )}
-
-          <div>
-            {!showModel &&
-              imgSrc &&
-              addImgs &&
-              imgSrc.map((el, index) => {
-                return (
-                  <>
-                    <figure
-                      key={index}
-                      onClick={() => selectedImgHandler(index, el)}>
-                      <img src={el} alt="f" />
-                    </figure>
-                  </>
-                );
-              })}
-          </div>
+        <div>
+          {!showModel &&
+            imgSrc &&
+            addImgs &&
+            imgSrc.map((el, index) => {
+              return (
+                <>
+                  <figure
+                    key={index}
+                    onClick={() => selectedImgHandler(index, el)}>
+                    <img src={el} alt="f" />
+                  </figure>
+                </>
+              );
+            })}
         </div>
       </div>
     </Fragment>

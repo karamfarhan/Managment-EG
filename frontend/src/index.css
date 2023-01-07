@@ -1,9 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,900;1,100;1,300;1,400&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,900;1,100;1,400;1,500;1,700;1,900&display=swap");
 :root {
-  --side-width: 250px;
+  --side-width: 200px;
   --side-width-mob: 80px;
-  --header-height: 60px;
+  --header-height: 150px;
+  --bar-shadow: 0 8px 26px -4px hsla(0, 0%, 8%, 0.15),
+    0 8px 9px -5px hsla(0, 0%, 8%, 0.06);
+  --main-btn-width: 30%;
+  --main-btn-font-size: 20px;
 }
 
 * {
@@ -15,8 +19,8 @@
 }
 
 body {
-  background-color: #f0f2f5;
-  font-family: "Roboto", sans-serif;
+  background-color: #f8f9fa;
+  font-family: "Noto Naskh Arabic", serif;
 }
 button {
   cursor: pointer;

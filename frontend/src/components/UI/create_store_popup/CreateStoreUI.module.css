@@ -11,17 +11,21 @@
 .formContent {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 30%;
   border-radius: 30px;
-  transform: translate(-50%, -50%);
+  transform: translate(-30%, -50%);
   z-index: 111;
   background: #fff;
-  width: 70%;
-  padding: 30px 60px;
+  width: 50%;
+  padding: 30px 20px;
+}
+.formContent form {
+  text-align: center;
 }
 .formContent form > div:first-of-type {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -45,12 +49,15 @@
 }
 
 .formContent button[type="submit"] {
-  width: 100%;
+  width: 80%;
   padding: 10px;
+  border-radius: 20px;
   border: none;
   background-color: #2a4bf7;
   background-color: #2a4bf7;
   color: #fff;
   font-size: 17px;
   margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
 }
