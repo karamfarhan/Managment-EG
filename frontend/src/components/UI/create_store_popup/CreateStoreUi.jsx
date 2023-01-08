@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useContext } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 import { useQuery } from "react-query";
@@ -8,7 +8,8 @@ import { BsPlusLg } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import classes from "./CreateStoreUI.module.css";
 import { useEffect } from "react";
-import { createStore } from "../../../store/create-store-slice";
+import { createStore, getStores } from "../../../store/create-store-slice";
+import AuthContext from "../../../context/Auth-ctx";
 
 export const Backdrop = ({ hideFormHandler }) => {
   return <div className={classes.backdrop} onClick={hideFormHandler} />;
@@ -24,39 +25,28 @@ export const InventoryCreator = ({ hideFormHandler }) => {
     address: "",
     description: "",
   });
+  const {token} = useContext(AuthContext)
   const dispatch = useDispatch();
   const { name, address, description } = storeData;
 
-  let token = localStorage.getItem("access_token") || null;
 
-  //store information
 
-  //add items filed
-  // const handleAddFields = () => {
-  //   setInputFields([
-  //     ...inputFields,
-  //     {
-  //       title: "",
-  //       quantity: "",
-  //       unit_price: "",
-  //       tax_rate: "",
-  //     },
-  //   ]);
-  // };
+
+
 
   //submit handler
   const submitHandler = (e) => {
     e.preventDefault();
     //store obj
-    console.log("hh");
     const storeObj = {
-      token,
+      token : token,
       name,
       address,
       description,
     };
-
     dispatch(createStore(storeObj));
+    dispatch(getStores(token));
+
   };
 
   return (

@@ -1,36 +1,85 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useContext } from "react";
+import AuthContext from "../../context/Auth-ctx";
 import Login from "./Login";
 import classes from "./AuthForm.module.css";
-import { authAction } from "../../store/auth-slice";
 const AuthForm = () => {
   //email & password
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
-  const dispatch = useDispatch();
-
+  //
+  const [err, setErr] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+   //auth context
+   const authCtx = useContext(AuthContext);
+  console.log(authCtx)
   let form = false;
 
   if (userInfo.email !== "" && userInfo.password !== "") {
     form = true;
   }
 
-  //auth state
-  const { err: errorState, isLoading } = useSelector(
-    (state) => state.authReducer
-  );
+
+
+  //login 
+  
+  const loggin = async()=> {
+    setIsLoading(true)
+    
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/account/login_token/",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+
+          body: JSON.stringify({
+            email: userInfo.email,
+            password: userInfo.password,
+          }),
+        }
+      );
+      const data = await response.json();
+      setIsLoading(false)
+      let token = data.access;
+      authCtx.login(token, data);
+      console.log(token)
+      console.log(data)
+
+      if (!response.ok) {
+        throw new Error(data.detail);
+      }
+  
+
+    } catch (err) {
+     console.log(err.message)
+     setErr(err.message)
+     setIsLoading(false)
+    }
+
+
+  }
+
+
+  console.log(authCtx.isLoggedIn)
+
+
+
+
+
 
   //submit hanlder
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     // avoid browser behavior
     e.preventDefault();
-
-    dispatch(authAction(userInfo));
+    await loggin()
+//    dispatch(authAct.onLogin());
   };
 
-  const unAuthUser = errorState !== null ? classes.unauth : "";
+  const unAuthUser = err !== null ? classes.unauth : "";
 
   return (
     <main>
@@ -48,7 +97,7 @@ const AuthForm = () => {
                 </button>
               )}
               {isLoading && <p> انتظر..... </p>}
-              {errorState && <p className="err-msg"> {errorState} </p>}
+              {err && <p className="err-msg"> {err} </p>}
             </div>
           </form>
         </div>

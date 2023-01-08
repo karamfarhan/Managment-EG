@@ -1,16 +1,18 @@
-import { useState } from "react";
-import { authAct } from "../../../store/auth-slice";
+import { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 
 import { AiFillSetting, AiOutlineLogout } from "react-icons/ai";
 import classes from "./Header.module.css";
+import AuthContext from "../../../context/Auth-ctx";
 export const Header = () => {
   const [signoutBtn, setSignoutBtn] = useState(false);
   const dispatch = useDispatch();
+  const authCtx = useContext(AuthContext)
+
 
   //logout handler
   const logoutHandler = () => {
-    dispatch(authAct.logout());
+    authCtx.logout()
   };
   // signout btn
   const toggleBtn = () => {

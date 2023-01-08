@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-
+import { AuthContextProvider } from "./context/Auth-ctx";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
@@ -14,9 +14,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+      <AuthContextProvider>
         <Provider store={store}>
           <App />
         </Provider>
+        </AuthContextProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>

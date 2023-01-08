@@ -1,8 +1,8 @@
 .addImg {
   position: relative;
   padding: 10px;
-  font-size: 20px;
-  width: 30%;
+  font-size: var(--main-btn-font-size);
+  width: var(--main-btn-width);
   background-color: #2a4bf7;
   color: #fff;
   border-radius: 10px;

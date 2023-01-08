@@ -1,12 +1,12 @@
-import { Fragment } from "react";
+import  { Fragment, useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
+import AuthContext from "../context/Auth-ctx";
 
 const ProtectedRoutes = () => {
-  const { user } = useSelector((state) => state.authReducer);
-
+  const authCtx = useContext(AuthContext);
+  const { isLoggedIn } = authCtx;
   return (
-    <Fragment>{user !== null ? <Outlet /> : <Navigate to="/login" />}</Fragment>
+    <Fragment>{isLoggedIn ? <Outlet /> : <Navigate to="/login" />}</Fragment>
   );
 };
 

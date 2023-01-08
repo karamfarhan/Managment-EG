@@ -1,35 +1,38 @@
+import {useContext} from 'react'
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-
+import AuthContext from "../context/Auth-ctx";
 //pages
 import AuthPage from "./AuthPage";
-import { CarsPage } from "./CarsPage";
-import { GalleryPage } from "./GalleryPage";
+import  CarsPage  from "./CarsPage";
+import  GalleryPage  from "./GalleryPage";
 import ProtectedRoutes from "./ProtectedRoute";
 import StaffPage from "./StaffPage";
-import { StoresPage } from "./StoresPage";
+import  StoresPage  from "./StoresPage";
+import  StoreDetailPage  from "./StoreDetailPage";
 
 const Pages = () => {
-  const { user } = useSelector((state) => state.authReducer);
-
+  const authCtx = useContext(AuthContext);
+  const { isLoggedIn } = authCtx;
+  console.log(isLoggedIn)
   return (
     <Routes>
       <Route
         path="/login"
-        element={user !== null ? <Navigate to="/staff" /> : <AuthPage />}
+        element={isLoggedIn ? <Navigate to="/staff" /> : <AuthPage />}
       />
       <Route
         path="/"
         element={
-          user !== null ? <Navigate to="/staff" /> : <Navigate to="/login" />
+          isLoggedIn ? <Navigate to="/staff" /> : <Navigate to="/login" />
         }
       />
       <Route element={<ProtectedRoutes />}>
         <Route
           path="/staff"
-          element={user !== null ? <StaffPage /> : <AuthPage />}
+          element={isLoggedIn ? <StaffPage /> : <AuthPage />}
         />
-        <Route path="/store" element={<StoresPage />} />
+        <Route path="/store/*" element={<StoresPage />} />
+        <Route path="/store/:storeId" element={<StoreDetailPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/cars" element={<CarsPage />} />
       </Route>

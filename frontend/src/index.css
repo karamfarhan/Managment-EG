@@ -6,8 +6,8 @@
   --header-height: 150px;
   --bar-shadow: 0 8px 26px -4px hsla(0, 0%, 8%, 0.15),
     0 8px 9px -5px hsla(0, 0%, 8%, 0.06);
-  --main-btn-width: 30%;
-  --main-btn-font-size: 20px;
+  --main-btn-width: 50%;
+  --main-btn-font-size: 14px;
 }
 
 * {
