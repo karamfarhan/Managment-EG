@@ -8,21 +8,22 @@ import Bar from "../UI/bars/Bar";
 import { useEffect } from "react";
 import { getStores } from "../../store/create-store-slice";
 import AuthContext from "../../context/Auth-ctx";
+import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
 const Store = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [showForm, setShowForm] = useState(false);
-  
-  const authCtx = useContext(AuthContext)
+  const [isDelete, setIsDelete] = useState(false);
+  const [storeId, setStoreId] = useState("");
 
-
+  const authCtx = useContext(AuthContext);
+  const { token } = authCtx;
 
   //store data
   const { store_data } = useSelector((state) => state.storeSlice);
   //get stores
-  useEffect(()=> {
- dispatch(getStores(authCtx.token));
-  }, [])
-console.log(store_data)
+  useEffect(() => {
+    dispatch(getStores(token));
+  }, [dispatch, token]);
   //hide form handler
   const hideFormHandler = () => {
     setShowForm(false);
@@ -32,9 +33,43 @@ console.log(store_data)
     setShowForm(true);
   };
 
+  //delete handler
+  const deleteHandler = async (id) => {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/stores/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setIsDelete(false);
+
+      const data = await res.json();
+      dispatch(getStores(token));
+    } catch (err) {}
+  };
+
+  //show delete mode
+  const deleteModelHandler = (id) => {
+    setIsDelete(true);
+    setStoreId(id);
+  };
+
+  //hide delete mode
+  const hideDeleteModel = () => {
+    setIsDelete(false);
+  };
   return (
     <Fragment>
       {showForm && <CreateStoreUi hideFormHandler={hideFormHandler} />}
+      {isDelete && (
+        <DeleteConfirmation
+          hideModel={hideDeleteModel}
+          deleteHandler={deleteHandler}
+          id={storeId}
+        />
+      )}
       <Bar>
         <button
           onClick={showFormHandler}
@@ -43,23 +78,51 @@ console.log(store_data)
           <SiHomeassistantcommunitystore /> انشاء مخزن
         </button>
       </Bar>
-      <div className={classes.storeContent}>
-        {/* مخازن */}
-        {store_data  && store_data.map((store) => {
-          return (
-            <div className={classes.storeObj} key={store.id}>
-              <h3> <span>أسم المخزن:</span> {store.name}</h3>
-             <p><span>عنوان المخزن:</span> {store.address}</p>
-              <Link to={`/store/${store.id}`}>اظهار التفاصيل</Link>
-              {/* <div className={classes.inform}>
-              <p> <span className={classes.title}>المنشيء: </span> {store.created_by.username} </p>
-              <p> {new Date(store.created_at).toDateString()} </p>
-              
-               </div> */}
-            </div>
-          );
-        })}
-      </div>
+
+      {store_data && store_data.length === 0 && (
+        <p className={classes.msg_p}> لا يوجد مخازن </p>
+      )}
+      {store_data && store_data.length > 0 && (
+        <div className={classes["table_content"]}>
+          <table>
+            <thead>
+              <tr>
+                <th>أسم المخزن</th>
+                <th>عنوان المخزن</th>
+                <th>انشيء عن طريق</th>
+                <th>تاريخ الانشاء</th>
+                <th>معلومات اضافية</th>
+                <th>حدث</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {store_data &&
+                store_data.map((store) => {
+                  return (
+                    <tr>
+                      <td>
+                        {" "}
+                        <Link to={`/store/${store.id}`}>{store.name}</Link>{" "}
+                      </td>
+                      <td> {store.address} </td>
+                      <td> {store.created_by.username} </td>
+                      <td>{new Date(store.created_at).toDateString()} </td>
+                      <td> {store.description} </td>
+                      <td>
+                        <button
+                          type="button"
+                          onClick={() => deleteModelHandler(store.id)}>
+                          حذف
+                        </button>{" "}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </Fragment>
   );
 };

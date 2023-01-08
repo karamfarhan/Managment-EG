@@ -25,7 +25,7 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
 
-        # token['username'] = user.username
+        token['username'] = user.username
 
         # Add more custom fields from your custom user model, If you have a
         # custom user model.

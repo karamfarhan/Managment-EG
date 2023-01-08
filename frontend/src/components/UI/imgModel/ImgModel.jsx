@@ -18,7 +18,6 @@ export const ImgContainer = ({
   prevImg,
   i,
 }) => {
-  console.log(imgSrc[i]);
   return (
     <Fragment>
       <span onClick={closeModelHandler} className={classes.close}>

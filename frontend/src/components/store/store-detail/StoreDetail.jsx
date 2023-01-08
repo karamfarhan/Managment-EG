@@ -1,93 +1,60 @@
-import { useEffect, useContext, useState } from 'react';
-import {useParams} from 'react-router-dom'
-import AuthContext from '../../../context/Auth-ctx';
+import { useEffect, useContext, useState, useCallback } from "react";
+import { useParams } from "react-router-dom";
+import AuthContext from "../../../context/Auth-ctx";
 
-//classes 
-import classes from './StoreDetail.module.css'
+//classes
+import classes from "./StoreDetail.module.css";
 
+const StoreDetail = () => {
+  const [data, setData] = useState({});
+  const params = useParams();
+  const { storeId } = params;
 
-const StoreDetail = ()=> {
-    const [data, setData] = useState({})
-    const params = useParams()
-    const {storeId} = params;
+  //token
+  const authCtx = useContext(AuthContext);
+  const { token } = authCtx;
+  //get store
 
+  const getTheStore = useCallback(async () => {
+    const res = await fetch(`http://127.0.0.1:8000/stores/${storeId}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    //token
-    const authCtx = useContext(AuthContext)
-    const {token} = authCtx
-    //get store
+    const data = await res.json();
+    setData(data);
+  }, [storeId, token]);
 
-    const getTheStore = async()=> {
-        const res = await fetch(`http://127.0.0.1:8000/stores/${storeId}`, {
-            method : 'GET',
-             headers  : {
-                "Content-type" : 'application/json',
-                'Authorization' : `Bearer ${token}`
-             }
-        })
+  useEffect(() => {
+    getTheStore();
+    console.log("hey");
+  }, [getTheStore]);
 
-        const data = await res.json();
-        setData(data);
-        
-    }
+  return (
+    <div className={classes.content}>
+      <div>
+        <h2> الموارد </h2>
+      </div>
 
+      <div>
+        <h2> {data.name}</h2>
+        <span> {new Date(data.created_at).toLocaleString()} </span>
 
-    useEffect(()=> {
+        <h3> {data.address} </h3>
+        <p>
+          {" "}
+          <span>{data.description}</span>{" "}
+        </p>
 
-        getTheStore()
+        <p className={classes.status}>
+          حالة المخزن : <span>{data.isActive ? "غير نشط" : " نشط"} </span>{" "}
+        </p>
+      </div>
+    </div>
+  );
+};
 
-    }, [])
-
-
-
-
-
-
-    return <div className={classes.content}>
-
-<div>
-
-<h2> الموارد </h2>
-
-</div>
-
-<div>
-
-<h2> {data.name} 
-</h2>
-<span> {new Date(data.created_at).toLocaleString()}  </span>
-
-<h3> {data.address} </h3>
-<p> <span>{data.description}</span>  </p>
-
-<p className={classes.status}> حالة المخزن : <span>{data.isActive ? 'غير نشط' :' نشط' } </span>  </p>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </div> 
-}
-
-export default StoreDetail
+export default StoreDetail;

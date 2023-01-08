@@ -9,29 +9,41 @@
   width: var(--main-btn-width);
   margin-bottom: 30px;
 }
-.storeContent {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.table_content {
   padding: 30px 0;
-}
-.storeObj {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
-  padding: 30px;
-  width: 320px;
-  text-align: center;
-  border-radius: 10px;
+  display: flex;
+  justify-content: center;
 }
 
-.inform {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #777;
+.table_content table{
+  width: 100%;
+  text-align: center;
+  border-spacing: 1px;
+}
+.table_content table th, .table_content table td  {
+  padding: 0.75rem;
+}
+.table_content table thead {
+  font-size: 13px;
+  background-color: #F13A11;
+  color: #fff;
+}
+
+.table_content table tbody{
   font-size: 12px;
 }
-.title{
-  color: #000;
+.table_content table tbody tr:nth-child(even) {
+  background-color: #ddd;
+}
+.table_content table tbody button {
+  background-color: #da3230;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: #fff;
+}
+.msg_p{
+  font-size: 40px;
+  text-align: center;
+  margin: 30px;
 }
