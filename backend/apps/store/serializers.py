@@ -119,38 +119,3 @@ class MediaPackWriteSerializer(serializers.ModelSerializer):
         for img in images:
             Image.objects.create(media_pack=media_pack, image=img)
         return media_pack
-
-    # def update(self, instance, validated_data):
-    #     instance.client_name = validated_data.get("client_name", instance.client_name)
-    #     instance.client_email = validated_data.get("client_email", instance.client_email)
-    #     instance.client_number = validated_data.get("client_number", instance.client_number)
-    #     instance.client_address = validated_data.get("client_address", instance.client_address)
-    #     instance.client_zipcode = validated_data.get("client_zipcode", instance.client_zipcode)
-
-    #     instance.client_country = validated_data.get("client_country", instance.client_country)
-    #     instance.client_city = validated_data.get("client_city", instance.client_city)
-    #     instance.due_after = validated_data.get("due_after", instance.due_after)
-    #     instance.email_is_sent = validated_data.get("email_is_sent", instance.email_is_sent)
-    #     instance.status = validated_data.get("status", instance.status)
-    #     instance.description = validated_data.get("description", instance.description)
-    #     instance.discount_amount = validated_data.get("discount_amount", instance.discount_amount)
-    #     instance.save()
-    #     items_data = self.context["items"]
-    #     if items_data:
-    #         for item in items_data:
-    #             item_id = item.get("id", None)
-    #             if item_id:
-    #                 item_obj = Item.objects.get(id=item_id)
-    #                 delete_order = item.get("delete", False)
-    #                 if delete_order:
-    #                     item_obj.delete()
-    #                 else:
-    #                     item_obj.title = item.get("title", item_obj.title)
-    #                     item_obj.quantity = item.get("quantity", item_obj.quantity)
-    #                     item_obj.unit_price = item.get("unit_price", item_obj.unit_price)
-    #                     item_obj.tax_rate = item.get("tax_rate", item_obj.tax_rate)
-    #                     item_obj.net_amount = item.get("net_amount", item_obj.net_amount)
-    #                     item_obj.save()
-    #             else:
-    #                 Item.objects.create(invoice=instance, **item)
-    #     return instance

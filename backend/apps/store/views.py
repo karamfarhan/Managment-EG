@@ -42,9 +42,9 @@ class StoreVewSet(viewsets.ViewSet):
     #     return self.queryset.filter(owner=self.request.user)
 
     def list(self, request, *args, **kwargs):
-        # queryset = Store.objects.filter(owner=request.user)
+        queryset = Store.objects.select_related("created_by")
         context = {"request": request}
-        serializer_class = StoreReadSerializer(self.queryset, context=context, many=True)
+        serializer_class = StoreReadSerializer(queryset, context=context, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):

@@ -66,9 +66,9 @@ class SubstanceVewSet(viewsets.ViewSet):
     #     return self.queryset.filter(owner=self.request.user)
 
     def list(self, request, *args, **kwargs):
-        # queryset = Store.objects.filter(owner=request.user)
+        queryset = Substance.objects.select_related("created_by")
         context = {"request": request}
-        serializer_class = SubstanceReadSerializer(self.queryset, context=context, many=True)
+        serializer_class = SubstanceReadSerializer(queryset, context=context, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
@@ -148,9 +148,9 @@ class InstrumentVewSet(viewsets.ViewSet):
     #     return self.queryset.filter(owner=self.request.user)
 
     def list(self, request, *args, **kwargs):
-        # queryset = Store.objects.filter(owner=request.user)
+        queryset = Instrument.objects.select_related("created_by")
         context = {"request": request}
-        serializer_class = InstrumentReadSerializer(self.queryset, context=context, many=True)
+        serializer_class = InstrumentReadSerializer(queryset, context=context, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
