@@ -2,24 +2,13 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-b#^fc)-7+5e3g6yq9sa1z#rq7!xe@ev@$mpe2uvjm%50%w=is"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-# if DEBUG:
-#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # During development only
-
-
-ALLOWED_HOSTS = []
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 AUTH_USER_MODEL = "account.Account"
 AUTHENTICATION_BACKENDS = (
@@ -27,7 +16,6 @@ AUTHENTICATION_BACKENDS = (
     "apps.account.backends.CaseInsensitiveModelBackend",
 )
 
-# Application definition
 
 INSTALLED_APPS = [
     # Third party apps
@@ -115,45 +103,6 @@ SIMPLE_JWT = {
 WSGI_APPLICATION = "core.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-
-# DB_NAME = "postgres"
-# DB_USER = "postgres"
-# DB_PASSWORD = "postgres"
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": DB_NAME,
-#         "USER": DB_USER,
-#         "PASSWORD": DB_PASSWORD,
-#         "HOST": "pgdb",
-#         "PORT": 5432,
-#     }
-# }
-
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],
-#         },
-#     },
-# }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -170,9 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Europe/Istanbul"
@@ -182,12 +128,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-#############################################################################
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-
-### DEVELOPMENT SETTINGS THIS -- ALSO PUT THE URLS IN THE URLS FILE IN THE MAIN FOLDER OF THE PORJECT
+# DEVELOPMENT SETTINGS THIS
+# ALSO PUT THE URLS IN THE URLS FILE IN THE MAIN FOLDER OF THE PORJECT
 
 STATIC_ROOT = ""  # os.path.join(BASE_DIR, 'static_cdn')
 STATIC_URL = "/static/"
@@ -202,12 +144,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 TEMP = os.path.join(BASE_DIR, "/media/temp")
 
 
-# PUT THE URL FOR THE SITE TO GET THE BASE URL
-BASE_URL = "http://127.0.0.1:8000"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10mb = 10 * 1024 *1024
@@ -216,18 +152,14 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10mb = 10 * 1024 *1024
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/account/login/"
 
-# cros headers config
-CORS_ALLOW_ALL_ORIGINS = True
-
-
 #  SMTP.Configuration
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "zahabiacompany@gmail.com"
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
