@@ -13,3 +13,4 @@ router.register(r"substances", SubstanceVewSet, basename="substance")
 router.register(r"categories", CategoryVewSet, basename="category")
 router.register(r"instruments", InstrumentVewSet, basename="instrument")
 urlpatterns += (path("", include(router.urls)),)
+

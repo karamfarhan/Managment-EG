@@ -11,7 +11,8 @@ class StoreReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ["id", "name", "created_by", "address", "description", "active_status", "start_at", "created_at"]
+        fields = ["id", "name", "created_by", "address",
+                  "description", "active_status", "start_at", "created_at"]
         read_only_fields = fields
 
     # def validate_avatar_url(self, company):
@@ -30,12 +31,14 @@ class StoreSelectBarSerializer(serializers.ModelSerializer):
 class StoreWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = ["name", "address", "description", "active_status", "start_at"]
+        fields = ["name", "address", "description",
+                  "active_status", "start_at"]
         # read_only_fields = ['id','slug','creatd_at','updated_at']
 
     def validate_name(self, value):
         if len(value) <= 1:
-            raise serializers.ValidationError("name must be more than 2 letters")
+            raise serializers.ValidationError(
+                "name must be more than 2 letters")
         return value
 
     def create(self, validated_data):
@@ -57,8 +60,10 @@ class StoreWriteSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
         instance.address = validated_data.get("address", instance.address)
-        instance.description = validated_data.get("description", instance.description)
-        instance.active_status = validated_data.get("active_status", instance.active_status)
+        instance.description = validated_data.get(
+            "description", instance.description)
+        instance.active_status = validated_data.get(
+            "active_status", instance.active_status)
         instance.start_at = validated_data.get("start_at", instance.start_at)
         instance.save()
         return instance
@@ -67,6 +72,8 @@ class StoreWriteSerializer(serializers.ModelSerializer):
 class MediaPackReadSerializer(serializers.ModelSerializer):
     # images = ImageSerializer(many=True)
     # company = serializers.SlugRelatedField(slug_field="slug", queryset=Company.objects.all())
+    store = serializers.SerializerMethodField('get_store_name')
+    created_by = serializers.SerializerMethodField('get_username')
 
     class Meta:
         model = MediaPack
@@ -78,8 +85,11 @@ class MediaPackReadSerializer(serializers.ModelSerializer):
         )
         read_only_fields = fields
 
-    # def get_created_by_username(self, invoice):
-    #     return invoice.created_by.username
+    def get_store_name(self, mediapack):
+        return mediapack.store.name
+
+    def get_username(self, mediapack):
+        return mediapack.created_by.username
 
     # def get_modified_by_username(self, invoice):
     #     return invoice.modified_by.username

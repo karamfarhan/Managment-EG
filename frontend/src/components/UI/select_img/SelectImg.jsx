@@ -21,7 +21,6 @@ export const ImgSelect = ({
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
   let dateNow = new Date().toLocaleString();
-
   //select store
   useEffect(() => {
     const selectStore = async () => {
@@ -40,22 +39,22 @@ export const ImgSelect = ({
 
   function updateImageDisplay(e) {
     const curFiles = e.target.files;
-    setImg((prevState) => [...prevState, e.target.files[0]]);
-
     if (curFiles.length === 0) {
       return;
     } else {
       setDateToday(dateNow);
       const selectedImages = Array.from(curFiles);
-
       const imagesArr = selectedImages.map((file) => {
         if (validFileType(file)) {
           return URL.createObjectURL(file);
         }
       });
       setImgSrc((prevImg) => prevImg.concat(imagesArr));
+      setImg(selectedImages);
     }
   }
+  console.log(img);
+
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -76,8 +75,13 @@ export const ImgSelect = ({
   const sendImgs = async () => {
     const formdata = new FormData();
 
-    formdata.append("store", 1);
-    formdata.append("images", imgSrc);
+    for (let i = 0; i < selectStores.length; i++) {
+      formdata.append("store", selectStores[i].pk);
+    }
+    for (let i = 0; i < img.length; i++) {
+      formdata.append("images", img[i]);
+    }
+
     formdata.append("alt_text", "dds");
     const res = await fetch("http://127.0.0.1:8000/images/", {
       method: "POST",
@@ -92,6 +96,7 @@ export const ImgSelect = ({
 
   const { isLoading, refetch, error, data } = useQuery("images", sendImgs, {
     refetchOnWindowFocus: false,
+    enabled: false,
   });
   console.log(data);
 
@@ -151,8 +156,7 @@ export const ImgSelect = ({
                       <button
                         onClick={() =>
                           setImgSrc(imgSrc.filter((e) => e !== el))
-                        }
-                      >
+                        }>
                         {<AiOutlineDelete />}
                       </button>
                     </div>
