@@ -12,10 +12,9 @@ const Gallery = () => {
   const [addImgs, setAddImgs] = useState(false);
 
   //image mode state
-  const [clickedImg, setClickedImg] = useState([]);
+  const [clickedImg, setClickedImg] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showImgModel, setShowImgModel] = useState(false);
-  console.log(currentIndex);
   //show model
   const selectImgModelHandler = () => {
     setShowModel(true);
@@ -28,13 +27,12 @@ const Gallery = () => {
 
   //selected image
   const selectedImgHandler = (i, src) => {
-    const allImgSrc = [src];
-    setClickedImg((prev) => [...prev, ...allImgSrc]);
-    setCurrentIndex(i);
+    setClickedImg(src);
+    // setCurrentIndex(i);
     setShowImgModel(true);
-    console.log(clickedImg);
+    // setClickedImg(src);
+    setCurrentIndex(i);
   };
-
   //close img model
   const closeModelHandler = () => {
     setShowImgModel(false);
@@ -94,7 +92,8 @@ const Gallery = () => {
                 <>
                   <figure
                     key={index}
-                    onClick={() => selectedImgHandler(index, el)}>
+                    onClick={() => selectedImgHandler(index, el)}
+                  >
                     <img src={el} alt="f" />
                   </figure>
                 </>

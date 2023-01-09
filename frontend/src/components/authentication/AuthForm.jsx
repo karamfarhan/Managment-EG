@@ -9,24 +9,22 @@ const AuthForm = () => {
     password: "",
   });
   //
-  const [err, setErr] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-   //auth context
-   const authCtx = useContext(AuthContext);
-  console.log(authCtx)
+  const [err, setErr] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  //auth context
+  const authCtx = useContext(AuthContext);
+  console.log(authCtx);
   let form = false;
 
   if (userInfo.email !== "" && userInfo.password !== "") {
     form = true;
   }
 
+  //login
 
+  const loggin = async () => {
+    setIsLoading(true);
 
-  //login 
-  
-  const loggin = async()=> {
-    setIsLoading(true)
-    
     try {
       const response = await fetch(
         "http://127.0.0.1:8000/account/login_token/",
@@ -43,40 +41,29 @@ const AuthForm = () => {
         }
       );
       const data = await response.json();
-      setIsLoading(false)
+      setIsLoading(false);
       let token = data.access;
       authCtx.login(token, data);
-      console.log(token)
-      console.log(data)
+      console.log(data);
 
       if (!response.ok) {
         throw new Error(data.detail);
       }
-  
-
     } catch (err) {
-     console.log(err.message)
-     setErr(err.message)
-     setIsLoading(false)
+      console.log(err.message);
+      setErr(err.message);
+      setIsLoading(false);
     }
+  };
 
-
-  }
-
-
-  console.log(authCtx.isLoggedIn)
-
-
-
-
-
+  console.log(authCtx.isLoggedIn);
 
   //submit hanlder
-  const submitHandler = async(e) => {
+  const submitHandler = async (e) => {
     // avoid browser behavior
     e.preventDefault();
-    await loggin()
-//    dispatch(authAct.onLogin());
+    await loggin();
+    //    dispatch(authAct.onLogin());
   };
 
   const unAuthUser = err !== null ? classes.unauth : "";
@@ -92,7 +79,8 @@ const AuthForm = () => {
                 <button
                   disabled={!form}
                   type="submit"
-                  className={classes.submitBtn}>
+                  className={classes.submitBtn}
+                >
                   تسجيل الدخول
                 </button>
               )}

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { getStores } from "../../store/create-store-slice";
 import AuthContext from "../../context/Auth-ctx";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
+import Notification from "../UI/notification/Notification";
 const Store = () => {
   const dispatch = useDispatch();
   const [showForm, setShowForm] = useState(false);
@@ -62,6 +63,7 @@ const Store = () => {
   };
   return (
     <Fragment>
+      <Notification />
       {showForm && <CreateStoreUi hideFormHandler={hideFormHandler} />}
       {isDelete && (
         <DeleteConfirmation
@@ -74,7 +76,8 @@ const Store = () => {
         <button
           onClick={showFormHandler}
           type="button"
-          className={classes.addInventory}>
+          className={classes.addInventory}
+        >
           <SiHomeassistantcommunitystore /> انشاء مخزن
         </button>
       </Bar>
@@ -112,7 +115,8 @@ const Store = () => {
                       <td>
                         <button
                           type="button"
-                          onClick={() => deleteModelHandler(store.id)}>
+                          onClick={() => deleteModelHandler(store.id)}
+                        >
                           حذف
                         </button>{" "}
                       </td>

@@ -6,10 +6,7 @@ import {
   AiOutlineDoubleRight,
   AiOutlineDoubleLeft,
 } from "react-icons/ai";
-
-export const Backdrop = () => {
-  return <div className={classes.backdrop} />;
-};
+import Backdrop from "../backdrop/Backdrop";
 
 export const ImgContainer = ({
   imgSrc,
@@ -20,18 +17,19 @@ export const ImgContainer = ({
 }) => {
   return (
     <Fragment>
+      <Backdrop hideModel={closeModelHandler} />
       <span onClick={closeModelHandler} className={classes.close}>
         <AiOutlineClose />
       </span>
       <div className={classes["img-container"]}>
-        <img src={imgSrc[i]} alt="img" />
+        <img src={imgSrc} alt="img" />
 
-        <span className={classes.rightAngle} onClick={nextImg}>
+        {/* <span className={classes.rightAngle} onClick={nextImg}>
           <AiOutlineDoubleRight />
         </span>
         <span className={classes.leftAngle} onClick={prevImg}>
           <AiOutlineDoubleLeft />
-        </span>
+        </span> */}
       </div>
     </Fragment>
   );
@@ -50,7 +48,6 @@ const ImgModel = ({ imgSrc, closeModelHandler, prevImg, nextImg, i }) => {
         />,
         document.getElementById("img_popup")
       )}
-      {ReactDOM.createPortal(<Backdrop />, document.getElementById("backdrop"))}
     </Fragment>
   );
 };

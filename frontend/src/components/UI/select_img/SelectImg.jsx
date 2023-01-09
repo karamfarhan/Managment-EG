@@ -1,5 +1,7 @@
-import { Fragment } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
+import { useQuery } from "react-query";
 import ReactDOM from "react-dom";
+import AuthContext from "../../../context/Auth-ctx";
 import { AiOutlineFileImage, AiOutlineDelete } from "react-icons/ai";
 import classes from "./SelectImg.module.css";
 
@@ -14,10 +16,31 @@ export const ImgSelect = ({
   setAddImgs,
   hideImageHandler,
 }) => {
+  const [selectStores, setSelectStores] = useState([]);
+  const [img, setImg] = useState([]);
+  const authCtx = useContext(AuthContext);
+  const { token } = authCtx;
   let dateNow = new Date().toLocaleString();
+
+  //select store
+  useEffect(() => {
+    const selectStore = async () => {
+      const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      setSelectStores(data);
+    };
+    selectStore();
+  }, [token]);
 
   function updateImageDisplay(e) {
     const curFiles = e.target.files;
+    setImg((prevState) => [...prevState, e.target.files[0]]);
 
     if (curFiles.length === 0) {
       return;
@@ -49,11 +72,34 @@ export const ImgSelect = ({
   function validFileType(file) {
     return fileTypes.includes(file.type);
   }
+  //send images
+  const sendImgs = async () => {
+    const formdata = new FormData();
+
+    formdata.append("store", 1);
+    formdata.append("images", imgSrc);
+    formdata.append("alt_text", "dds");
+    const res = await fetch("http://127.0.0.1:8000/images/", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formdata,
+    });
+    const data = await res.json();
+    console.log(data);
+  };
+
+  const { isLoading, refetch, error, data } = useQuery("images", sendImgs, {
+    refetchOnWindowFocus: false,
+  });
+  console.log(data);
 
   //add images
   const addImgsHandler = () => {
     setAddImgs(true);
     hideImageHandler();
+    refetch();
   };
 
   const isDisable = imgSrc.length === 0;
@@ -81,9 +127,13 @@ export const ImgSelect = ({
               <option value="#" selected hidden>
                 أختار الموقع
               </option>
-              <option value="#">مستشفي السعودي</option>
-              <option value="#">نيو جيزة</option>
-              <option value="#">بورسعيد</option>
+              {selectStores.map((el) => {
+                return (
+                  <option value={el.name} key={el.pk}>
+                    {el.name}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
@@ -100,8 +150,9 @@ export const ImgSelect = ({
                       <p> {index + 1} </p>
                       <button
                         onClick={() =>
-                          setImgSrc(imgSrc.filter((e) => e != el))
-                        }>
+                          setImgSrc(imgSrc.filter((e) => e !== el))
+                        }
+                      >
                         {<AiOutlineDelete />}
                       </button>
                     </div>
