@@ -29,8 +29,8 @@ const CreateSubsModel = ({hideSubstancesHandler}) => {
 
     const obj = {
       name,
-      category : 'liq',
-      unitType : unit_type,
+      category : ['solid'],
+      unitType : 'T',
       token : token
     }
 
@@ -51,7 +51,6 @@ const CreateSubsModel = ({hideSubstancesHandler}) => {
         <form onSubmit = {submitHandler}>
           <Inputs type="text" placeholder="أسم المادة" value={name} onChange = {(e)=> setSubstancesData({...substancesData, name : e.target.value})}  />
           <Inputs type="text" placeholder="الكمية" value = {unit_type} onChange = {(e)=> setSubstancesData({...substancesData, unit_type : e.target.value})}  />
-d
           <div className={classes.actions}>
             {categortyBtn.map((el, i) => {
               return (

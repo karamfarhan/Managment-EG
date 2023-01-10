@@ -36,3 +36,12 @@ button:disabled {
   color: red;
   font-size: 12px;
 }
+/*pagination*/
+.ant-pagination .ant-pagination-item a,
+.ant-pagination-item-link {
+  color: var(--main-color) !important;
+  font-weight: bold;
+}
+.ant-pagination-options {
+  display: none !important;
+}

@@ -9,6 +9,7 @@ import ImgModel from "../UI/imgModel/ImgModel";
 import Notification from "../UI/notification/Notification";
 import SelectImg from "../UI/select_img/SelectImg";
 import classes from "./Gallery.module.css";
+import Paginate from "../UI/pagination/Paginate";
 
 const Gallery = () => {
   const [imgSrc, setImgSrc] = useState([]);
@@ -18,6 +19,33 @@ const Gallery = () => {
   const authCtx = useContext(AuthContext);
 
   const { token } = authCtx;
+
+
+
+  /**************************/
+
+// pagination details
+const [currentPage, setCurrentPage] = useState(1)
+const itemsPerPage = 10;
+const {data} =  useSelector((state)=> state.imageReducer)
+const {count} = data !== null && data
+
+
+
+
+
+
+  /**************************/
+
+
+
+
+
+
+
+
+
+
 
   //image mode state
   const [clickedImg, setClickedImg] = useState("");
@@ -36,6 +64,11 @@ const Gallery = () => {
   // all imgs
   const { data: all_images } = useSelector((state) => state.imageReducer);
   const allImgs = all_images && all_images.results;
+
+
+
+  //mutate data
+
 
   //show model
   const selectImgModelHandler = () => {
@@ -127,6 +160,7 @@ const Gallery = () => {
               );
             })}
         </div>
+        <Paginate currentPage = {currentPage} setCurrentPage = {setCurrentPage} itemsPerPage = {itemsPerPage} count = {count}  />
       </div>
     </Fragment>
   );
