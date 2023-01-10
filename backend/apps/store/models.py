@@ -60,6 +60,7 @@ class Store(models.Model):
     class Meta:
         verbose_name = "Store"
         verbose_name_plural = "Stores"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.address

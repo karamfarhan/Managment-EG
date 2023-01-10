@@ -1,19 +1,19 @@
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Image, MediaPack, Store
-from .serializers import (
+from .serializers import (  # MediaPackReadSerializer,; MediaPackWriteSerializer,; StoreReadSerializer,; StoreWriteSerializer,
     ImageSerializer,
-    MediaPackReadSerializer,
-    MediaPackWriteSerializer,
-    StoreReadSerializer,
+    MediaPackSerializer,
     StoreSelectBarSerializer,
-    StoreWriteSerializer,
+    StoreSerializer,
 )
 
 SUCCESS_CREATED = "successfully created"
@@ -34,198 +34,248 @@ class StoreSelectBarView(ListAPIView):
     #     return self.queryset.filter(owner=self.request.user)
 
 
-class StoreVewSet(viewsets.ViewSet):
+class StoreViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Store.objects.select_related("created_by")
-    # TRY THIS AND ENABLE get_queryset func MAYBE IT WILL BE BETTER
+    pagination_class = PageNumberPagination
+    serializer_class = StoreSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["created_by__username", "name", "address"]  # fields you want to search against
+    ordering_fields = ["name", "created_at"]  # fields you want to order by
+
     # def get_queryset(self):
     #     return self.queryset.filter(owner=self.request.user)
-
-    def list(self, request, *args, **kwargs):
-        queryset = Store.objects.select_related("created_by")
-        context = {"request": request}
-        serializer_class = StoreReadSerializer(queryset, context=context, many=True)
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
-
-    def retrieve(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        company = get_object_or_404(self.queryset, pk=pk)
-        context = {"request": request}
-        serializer_class = StoreReadSerializer(company, context=context)
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
-
     def create(self, request, *args, **kwargs):
-        data = request.data
-        serializer = StoreWriteSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            company = serializer.save(created_by=request.user)
-            new_serializer = StoreReadSerializer(company, context={"request": request})
-            # context["response"] = "ok"
-            # context["response_message"] = SUCCESS_CREATED
-            # add_company_data_to_response(company, context)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(created_by=request.user)
 
-            return Response(new_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # your custom code here
+        # example: instance.some_field = some_value
+        # instance.save()
 
-    def update(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        request.user
-        company = get_object_or_404(self.queryset, pk=pk)
-
-        # if company.owner != user:
-        #     context["response"] = "error"
-        #     context["response_message"] = "you don't have permission."
-        #     return Response(context)
-        serializer = StoreWriteSerializer(company, data=request.data, partial=True)
-        if serializer.is_valid():
-            company = serializer.save()
-            new_serializer = StoreReadSerializer(company, context={"request": request})
-            # context["response"] = "ok"
-            # context["response_message"] = SUCCESS_UPDATE
-            # add_company_data_to_response(company, context)
-            return Response(new_serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, *args, **kwargs):
-        context = {}
-        pk = kwargs.get("pk")
-        request.user
-        company = get_object_or_404(self.queryset, pk=pk)
-        # if company.owner != user:
-        #     context["response"] = "error"
-        #     context["response_message"] = "you don't have permission."
-        #     return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        operation = company.delete()
-        if operation:
-            context["response"] = "ok"
-            context["response_message"] = SUCCESS_DELETE
-            return Response(context, status=status.HTTP_200_OK)
-        else:
-            context["response"] = "error"
-            context["response_message"] = "delete failed"
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-# localhost:8000/api/post/all/?page=3
-# localhost:8000/api/post/all/?search=django
-class ImageListPagination(ListAPIView):
-    queryset = Image.objects.select_related("media_pack")
-    serializer_class = ImageSerializer
+# class StoreViewSet(viewsets.ViewSet):
+#     permission_classes = (IsAuthenticated,)
+# queryset = Store.objects.select_related("created_by")
+
+# # TRY THIS AND ENABLE get_queryset func MAYBE IT WILL BE BETTER
+# # def get_queryset(self):
+# #     return self.queryset.filter(owner=self.request.user)
+
+# def list(self, request, *args, **kwargs):
+#     queryset = Store.objects.select_related("created_by")
+#     context = {"request": request}
+#     serializer_class = StoreReadSerializer(queryset, context=context, many=True)
+#     return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+# def retrieve(self, request, *args, **kwargs):
+#     pk = kwargs.get("pk")
+#     company = get_object_or_404(self.queryset, pk=pk)
+#     context = {"request": request}
+#     serializer_class = StoreReadSerializer(company, context=context)
+#     return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+# def create(self, request, *args, **kwargs):
+#     data = request.data
+#     serializer = StoreWriteSerializer(data=data)
+#     if serializer.is_valid(raise_exception=True):
+#         company = serializer.save(created_by=request.user)
+#         new_serializer = StoreReadSerializer(company, context={"request": request})
+#         # context["response"] = "ok"
+#         # context["response_message"] = SUCCESS_CREATED
+#         # add_company_data_to_response(company, context)
+
+#         return Response(new_serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# def update(self, request, *args, **kwargs):
+#     pk = kwargs.get("pk")
+#     request.user
+#     company = get_object_or_404(self.queryset, pk=pk)
+
+#     # if company.owner != user:
+#     #     context["response"] = "error"
+#     #     context["response_message"] = "you don't have permission."
+#     #     return Response(context)
+#     serializer = StoreWriteSerializer(company, data=request.data, partial=True)
+#     if serializer.is_valid():
+#         company = serializer.save()
+#         new_serializer = StoreReadSerializer(company, context={"request": request})
+#         # context["response"] = "ok"
+#         # context["response_message"] = SUCCESS_UPDATE
+#         # add_company_data_to_response(company, context)
+#         return Response(new_serializer.data, status=status.HTTP_200_OK)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# def destroy(self, request, *args, **kwargs):
+#     context = {}
+#     pk = kwargs.get("pk")
+#     request.user
+#     company = get_object_or_404(self.queryset, pk=pk)
+#     # if company.owner != user:
+#     #     context["response"] = "error"
+#     #     context["response_message"] = "you don't have permission."
+#     #     return Response(context, status=status.HTTP_400_BAD_REQUEST)
+#     operation = company.delete()
+#     if operation:
+#         context["response"] = "ok"
+#         context["response_message"] = SUCCESS_DELETE
+#         return Response(context, status=status.HTTP_200_OK)
+#     else:
+#         context["response"] = "error"
+#         context["response_message"] = "delete failed"
+#         return Response(context, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ImageViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    # authentication_classes = (JWTAuthentication,) # if you make it in settings you don't have to make it here
-    # pagination_class = PageNumberPagination
-    filter_backends = (SearchFilter, OrderingFilter)
+    queryset = Image.objects.select_related("media_pack")
+    pagination_class = PageNumberPagination
+    serializer_class = ImageSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
     search_fields = (
         "media_pack__store__name",
         "media_pack__store__address",
         "media_pack__created_at",
         "media_pack__created_by__username",
     )
-    ordering_fields = ("media_pack__created_at",)
+    ordering_fields = ("media_pack__created_at",)  # fields you want to order by
 
-    # def get_queryset(self):
-    #     return self.queryset.filter(company__owner=self.request.user)
-
-
-class ImageVewSet(viewsets.ViewSet):
-    permission_classes = (IsAuthenticated,)
-    queryset = Image.objects.select_related("media_pack")
-    # TRY THIS AND ENABLE get_queryset func MAYBE IT WILL BE BETTER
     # def get_queryset(self):
     #     return self.queryset.filter(owner=self.request.user)
-
-    # def list(self, request, *args, **kwargs):
-    #     # queryset = Store.objects.filter(owner=request.user)
-    #     context = {"request": request}
-    #     serializer_class = StoreReadSerializer(self.queryset, context=context, many=True)
-    #     return Response(serializer_class.data, status=status.HTTP_200_OK)
+    def get_serializer_class(self):
+        if self.action == "create":
+            return MediaPackSerializer
+        return self.serializer_class
 
     def retrieve(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        image = get_object_or_404(self.queryset, pk=pk)
-        context = {"request": request}
-        serializer_class = ImageSerializer(image, context=context)
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
-
-    def create(self, request, *args, **kwargs):
-        response_data = {}
-        try:
-            store_pk = request.data.get("store")
-            store = Store.objects.get(pk=store_pk)
-        except Store.DoesNotExist:
-            response_data["message"] = "there is no store with this name"
-            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = MediaPackWriteSerializer(data=request.data)
-        # images = request.FILES.getlist("images")
-        if serializer.is_valid():
-            serializer.save(created_by=request.user, store=store)
-            # for img in images:
-            #     Image.objects.create(media_pack=media_pack, image=img)
-            response_data["message"] = SUCCESS_CREATED
-            return Response(response_data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def update(self, request, *args, **kwargs):
-    #     pk = kwargs.get("pk")
-    #     user = request.user
-    #     company = get_object_or_404(self.queryset, pk=pk)
-
-    #     # if company.owner != user:
-    #     #     context["response"] = "error"
-    #     #     context["response_message"] = "you don't have permission."
-    #     #     return Response(context)
-    #     serializer = StoreWriteSerializer(company, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         company = serializer.save()
-    #         new_serializer = StoreReadSerializer(company, context={"request": request})
-    #         # context["response"] = "ok"
-    #         # context["response_message"] = SUCCESS_UPDATE
-    #         # add_company_data_to_response(company, context)
-    #         return Response(new_serializer.data, status=status.HTTP_200_OK)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return HttpResponseForbidden("Retrieving is not allowed.")
 
     def destroy(self, request, *args, **kwargs):
-        context = {}
-        pk = kwargs.get("pk")
-        request.user
-        image = get_object_or_404(self.queryset, pk=pk)
-        # if company.owner != user:
-        #     context["response"] = "error"
-        #     context["response_message"] = "you don't have permission."
-        #     return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        operation = image.delete()
-        if operation:
-            context["response"] = "ok"
-            context["response_message"] = SUCCESS_DELETE
-            return Response(context, status=status.HTTP_200_OK)
-        else:
-            context["response"] = "error"
-            context["response_message"] = "delete failed"
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        return HttpResponseForbidden("Destroy is not allowed.")
+
+    def get_object(self):
+        if self.action in ["retrieve", "destroy"]:
+            raise Http404("Retrieving/destroy is not allowed.")
+        return super().get_object()
+
+    def create(self, request, *args, **kwargs):
+        # response_data = {}
+        # try:
+        #     store_pk = request.data.get("store")
+        #     store = Store.objects.get(pk=store_pk)
+        # except Store.DoesNotExist:
+        #     response_data["message"] = "there is no store with this name"
+        #     return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(created_by=request.user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(status=status.HTTP_204_NO_CONTENT, headers=headers)
+
+        # serializer = MediaPackSerializer(data=request.data)
+        # # images = request.FILES.getlist("images")
+        # if serializer.is_valid():
+        #     serializer.save(created_by=request.user)
+        #     # for img in images:
+        #     #     Image.objects.create(media_pack=media_pack, image=img)
+
+        #     response_data["message"] = SUCCESS_CREATED
+        #     return Response(response_data, status=status.HTTP_201_CREATED)
+
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     instance = serializer.save(created_by=request.user)
+
+    #     # your custom code here
+    #     # example: instance.some_field = some_value
+    #     instance.save()
+
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-# @api_view(["POST"])
-# @permission_classes([])
-# @authentication_classes([])
-# def MediaView(request):
-#     response_data={}
-#     if request.method == "POST":
+# class ImageListPagination(ListAPIView):
+#     queryset = Image.objects.select_related("media_pack")
+#     serializer_class = ImageSerializer
+#     permission_classes = (IsAuthenticated,)
+#     # authentication_classes = (JWTAuthentication,) # if you make it in settings you don't have to make it here
+#     # pagination_class = PageNumberPagination
+#     filter_backends = (SearchFilter, OrderingFilter)
+#     search_fields = (
+#         "media_pack__store__name",
+#         "media_pack__store__address",
+#         "media_pack__created_at",
+#         "media_pack__created_by__username",
+#     )
+#     ordering_fields = ("media_pack__created_at",)
+
+#     # def get_queryset(self):
+#     #     return self.queryset.filter(company__owner=self.request.user)
+
+
+# class ImageVewSet(viewsets.ViewSet):
+#     permission_classes = (IsAuthenticated,)
+#     queryset = Image.objects.select_related("media_pack")
+#     # TRY THIS AND ENABLE get_queryset func MAYBE IT WILL BE BETTER
+#     # def get_queryset(self):
+#     #     return self.queryset.filter(owner=self.request.user)
+
+#     def list(self, request, *args, **kwargs):
+#         # queryset = Store.objects.filter(owner=request.user)
+#         context = {"request": request}
+#         serializer_class = StoreReadSerializer(self.queryset, context=context, many=True)
+#         return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+#     def retrieve(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk")
+#         image = get_object_or_404(self.queryset, pk=pk)
+#         context = {"request": request}
+#         serializer_class = ImageSerializer(image, context=context)
+#         return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+#     def create(self, request, *args, **kwargs):
+#         response_data = {}
 #         try:
-#             store_pk = request.data["store_pk"]
+#             store_pk = request.data.get("store")
 #             store = Store.objects.get(pk=store_pk)
 #         except Store.DoesNotExist:
 #             response_data["message"] = "there is no store with this name"
 #             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
-#         serializer = MediaPackReadSerializer(data=request.data)
-#         files = request.FILES.getlist("images")
+#         serializer = MediaPackWriteSerializer(data=request.data)
+#         # images = request.FILES.getlist("images")
 #         if serializer.is_valid():
-#             media_pack = serializer.save(created_by=request.user,store=store)
-#             for img in files:
-#                 Image.objects.create(media_pack=media_pack, image=img)
+#             serializer.save(created_by=request.user, store=store)
+#             # for img in images:
+#             #     Image.objects.create(media_pack=media_pack, image=img)
 #             response_data["message"] = SUCCESS_CREATED
-#             return  Response(response_data, status=status.HTTP_201_CREATED)
+#             return Response(response_data, status=status.HTTP_201_CREATED)
 
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     def destroy(self, request, *args, **kwargs):
+#         context = {}
+#         pk = kwargs.get("pk")
+#         request.user
+#         image = get_object_or_404(self.queryset, pk=pk)
+#         # if company.owner != user:
+#         #     context["response"] = "error"
+#         #     context["response_message"] = "you don't have permission."
+#         #     return Response(context, status=status.HTTP_400_BAD_REQUEST)
+#         operation = image.delete()
+#         if operation:
+#             context["response"] = "ok"
+#             context["response_message"] = SUCCESS_DELETE
+#             return Response(context, status=status.HTTP_200_OK)
+#         else:
+#             context["response"] = "error"
+#             context["response_message"] = "delete failed"
+#             return Response(context, status=status.HTTP_400_BAD_REQUEST)
