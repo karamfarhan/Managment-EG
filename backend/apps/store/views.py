@@ -116,11 +116,12 @@ class ImageListPagination(ListAPIView):
     # pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = (
-        "store__address",
-        "created_at",
-        "created_by__username",
+        "media_pack__store__name",
+        "media_pack__store__address",
+        "media_pack__created_at",
+        "media_pack__created_by__username",
     )
-    ordering_fields = ("created_at",)
+    ordering_fields = ("media_pack__created_at",)
 
     # def get_queryset(self):
     #     return self.queryset.filter(company__owner=self.request.user)

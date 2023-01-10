@@ -94,3 +94,8 @@ class Image(models.Model):
         blank=False,
     )
     media_pack = models.ForeignKey(MediaPack, on_delete=models.CASCADE, related_name="media_mediapack")
+
+    class Meta:
+        verbose_name = "Image"
+        verbose_name_plural = "Images"
+        ordering = ("-media_pack__created_at",)

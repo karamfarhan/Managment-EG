@@ -1,20 +1,18 @@
 from apps.account.models import Account
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
-from django.db.models import Q
-from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.exceptions import AuthenticationFailed, ValidationError
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
-from drf_extra_fields.fields import LowercaseEmailField
-# from rest_framework_simplejwt.serializers import UniqueValidator, LowercaseEmailField
-
 from django.core.validators import MinLengthValidator
+from django.db.models import Q
+from drf_extra_fields.fields import LowercaseEmailField
+from rest_framework import serializers
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .utils import decode_uid
 
+# from rest_framework_simplejwt.serializers import UniqueValidator, LowercaseEmailField
 
 
 class LoginTokenObtainSerializer(TokenObtainPairSerializer):
@@ -25,7 +23,7 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
 
-        token['username'] = user.username
+        # token['username'] = user.username
 
         # Add more custom fields from your custom user model, If you have a
         # custom user model.
@@ -40,7 +38,6 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
         # Check if the Account model has an email field
         if not hasattr(Account, "email"):
             raise ValidationError("The Account model does not have an email field")
-
 
         account_exists = Account.objects.filter(email=email).exists()
         if account_exists:
@@ -106,9 +103,15 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
 
 
 class AccountRegistrationSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True, label="Email Address", validators=[UniqueValidator(queryset=Account.objects.all())])
-    username = serializers.CharField(required=True, max_length=200, validators=[UniqueValidator(queryset=Account.objects.all())])
-    password = serializers.CharField(required=True, label="Password", style={"input_type": "password"}, validators=[MinLengthValidator(8)])
+    email = serializers.EmailField(
+        required=True, label="Email Address", validators=[UniqueValidator(queryset=Account.objects.all())]
+    )
+    username = serializers.CharField(
+        required=True, max_length=200, validators=[UniqueValidator(queryset=Account.objects.all())]
+    )
+    password = serializers.CharField(
+        required=True, label="Password", style={"input_type": "password"}, validators=[MinLengthValidator(8)]
+    )
     confirm_password = serializers.CharField(
         required=True,
         label="Confirm Password",
@@ -138,6 +141,7 @@ class AccountRegistrationSerializer(serializers.Serializer):
 
 class AccountRedSerializer(serializers.ModelSerializer):
     profile_image = serializers.SerializerMethodField("validate_profile_image")
+
     class Meta:
         model = Account
         fields = [
@@ -150,6 +154,7 @@ class AccountRedSerializer(serializers.ModelSerializer):
             "last_name",
         ]
         read_only_fields = fields
+
     def validate_profile_image(self, user):
         try:
             request = self.context["request"]
@@ -167,8 +172,6 @@ class AccountRedSerializer(serializers.ModelSerializer):
         else:
             profile_image = full_url
         return profile_image
-
-
 
 
 # class AccountWriteSerializer(serializers.ModelSerializer):
@@ -233,11 +236,6 @@ class AccountWriteSerializer(serializers.ModelSerializer):
         return instance
 
 
-
-
-
-
-
 class ChangePasswordSerializer(serializers.Serializer):
 
     old_password = serializers.CharField(required=True)
@@ -283,7 +281,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 #             raise serializers.ValidationError("User not active.")
 #         return data
 
-## Ai code 
+## Ai code
 
 
 class ResetPasswordSerializer(serializers.Serializer):
@@ -320,8 +318,6 @@ class ResetPasswordSerializer(serializers.Serializer):
         return data
 
 
-
-
 class AccountActivationSerializer(serializers.Serializer):
     uid = serializers.CharField(required=True)
     token = serializers.CharField(required=True)
@@ -347,8 +343,7 @@ class AccountActivationSerializer(serializers.Serializer):
             raise serializers.ValidationError("activation token is not valid or your link is expired! request new one")
 
 
-
-## AI code 
+## AI code
 
 # from uuid import UUID
 # class AccountActivationSerializer(serializers.Serializer):
@@ -390,8 +385,6 @@ class AccountActivationSerializer(serializers.Serializer):
 #             }
 
 
-
-
 # --> checkUsername serializer
 class CheckAccountSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=50)
@@ -399,4 +392,3 @@ class CheckAccountSerializer(serializers.Serializer):
     def validate_email(self, value):
         account_exists = Account.objects.filter(email=value).exists()
         return account_exists
-
