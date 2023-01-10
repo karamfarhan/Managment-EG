@@ -1,4 +1,4 @@
-from django.http import Http404, HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, authentication_classes
@@ -65,14 +65,15 @@ class ImageViewSet(viewsets.ModelViewSet):
         return self.serializer_class
 
     def retrieve(self, request, *args, **kwargs):
-        return HttpResponseForbidden("Retrieving is not allowed.")
+        return HttpResponseNotAllowed(["GET"], "Retrieving is not allowed")
 
     def destroy(self, request, *args, **kwargs):
-        return HttpResponseForbidden("Destroy is not allowed.")
+        return HttpResponseNotAllowed(["GET"], "Destroying is not allowed")
 
+    # This method is not required i think :)
     def get_object(self):
         if self.action in ["retrieve", "destroy"]:
-            raise Http404("Retrieving/destroy is not allowed.")
+            raise Http404("Retrieving/Destroying is not allowed.")
         return super().get_object()
 
     def create(self, request, *args, **kwargs):
