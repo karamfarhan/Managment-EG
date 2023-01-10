@@ -15,7 +15,6 @@ tox.ini
 .pytest_cache
 # Logs
 *.log
-
 # PyEnv version selector
 .python-version
 

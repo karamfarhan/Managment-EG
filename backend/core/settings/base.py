@@ -20,6 +20,12 @@ AUTHENTICATION_BACKENDS = (
 INSTALLED_APPS = [
     # Third party apps
     "jazzmin",
+    "django_cleanup.apps.CleanupConfig",
+    "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
+    "corsheaders",
+    "drf_yasg",
+    # Default apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -30,10 +36,6 @@ INSTALLED_APPS = [
     "apps.account",
     "apps.substance",
     "apps.store",
-    "rest_framework",
-    "rest_framework_simplejwt.token_blacklist",
-    "corsheaders",
-    "drf_yasg",
 ]
 
 MIDDLEWARE = [
