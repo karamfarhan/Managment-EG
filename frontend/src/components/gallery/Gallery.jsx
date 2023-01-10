@@ -1,7 +1,12 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
 import { AiOutlineFileImage } from "react-icons/ai";
 import Bar from "../UI/bars/Bar";
+import { fetchImgs } from "../../store/upload-img-slice.js";
+import AuthContext from "../../context/Auth-ctx";
+import { useDispatch, useSelector } from "react-redux";
+
 import ImgModel from "../UI/imgModel/ImgModel";
+import Notification from "../UI/notification/Notification";
 import SelectImg from "../UI/select_img/SelectImg";
 import classes from "./Gallery.module.css";
 
@@ -10,11 +15,28 @@ const Gallery = () => {
   const [dateToday, setDateToday] = useState("");
   const [showModel, setShowModel] = useState(false);
   const [addImgs, setAddImgs] = useState(false);
+  const authCtx = useContext(AuthContext);
+
+  const { token } = authCtx;
 
   //image mode state
   const [clickedImg, setClickedImg] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showImgModel, setShowImgModel] = useState(false);
+  const dispatch = useDispatch();
+
+  //get all images
+  useEffect(() => {
+    const obj = {
+      token,
+    };
+    dispatch(fetchImgs(obj));
+  }, []);
+
+  // all imgs
+  const { data: all_images } = useSelector((state) => state.imageReducer);
+  const allImgs = all_images && all_images.results;
+
   //show model
   const selectImgModelHandler = () => {
     setShowModel(true);
@@ -49,7 +71,10 @@ const Gallery = () => {
     setCurrentIndex((prevInx) => prevInx - 1);
   };
   return (
+    
     <Fragment>
+
+
       {showModel && (
         <SelectImg
           setDateToday={setDateToday}
@@ -79,24 +104,26 @@ const Gallery = () => {
         </button>
       </Bar>
       <div className={classes.preview}>
-        {dateToday !== "" && addImgs && (
-          <p className={classes.date}> {dateToday} </p>
-        )}
+     
 
         <div>
           {!showModel &&
-            imgSrc &&
-            addImgs &&
-            imgSrc.map((el, index) => {
+            allImgs &&
+            allImgs.map((el, index) => {
               return (
-                <>
-                  <figure
-                    key={index}
-                    onClick={() => selectedImgHandler(index, el)}
-                  >
-                    <img src={el} alt="f" />
+                <div className ={classes.fig} key={index} onClick={() => selectedImgHandler(index, el.image)}>
+                  <figure >
+                    <img src={el.image} alt="f" />
                   </figure>
-                </>
+                  <div>
+
+                  <h3> {el.media_pack.store} </h3>
+                  <p className = {classes.uploaded}> تم رفع الصور عن طريق : <span>{el.media_pack.created_by} </span></p>
+                  <p className = {classes.description_parag}> وصف الصورة : <span>{el.media_pack.alt_text}</span> </p>
+                  <p className = {classes.date}> {new Date(el.media_pack.created_at).toLocaleString()} </p>
+
+                  </div>
+                </div>
               );
             })}
         </div>

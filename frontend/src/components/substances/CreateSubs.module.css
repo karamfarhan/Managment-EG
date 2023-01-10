@@ -1,0 +1,23 @@
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.actions button {
+    padding: 15px 10px;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+}
+.actions button svg{
+    color: #fff;
+    font-size: 25px;
+}
+.actions button:first-of-type {
+    background-color: #2a4bf7;
+}
+.actions button:last-of-type{
+    background-color: rgb(233, 30, 99);
+}

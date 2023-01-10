@@ -1,6 +1,8 @@
 import { Fragment, useState, useEffect, useContext } from "react";
 import { useQuery } from "react-query";
 import ReactDOM from "react-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadImgs } from "../../../store/upload-img-slice.js";
 import AuthContext from "../../../context/Auth-ctx";
 import { AiOutlineFileImage, AiOutlineDelete } from "react-icons/ai";
 import classes from "./SelectImg.module.css";
@@ -17,10 +19,13 @@ export const ImgSelect = ({
   hideImageHandler,
 }) => {
   const [selectStores, setSelectStores] = useState([]);
+  const [selectedVal, setSelectVal] = useState("");
   const [img, setImg] = useState([]);
+  const [description, setDescription] = useState("");
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
   let dateNow = new Date().toLocaleString();
+  const dispatch = useDispatch();
   //select store
   useEffect(() => {
     const selectStore = async () => {
@@ -53,7 +58,6 @@ export const ImgSelect = ({
       setImg(selectedImages);
     }
   }
-  console.log(img);
 
   const fileTypes = [
     "image/apng",
@@ -71,40 +75,17 @@ export const ImgSelect = ({
   function validFileType(file) {
     return fileTypes.includes(file.type);
   }
-  //send images
-  const sendImgs = async () => {
-    const formdata = new FormData();
-
-    for (let i = 0; i < selectStores.length; i++) {
-      formdata.append("store", selectStores[i].pk);
-    }
-    for (let i = 0; i < img.length; i++) {
-      formdata.append("images", img[i]);
-    }
-
-    formdata.append("alt_text", "dds");
-    const res = await fetch("http://127.0.0.1:8000/images/", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formdata,
-    });
-    const data = await res.json();
-    console.log(data);
-  };
-
-  const { isLoading, refetch, error, data } = useQuery("images", sendImgs, {
-    refetchOnWindowFocus: false,
-    enabled: false,
-  });
-  console.log(data);
-
   //add images
   const addImgsHandler = () => {
+    const obj = {
+      token,
+      img,
+      selectVal: selectedVal,
+      description: description,
+    };
     setAddImgs(true);
     hideImageHandler();
-    refetch();
+    dispatch(uploadImgs(obj));
   };
 
   const isDisable = imgSrc.length === 0;
@@ -128,13 +109,16 @@ export const ImgSelect = ({
           </button>
 
           <div className={classes.selectLocation}>
-            <select>
+            <select
+              onChange={(e) => setSelectVal(e.target.value)}
+              value={selectedVal}
+            >
               <option value="#" selected hidden>
                 أختار الموقع
               </option>
               {selectStores.map((el) => {
                 return (
-                  <option value={el.name} key={el.pk}>
+                  <option value={el.pk} key={el.pk}>
                     {el.name}
                   </option>
                 );
@@ -156,7 +140,8 @@ export const ImgSelect = ({
                       <button
                         onClick={() =>
                           setImgSrc(imgSrc.filter((e) => e !== el))
-                        }>
+                        }
+                      >
                         {<AiOutlineDelete />}
                       </button>
                     </div>
@@ -164,6 +149,13 @@ export const ImgSelect = ({
                 );
               })}
           </div>
+        </div>
+        <div className={classes.comment}>
+          <textarea
+            placeholder="تعليق علي الصور"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          ></textarea>
         </div>
 
         <div className={classes["action_two"]}>

@@ -81,6 +81,7 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  max-height: 170px;
 }
 .preview figure {
   width: 150px;
@@ -119,7 +120,21 @@
   padding: 5px;
   border-radius: 10px;
 }
-
+.comment {
+  position: absolute;
+  bottom: 64px;
+  /* border: 1px solid black; */
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.comment textarea {
+  width: 100%;
+  resize: none;
+  /* position: relative; */
+  border: 1px solid;
+  min-height: 60px;
+}
 .action_two {
   position: absolute;
   background: #fff;

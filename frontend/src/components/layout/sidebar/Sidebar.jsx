@@ -4,6 +4,7 @@ import { StoreIcon } from "../../icons/StoreIcon";
 
 //icon
 import { FaCarSide } from "react-icons/fa";
+import { GiPaddles } from "react-icons/gi";
 import classes from "./Sidebar.module.css";
 import { GalleryIcon } from "../../icons/GalleryIcon";
 
@@ -43,6 +44,22 @@ const Sidebar = () => {
             <p>المخازن</p>
           </NavLink>
         </li>
+        <li>
+        <NavLink
+          to="/create_subs"
+          style={({ isActive }) => {
+            return {
+              background: isActive ? "#edeaea" : "inherit",
+              color: isActive ? "#2150d8" : "#fff",
+              borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
+            };
+          }}>
+          <span>
+            <GiPaddles />
+          </span>
+          <p>ادارة الموارد</p>
+        </NavLink>
+      </li>
         <li>
           <NavLink
             to="/gallery"

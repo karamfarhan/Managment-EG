@@ -29,15 +29,18 @@
   gap: 10px;
   flex-wrap: wrap;
 }
-.preview figure {
+.fig{
   width: 250px;
-  height: 250px;
-  overflow: hidden;
   cursor: pointer;
-}
+  overflow: hidden;
 
+}
+.fig figure {
+  overflow: hidden;
+  height: 250px;
+}
 @media (max-width: 767px) {
-  .preview figure {
+  .fig{
     width: 100%;
   }
 }
@@ -53,4 +56,7 @@
 .date {
   color: #777;
   margin: 0 0 10px 0;
+}
+.uploaded span, .description_parag span {
+  font-weight: bold;
 }

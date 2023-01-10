@@ -86,7 +86,7 @@ class MediaPackReadSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_store_name(self, mediapack):
-        return mediapack.store.name
+        return mediapack.store.address
 
     def get_username(self, mediapack):
         return mediapack.created_by.username

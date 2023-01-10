@@ -1,0 +1,42 @@
+.closeModel {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    font-size: 30px;
+}
+.closeModel:hover{
+   color: red;
+}
+.form {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 120;
+    text-align: center;
+    background-color: #fff;
+    width: 50%;
+    border-radius: 30px;
+}
+.form form {
+    width: 70%;
+    margin: 0 auto;
+}
+.form button[type = 'submit'] {
+    width: 100%;
+    margin: 30px 0;
+    padding: 10px 0;
+    background-color: #2a4bf7;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+}
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.actions button{
+    padding: 6px 10px;
+}

@@ -1,0 +1,12 @@
+.notificaiton {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    background: #0a950ac7;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+}

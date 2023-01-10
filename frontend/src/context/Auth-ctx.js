@@ -23,7 +23,7 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("user");
     sessionStorage.removeItem("current-page");
     localStorage.removeItem("filter");
-  }, []);
+  }, []); 
 
   const loginHandler = (token, data) => {
     setToken(token);

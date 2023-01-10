@@ -100,7 +100,7 @@ const Store = () => {
               {store_data &&
                 store_data.map((store) => {
                   return (
-                    <tr>
+                    <tr key = {store.id}>
                       <td>
                         {" "}
                         <Link to={`/store/${store.id}`}>{store.name}</Link>{" "}

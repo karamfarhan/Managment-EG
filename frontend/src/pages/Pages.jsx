@@ -9,6 +9,7 @@ import ProtectedRoutes from "./ProtectedRoute";
 import StaffPage from "./StaffPage";
 import  StoresPage  from "./StoresPage";
 import  StoreDetailPage  from "./StoreDetailPage";
+import CreateSubstancePage from './CreateSubstancePage';
 
 const Pages = () => {
   const authCtx = useContext(AuthContext);
@@ -33,6 +34,7 @@ const Pages = () => {
         />
         <Route path="/store/*" element={<StoresPage />} />
         <Route path="/store/:storeId" element={<StoreDetailPage />} />
+        <Route path="/create_subs" element={<CreateSubstancePage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/cars" element={<CarsPage />} />
       </Route>

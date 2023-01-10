@@ -56,7 +56,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             />
             <Inputs
               type="text"
-              placeholder="عنوان المخزن"
+              placeholder="عنوان المخزن أو الموقع"  
               onChange={(e) =>
                 setStoreData({ ...storeData, address: e.target.value })
               }
