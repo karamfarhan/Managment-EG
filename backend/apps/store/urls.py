@@ -4,8 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ImageViewSet, StoreSelectBarView, StoreViewSet
 
 urlpatterns = [
-    path("stores/select_list/", StoreSelectBarView.as_view(), name="all_stores"),
-    # path("images/all/", ImageListPagination.as_view(), name="all_images"),
+    path("stores/select_list/", StoreSelectBarView.as_view(), name="stores_select_list"),
 ]
 
 
