@@ -68,6 +68,27 @@ export const imagesPagination = createAsyncThunk("pagination/img", async (arg) =
 
 
 
+//search
+export const searchImgs = createAsyncThunk("search/imgs", async (arg, ThunkAPI) => {
+  try {
+    const res = await fetch(`http://127.0.0.1:8000/images/all/?search=${arg.search}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${arg.token}`,
+      },
+
+    });
+    if (!res.ok) {
+      throw new Error(res.statusText || "حدث خطأ");
+    }
+  ThunkAPI.dispatch(getStores(arg.token))
+
+   
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 
 
 

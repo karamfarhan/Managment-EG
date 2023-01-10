@@ -160,7 +160,7 @@ const {count} = data !== null && data
               );
             })}
         </div>
-        <Paginate currentPage = {currentPage} setCurrentPage = {setCurrentPage} itemsPerPage = {itemsPerPage} count = {count}  />
+       {itemsPerPage >= 10 &&  <Paginate currentPage = {currentPage} setCurrentPage = {setCurrentPage} itemsPerPage = {itemsPerPage} count = {count}  />}
       </div>
     </Fragment>
   );

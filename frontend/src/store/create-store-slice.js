@@ -47,6 +47,33 @@ export const createStore = createAsyncThunk("createStore/data", async (arg, Thun
     console.log(err);
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const storeSlice = createSlice({
   name: "store",
   initialState: {
