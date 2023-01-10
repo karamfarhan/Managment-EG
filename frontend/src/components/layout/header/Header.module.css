@@ -11,25 +11,7 @@
   flex-wrap: wrap;
   padding: 0 30px;
 }
-.header form{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-.header form input{
-  background-color: #fff;
-}
-.header form button[type = 'submit'] {
-  min-width: 90px;
-  height: 90%;
-  border-radius: 100px;
-  position: absolute;
-  right: -10px;
-  border: none;
-  color: #fff;
-  background-color: #f13a11;
-}
+
 .head-content {
   display: flex;
   justify-content: space-evenly;

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { notificationAction } from "./notification-slice";
 
 export const uploadImgs = createAsyncThunk(
   "upload/img",
@@ -31,7 +30,7 @@ export const uploadImgs = createAsyncThunk(
 // fetch images
 export const fetchImgs = createAsyncThunk("fetch/img", async (arg) => {
   try {
-    const res = await fetch("http://127.0.0.1:8000/images/all/", {
+    const res = await fetch("http://127.0.0.1:8000/images/", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${arg.token}`,
@@ -50,7 +49,7 @@ export const fetchImgs = createAsyncThunk("fetch/img", async (arg) => {
 // images pagination
 export const imagesPagination = createAsyncThunk("pagination/img", async (arg) => {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/images/all/?page=${arg.page}`, {
+    const res = await fetch(`http://127.0.0.1:8000/images/?page=${arg.page}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${arg.token}`,
@@ -71,7 +70,7 @@ export const imagesPagination = createAsyncThunk("pagination/img", async (arg) =
 //search
 export const searchImgs = createAsyncThunk("search/imgs", async (arg, ThunkAPI) => {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/images/all/?search=${arg.search}`, {
+    const res = await fetch(`http://127.0.0.1:8000/images/?search=${arg.search}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${arg.token}`,
@@ -81,20 +80,16 @@ export const searchImgs = createAsyncThunk("search/imgs", async (arg, ThunkAPI) 
     if (!res.ok) {
       throw new Error(res.statusText || "حدث خطأ");
     }
-  ThunkAPI.dispatch(getStores(arg.token))
+    
+    const data = await res.json()
+    console.log(data)
+    return data
 
    
   } catch (err) {
     console.log(err);
   }
 });
-
-
-
-
-
-
-
 
 
 
@@ -123,7 +118,7 @@ const images_slice = createSlice({
 
 
 
-
+    // image pagination
 
 
     [imagesPagination.pending]: (state) => {
@@ -137,7 +132,18 @@ const images_slice = createSlice({
       console.log(state);
     },
 
+    // search image 
 
+  [searchImgs.pending]: (state) => {
+      console.log(state);
+    },
+    [searchImgs.fulfilled]: (state, action) => {
+      console.log(action);
+      state.data = action.payload;
+    },
+    [searchImgs.rejected]: (state) => {
+      console.log(state);
+    },
 
 
 

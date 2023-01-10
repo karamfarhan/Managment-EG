@@ -58,7 +58,8 @@ export const ImgSelect = ({
       setImg(selectedImages);
     }
   }
-
+  console.log(img);
+  console.log(imgSrc);
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -86,8 +87,16 @@ export const ImgSelect = ({
     setAddImgs(true);
     hideImageHandler();
     dispatch(uploadImgs(obj));
+    setImgSrc([]);
+    setImg([]);
   };
 
+  //delete handler
+  const deleteHandler = (el, i) => {
+    setImgSrc(imgSrc.filter((e) => e !== el));
+
+    // setImg(delete img[i]);
+  };
   const isDisable = imgSrc.length === 0;
 
   return (
@@ -111,8 +120,7 @@ export const ImgSelect = ({
           <div className={classes.selectLocation}>
             <select
               onChange={(e) => setSelectVal(e.target.value)}
-              value={selectedVal}
-            >
+              value={selectedVal}>
               <option value="#" selected hidden>
                 أختار الموقع
               </option>
@@ -137,11 +145,7 @@ export const ImgSelect = ({
                     </figure>
                     <div className={classes.prev}>
                       <p> {index + 1} </p>
-                      <button
-                        onClick={() =>
-                          setImgSrc(imgSrc.filter((e) => e !== el))
-                        }
-                      >
+                      <button onClick={() => deleteHandler(el, index)}>
                         {<AiOutlineDelete />}
                       </button>
                     </div>
@@ -154,8 +158,7 @@ export const ImgSelect = ({
           <textarea
             placeholder="تعليق علي الصور"
             onChange={(e) => setDescription(e.target.value)}
-            value={description}
-          ></textarea>
+            value={description}></textarea>
         </div>
 
         <div className={classes["action_two"]}>
