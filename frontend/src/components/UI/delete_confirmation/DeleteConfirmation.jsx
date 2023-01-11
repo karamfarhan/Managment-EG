@@ -1,8 +1,12 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import {useDispatch} from 'react-redux'
+import { getSubs } from "../../../store/create-substance";
 import Backdrop from "../backdrop/Backdrop";
 import classes from "./DeleteConfirmation.module.css";
 
+
 const DeleteConfirmation = ({ deleteHandler, hideModel, id }) => {
+
   return (
     <Fragment>
       <Backdrop hideModel={hideModel} />

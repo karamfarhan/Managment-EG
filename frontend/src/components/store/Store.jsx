@@ -36,7 +36,7 @@ const Store = () => {
   //delete handler
   const deleteHandler = async (id) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/stores/${id}`, {
+      const res = await fetch(`http://127.0.0.1:8000/stores/${id}/`, {
         method: "DELETE",
         headers: {
           "Content-type": "application/json",

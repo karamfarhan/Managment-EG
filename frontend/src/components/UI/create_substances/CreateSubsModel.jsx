@@ -37,7 +37,7 @@ const CreateSubsModel = ({
   //form validation
   let formIsValid = false;
 
-  if (showMattersPage) {
+  if (showMattersForm) {
     if (name.trim() !== "" && selectBox.trim() !== "") {
       formIsValid = true;
     }
