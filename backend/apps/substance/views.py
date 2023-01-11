@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
@@ -8,11 +9,13 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Category, Instrument, InvoiceSubstanceItem, Substance
+from .models import Category, Instrument, Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, Substance
 from .serializers import (
     CategorySerializer,
     InstrumentSelectBarSerializer,
     InstrumentSerializer,
+    InvoiceReadSerializer,
+    InvoiceSerializer,
     SubstanceSelectBarSerializer,
     SubstanceSerializer,
 )
@@ -22,7 +25,7 @@ SUCCESS_UPDATE = "successfully updated"
 SUCCESS_DELETE = "successfully deleted"
 
 
-class CategoryVewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Category.objects.all()
     pagination_class = None
@@ -47,7 +50,7 @@ class CategoryVewSet(viewsets.ModelViewSet):
         return super().get_object()
 
 
-class SubstanceVewSet(viewsets.ModelViewSet):
+class SubstanceViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Substance.objects.select_related("created_by")
     pagination_class = PageNumberPagination
@@ -77,7 +80,7 @@ class SubstanceSelectBarView(ListAPIView):
     pagination_class = None
 
 
-class InstrumentVewSet(viewsets.ModelViewSet):
+class InstrumentViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Instrument.objects.select_related("created_by")
     pagination_class = PageNumberPagination
@@ -99,3 +102,34 @@ class InstrumentSelectBarView(ListAPIView):
     serializer_class = InstrumentSelectBarSerializer
     permission_classes = (IsAuthenticated,)
     pagination_class = None
+
+
+class InvoiceViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = Invoice.objects.all().prefetch_related(
+        Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),
+        Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()),
+        Prefetch("instruments__instrument", queryset=Instrument.objects.all()),
+        Prefetch("substances__substance", queryset=Substance.objects.all()),
+    )
+    serializer_class = InvoiceSerializer
+    pagination_class = PageNumberPagination
+    # filter_backends = [SearchFilter, OrderingFilter]
+    # search_fields = ["created_by__username", "name", "category__name", "ins_type"]  # fields you want to search against
+    # ordering_fields = ["name", "created_at", "last_maintain"]
+    # def get_queryset(self):
+    #     return Invoice.objects.all().prefetch_related(Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()))
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return InvoiceReadSerializer
+        return self.serializer_class
+
+    def create(self, request, *args, **kwargs):
+        substances = request.data.pop("substances")
+        instruments = request.data.pop("instruments")
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(created_by=request.user, substances=substances, instruments=instruments)
+        headers = self.get_success_headers(serializer.data)
+        return Response(status=status.HTTP_201_CREATED, headers=headers)

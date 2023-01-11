@@ -161,11 +161,12 @@ class Invoice(models.Model):
         on_delete=models.PROTECT,
         related_name="invoice_store",
     )
-    substances = models.ManyToManyField(
-        Substance, through="substance.InvoiceSubstanceItem", related_name="invoice_substance"
-    )
-    instruments = models.ManyToManyField(
-        Instrument, through="substance.InvoiceInstrumentItem", related_name="invoice_instrument"
+    substances = models.ManyToManyField(Substance, through="InvoiceSubstanceItem")
+    instruments = models.ManyToManyField(Instrument, through="InvoiceInstrumentItem")
+    note = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_("invoice note"),
     )
 
     def __str__(self):
@@ -173,16 +174,14 @@ class Invoice(models.Model):
 
 
 class InvoiceSubstanceItem(models.Model):
-    substance = models.ForeignKey(
-        Substance,
-        on_delete=models.CASCADE,
-    )
+    substance = models.ForeignKey(Substance, on_delete=models.CASCADE, null=True, blank=True)
     invoice = models.ForeignKey(
         Invoice,
         on_delete=models.CASCADE,
     )
     mass = models.BigIntegerField(
-        default=0,
+        null=False,
+        blank=False,
         verbose_name=_("invoice substance mass"),
     )
     description = models.TextField(
@@ -199,6 +198,8 @@ class InvoiceInstrumentItem(models.Model):
     instrument = models.ForeignKey(
         Instrument,
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     invoice = models.ForeignKey(
         Invoice,

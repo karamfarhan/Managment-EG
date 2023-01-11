@@ -1,7 +1,14 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import CategoryVewSet, InstrumentSelectBarView, InstrumentVewSet, SubstanceSelectBarView, SubstanceVewSet
+from .views import (
+    CategoryViewSet,
+    InstrumentSelectBarView,
+    InstrumentViewSet,
+    InvoiceViewSet,
+    SubstanceSelectBarView,
+    SubstanceViewSet,
+)
 
 urlpatterns = [
     # path(r"substances/categories/", SubstanceCategoryVewSet.as_view({'get': 'list','post': 'create', 'delete': 'destroy'}), name="substance_category"),
@@ -9,8 +16,8 @@ urlpatterns = [
     path("instruments/select_list/", InstrumentSelectBarView.as_view(), name="insturment_select"),
 ]
 router = DefaultRouter()
-router.register(r"substances", SubstanceVewSet, basename="substance")
-router.register(r"categories", CategoryVewSet, basename="category")
-router.register(r"instruments", InstrumentVewSet, basename="instrument")
+router.register(r"substances", SubstanceViewSet, basename="substance")
+router.register(r"categories", CategoryViewSet, basename="category")
+router.register(r"instruments", InstrumentViewSet, basename="instrument")
+router.register(r"invoices", InvoiceViewSet, basename="invoice")
 urlpatterns += (path("", include(router.urls)),)
-
