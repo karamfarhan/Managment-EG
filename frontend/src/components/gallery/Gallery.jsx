@@ -32,7 +32,7 @@ const Gallery = () => {
 
   // pagination details
   let curPage = sessionStorage.getItem("current-page");
-  const [currentPage, setCurrentPage] = useState(parseInt(curPage) || 1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const { data } = useSelector((state) => state.imageReducer);
   const { count } = data !== null && data;

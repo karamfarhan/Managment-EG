@@ -82,7 +82,7 @@ const Store = () => {
       {store_data && store_data.length === 0 && (
         <p className={classes.msg_p}> لا يوجد مخازن </p>
       )}
-      {store_data && store_data.length > 0 && (
+      {store_data && store_data.results.length > 0 && (
         <div className={classes["table_content"]}>
           <table>
             <thead>
@@ -97,8 +97,8 @@ const Store = () => {
             </thead>
 
             <tbody>
-              {store_data &&
-                store_data.map((store) => {
+              {store_data && store_data.results &&
+                store_data.results.map((store) => {
                   return (
                     <tr key = {store.id}>
                       <td>

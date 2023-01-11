@@ -58,8 +58,7 @@ export const ImgSelect = ({
       setImg(selectedImages);
     }
   }
-  console.log(img);
-  console.log(imgSrc);
+
   const fileTypes = [
     "image/apng",
     "image/bmp",
@@ -81,7 +80,7 @@ export const ImgSelect = ({
     const obj = {
       token,
       img,
-      selectVal: selectedVal,
+      selectVal: parseInt(selectedVal),
       description: description,
     };
     setAddImgs(true);
@@ -145,9 +144,9 @@ export const ImgSelect = ({
                     </figure>
                     <div className={classes.prev}>
                       <p> {index + 1} </p>
-                      <button onClick={() => deleteHandler(el, index)}>
+           {/*           <button onClick={() => deleteHandler(el, index)}>
                         {<AiOutlineDelete />}
-                      </button>
+                </button>*/}
                     </div>
                   </div>
                 );
