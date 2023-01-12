@@ -21,10 +21,10 @@ class StoreSerializer(serializers.ModelSerializer):
     def get_username(self, store):
         return store.created_by.username
 
-    def validate_name(self, value):
-        if len(value) <= 1:
-            raise serializers.ValidationError("name must be more than 2 letters")
-        return value
+    # def validate_name(self, value):
+    #     if len(value) <= 1:
+    #         raise serializers.ValidationError("name must be more than 2 letters")
+    #     return value
 
 
 class MediaPackSerializer(serializers.ModelSerializer):

@@ -2,9 +2,11 @@ from apps.account.models import Account
 from apps.store.models import Store
 from core.utils import unique_slug_generator
 from django.db import models
+from django.db.models import F
 from django.db.models.signals import pre_save
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
+from rest_framework import serializers
 
 
 class Category(models.Model):
@@ -41,9 +43,7 @@ class Substance(models.Model):
         verbose_name=_("substance name"),
     )
     category = models.ManyToManyField(
-        Category,
-        related_name="substance_categories",
-        verbose_name=_("substance Category"),
+        Category, related_name="substance_categories", verbose_name=_("substance Category"), null=True, blank=True
     )
     description = models.TextField(
         default="No description",
@@ -101,9 +101,7 @@ class Instrument(models.Model):
         verbose_name=_("instrument name"),
     )
     category = models.ManyToManyField(
-        Category,
-        related_name="instrument_categories",
-        verbose_name=_("instrumen Category"),
+        Category, related_name="instrument_categories", verbose_name=_("instrumen Category"), null=True, blank=True
     )
     description = models.TextField(
         default="No description",
@@ -115,7 +113,7 @@ class Instrument(models.Model):
     )
     in_action = models.BooleanField(
         default=False,
-        verbose_name=_("instrument availablity"),
+        verbose_name=_("in action"),
     )
     is_working = models.BooleanField(
         default=True,
@@ -148,6 +146,56 @@ class Instrument(models.Model):
         return self.name
 
 
+class InvoiceSubstanceItem(models.Model):
+    substance = models.ForeignKey(Substance, on_delete=models.CASCADE, null=True, blank=True)
+    mass = models.BigIntegerField(
+        null=False,
+        blank=False,
+        verbose_name=_("invoice substance mass"),
+    )
+    description = models.TextField(
+        default="No description",
+        max_length=500,
+        null=True,
+        unique=False,
+        blank=True,
+        verbose_name=_("invoice substance information"),
+    )
+
+    def save(self, *args, **kwargs):
+        if self.substance.units - self.mass < 0:
+            raise serializers.ValidationError({"mass": "the mass you intered is bigger than the substance have"})
+        else:
+            # TODO the update should be upgraded to better code (to - .update,F)
+            self.substance.units -= self.mass
+            self.substance.save()
+        return super().save(*args, **kwargs)
+
+
+class InvoiceInstrumentItem(models.Model):
+    instrument = models.ForeignKey(
+        Instrument,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    description = models.TextField(
+        default="No description",
+        max_length=500,
+        null=True,
+        unique=False,
+        blank=True,
+        verbose_name=_("invoice instrument information"),
+    )
+
+    def save(self, *args, **kwargs):
+        # TODO should return .in_action to False when the invoice deleted
+        self.instrument.in_action = True
+        self.instrument.save()
+
+        super().save(*args, **kwargs)
+
+
 class Invoice(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -164,8 +212,8 @@ class Invoice(models.Model):
         on_delete=models.CASCADE,
         related_name="invoice_store",
     )
-    substances_data = models.ManyToManyField(Substance, through="InvoiceSubstanceItem")
-    instruments_data = models.ManyToManyField(Instrument, through="InvoiceInstrumentItem")
+    substances = models.ManyToManyField(InvoiceSubstanceItem)
+    instruments = models.ManyToManyField(InvoiceInstrumentItem)
     note = models.TextField(
         null=True,
         blank=True,
@@ -175,44 +223,7 @@ class Invoice(models.Model):
     def __str__(self):
         return f"Invoice-{self.pk} - for Store {self.store.pk}"
 
-
-class InvoiceSubstanceItem(models.Model):
-    sub = models.ForeignKey(Substance, on_delete=models.CASCADE, null=True, blank=True)
-    invoice = models.ForeignKey(
-        Invoice,
-        on_delete=models.CASCADE,
-    )
-    mass = models.BigIntegerField(
-        null=False,
-        blank=False,
-        verbose_name=_("invoice substance mass"),
-    )
-    description = models.TextField(
-        default="No description",
-        max_length=500,
-        null=True,
-        unique=False,
-        blank=True,
-        verbose_name=_("invoice substance information"),
-    )
-
-
-class InvoiceInstrumentItem(models.Model):
-    ins = models.ForeignKey(
-        Instrument,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    invoice = models.ForeignKey(
-        Invoice,
-        on_delete=models.CASCADE,
-    )
-    description = models.TextField(
-        default="No description",
-        max_length=500,
-        null=True,
-        unique=False,
-        blank=True,
-        verbose_name=_("invoice instrument information"),
-    )
+    class Meta:
+        verbose_name = "Invoice"
+        verbose_name_plural = "Invoices"
+        ordering = ["-created_at"]
