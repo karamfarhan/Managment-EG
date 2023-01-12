@@ -9,6 +9,7 @@ import classes from "./CreateSubs.module.css";
 import { getSubs } from "../../store/create-substance";
 import InstrumentsView from "./instruments_view/InstrumentsView";
 import { getInstruments } from "../../store/create-instruments";
+import { subsPagination } from "../../store/create-substance";
 const CreateSubs = () => {
   //for add matters
   const [showModel, setShowModel] = useState(false);
@@ -18,6 +19,11 @@ const CreateSubs = () => {
   const [showMatters, setShowMatters] = useState(false);
   //show instruments
   const [showInstrumentsPage, setShowInstrumentsPage] = useState(false);
+  //current page
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(sessionStorage.getItem("current-page")) || 1
+  );
+
   const authCtx = useContext(AuthContext);
 
   const { token } = authCtx;
@@ -27,68 +33,83 @@ const CreateSubs = () => {
   //hide model for matters
   const hideSubstancesHandler = () => {
     setShowModel(false);
-    setShowInstrumentsForm(false)
+    setShowInstrumentsForm(false);
   };
   //fetch matters
-  useEffect(()=>{
-    if (showMatters===true) {
+  useEffect(() => {
+    if (showMatters === true && currentPage === 1) {
       dispatch(getSubs(token));
     }
-  }, [showMatters])
-    //fetch instruments
-    useEffect(()=>{
-      if (showInstrumentsPage===true) {
-        dispatch(getInstruments(token));
-      }
-    }, [showInstrumentsPage])
+
+    if (showMatters === true && currentPage > 1) {
+      const obj = {
+        page: currentPage,
+        token,
+      };
+      dispatch(subsPagination(obj));
+    }
+  }, [showMatters]);
+  //fetch instruments
+  useEffect(() => {
+    if (showInstrumentsPage === true) {
+      console.log("INSIDE USEEFFECT");
+      dispatch(getInstruments(token));
+    }
+  }, [showInstrumentsPage]);
 
   //fetch matters
   const fetchMatters = () => {
-   setShowMatters((prevState) => !prevState);
-   setShowInstrumentsPage(false)
+    setShowMatters(true);
+    setShowInstrumentsPage(false);
   };
 
-  
   //fetch instruments
   const fetchInstruments = () => {
-    setShowInstrumentsPage((prevState) => !prevState);
-    setShowMatters(false)
-   };
- 
+    setShowInstrumentsPage(true);
+    setShowMatters(false);
+  };
+
   return (
     <Fragment>
-      {(showModel || showInstrumentsForm) &&  (
-        <CreateSubsModel hideSubstancesHandler={hideSubstancesHandler} showMattersForm={showModel} instrumentsPage ={showInstrumentsPage} showMattersPage = {showMatters} showInstrumentsForm = {showInstrumentsForm}/>
+      {(showModel || showInstrumentsForm) && (
+        <CreateSubsModel
+          hideSubstancesHandler={hideSubstancesHandler}
+          showMattersForm={showModel}
+          instrumentsPage={showInstrumentsPage}
+          showMattersPage={showMatters}
+          showInstrumentsForm={showInstrumentsForm}
+        />
       )}
-   {/* المخزن الرئيسي*/}
+      {/* المخزن الرئيسي*/}
 
-   <div className={classes["main_inventory"]}>
-   <h2>ادارة الموارد / المخزن الرئيسي</h2>
-
- 
- </div>
+      <div className={classes["main_inventory"]}>
+        <h2>ادارة الموارد / المخزن الرئيسي</h2>
+      </div>
 
       <div className={classes.buttons}>
-      <div className={classes.show}>
-      <div>
-        <button
-          id="material"
-          type="button"
-          name="material"
-          onClick={fetchMatters}
-        >
-       
-    {showMatters ? "اخفاء" : "اظهار الموارد"}
-        </button>
-      </div>
+        <div className={classes.show}>
+          <div>
+            <button
+              id="material"
+              type="button"
+              name="material"
+              onClick={fetchMatters}
+            >
+              اظهار الموارد
+            </button>
+          </div>
 
-      <div>
-        <button id="instruments" type="button" name="instruments" onClick={fetchInstruments}
-        >
-         {showInstrumentsPage ? "اخفاء" : "اظهار المعدات"}
-        </button>
-      </div>
-    </div>
+          <div>
+            <button
+              id="instruments"
+              type="button"
+              name="instruments"
+              onClick={fetchInstruments}
+            >
+              اظهار المعدات
+            </button>
+          </div>
+        </div>
         <div className={classes.actions}>
           <button onClick={() => setShowModel(true)}>
             {" "}
@@ -109,9 +130,13 @@ const CreateSubs = () => {
         </div>
       </div>
 
-   
-      {showMatters  && <SubstancesView />}
-      {showInstrumentsPage && <InstrumentsView /> }
+      {showMatters && (
+        <SubstancesView
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
+      {showInstrumentsPage && <InstrumentsView />}
     </Fragment>
   );
 };

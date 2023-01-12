@@ -48,12 +48,13 @@ const CreateSubsModel = ({
     }
   }
   //submit handler
+
   const submitHandler = (e) => {
     e.preventDefault();
 
     if (formIsValid === false) return;
     //post subtances
-    if (showMattersForm) {
+    if (showMattersPage) {
       const obj = {
         name,
         unitType: selectBox,
@@ -173,8 +174,8 @@ const CreateSubsModel = ({
             })
           </div>*/}
           <button type="submit" disabled={!formIsValid}>
-            {" "}
-            أضف{" "}
+          
+            أضف
           </button>
         </form>
       </div>

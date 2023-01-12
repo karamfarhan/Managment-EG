@@ -1,3 +1,4 @@
+import {Fragment} from 'react'
 import { useSelector } from "react-redux";
 import classes from "./Instruments.module.css";
 const InstrumentsView = () => {
@@ -6,10 +7,16 @@ const InstrumentsView = () => {
   );
 
   return (
+
+ <Fragment>
+     
     <div className={classes["table_content"]}>
       {instrumentsData && instrumentsData.results.length === 0 && (
         <p className={classes.msg_p}> لا يوجد أجهزة </p>
       )}
+
+ 
+
 
       {instrumentsData && instrumentsData.results.length > 0 && (
         <table>
@@ -32,7 +39,7 @@ const InstrumentsView = () => {
                   <tr key={insruments.id}>
                     <td>{insruments.name}</td>
                     <td>{insruments.last_maintain}</td>
-                    <td>{insruments.in_action ? "متواجدة" : "خارج المخزن"}</td>
+                    <td>{insruments.in_action === false ? "متواجدة" : "خارج المخزن"}</td>
 
                     <td>{insruments.is_working ? "تعمل" : "معطلة"}</td>
                     <td>
@@ -52,6 +59,7 @@ const InstrumentsView = () => {
         </table>
       )}
     </div>
+ </Fragment>
   );
 };
 

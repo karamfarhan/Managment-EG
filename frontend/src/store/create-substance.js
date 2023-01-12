@@ -1,42 +1,90 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // POST
-export const createSubs = createAsyncThunk("create/subs", async (arg) => {
-  const res = await fetch("http://127.0.0.1:8000/substances/", {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-      Authorization: `Bearer ${arg.token}`,
-    },
-    body: JSON.stringify({
-      name: arg.name,
-      category: arg.category,
-      unit_type: arg.unitType,
-      description: arg.description,
-      units:arg.quantity
-    }),
-  });
-
-  const data = await res.json();
-});
+export const createSubs = createAsyncThunk(
+  "create/subs",
+  async (arg, ThunkAPI) => {
+    const res = await fetch("http://127.0.0.1:8000/substances/", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${arg.token}`,
+      },
+      body: JSON.stringify({
+        name: arg.name,
+        category: arg.category,
+        unit_type: arg.unitType,
+        description: arg.description,
+        units: arg.quantity,
+      }),
+    });
+    ThunkAPI.dispatch(getSubs(arg.token));
+    const data = await res.json();
+  }
+);
 
 // GET
 export const getSubs = createAsyncThunk("get/subs", async (arg) => {
-try{
+  try {
     const res = await fetch("http://127.0.0.1:8000/substances/", {
-        method: "GET",
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${arg}`,
+      },
+    });
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//DELETE
+export const deleteSubs = createAsyncThunk(
+  "delete/subs",
+  async (arg, ThunkAPI) => {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/substances/${arg.id}/`, {
+        method: "DELETE",
         headers: {
-          Authorization: `Bearer ${arg}`,
+          Authorization: `Bearer ${arg.token}`,
         },
       });
-    
+      ThunkAPI.dispatch(getSubs(arg.token));
+
       const data = await res.json();
-      console.log(data)
-      return data
-}catch(err){
-    console.log(err)
-}
-});
+
+      // setIsDelete(false);
+    } catch (err) {}
+  }
+);
+
+//pagination
+
+export const subsPagination = createAsyncThunk(
+  "delete/subs",
+  async (arg, ThunkAPI) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/substances/?page=${arg.page}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
+      //  ThunkAPI.dispatch(getSubs(arg.token))
+
+      const data = await res.json();
+      console.log(data);
+      return data;
+      // setIsDelete(false);
+    } catch (err) {}
+  }
+);
 
 //slice
 
@@ -46,18 +94,30 @@ const createSubSlice = createSlice({
     data: null,
   },
 
-  extraReducers : {
-  
-    [getSubs.pending] : (state, action)=> {
-        console.log(state)
+  extraReducers: {
+    [getSubs.pending]: (state, action) => {
+      console.log(state);
     },
-    [getSubs.fulfilled] : (state, action)=> {
-        state.data = action.payload;
-        console.log(action.payload)
+    [getSubs.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      console.log(action.payload);
     },
-    [getSubs.rejected] : (state, action)=> {
-        console.log(state)
+    [getSubs.rejected]: (state, action) => {
+      console.log(state);
     },
-  }
+
+    //pagination
+
+    [subsPagination.pending]: (state, action) => {
+      console.log(state);
+    },
+    [subsPagination.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      console.log(action.payload);
+    },
+    [subsPagination.rejected]: (state, action) => {
+      console.log(state);
+    },
+  },
 });
-export default createSubSlice
+export default createSubSlice;

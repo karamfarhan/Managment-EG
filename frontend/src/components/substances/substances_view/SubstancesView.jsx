@@ -1,64 +1,88 @@
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState, useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthContext from "../../../context/Auth-ctx";
+import { deleteSubs } from "../../../store/create-substance";
 import { getSubs } from "../../../store/create-substance";
+import EditFormSubs from "../edit-form-substance/EditFormSubs";
+
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./SubstancesView.module.css";
-const SubstancesView = () => {
+import Paginate from "../../UI/pagination/Paginate";
+import { subsPagination } from "../../../store/create-substance";
+const SubstancesView = ({currentPage, setCurrentPage}) => {
   const { data: subsData } = useSelector((state) => state.subsReducer);
 
   const [isDelete, setIsDelete] = useState(false);
-  const [instrumentId, setInstrumentId] = useState("");
+  const [substanceId, setSubstanceId] = useState("");
   const dispatch = useDispatch();
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
 
+  const navigate = useNavigate();
+
+  //pagination
+  const subsCount = subsData && subsData.count;
+
   //delete handler
 
+  const deleteHandler = (id) => {
+    const obj = {
+      id,
+      token,
+    };
+    dispatch(deleteSubs(obj));
+    setIsDelete(false);
+  };
 
-  const deleteHandler = async (id) => {
-    
-
-    try {
-      const res = await fetch(`http://127.0.0.1:8000/substances/${id}/`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      
-      const data = await res.json();
-      console.log(data);
-      console.log(res)
-
-      setIsDelete(false);
-
-
-          dispatch(getSubs(token));
-    
-      
-
-
-    } catch (err) {}
+  //edit form
+  const editForm = (id) => {
+    navigate(`/create_subs/${id}`);
   };
 
   //show delete mode
   const deleteModelHandler = (id) => {
     setIsDelete(true);
-    setInstrumentId(id);
+    setSubstanceId(id);
   };
 
   //hide delete mode
   const hideDeleteModel = () => {
     setIsDelete(false);
   };
+
+  //pagination
+  const paginationFun = (obj)=>{
+    dispatch(subsPagination(obj))
+  }
+
+
+  useEffect(()=> {
+
+    const obj = {
+      token,
+      page : currentPage
+    }
+
+    if(currentPage > 1) {
+      dispatch(subsPagination(obj))
+    }
+
+  }, [currentPage, dispatch])
+
   return (
     <Fragment>
+      {/*edit form*/}
+
+      <Routes>
+        <Route path="/:edit" element={<EditFormSubs subsEl={subsData} currentPage={currentPage} setCurrentPage={setCurrentPage} />} />
+      </Routes>
+
       {isDelete && (
         <DeleteConfirmation
           hideModel={hideDeleteModel}
           deleteHandler={deleteHandler}
-          id={instrumentId}
+          id={substanceId}
         />
       )}
 
@@ -96,7 +120,7 @@ const SubstancesView = () => {
                       <td>{new Date(subs.created_at).toLocaleDateString()}</td>
 
                       <td>
-                        <button>تعديل</button>
+                        <button onClick={() => editForm(subs.id)}>تعديل</button>
                         <button onClick={() => deleteModelHandler(subs.id)}>
                           حذف
                         </button>
@@ -105,7 +129,17 @@ const SubstancesView = () => {
                   );
                 })}
             </tbody>
+
+          
           </table>
+        )}
+        {subsCount > 10 && (
+          <Paginate
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            count={subsCount}
+            paginationFun={paginationFun}
+          />
         )}
       </div>
     </Fragment>

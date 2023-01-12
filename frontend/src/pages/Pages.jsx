@@ -34,7 +34,7 @@ const Pages = () => {
         />
         <Route path="/store/*" element={<StoresPage />} />
         <Route path="/store/:storeId" element={<StoreDetailPage />} />
-        <Route path="/create_subs" element={<CreateSubstancePage />} />
+        <Route path="/create_subs/*" element={<CreateSubstancePage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/cars" element={<CarsPage />} />
       </Route>

@@ -114,6 +114,14 @@ const Gallery = () => {
     };
     dispatch(searchImgs(obj));
   };
+
+  //pagination
+
+  const paginationFun = (obj)=>{
+    dispatch(imagesPagination(obj))
+  }
+
+  
   return (
     <Fragment>
       {showModel && (
@@ -196,8 +204,8 @@ const Gallery = () => {
           <Paginate
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            itemsPerPage={itemsPerPage}
             count={count}
+            paginationFun={paginationFun}
           />
         )}
       </div>

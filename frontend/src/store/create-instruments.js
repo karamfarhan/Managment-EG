@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const createInstruments = createAsyncThunk(
   "create/instruments",
-  async (arg) => {
+  async (arg,ThunkAPI) => {
     try {
       const res = await fetch("http://127.0.0.1:8000/instruments/", {
         method: "POST",
@@ -20,7 +20,7 @@ export const createInstruments = createAsyncThunk(
         }),
       });
       const data = await res.json();
-      console.log(data);
+      ThunkAPI.dispatch(getInstruments(arg.token))
       return data;
     } catch (err) {
       console.log(err);
@@ -47,6 +47,29 @@ export const getInstruments = createAsyncThunk(
     }
   }
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //slice
 const instrumentsSlice = createSlice({

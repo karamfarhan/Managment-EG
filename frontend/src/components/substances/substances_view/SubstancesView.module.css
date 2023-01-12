@@ -1,6 +1,7 @@
 .table_content {
   padding: 30px 0;
   overflow: auto;
+  position: relative;
 }
 
 .table_content table {

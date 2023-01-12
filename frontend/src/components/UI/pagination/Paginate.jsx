@@ -6,7 +6,7 @@ import { imagesPagination } from "../../../store/upload-img-slice";
 
 import classes from "./Paginate.module.css";
 
-const Paginate = ({ setCurrentPage, currentPage, count, itemsPerPage }) => {
+const Paginate = ({ setCurrentPage, currentPage, count, paginationFun }) => {
   const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
   const { token } = authCtx;
@@ -17,8 +17,8 @@ const Paginate = ({ setCurrentPage, currentPage, count, itemsPerPage }) => {
       token,
     };
     // store current page in session storage
-    sessionStorage.setItem("current-page", number);
-    dispatch(imagesPagination(obj));
+  sessionStorage.setItem("current-page", number);
+    paginationFun(obj)
     setCurrentPage(number);
   };
 
@@ -26,7 +26,7 @@ const Paginate = ({ setCurrentPage, currentPage, count, itemsPerPage }) => {
     <div className={classes.pagination}>
       <Pagination
         onChange={(value) => paginationHandler(value)}
-        pageSize={itemsPerPage}
+        pageSize={10}
         total={count}
         current={currentPage}
       />
