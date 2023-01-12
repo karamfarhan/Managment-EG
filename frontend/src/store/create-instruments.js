@@ -16,11 +16,13 @@ export const createInstruments = createAsyncThunk(
           name: arg.name,
           ins_type: "Handed",
           last_maintain: arg.last_maintain,
+          maintain_place : arg.maintain_place,
           description: arg.description,
         }),
       });
-      const data = await res.json();
       ThunkAPI.dispatch(getInstruments(arg.token))
+      const data = await res.json();
+      console.log(data)
       return data;
     } catch (err) {
       console.log(err);

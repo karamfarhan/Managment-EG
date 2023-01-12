@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext, useEffect } from "react";
+import { Fragment, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthContext from "../../../context/Auth-ctx";
@@ -41,34 +41,30 @@ const SubstancesView = ({ currentPage, setCurrentPage }) => {
     setSubstanceId(id);
   };
 
-    //hide delete mode
-    const hideDeleteModel = () => {
-      setIsDelete(false);
-    };
+  //hide delete mode
+  const hideDeleteModel = () => {
+    setIsDelete(false);
+  };
   //edit form
   const editForm = (id) => {
     navigate(`/create_subs/subs/${id}`);
   };
-
-
-
-
 
   //pagination
   const paginationFun = (obj) => {
     dispatch(subsPagination(obj));
   };
 
-  useEffect(() => {
-    const obj = {
-      token,
-      page: currentPage,
-    };
+  // useEffect(() => {
+  //   const obj = {
+  //     token,
+  //     page: currentPage,
+  //   };
 
-    if (currentPage > 1) {
-      dispatch(subsPagination(obj));
-    }
-  }, [currentPage, dispatch]);
+  //   if (currentPage === 1) {
+  //     dispatch(ge(obj));
+  //   }
+  // }, [currentPage, dispatch, token]);
 
   return (
     <Fragment>
@@ -96,7 +92,7 @@ const SubstancesView = ({ currentPage, setCurrentPage }) => {
       )}
 
       <div className={classes["table_content"]}>
-        {subsData && subsData.results.length === 0 && (
+        {subsData && subsData.results && subsData.results.length === 0 && (
           <p className={classes.msg_p}> لا يوجد مواد </p>
         )}
 

@@ -41,32 +41,28 @@ const CreateSubs = () => {
       dispatch(getSubs(token));
     }
 
-    if (showMatters === true && currentPage > 1) {
-      const obj = {
-        page: currentPage,
-        token,
-      };
-      dispatch(subsPagination(obj));
-    }
-  }, [showMatters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, dispatch, showMatters]);
   //fetch instruments
   useEffect(() => {
-    if (showInstrumentsPage === true) {
-      console.log("INSIDE USEEFFECT");
+    if (showInstrumentsPage === true && currentPage === 1) {
       dispatch(getInstruments(token));
     }
-  }, [showInstrumentsPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, dispatch, showInstrumentsPage]);
 
   //fetch matters
   const fetchMatters = () => {
     setShowMatters(true);
     setShowInstrumentsPage(false);
+    setCurrentPage(1);
   };
 
   //fetch instruments
   const fetchInstruments = () => {
     setShowInstrumentsPage(true);
     setShowMatters(false);
+    setCurrentPage(1);
   };
 
   return (
@@ -93,8 +89,7 @@ const CreateSubs = () => {
               id="material"
               type="button"
               name="material"
-              onClick={fetchMatters}
-            >
+              onClick={fetchMatters}>
               عرض الموارد
             </button>
           </div>
@@ -104,8 +99,7 @@ const CreateSubs = () => {
               id="instruments"
               type="button"
               name="instruments"
-              onClick={fetchInstruments}
-            >
+              onClick={fetchInstruments}>
               عرض المعدات
             </button>
           </div>

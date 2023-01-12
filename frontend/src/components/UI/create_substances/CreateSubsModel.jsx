@@ -26,13 +26,20 @@ const CreateSubsModel = ({
     quantity: 1,
     description: "",
     last_maintain: "",
+    maintain_place: "",
   });
   const [selectType, setSelectType] = useState(["T", "KL", "L"]);
   const [selectBox, setSelectBox] = useState("");
 
   const dispatch = useDispatch();
-  const { name, categorty, quantity, description, last_maintain } =
-    substancesData;
+  const {
+    name,
+    categorty,
+    quantity,
+    description,
+    last_maintain,
+    maintain_place,
+  } = substancesData;
 
   //form validation
   let formIsValid = false;
@@ -43,7 +50,11 @@ const CreateSubsModel = ({
     }
   }
   if (showInstrumentsForm) {
-    if (name.trim() !== "" && last_maintain.trim() !== "") {
+    if (
+      name.trim() !== "" &&
+      last_maintain.trim() !== "" &&
+      maintain_place.trim() !== ""
+    ) {
       formIsValid = true;
     }
   }
@@ -71,6 +82,7 @@ const CreateSubsModel = ({
         description,
         token: token,
         last_maintain,
+        maintain_place,
       };
       dispatch(createInstruments(obj));
     }
@@ -115,14 +127,26 @@ const CreateSubsModel = ({
               />
             </div>
           )}
-
+          {showInstrumentsForm && (
+            <Inputs
+              type="text"
+              placeholder="مكان الصيانة"
+              value={maintain_place}
+              required
+              onChange={(e) =>
+                setSubstancesData({
+                  ...substancesData,
+                  maintain_place: e.target.value,
+                })
+              }
+            />
+          )}
           {showMattersForm && (
             <div className={classes.selectType}>
               <select
                 value={selectBox}
                 onChange={(e) => setSelectBox(e.target.value)}
-                required
-              >
+                required>
                 <option hidden selected>
                   وحدة القياس
                 </option>
@@ -174,7 +198,6 @@ const CreateSubsModel = ({
             })
           </div>*/}
           <button type="submit" disabled={!formIsValid}>
-          
             أضف
           </button>
         </form>

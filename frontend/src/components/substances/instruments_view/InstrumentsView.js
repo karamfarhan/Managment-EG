@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {useNavigate, Routes , Route} from 'react-router-dom'
 import AuthContext from "../../../context/Auth-ctx";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
-import { deleteInstruments } from '../../../store/create-instruments';
+import { deleteInstruments, getInstruments } from '../../../store/create-instruments';
 import EditFormInstrum from '../edit-form-isntruments/EditFormInstrum';
 import Paginate from "../../UI/pagination/Paginate";
 import classes from "./Instruments.module.css";
@@ -30,6 +30,7 @@ const InstrumentsView = ({currentPage, setCurrentPage}) => {
   const paginationFun = (obj) => {
     dispatch(instrumentsPagination(obj));
   };
+
 
   //delete handler
   const deleteHandler = (id) => {
@@ -85,6 +86,7 @@ const InstrumentsView = ({currentPage, setCurrentPage}) => {
             <tr>
               <th>أسم الاله</th>
               <th>أخر صيانة</th>
+              <th>مكان صيانة</th>
               <th>متوافرة في المخزن</th>
               <th>الحالة</th>
               <th>تاريخ الاضافة</th>
@@ -100,6 +102,7 @@ const InstrumentsView = ({currentPage, setCurrentPage}) => {
                   <tr key={insruments.id}>
                     <td>{insruments.name}</td>
                     <td>{insruments.last_maintain}</td>
+                    <td>{insruments.maintain_place}</td>
                     <td>{insruments.in_action === false ? "متواجدة" : "خارج المخزن"}</td>
 
                     <td>{insruments.is_working ? "تعمل" : "معطلة"}</td>

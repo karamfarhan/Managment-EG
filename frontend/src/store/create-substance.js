@@ -18,7 +18,7 @@ export const createSubs = createAsyncThunk(
         units: arg.quantity,
       }),
     });
-    ThunkAPI.dispatch(getSubs(arg.token));
+    //ThunkAPI.dispatch(getSubs(arg.token));
     const data = await res.json();
   }
 );

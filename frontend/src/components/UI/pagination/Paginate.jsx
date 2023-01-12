@@ -17,8 +17,10 @@ const Paginate = ({ setCurrentPage, currentPage, count, paginationFun }) => {
       token,
     };
     // store current page in session storage
-  sessionStorage.setItem("current-page", number);
-    paginationFun(obj)
+    sessionStorage.setItem("current-page", number);
+    if (number !== 1) {
+      paginationFun(obj);
+    }
     setCurrentPage(number);
   };
 
