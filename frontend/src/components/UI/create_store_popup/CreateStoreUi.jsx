@@ -22,10 +22,17 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   const { token } = useContext(AuthContext);
   const dispatch = useDispatch();
   const { name, address, description } = storeData;
+  //form validation
+  let formIsValid = false
+
+  if(storeData.address.trim() !== "" && storeData.name.trim() !=="") {
+    formIsValid = true
+  }
 
   //submit handler
   const submitHandler = (e) => {
     e.preventDefault();
+    if(formIsValid === false) return
     //store obj
     const storeObj = {
       token: token,
@@ -37,6 +44,9 @@ export const InventoryCreator = ({ hideFormHandler }) => {
     dispatch(getStores(token));
     hideFormHandler();
   };
+
+
+
 
   return (
     <Fragment>
@@ -50,6 +60,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             <Inputs
               type="text"
               placeholder="أسم المخزن"
+              value = {storeData.name}
               onChange={(e) =>
                 setStoreData({ ...storeData, name: e.target.value })
               }
@@ -57,6 +68,8 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             <Inputs
               type="text"
               placeholder="عنوان المخزن أو الموقع"  
+              value = {storeData.address}
+
               onChange={(e) =>
                 setStoreData({ ...storeData, address: e.target.value })
               }
@@ -64,6 +77,8 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             <Inputs
               type="text"
               placeholder=" معلومات اضافية (وصف - ملاحظات- الخ..)"
+              value = {storeData.description}
+
               onChange={(e) =>
                 setStoreData({ ...storeData, description: e.target.value })
               }
@@ -88,7 +103,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
           </button>
         </div> */}
 
-          <button type="submit">اضافة</button>
+          <button disabled = {!formIsValid} type="submit">اضافة</button>
         </form>
       </div>
     </Fragment>

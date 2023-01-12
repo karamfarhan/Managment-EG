@@ -7,7 +7,7 @@
   --bar-shadow: 0 8px 26px -4px hsla(0, 0%, 8%, 0.15),
     0 8px 9px -5px hsla(0, 0%, 8%, 0.06);
   --main-btn-width: 50%;
-  --main-btn-font-size: 14px;
+  --main-btn-font-size: 19px;
 }
 
 * {
@@ -31,7 +31,10 @@ button:disabled {
 }
 
 /* error msg */
-
+.validation-msg {
+  font-size: 25px;
+  text-align: center;
+}
 .err-msg {
   color: red;
   font-size: 12px;

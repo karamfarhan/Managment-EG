@@ -95,7 +95,7 @@ const CreateSubs = () => {
               name="material"
               onClick={fetchMatters}
             >
-              اظهار الموارد
+              عرض الموارد
             </button>
           </div>
 
@@ -106,7 +106,7 @@ const CreateSubs = () => {
               name="instruments"
               onClick={fetchInstruments}
             >
-              اظهار المعدات
+              عرض المعدات
             </button>
           </div>
         </div>

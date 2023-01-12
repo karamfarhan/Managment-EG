@@ -26,6 +26,13 @@ export const ImgSelect = ({
   const { token } = authCtx;
   let dateNow = new Date().toLocaleString();
   const dispatch = useDispatch();
+
+  //form validation
+  let formIsValid = false
+
+  if(selectedVal !== "" && description.trim() !== "") {
+    formIsValid = true
+  }
   //select store
   useEffect(() => {
     const selectStore = async () => {
@@ -98,6 +105,8 @@ export const ImgSelect = ({
   };
   const isDisable = imgSrc.length === 0;
 
+
+
   return (
     <Fragment>
       <div className={classes["popup-container"]}>
@@ -161,7 +170,7 @@ export const ImgSelect = ({
         </div>
 
         <div className={classes["action_two"]}>
-          <button disabled={isDisable} onClick={addImgsHandler}>
+          <button disabled={!formIsValid} onClick={addImgsHandler}>
             تأكيد
           </button>
           <button onClick={hideImageHandler}>الغاء</button>
