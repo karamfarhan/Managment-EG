@@ -5,8 +5,10 @@ import AuthContext from "../../../context/Auth-ctx";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import { deleteInstruments } from '../../../store/create-instruments';
 import EditFormInstrum from '../edit-form-isntruments/EditFormInstrum';
+import Paginate from "../../UI/pagination/Paginate";
 import classes from "./Instruments.module.css";
-const InstrumentsView = ({setCurrentPage}) => {
+import { instrumentsPagination } from '../../../store/create-instruments';
+const InstrumentsView = ({currentPage, setCurrentPage}) => {
   const authCtx = useContext(AuthContext);
 
   const { token } = authCtx;
@@ -14,8 +16,22 @@ const InstrumentsView = ({setCurrentPage}) => {
   const [isDelete, setIsDelete] = useState(false);
   const [instrumentId, setInstrumentId] = useState("");
 
-  //delete handler
 
+  const { data: instrumentsData } = useSelector(
+    (state) => state.instrumentsReducer
+  );
+
+
+  
+  //pagination
+  const instrumentsCount = instrumentsData && instrumentsData.count;
+
+  //pagination
+  const paginationFun = (obj) => {
+    dispatch(instrumentsPagination(obj));
+  };
+
+  //delete handler
   const deleteHandler = (id) => {
     const obj = {
       id,
@@ -35,11 +51,6 @@ const InstrumentsView = ({setCurrentPage}) => {
   const hideDeleteModel = () => {
     setIsDelete(false);
   };
-
-  const { data: instrumentsData } = useSelector(
-    (state) => state.instrumentsReducer
-  );
-
 
 
 
@@ -107,6 +118,14 @@ const InstrumentsView = ({setCurrentPage}) => {
               })}
           </tbody>
         </table>
+      )}
+      {instrumentsCount > 10 && (
+        <Paginate
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          count={instrumentsCount}
+          paginationFun={paginationFun}
+        />
       )}
     </div>
  </Fragment>

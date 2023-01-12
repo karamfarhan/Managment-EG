@@ -44,9 +44,9 @@ const Store = () => {
         },
       });
       setIsDelete(false);
+      dispatch(getStores(token));
 
       const data = await res.json();
-      dispatch(getStores(token));
     } catch (err) {}
   };
 

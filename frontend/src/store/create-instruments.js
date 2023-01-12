@@ -75,6 +75,31 @@ export const deleteInstruments = createAsyncThunk(
 
 
 
+//pagination
+
+export const instrumentsPagination = createAsyncThunk(
+  "delete/subs",
+  async (arg, ThunkAPI) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/instruments/?page=${arg.page}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
+      //  ThunkAPI.dispatch(getSubs(arg.token))
+
+      const data = await res.json();
+      console.log(data);
+      return data;
+      // setIsDelete(false);
+    } catch (err) {}
+  }
+);
+
 
 
 
@@ -104,6 +129,13 @@ const instrumentsSlice = createSlice({
       console.log(action.payload);
     },
     [getInstruments.rejected]: (state) => {},
+
+    //pagination
+    [instrumentsPagination.pending]: (state) => {},
+    [instrumentsPagination.fulfilled]: (state, action) => {
+      state.data = action.payload;
+    },
+    [instrumentsPagination.rejected]: (state) => {},
   },
 });
 
