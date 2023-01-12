@@ -136,6 +136,9 @@ class Instrument(models.Model):
         verbose_name=_("last maintain at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
+    maintain_place = models.CharField(
+        max_length=250, null=False, blank=False, verbose_name=_("place of fixing the instrument")
+    )
 
     class Meta:
         verbose_name = "Instrument"
@@ -158,11 +161,11 @@ class Invoice(models.Model):
     )
     store = models.ForeignKey(
         Store,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="invoice_store",
     )
-    substances = models.ManyToManyField(Substance, through="InvoiceSubstanceItem")
-    instruments = models.ManyToManyField(Instrument, through="InvoiceInstrumentItem")
+    substances_data = models.ManyToManyField(Substance, through="InvoiceSubstanceItem")
+    instruments_data = models.ManyToManyField(Instrument, through="InvoiceInstrumentItem")
     note = models.TextField(
         null=True,
         blank=True,
@@ -174,7 +177,7 @@ class Invoice(models.Model):
 
 
 class InvoiceSubstanceItem(models.Model):
-    substance = models.ForeignKey(Substance, on_delete=models.CASCADE, null=True, blank=True)
+    sub = models.ForeignKey(Substance, on_delete=models.CASCADE, null=True, blank=True)
     invoice = models.ForeignKey(
         Invoice,
         on_delete=models.CASCADE,
@@ -195,7 +198,7 @@ class InvoiceSubstanceItem(models.Model):
 
 
 class InvoiceInstrumentItem(models.Model):
-    instrument = models.ForeignKey(
+    ins = models.ForeignKey(
         Instrument,
         on_delete=models.CASCADE,
         null=True,

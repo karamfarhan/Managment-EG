@@ -72,6 +72,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
             "in_action",
             "ins_type",
             "last_maintain",
+            "maintain_place",
             "created_at",
         ]
         read_only_fields = ["id", "created_by", "created_at", "in_action"]
@@ -83,11 +84,11 @@ class InvoiceSubstanceItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvoiceSubstanceItem
-        fields = ["substance", "substance_name", "mass", "description"]
+        fields = ["sub", "substance_name", "mass", "description"]
         read_only_fields = ["substance_name"]
 
     def get_substance_name(self, instance):
-        return instance.substance.name
+        return instance.sub.name
 
 
 class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
@@ -96,46 +97,49 @@ class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvoiceInstrumentItem
-        fields = ["instrument_name", "instrument", "description"]
+        fields = ["instrument_name", "ins", "description"]
         read_only_fields = ["instrument_name"]
 
     def get_instrument_name(self, instance):
-        return instance.instrument.name
+        return instance.ins.name
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    # substances = InvoiceSubstanceItemSerializer(many=True)
-    # instruments = InvoiceInstrumentItemSerializer(many=True)
+    # substances_data = InvoiceSubstanceItemSerializer(many=True)
+    # instruments_data = InvoiceInstrumentItemSerializer(many=True)
     class Meta:
         model = Invoice
         fields = [
             "note",
             "store",
-            # "substances",
-            # "instruments",
+            # "substances_data",
+            # "instruments_data",
         ]
 
     def create(self, validated_data):
-        substances_data = validated_data.pop("substances")
-        instruments_data = validated_data.pop("instruments")
-        invoice = Invoice.objects.create(**validated_data)
-        for substance_data in substances_data:
-            sub = Substance.objects.get(id=substance_data.pop("substance"))
-            InvoiceSubstanceItem.objects.create(invoice=invoice, substance=sub, **substance_data)
-            # substance = substance_data.pop('substance')
-            # invoice.substances.add(substance, through_defaults=substance_data)
-        for instrument_data in instruments_data:
-            ins = Instrument.objects.get(id=instrument_data.pop("instrument"))
-            InvoiceInstrumentItem.objects.create(invoice=invoice, instrument=ins, **instrument_data)
-            # instrument = instrument_data.pop('instrument')
-            # invoice.instruments.add(instrument, through_defaults=instrument_data)
-        return invoice
+        substances_data = validated_data.pop("substances_data")
+        instruments_data = validated_data.pop("instruments_data")
+        try:
+            invoice = Invoice.objects.create(**validated_data)
+            for substance_data in substances_data:
+                sub = get_object_or_404(Substance, id=substance_data.pop("sub"))
+                # InvoiceSubstanceItem.objects.create(invoice=invoice, substance=sub, **substance_data)
+                invoice.substances_data.add(sub, through_defaults=substance_data)
+            for instrument_data in instruments_data:
+                ins = get_object_or_404(Instrument, id=instrument_data.pop("ins"))
+                # InvoiceInstrumentItem.objects.create(invoice=invoice, instrument=ins, **instrument_data)
+                invoice.instruments_data.add(ins, through_defaults=instrument_data)
+
+            return invoice
+        except ValueError:
+            invoice.delete()
+            raise serializers.ValidationError({"error": "Invalid substances / instruments data was sent"})
 
 
 class InvoiceReadSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
-    substances = InvoiceSubstanceItemSerializer(many=True)
-    instruments = InvoiceInstrumentItemSerializer(many=True)
+    substances_data = InvoiceSubstanceItemSerializer(many=True)
+    instruments_data = InvoiceInstrumentItemSerializer(many=True)
     store = serializers.SerializerMethodField("get_store_name")
 
     class Meta:
@@ -145,8 +149,8 @@ class InvoiceReadSerializer(serializers.ModelSerializer):
             "created_at",
             "note",
             "store",
-            "substances",
-            "instruments",
+            "substances_data",
+            "instruments_data",
             "created_by",
         ]
         read_only_fields = fields

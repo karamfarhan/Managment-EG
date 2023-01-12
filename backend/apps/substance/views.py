@@ -107,10 +107,8 @@ class InstrumentSelectBarView(ListAPIView):
 class InvoiceViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Invoice.objects.all().prefetch_related(
-        Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),
-        Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()),
-        Prefetch("instruments__instrument", queryset=Instrument.objects.all()),
-        Prefetch("substances__substance", queryset=Substance.objects.all()),
+        Prefetch("substances_data", queryset=InvoiceSubstanceItem.objects.all()),
+        Prefetch("instruments_data", queryset=InvoiceInstrumentItem.objects.all()),
     )
     serializer_class = InvoiceSerializer
     pagination_class = PageNumberPagination
@@ -126,10 +124,10 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         return self.serializer_class
 
     def create(self, request, *args, **kwargs):
-        substances = request.data.pop("substances")
-        instruments = request.data.pop("instruments")
+        substances_data = request.data.get("substances_data", [])
+        instruments_data = request.data.get("instruments_data", [])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(created_by=request.user, substances=substances, instruments=instruments)
+        serializer.save(created_by=request.user, substances_data=substances_data, instruments_data=instruments_data)
         headers = self.get_success_headers(serializer.data)
         return Response(status=status.HTTP_201_CREATED, headers=headers)

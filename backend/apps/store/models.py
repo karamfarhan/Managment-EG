@@ -69,7 +69,7 @@ class Store(models.Model):
 class MediaPack(models.Model):
     store = models.ForeignKey(
         Store,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="mediapack_store",
     )
     alt_text = models.CharField(

@@ -47,7 +47,9 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
                     data["username"] = user.username
                     return data
                 else:
-                    raise AuthenticationFailed("The Account Is not Acitve, We sent an activation link to your email!.")
+                    raise AuthenticationFailed(
+                        "The Account Is not Acitve, Contact the Admin to Activate your Account."
+                    )
             else:
                 raise AuthenticationFailed("The Password Is Incorect.")
         else:
