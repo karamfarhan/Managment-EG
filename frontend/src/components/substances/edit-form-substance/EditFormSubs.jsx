@@ -15,7 +15,9 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   const { token } = authCtx;
   const selectedSubs =
     subsEl && subsEl.results && subsEl.results.find((el) => el.id === elId);
-
+    if(selectedSubs === null) {
+      backHandler()
+    }
   //state
   const [subsData, setSubsData] = useState({
     name: selectedSubs.name,
@@ -43,6 +45,8 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   ) {
     formIsValid = true;
   }
+
+
 
   //navigate
   const navigate = useNavigate();

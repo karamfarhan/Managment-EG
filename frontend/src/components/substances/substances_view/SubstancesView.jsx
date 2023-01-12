@@ -10,7 +10,8 @@ import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation"
 import classes from "./SubstancesView.module.css";
 import Paginate from "../../UI/pagination/Paginate";
 import { subsPagination } from "../../../store/create-substance";
-const SubstancesView = ({currentPage, setCurrentPage}) => {
+import EditFormInstrum from "../edit-form-isntruments/EditFormInstrum";
+const SubstancesView = ({ currentPage, setCurrentPage }) => {
   const { data: subsData } = useSelector((state) => state.subsReducer);
 
   const [isDelete, setIsDelete] = useState(false);
@@ -34,48 +35,56 @@ const SubstancesView = ({currentPage, setCurrentPage}) => {
     dispatch(deleteSubs(obj));
     setIsDelete(false);
   };
-
-  //edit form
-  const editForm = (id) => {
-    navigate(`/create_subs/${id}`);
-  };
-
   //show delete mode
   const deleteModelHandler = (id) => {
     setIsDelete(true);
     setSubstanceId(id);
   };
 
-  //hide delete mode
-  const hideDeleteModel = () => {
-    setIsDelete(false);
+    //hide delete mode
+    const hideDeleteModel = () => {
+      setIsDelete(false);
+    };
+  //edit form
+  const editForm = (id) => {
+    navigate(`/create_subs/subs/${id}`);
   };
 
+
+
+
+
   //pagination
-  const paginationFun = (obj)=>{
-    dispatch(subsPagination(obj))
-  }
+  const paginationFun = (obj) => {
+    dispatch(subsPagination(obj));
+  };
 
-
-  useEffect(()=> {
-
+  useEffect(() => {
     const obj = {
       token,
-      page : currentPage
-    }
+      page: currentPage,
+    };
 
-    if(currentPage > 1) {
-      dispatch(subsPagination(obj))
+    if (currentPage > 1) {
+      dispatch(subsPagination(obj));
     }
-
-  }, [currentPage, dispatch])
+  }, [currentPage, dispatch]);
 
   return (
     <Fragment>
       {/*edit form*/}
 
       <Routes>
-        <Route path="/:edit" element={<EditFormSubs subsEl={subsData} currentPage={currentPage} setCurrentPage={setCurrentPage} />} />
+        <Route
+          path="/subs/:edit"
+          element={
+            <EditFormSubs
+              subsEl={subsData}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          }
+        />
       </Routes>
 
       {isDelete && (
@@ -129,8 +138,6 @@ const SubstancesView = ({currentPage, setCurrentPage}) => {
                   );
                 })}
             </tbody>
-
-          
           </table>
         )}
         {subsCount > 10 && (

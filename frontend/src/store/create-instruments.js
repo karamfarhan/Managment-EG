@@ -52,6 +52,25 @@ export const getInstruments = createAsyncThunk(
 
 
 
+//DELETE
+export const deleteInstruments = createAsyncThunk(
+  "delete/subs",
+  async (arg, ThunkAPI) => {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/instruments/${arg.id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${arg.token}`,
+        },
+      });
+      ThunkAPI.dispatch(getInstruments(arg.token));
+
+      const data = await res.json();
+
+      // setIsDelete(false);
+    } catch (err) {}
+  }
+);
 
 
 

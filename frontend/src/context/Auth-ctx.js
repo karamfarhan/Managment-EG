@@ -67,6 +67,13 @@ export const AuthContextProvider = (props) => {
     userInfom
   };
 
+  
+useEffect(()=> {
+  if(token === '') {
+  
+    logoutHandler()
+  }
+}, [logoutHandler])
   return (
     <AuthContext.Provider value={contextValue}>
       {props.children}

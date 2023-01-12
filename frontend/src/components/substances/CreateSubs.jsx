@@ -136,7 +136,12 @@ const CreateSubs = () => {
           setCurrentPage={setCurrentPage}
         />
       )}
-      {showInstrumentsPage && <InstrumentsView />}
+      {showInstrumentsPage && (
+        <InstrumentsView
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </Fragment>
   );
 };
