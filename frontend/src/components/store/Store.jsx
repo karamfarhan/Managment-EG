@@ -127,18 +127,16 @@ const Store = () => {
           <SiHomeassistantcommunitystore /> انشاء مخزن
         </button>
       </Bar>
-      <div className={classes.search}>
-        <Search
-          placeholder="أبحث بأسم المخزن أو التاريخ YYYY-DD-MM"
-          onChange={searchHandler}
-          value={searchValue}
-          searchData={fetchSearchHandler}
-        />
-      </div>
+      <Search
+        placeholder="أبحث بأسم المخزن أو التاريخ YYYY-DD-MM"
+        onChange={searchHandler}
+        value={searchValue}
+        searchData={fetchSearchHandler}
+      />
       {store_data && store_data.length === 0 && (
         <p className={classes.msg_p}> لا يوجد مخازن </p>
       )}
-      {store_data && store_data.results.length > 0 && (
+      {store_data && store_data.results && store_data.results.length > 0 && (
         <div className={classes["table_content"]}>
           <div></div>
           <table>
@@ -164,7 +162,7 @@ const Store = () => {
                         <Link to={`/store/${store.id}`}>{store.name}</Link>{" "}
                       </td>
                       <td> {store.address} </td>
-                      <td> {store.created_by.username} </td>
+                      <td> {store.created_by} </td>
                       <td>{new Date(store.created_at).toDateString()} </td>
                       <td> {store.description} </td>
                       <td>

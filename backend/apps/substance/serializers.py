@@ -1,4 +1,5 @@
 from apps.account.models import Account
+from django.db.models import F
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
@@ -84,11 +85,11 @@ class InvoiceSubstanceItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvoiceSubstanceItem
-        fields = ["sub", "substance_name", "mass", "description"]
+        fields = ["substance", "substance_name", "mass", "description"]
         read_only_fields = ["substance_name"]
 
     def get_substance_name(self, instance):
-        return instance.sub.name
+        return instance.substance.name
 
 
 class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
@@ -97,63 +98,43 @@ class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvoiceInstrumentItem
-        fields = ["instrument_name", "ins", "description"]
+        fields = ["instrument_name", "instrument", "description"]
         read_only_fields = ["instrument_name"]
 
     def get_instrument_name(self, instance):
-        return instance.ins.name
+        return instance.instrument.name
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    # substances_data = InvoiceSubstanceItemSerializer(many=True)
-    # instruments_data = InvoiceInstrumentItemSerializer(many=True)
-    class Meta:
-        model = Invoice
-        fields = [
-            "note",
-            "store",
-            # "substances_data",
-            # "instruments_data",
-        ]
-
-    def create(self, validated_data):
-        substances_data = validated_data.pop("substances_data")
-        instruments_data = validated_data.pop("instruments_data")
-        try:
-            invoice = Invoice.objects.create(**validated_data)
-            for substance_data in substances_data:
-                sub = get_object_or_404(Substance, id=substance_data.pop("sub"))
-                # InvoiceSubstanceItem.objects.create(invoice=invoice, substance=sub, **substance_data)
-                invoice.substances_data.add(sub, through_defaults=substance_data)
-            for instrument_data in instruments_data:
-                ins = get_object_or_404(Instrument, id=instrument_data.pop("ins"))
-                # InvoiceInstrumentItem.objects.create(invoice=invoice, instrument=ins, **instrument_data)
-                invoice.instruments_data.add(ins, through_defaults=instrument_data)
-
-            return invoice
-        except ValueError:
-            invoice.delete()
-            raise serializers.ValidationError({"error": "Invalid substances / instruments data was sent"})
-
-
-class InvoiceReadSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
-    substances_data = InvoiceSubstanceItemSerializer(many=True)
-    instruments_data = InvoiceInstrumentItemSerializer(many=True)
-    store = serializers.SerializerMethodField("get_store_name")
+    substances = InvoiceSubstanceItemSerializer(many=True)
+    instruments = InvoiceInstrumentItemSerializer(many=True)
+    # TODO should return the store name when read, not the id
 
     class Meta:
         model = Invoice
         fields = [
             "id",
-            "created_at",
             "note",
             "store",
-            "substances_data",
-            "instruments_data",
+            "substances",
+            "instruments",
             "created_by",
+            "created_at",
         ]
-        read_only_fields = fields
+        read_only_fields = ["id", "created_by", "created_at"]
 
-    def get_store_name(self, instance):
-        return instance.store.name
+    def create(self, validated_data):
+        # TODO if there is error in the sub/ins the invoice will be created
+        # TODO should set up the method that will sucess when all thing are successed
+        # ! there is another way to set up the creating of sub/ins
+        # ! which is to call the serializer (.is_vaild,.save) of them and then
+        # ! in this way i can write any logic in the .create() method in the serializer
+        substances = validated_data.pop("substances")
+        instruments = validated_data.pop("instruments")
+        invoice = Invoice.objects.create(**validated_data)
+        substance_items_obj = [InvoiceSubstanceItem.objects.create(**substance) for substance in substances]
+        invoice.substances.add(*substance_items_obj)
+        instrument_items_obj = [InvoiceInstrumentItem.objects.create(**instrument) for instrument in instruments]
+        invoice.instruments.add(*instrument_items_obj)
+        return invoice

@@ -151,18 +151,15 @@ const Gallery = () => {
         </button>
       </Bar>
 
-      <div className={classes.search}>
-        {allImgs && allImgs.length === 0 && (
-          <p className="validation-msg">لا يوجد صور في اليوميات</p>
-        )}
-        <Search
-          placeholder="أبحث من خلال أسم الموقع أو أسم المستخدم"
-          onChange={searchHandler}
-          value={searchValue}
-          searchData={fetchSearchHandler}
-        />
-      </div>
-
+      <Search
+        placeholder=" أبحث من خلال التاريخ أسم الموقع أو أسم المستخدم"
+        onChange={searchHandler}
+        value={searchValue}
+        searchData={fetchSearchHandler}
+      />
+      {allImgs && allImgs.length === 0 && (
+        <p className="validation-msg">لا يوجد صور في اليوميات</p>
+      )}
       <div className={classes.preview}>
         <div>
           {!showModel &&

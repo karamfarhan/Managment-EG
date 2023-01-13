@@ -15,9 +15,9 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   const { token } = authCtx;
   const selectedSubs =
     subsEl && subsEl.results && subsEl.results.find((el) => el.id === elId);
-    if(selectedSubs === null) {
-      backHandler()
-    }
+  if (selectedSubs === null) {
+    backHandler();
+  }
   //state
   const [subsData, setSubsData] = useState({
     name: selectedSubs.name,
@@ -38,15 +38,13 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   let formIsValid = false;
 
   if (
-    (subsData.name.trim() !== "" )  &&
+    subsData.name.trim() !== "" &&
     (subsData.name !== selectedSubs.name ||
       subsData.description !== selectedSubs.description ||
       selectType !== subsData.unit_type)
   ) {
     formIsValid = true;
   }
-
-
 
   //navigate
   const navigate = useNavigate();
@@ -80,8 +78,9 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
         },
         body: JSON.stringify(obj),
       });
-      dispatch(getSubs(token));
-      const data = await res.json();
+      //  dispatch(getSubs(token));
+      //setCurrentPage(2);
+      return await res.json();
     } catch (err) {
       console.log(err);
     }
@@ -125,8 +124,7 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
           <div className={classes.selectType}>
             <select
               value={selectType}
-              onChange={(e) => setSelectType(e.target.value)}
-            >
+              onChange={(e) => setSelectType(e.target.value)}>
               {unitTypes.map((option, i) => {
                 return (
                   <option key={i} value={option}>

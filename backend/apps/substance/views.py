@@ -14,7 +14,6 @@ from .serializers import (
     CategorySerializer,
     InstrumentSelectBarSerializer,
     InstrumentSerializer,
-    InvoiceReadSerializer,
     InvoiceSerializer,
     SubstanceSelectBarSerializer,
     SubstanceSerializer,
@@ -107,27 +106,28 @@ class InstrumentSelectBarView(ListAPIView):
 class InvoiceViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Invoice.objects.all().prefetch_related(
-        Prefetch("substances_data", queryset=InvoiceSubstanceItem.objects.all()),
-        Prefetch("instruments_data", queryset=InvoiceInstrumentItem.objects.all()),
+        Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),
+        Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()),
     )
     serializer_class = InvoiceSerializer
     pagination_class = PageNumberPagination
-    # filter_backends = [SearchFilter, OrderingFilter]
-    # search_fields = ["created_by__username", "name", "category__name", "ins_type"]  # fields you want to search against
-    # ordering_fields = ["name", "created_at", "last_maintain"]
-    # def get_queryset(self):
-    #     return Invoice.objects.all().prefetch_related(Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()))
-
-    def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
-            return InvoiceReadSerializer
-        return self.serializer_class
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = [
+        "created_at",
+    ]
+    ordering_fields = [
+        "created_at",
+    ]
 
     def create(self, request, *args, **kwargs):
-        substances_data = request.data.get("substances_data", [])
-        instruments_data = request.data.get("instruments_data", [])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(created_by=request.user, substances_data=substances_data, instruments_data=instruments_data)
+        serializer.save(created_by=request.user)
         headers = self.get_success_headers(serializer.data)
-        return Response(status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def destroy(self, request, *args, **kwargs):
+        invoice = self.get_object()
+        invoice.substances.all().delete()
+        invoice.instruments.all().delete()
+        return super().destroy(request, *args, **kwargs)

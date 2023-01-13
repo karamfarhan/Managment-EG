@@ -34,7 +34,7 @@ const CreateSubsModel = ({
   const dispatch = useDispatch();
   const {
     name,
-    categorty,
+
     quantity,
     description,
     last_maintain,
@@ -74,6 +74,7 @@ const CreateSubsModel = ({
         token: token,
       };
       dispatch(createSubs(obj));
+      console.log("CREATED SUBS");
     }
 
     if (showInstrumentsForm) {
@@ -85,6 +86,7 @@ const CreateSubsModel = ({
         maintain_place,
       };
       dispatch(createInstruments(obj));
+      console.log("CREATED INSTRUM");
     }
 
     hideSubstancesHandler();

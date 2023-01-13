@@ -18,8 +18,8 @@ export const createSubs = createAsyncThunk(
         units: arg.quantity,
       }),
     });
-    //ThunkAPI.dispatch(getSubs(arg.token));
-    const data = await res.json();
+    ThunkAPI.dispatch(getSubs(arg.token));
+    return await res.json();
   }
 );
 
@@ -55,7 +55,7 @@ export const deleteSubs = createAsyncThunk(
       ThunkAPI.dispatch(getSubs(arg.token));
 
       const data = await res.json();
-
+      console.log(data);
       // setIsDelete(false);
     } catch (err) {}
   }
@@ -76,13 +76,56 @@ export const subsPagination = createAsyncThunk(
           },
         }
       );
-      //  ThunkAPI.dispatch(getSubs(arg.token))
 
       const data = await res.json();
       console.log(data);
       return data;
       // setIsDelete(false);
     } catch (err) {}
+  }
+);
+
+//SEARCH
+export const searchSubstances = createAsyncThunk("get/subs", async (arg) => {
+  try {
+    const res = await fetch(
+      `http://127.0.0.1:8000/substances/?search=${arg.search}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${arg.token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//search pagination
+export const subsSearchPagination = createAsyncThunk(
+  "store/search",
+  async (arg) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/substances/?page=${arg.page}&search=${arg.search}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err.message);
+    }
   }
 );
 
@@ -116,6 +159,29 @@ const createSubSlice = createSlice({
       console.log(action.payload);
     },
     [subsPagination.rejected]: (state, action) => {
+      console.log(state);
+    },
+
+    //search
+    [searchSubstances.pending]: (state, action) => {
+      console.log(state);
+    },
+    [searchSubstances.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      console.log(action.payload);
+    },
+    [searchSubstances.rejected]: (state, action) => {
+      console.log(state);
+    },
+    // search pagination
+    [subsSearchPagination.pending]: (state, action) => {
+      console.log(state);
+    },
+    [subsSearchPagination.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      console.log(action.payload);
+    },
+    [subsSearchPagination.rejected]: (state, action) => {
       console.log(state);
     },
   },

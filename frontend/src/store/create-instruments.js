@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 //POST
-
 export const createInstruments = createAsyncThunk(
   "create/instruments",
-  async (arg,ThunkAPI) => {
+  async (arg, ThunkAPI) => {
     try {
       const res = await fetch("http://127.0.0.1:8000/instruments/", {
         method: "POST",
@@ -16,13 +15,13 @@ export const createInstruments = createAsyncThunk(
           name: arg.name,
           ins_type: "Handed",
           last_maintain: arg.last_maintain,
-          maintain_place : arg.maintain_place,
+          maintain_place: arg.maintain_place,
           description: arg.description,
         }),
       });
-      ThunkAPI.dispatch(getInstruments(arg.token))
+      ThunkAPI.dispatch(getInstruments(arg.token));
       const data = await res.json();
-      console.log(data)
+      console.log(data);
       return data;
     } catch (err) {
       console.log(err);
@@ -50,10 +49,6 @@ export const getInstruments = createAsyncThunk(
   }
 );
 
-
-
-
-
 //DELETE
 export const deleteInstruments = createAsyncThunk(
   "delete/subs",
@@ -67,15 +62,12 @@ export const deleteInstruments = createAsyncThunk(
       });
       ThunkAPI.dispatch(getInstruments(arg.token));
 
-      const data = await res.json();
+      return await res.json();
 
       // setIsDelete(false);
     } catch (err) {}
   }
 );
-
-
-
 
 //pagination
 
@@ -102,20 +94,52 @@ export const instrumentsPagination = createAsyncThunk(
   }
 );
 
+//SEARCH
+export const searchInstruments = createAsyncThunk(
+  "get/instruments",
+  async (arg) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/instruments/?search=${arg.search}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
 
+      const data = await res.json();
 
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
-
-
-
-
-
-
-
-
-
-
-
+//search pagination
+export const instrumSearchPagination = createAsyncThunk(
+  "store/search",
+  async (arg) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/instruments/?page=${arg.page}&search=${arg.search}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+);
 
 //slice
 const instrumentsSlice = createSlice({
@@ -138,7 +162,21 @@ const instrumentsSlice = createSlice({
       state.data = action.payload;
     },
     [instrumentsPagination.rejected]: (state) => {},
+
+    //search
+    [searchInstruments.pending]: (state) => {},
+    [searchInstruments.fulfilled]: (state, action) => {
+      state.data = action.payload;
+    },
+    [searchInstruments.rejected]: (state) => {},
+
+    //search pagination
+    [instrumSearchPagination.pending]: (state) => {},
+    [instrumSearchPagination.fulfilled]: (state, action) => {
+      state.data = action.payload;
+    },
+    [instrumSearchPagination.rejected]: (state) => {},
   },
 });
 
-export default instrumentsSlice
+export default instrumentsSlice;

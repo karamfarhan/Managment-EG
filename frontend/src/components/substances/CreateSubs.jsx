@@ -20,9 +20,9 @@ const CreateSubs = () => {
   //show instruments
   const [showInstrumentsPage, setShowInstrumentsPage] = useState(false);
   //current page
-  const [currentPage, setCurrentPage] = useState(
-    parseInt(sessionStorage.getItem("current-page")) || 1
-  );
+  const [currentPage, setCurrentPage] = useState(1);
+  //search value
+  const [searchVal, setSearchVal] = useState("");
 
   const authCtx = useContext(AuthContext);
 
@@ -35,27 +35,31 @@ const CreateSubs = () => {
     setShowModel(false);
     setShowInstrumentsForm(false);
   };
+  console.log(showMatters);
   //fetch matters
   useEffect(() => {
-    if (showMatters === true && currentPage === 1) {
+    if (
+      showMatters === true &&
+      showInstrumentsPage === false &&
+      currentPage === 1 &&
+      searchVal === ""
+    ) {
       dispatch(getSubs(token));
     }
+    //fetch instruments
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, dispatch, showMatters]);
-  //fetch instruments
-  useEffect(() => {
-    if (showInstrumentsPage === true && currentPage === 1) {
+    if (showInstrumentsPage === true && currentPage === 1 && searchVal === "") {
       dispatch(getInstruments(token));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, dispatch, showInstrumentsPage]);
+  }, [currentPage, dispatch, showMatters, searchVal, showInstrumentsPage]);
 
   //fetch matters
   const fetchMatters = () => {
     setShowMatters(true);
     setShowInstrumentsPage(false);
     setCurrentPage(1);
+    setSearchVal("");
   };
 
   //fetch instruments
@@ -63,6 +67,7 @@ const CreateSubs = () => {
     setShowInstrumentsPage(true);
     setShowMatters(false);
     setCurrentPage(1);
+    setSearchVal("");
   };
 
   return (
@@ -128,12 +133,16 @@ const CreateSubs = () => {
         <SubstancesView
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          setSearchVal={setSearchVal}
+          searchVal={searchVal}
         />
       )}
       {showInstrumentsPage && (
         <InstrumentsView
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          setSearchVal={setSearchVal}
+          searchVal={searchVal}
         />
       )}
     </Fragment>

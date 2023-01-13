@@ -2,20 +2,31 @@ import { Fragment, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthContext from "../../../context/Auth-ctx";
-import { deleteSubs } from "../../../store/create-substance";
-import { getSubs } from "../../../store/create-substance";
+import {
+  deleteSubs,
+  searchSubstances,
+  subsSearchPagination,
+} from "../../../store/create-substance";
 import EditFormSubs from "../edit-form-substance/EditFormSubs";
 
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./SubstancesView.module.css";
 import Paginate from "../../UI/pagination/Paginate";
+import Search from "../../UI/search/Search";
 import { subsPagination } from "../../../store/create-substance";
-import EditFormInstrum from "../edit-form-isntruments/EditFormInstrum";
-const SubstancesView = ({ currentPage, setCurrentPage }) => {
+const SubstancesView = ({
+  currentPage,
+  setCurrentPage,
+  searchVal,
+  setSearchVal,
+}) => {
   const { data: subsData } = useSelector((state) => state.subsReducer);
 
   const [isDelete, setIsDelete] = useState(false);
   const [substanceId, setSubstanceId] = useState("");
+
+  //search value
+
   const dispatch = useDispatch();
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
@@ -26,7 +37,6 @@ const SubstancesView = ({ currentPage, setCurrentPage }) => {
   const subsCount = subsData && subsData.count;
 
   //delete handler
-
   const deleteHandler = (id) => {
     const obj = {
       id,
@@ -55,16 +65,25 @@ const SubstancesView = ({ currentPage, setCurrentPage }) => {
     dispatch(subsPagination(obj));
   };
 
-  // useEffect(() => {
-  //   const obj = {
-  //     token,
-  //     page: currentPage,
-  //   };
+  //search handler
+  const searchHandler = (e) => {
+    setSearchVal(e.target.value);
+  };
 
-  //   if (currentPage === 1) {
-  //     dispatch(ge(obj));
-  //   }
-  // }, [currentPage, dispatch, token]);
+  //search dispatch
+  const searchDispatch = () => {
+    setCurrentPage(1);
+    const obj = {
+      token,
+      search: searchVal,
+    };
+    dispatch(searchSubstances(obj));
+  };
+
+  //search pagnation
+  const searchPagination = (obj) => {
+    dispatch(subsSearchPagination(obj));
+  };
 
   return (
     <Fragment>
@@ -92,10 +111,14 @@ const SubstancesView = ({ currentPage, setCurrentPage }) => {
       )}
 
       <div className={classes["table_content"]}>
+        <Search
+          onChange={searchHandler}
+          value={searchVal}
+          searchData={searchDispatch}
+        />
         {subsData && subsData.results && subsData.results.length === 0 && (
           <p className={classes.msg_p}> لا يوجد مواد </p>
         )}
-
         {subsData && subsData.results.length > 0 && (
           <table>
             <thead>
@@ -142,6 +165,9 @@ const SubstancesView = ({ currentPage, setCurrentPage }) => {
             setCurrentPage={setCurrentPage}
             count={subsCount}
             paginationFun={paginationFun}
+            searchPagination={searchPagination}
+            search={searchVal}
+            searchFn={searchDispatch}
           />
         )}
       </div>
