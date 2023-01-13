@@ -1,14 +1,19 @@
 import { useContext } from "react";
 import { Pagination } from "antd";
-import { useDispatch } from "react-redux";
 import AuthContext from "../../../context/Auth-ctx";
-import { imagesPagination } from "../../../store/upload-img-slice";
 
 import classes from "./Paginate.module.css";
 
-const Paginate = ({ setCurrentPage, currentPage, count, paginationFun }) => {
+const Paginate = ({
+  setCurrentPage,
+  currentPage,
+  count,
+  paginationFun,
+  search,
+  searchPagination,
+  searchFn,
+}) => {
   const authCtx = useContext(AuthContext);
-  const dispatch = useDispatch();
   const { token } = authCtx;
 
   const paginationHandler = (number) => {
@@ -16,10 +21,18 @@ const Paginate = ({ setCurrentPage, currentPage, count, paginationFun }) => {
       page: number,
       token,
     };
+    console.log(search);
     // store current page in session storage
     sessionStorage.setItem("current-page", number);
-    if (number !== 1) {
+    if (number > 1 && search.trim() === "") {
       paginationFun(obj);
+    }
+    if (number > 1 && search !== "") {
+      obj.search = search;
+      searchPagination(obj);
+    }
+    if (number === 1 && search !== "") {
+      searchFn();
     }
     setCurrentPage(number);
   };

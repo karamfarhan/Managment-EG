@@ -1,7 +1,7 @@
 import Inputs from "../inputs/Inputs";
 import classes from "./Search.module.css";
 
-const Search = ({ value, onChange, searchData }) => {
+const Search = ({ value, onChange, searchData, placeholder }) => {
   const submitHander = (e) => {
     e.preventDefault();
     searchData();
@@ -11,7 +11,7 @@ const Search = ({ value, onChange, searchData }) => {
       <form onSubmit={submitHander}>
         <Inputs
           type="search"
-          placeholder=" أبحث من خلال اسم الموقع أو أسم الموظف"
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
         />

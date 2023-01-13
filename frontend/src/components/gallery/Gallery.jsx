@@ -10,7 +10,6 @@ import AuthContext from "../../context/Auth-ctx";
 import { useDispatch, useSelector } from "react-redux";
 
 import ImgModel from "../UI/imgModel/ImgModel";
-import Notification from "../UI/notification/Notification";
 import SelectImg from "../UI/select_img/SelectImg";
 import classes from "./Gallery.module.css";
 import Paginate from "../UI/pagination/Paginate";
@@ -117,11 +116,10 @@ const Gallery = () => {
 
   //pagination
 
-  const paginationFun = (obj)=>{
-    dispatch(imagesPagination(obj))
-  }
+  const paginationFun = (obj) => {
+    dispatch(imagesPagination(obj));
+  };
 
-  
   return (
     <Fragment>
       {showModel && (
@@ -154,13 +152,15 @@ const Gallery = () => {
       </Bar>
 
       <div className={classes.search}>
-        {allImgs && allImgs.length === 0 && <p className= "validation-msg">لا يوجد صور في اليوميات</p>}
-      {allImgs && allImgs.length > 1 &&   <Search
-        placeholder="أبحث من خلال أسم الموقع أو أسم المستخدم"
-        onChange={searchHandler}
-        value={searchValue}
-        searchData={fetchSearchHandler}
-      />}
+        {allImgs && allImgs.length === 0 && (
+          <p className="validation-msg">لا يوجد صور في اليوميات</p>
+        )}
+        <Search
+          placeholder="أبحث من خلال أسم الموقع أو أسم المستخدم"
+          onChange={searchHandler}
+          value={searchValue}
+          searchData={fetchSearchHandler}
+        />
       </div>
 
       <div className={classes.preview}>
