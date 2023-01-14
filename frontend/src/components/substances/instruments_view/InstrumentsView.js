@@ -117,7 +117,6 @@ const InstrumentsView = ({
                 <th>متوافرة في المخزن</th>
                 <th>الحالة</th>
                 <th>تاريخ الاضافة</th>
-                <th> المنشيء</th>
                 <th>معلومات اضافية</th>
                 <th>حدث</th>
               </tr>
@@ -131,9 +130,11 @@ const InstrumentsView = ({
                       <td>{insruments.name}</td>
                       <td>{insruments.last_maintain}</td>
                       <td>{insruments.maintain_place}</td>
-                      <td style ={{
-                        color :  insruments.in_action === false  ? "#000" : "red"
-                      }}>
+                      <td
+                        style={{
+                          color:
+                            insruments.in_action === false ? "#000" : "red",
+                        }}>
                         {insruments.in_action === false
                           ? "متواجدة"
                           : "خارج المخزن"}
@@ -143,9 +144,7 @@ const InstrumentsView = ({
                       <td>
                         {new Date(insruments.created_at).toLocaleDateString()}
                       </td>
-
-                    
-
+                      <td>{insruments.description}</td>
                       <td>
                         <button
                           onClick={() => editInstrumentsForm(insruments.id)}>

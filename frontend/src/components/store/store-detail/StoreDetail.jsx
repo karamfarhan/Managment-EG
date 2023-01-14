@@ -36,25 +36,26 @@ const StoreDetail = () => {
 
   return (
     <div className={classes.content}>
-      <div>
-     
-      <Invoices store = {data} />
-      
-      </div>
-
-      <div dir = "rtl">
+      <div dir="rtl">
         <h2> {data.name}</h2>
-        <span> {new Date(data.created_at).toLocaleString()} </span>
-
-        <h3> {data.address} </h3>
         <p>
-          {" "}
-          <span>{data.description}</span>{" "}
+          تم انشاء المخزن في :
+          <span> {new Date(data.created_at).toLocaleString()} </span>{" "}
         </p>
-
+        <div>
+          <p>
+            الموقع المرتبط بالمخزن : <span> {data.address}</span>
+          </p>
+        </div>
+        <p>
+          <span>{data.description}</span>
+        </p>
         <p className={classes.status}>
           حالة المخزن : <span>{data.isActive ? "غير نشط" : " نشط"} </span>{" "}
         </p>
+        <div>
+          <Invoices store={data} />
+        </div>
       </div>
     </div>
   );

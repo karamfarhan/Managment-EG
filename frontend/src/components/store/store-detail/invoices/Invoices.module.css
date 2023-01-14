@@ -1,8 +1,7 @@
 .invoice {
     background-color: #ffff005c;
     text-align: center;
-    max-height: 100vh;
-    position: absolute;
+    height: 100%;
     overflow: auto;
     width: 100%;
 }

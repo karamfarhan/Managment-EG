@@ -1,20 +1,15 @@
 .content {
-    display: flex;
-    flex-wrap: wrap;
+  width: 95%;
+  padding: 30px 15px;
+  margin: 60px auto;
 }
 
-.content>div:first-of-type {
-    width: 35%;
-    position: relative;
-}
-
-
-.content>div:last-of-type {
-    width: calc(100% - 35%);
-    margin-left: auto;
-    padding-right: 30px;
+.content > div:first-of-type {
+  padding: 10px;
+  overflow: hidden;
+  border: 1px solid #000;
 }
 
 .content span {
-    font-weight: bold;
+  font-weight: bold;
 }

@@ -14,13 +14,17 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
   const selectedInstrument =
-  instruments && instruments.results && instruments.results.find((el) => el.id === elId);
+    instruments &&
+    instruments.results &&
+    instruments.results.find((el) => el.id === elId);
 
   //state
   const [instrumData, setInstrumData] = useState({
     name: selectedInstrument.name,
     description: selectedInstrument.description,
     last_maintain: selectedInstrument.last_maintain,
+    maintain_site: selectedInstrument.maintain_place,
+    in_action: selectedInstrument.in_action,
   });
 
   const [unitTypes, setUnitTypes] = useState(["T", "KL", "L"]);
@@ -33,7 +37,7 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
   let formIsValid = false;
 
   if (
-    (instrumData.name.trim() !== "" )  &&
+    instrumData.name.trim() !== "" &&
     (instrumData.name !== selectedInstrument.name ||
       instrumData.description !== selectedInstrument.description ||
       instrumData.last_maintain !== selectedInstrument.unit_type)
@@ -49,19 +53,9 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
       name: instrumData.name,
       description: instrumData.description,
       last_maintain: instrumData.last_maintain,
+      maintain_place: instrumData.maintain_site,
+      in_action: false,
     };
-    // if (obj.name === nameVar) {
-    //   delete obj.name;
-    // }
-    // if (obj.description === descriptionVar) {
-    //   delete obj.description;
-    // }
-    // if (obj.quantity === quantityVar) {
-    //   delete obj.quantity;
-    // }
-    // if (obj.unit_type === typeVar) {
-    //   delete obj.unit_type;
-    // }
     console.log(obj);
     try {
       const res = await fetch(`http://127.0.0.1:8000/instruments/${elId}/`, {
@@ -78,7 +72,6 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
       console.log(err);
     }
   };
- 
 
   //submit Handler
   const submitHandler = (e) => {
@@ -91,7 +84,7 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
   const backHandler = () => {
     navigate("/create_subs");
   };
-
+  console.log(instrumData);
   return (
     <Fragment>
       <Backdrop>
@@ -101,7 +94,9 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
             name="sub-name"
             placeholder="أسم الماكينة"
             value={instrumData.name}
-            onChange={(e) => setInstrumData({ ...instrumData, name: e.target.value })}
+            onChange={(e) =>
+              setInstrumData({ ...instrumData, name: e.target.value })
+            }
           />
           <Inputs
             type="date"
@@ -112,6 +107,25 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
               setInstrumData({ ...instrumData, last_maintain: e.target.value })
             }
           />
+          <Inputs
+            type="text"
+            name="last_maintain"
+            placeholder="مكان الصيانة"
+            value={instrumData.maintain_site}
+            onChange={(e) =>
+              setInstrumData({ ...instrumData, maintain_site: e.target.value })
+            }
+          />
+
+          <select
+            value={instrumData.in_action}
+            onChange={(e) =>
+              setInstrumData({ ...instrumData, in_action: e.target.value })
+            }>
+            <option value={false}> موجودة بالمخزن </option>
+            <option value={true}> غير موجودة </option>
+          </select>
+
           <Inputs
             type="text"
             name="sub-description"
