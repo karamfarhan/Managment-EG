@@ -7,6 +7,25 @@
 # def update_instrument_action(sender, instance, **kwargs):
 #     # instance is the deleted object of ModelB
 #     # Perform your update logic here
-#     # instance.substance.in_action = False
-#     # instance.substance.save()
-#     Instrument.objects.filter(id=instance.substance.id).update(in_action=True)
+#     print("pre_delete being claled")
+#     Instrument.objects.filter(id=instance.instrument.id).update(in_action=True)
+#     # instance.instrument.in_action = False
+#     # instance.instrument.save()
+
+
+# @receiver(post_save, sender=User)
+# def create_user_token(sender, instance, created, **kwargs):
+#     if created:
+#         Token.objects.create(user=instance)
+
+
+# @receiver(post_save, sender=User)
+# def create_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+
+
+# @receiver(post_save, sender=User)
+# def save_profile(sender, instance, created, **kwargs):
+#     if created == False:
+#         instance.profile.save()

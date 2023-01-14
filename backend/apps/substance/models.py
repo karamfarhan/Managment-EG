@@ -3,7 +3,8 @@ from apps.store.models import Store
 from core.utils import unique_slug_generator
 from django.db import models
 from django.db.models import F
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_delete, pre_delete, pre_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 from rest_framework import serializers
@@ -162,15 +163,6 @@ class InvoiceSubstanceItem(models.Model):
         verbose_name=_("invoice substance information"),
     )
 
-    # def save(self, *args, **kwargs):
-    #     if self.substance.units - self.mass < 0:
-    #         raise serializers.ValidationError({"mass": "the mass you intered is bigger than the substance have"})
-    #     else:
-    #         # TODO the update should be upgraded to better code (to - .update,F)
-    #         self.substance.units -= self.mass
-    #         self.substance.save()
-    #     return super().save(*args, **kwargs)
-
 
 class InvoiceInstrumentItem(models.Model):
     instrument = models.ForeignKey(
@@ -187,13 +179,6 @@ class InvoiceInstrumentItem(models.Model):
         blank=True,
         verbose_name=_("invoice instrument information"),
     )
-
-    # def save(self, *args, **kwargs):
-    #     # TODO should return .in_action to False when the invoice deleted
-    #     self.instrument.in_action = True
-    #     self.instrument.save()
-
-    #     super().save(*args, **kwargs)
 
 
 class Invoice(models.Model):
@@ -227,3 +212,16 @@ class Invoice(models.Model):
         verbose_name = "Invoice"
         verbose_name_plural = "Invoices"
         ordering = ["-created_at"]
+
+
+@receiver(pre_delete, sender=InvoiceInstrumentItem)
+def update_instrument_action(sender, instance, **kwargs):
+    instance.instrument.in_action = False
+    instance.instrument.save()
+
+
+@receiver(pre_delete, sender=Invoice)
+def delete_related_items_on_invoice_delete(sender, instance, **kwargs):
+    # instance is the deleted invoice object
+    instance.substances.all().delete()
+    instance.instruments.all().delete()

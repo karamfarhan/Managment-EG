@@ -77,7 +77,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
             "maintain_place",
             "created_at",
         ]
-        read_only_fields = ["id", "created_by", "created_at", "in_action"]
+        read_only_fields = ["id", "created_by", "created_at"]
 
 
 class InvoiceSubstanceItemSerializer(serializers.ModelSerializer):
