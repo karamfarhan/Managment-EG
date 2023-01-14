@@ -41,7 +41,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
       description,
     };
     dispatch(createStore(storeObj));
-    dispatch(getStores(token));
+   //s dispatch(getStores(token));
     hideFormHandler();
   };
 

@@ -39,7 +39,7 @@ export const createStore = createAsyncThunk(
       if (!res.ok) {
         throw new Error(res.statusText || "حدث خطأ");
       }
-      //ThunkAPI.dispatch(getStores(arg.token))
+    ThunkAPI.dispatch(getStores(arg.token))
     } catch (err) {
       console.log(err);
     }

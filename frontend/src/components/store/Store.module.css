@@ -42,6 +42,10 @@
   padding: 5px 10px;
   border-radius: 6px;
   color: #fff;
+  margin: 0 5px;
+}
+.table_content table tbody button:last-of-type {
+  background-color: green;
 }
 .msg_p {
   font-size: 40px;

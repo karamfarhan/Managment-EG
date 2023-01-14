@@ -16,16 +16,22 @@ import {
 import AuthContext from "../../context/Auth-ctx";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
 import Search from "../UI/search/Search";
+import AddInvoice from "../UI/add_invoice/AddInvoice";
 const Store = () => {
   const dispatch = useDispatch();
   const [showForm, setShowForm] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const [storeId, setStoreId] = useState("");
+  const [storeIdInvoice, setStoreIdInvoice] = useState("");
   //current page
   const [currentPage, setCurrentPage] = useState(1);
 
   //search
   const [searchValue, setSearchValue] = useState("");
+
+  //create invoice
+  const [showInvoiceForm, setShowInvoiceForm] = useState(false);
+  const [storeName, setStoreName] = useState('');
+  const [storeId, setStoreId] = useState('');
 
   //paginationFun
   const paginationFun = (obj) => {
@@ -49,7 +55,7 @@ const Store = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, currentPage, searchValue]);
-  //hide form handler
+  // //hide form handler
   const hideFormHandler = () => {
     setShowForm(false);
   };
@@ -109,8 +115,22 @@ const Store = () => {
     dispatch(storeSearchPagination(obj));
   };
 
+  //show invoice handler 
+  const showInvoiceHandler = (name, id)=>{
+    setShowInvoiceForm(true)
+    setStoreName(name)
+    setStoreIdInvoice(id)
+  }
+
+   //hide invoice handler 
+   const hideInvoiceHandler = ()=>{
+    setShowInvoiceForm(false)
+  }
+
   return (
     <Fragment>
+      {showInvoiceForm && <AddInvoice storeId = {storeIdInvoice} storeName = {storeName} hideModel = {hideInvoiceHandler}/>}
+
       {showForm && <CreateStoreUi hideFormHandler={hideFormHandler} />}
       {isDelete && (
         <DeleteConfirmation
@@ -123,7 +143,8 @@ const Store = () => {
         <button
           onClick={showFormHandler}
           type="button"
-          className={classes.addInventory}>
+          className={classes.addInventory}
+        >
           <SiHomeassistantcommunitystore /> انشاء مخزن
         </button>
       </Bar>
@@ -158,8 +179,7 @@ const Store = () => {
                   return (
                     <tr key={store.id}>
                       <td>
-                        {" "}
-                        <Link to={`/store/${store.id}`}>{store.name}</Link>{" "}
+                        <Link to={`/store/${store.id}`}>{store.name}</Link>
                       </td>
                       <td> {store.address} </td>
                       <td> {store.created_by} </td>
@@ -168,9 +188,12 @@ const Store = () => {
                       <td>
                         <button
                           type="button"
-                          onClick={() => deleteModelHandler(store.id)}>
+                          onClick={() => deleteModelHandler(store.id)}
+                        >
                           حذف
-                        </button>{" "}
+                        </button>
+
+                        <button type="button" onClick = {()=>{showInvoiceHandler(store.name, store.id)}}>تحويل</button>
                       </td>
                     </tr>
                   );
