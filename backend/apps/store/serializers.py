@@ -1,6 +1,21 @@
 from apps.account.serializers import AccountRedSerializer
 from apps.store.models import Image, MediaPack, Store
+from apps.substance.models import Invoice
+from apps.substance.serializers import AccountSerializer
 from rest_framework import serializers
+
+
+class StoreInvoicesSerializer(serializers.ModelSerializer):
+    created_by = AccountSerializer(read_only=True)
+
+    class Meta:
+        model = Invoice
+        fields = [
+            "id",
+            "created_by",
+            "created_at",
+        ]
+        read_only_fields = fields
 
 
 class StoreSelectBarSerializer(serializers.ModelSerializer):
@@ -12,19 +27,30 @@ class StoreSelectBarSerializer(serializers.ModelSerializer):
 
 class StoreSerializer(serializers.ModelSerializer):
     created_by = serializers.SerializerMethodField("get_username")
+    invoices = serializers.SerializerMethodField("get_invoices")
 
     class Meta:
         model = Store
-        fields = ["id", "name", "created_by", "address", "description", "active_status", "start_at", "created_at"]
-        read_only_fields = ["id", "created_by", "creatd_at"]
+        fields = [
+            "id",
+            "name",
+            "created_by",
+            "address",
+            "description",
+            "active_status",
+            "start_at",
+            "created_at",
+            "invoices",
+        ]
+        read_only_fields = ["id", "created_by", "creatd_at", "invoices"]
 
     def get_username(self, store):
         return store.created_by.username
 
-    # def validate_name(self, value):
-    #     if len(value) <= 1:
-    #         raise serializers.ValidationError("name must be more than 2 letters")
-    #     return value
+    def get_invoices(self, store):
+        invoices = store.invoice_store.all()
+        serializer = StoreInvoicesSerializer(invoices, many=True)
+        return serializer.data
 
 
 class MediaPackSerializer(serializers.ModelSerializer):

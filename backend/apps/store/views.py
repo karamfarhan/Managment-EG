@@ -1,3 +1,5 @@
+from apps.substance.models import Invoice
+from django.db.models import Prefetch
 from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
@@ -35,6 +37,13 @@ class StoreViewSet(viewsets.ModelViewSet):
     search_fields = ["created_by__username", "name", "address"]  # fields you want to search against
     ordering_fields = ["name", "created_at"]  # fields you want to order by
 
+    # def get_queryset(self):
+    #     if self.action == "retrieve":
+    #         instance = self.get_object()
+    #         return instance
+    #         # return Store.objects.select_related(
+    #         # Prefetch("invoice_store", queryset=Invoice.objects.filter(store__id=instance.id)),
+    #         # )
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

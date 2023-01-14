@@ -1,4 +1,5 @@
 from apps.account.models import Account
+from django.db import transaction
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -88,18 +89,38 @@ class InvoiceSubstanceItemSerializer(serializers.ModelSerializer):
         fields = ["substance", "substance_name", "mass", "description"]
         read_only_fields = ["substance_name"]
 
+    def validate(self, data):
+        if data["substance"].units - data["mass"] < 0:
+            raise serializers.ValidationError(
+                {
+                    "mass": f"You don't have ({data['mass']} {data['substance'].unit_type}) Of ({data['substance'].name}) to send it to the store. You only have ({data['substance'].units} {data['substance'].unit_type})"
+                }
+            )
+        return data
+
+    def create(self, validated_data):
+        substance = validated_data["substance"]
+        substance.units -= validated_data["mass"]
+        substance.save()
+        return super().create(validated_data)
+
     def get_substance_name(self, instance):
         return instance.substance.name
 
 
 class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
     instrument_name = serializers.SerializerMethodField("get_instrument_name")
-    # instrument = serializers.PrimaryKeyRelatedField(queryset=Instrument.objects.all(),write_only=True)
 
     class Meta:
         model = InvoiceInstrumentItem
         fields = ["instrument_name", "instrument", "description"]
         read_only_fields = ["instrument_name"]
+
+    def create(self, validated_data):
+        instrument = validated_data["instrument"]
+        instrument.in_action = True
+        instrument.save()
+        return super().create(validated_data)
 
     def get_instrument_name(self, instance):
         return instance.instrument.name
@@ -125,16 +146,32 @@ class InvoiceSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_by", "created_at"]
 
     def create(self, validated_data):
-        # TODO if there is error in the sub/ins the invoice will be created
-        # TODO should set up the method that will sucess when all thing are successed
-        # ! there is another way to set up the creating of sub/ins
-        # ! which is to call the serializer (.is_vaild,.save) of them and then
-        # ! in this way i can write any logic in the .create() method in the serializer
-        substances = validated_data.pop("substances")
-        instruments = validated_data.pop("instruments")
+        invoice = self.create_invoice(validated_data)
+        return invoice
+
+    @transaction.atomic
+    def create_invoice(self, validated_data):
+        substances = validated_data.pop("substances", [])
+        instruments = validated_data.pop("instruments", [])
+
         invoice = Invoice.objects.create(**validated_data)
-        substance_items_obj = [InvoiceSubstanceItem.objects.create(**substance) for substance in substances]
-        invoice.substances.add(*substance_items_obj)
-        instrument_items_obj = [InvoiceInstrumentItem.objects.create(**instrument) for instrument in instruments]
-        invoice.instruments.add(*instrument_items_obj)
+
+        # ! serializer way
+        for substance in substances:
+            substance["substance"] = substance["substance"].pk
+            serializer = InvoiceSubstanceItemSerializer(data=substance)
+            serializer.is_valid(raise_exception=True)
+            sub = serializer.save()
+            invoice.substances.add(sub)
+        for instrument in instruments:
+            instrument["instrument"] = instrument["instrument"].pk
+            serializer = InvoiceInstrumentItemSerializer(data=instrument)
+            serializer.is_valid(raise_exception=True)
+            ins = serializer.save()
+            invoice.instruments.add(ins)
+        # ! only create way
+        # substance_items_obj = [InvoiceSubstanceItem.objects.create(**substance) for substance in substances]
+        # invoice.substances.add(*substance_items_obj)
+        # instrument_items_obj = [InvoiceInstrumentItem.objects.create(**instrument) for instrument in instruments]
+        # invoice.instruments.add(*instrument_items_obj)
         return invoice

@@ -43,7 +43,7 @@ class Substance(models.Model):
         verbose_name=_("substance name"),
     )
     category = models.ManyToManyField(
-        Category, related_name="substance_categories", verbose_name=_("substance Category"), null=True, blank=True
+        Category, related_name="substance_categories", verbose_name=_("substance Category"), blank=True
     )
     description = models.TextField(
         default="No description",
@@ -101,7 +101,7 @@ class Instrument(models.Model):
         verbose_name=_("instrument name"),
     )
     category = models.ManyToManyField(
-        Category, related_name="instrument_categories", verbose_name=_("instrumen Category"), null=True, blank=True
+        Category, related_name="instrument_categories", verbose_name=_("instrumen Category"), blank=True
     )
     description = models.TextField(
         default="No description",
@@ -126,7 +126,7 @@ class Instrument(models.Model):
         verbose_name=_("creatred at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
-
+    # TODO delete the ins_type we don't need it
     ins_type = models.CharField(max_length=20, choices=TYPE, verbose_name=_("Unit Type"))
     last_maintain = models.DateField(
         # format=None,
@@ -162,14 +162,14 @@ class InvoiceSubstanceItem(models.Model):
         verbose_name=_("invoice substance information"),
     )
 
-    def save(self, *args, **kwargs):
-        if self.substance.units - self.mass < 0:
-            raise serializers.ValidationError({"mass": "the mass you intered is bigger than the substance have"})
-        else:
-            # TODO the update should be upgraded to better code (to - .update,F)
-            self.substance.units -= self.mass
-            self.substance.save()
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.substance.units - self.mass < 0:
+    #         raise serializers.ValidationError({"mass": "the mass you intered is bigger than the substance have"})
+    #     else:
+    #         # TODO the update should be upgraded to better code (to - .update,F)
+    #         self.substance.units -= self.mass
+    #         self.substance.save()
+    #     return super().save(*args, **kwargs)
 
 
 class InvoiceInstrumentItem(models.Model):
@@ -188,12 +188,12 @@ class InvoiceInstrumentItem(models.Model):
         verbose_name=_("invoice instrument information"),
     )
 
-    def save(self, *args, **kwargs):
-        # TODO should return .in_action to False when the invoice deleted
-        self.instrument.in_action = True
-        self.instrument.save()
+    # def save(self, *args, **kwargs):
+    #     # TODO should return .in_action to False when the invoice deleted
+    #     self.instrument.in_action = True
+    #     self.instrument.save()
 
-        super().save(*args, **kwargs)
+    #     super().save(*args, **kwargs)
 
 
 class Invoice(models.Model):
