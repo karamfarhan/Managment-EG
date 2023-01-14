@@ -54,7 +54,7 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
       description: instrumData.description,
       last_maintain: instrumData.last_maintain,
       maintain_place: instrumData.maintain_site,
-      in_action: false,
+      in_action: instrumData.in_action === "true" ? true : false,
     };
     console.log(obj);
     try {
