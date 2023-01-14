@@ -1,0 +1,16 @@
+.invoice {
+    background-color: #ffff005c;
+    text-align: center;
+    max-height: 100vh;
+    position: absolute;
+    overflow: auto;
+    width: 100%;
+}
+.invoice h2{
+    padding: 10px;
+}
+.invoice li {
+    background: #ffffff94;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+}

@@ -10,6 +10,7 @@ import StaffPage from "./StaffPage";
 import  StoresPage  from "./StoresPage";
 import  StoreDetailPage  from "./StoreDetailPage";
 import CreateSubstancePage from './CreateSubstancePage';
+import InvoiceDetailPage from './InvoiceDetailPage';
 
 const Pages = () => {
   const authCtx = useContext(AuthContext);
@@ -33,7 +34,8 @@ const Pages = () => {
           element={isLoggedIn ? <StaffPage /> : <AuthPage />}
         />
         <Route path="/store/*" element={<StoresPage />} />
-        <Route path="/store/:storeId" element={<StoreDetailPage />} />
+        <Route path="/store/:storeId/*" element={<StoreDetailPage />} />
+        <Route path="/store/:storeId/:invoiceId" element={<InvoiceDetailPage />} />
         <Route path="/create_subs/*" element={<CreateSubstancePage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/cars" element={<CarsPage />} />

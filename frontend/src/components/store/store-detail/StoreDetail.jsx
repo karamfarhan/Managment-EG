@@ -1,6 +1,7 @@
 import { useEffect, useContext, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import AuthContext from "../../../context/Auth-ctx";
+import Invoices from "./invoices/Invoices";
 
 //classes
 import classes from "./StoreDetail.module.css";
@@ -36,10 +37,12 @@ const StoreDetail = () => {
   return (
     <div className={classes.content}>
       <div>
-        <h2> الموارد </h2>
+     
+      <Invoices store = {data} />
+      
       </div>
 
-      <div>
+      <div dir = "rtl">
         <h2> {data.name}</h2>
         <span> {new Date(data.created_at).toLocaleString()} </span>
 

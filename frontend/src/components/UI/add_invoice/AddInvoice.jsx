@@ -137,6 +137,7 @@ console.log(invoice)
   const submitHandler = (e)=>{
     e.preventDefault()
     createInvoice()
+    hideModel()
   }
 
 

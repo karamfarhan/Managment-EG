@@ -29,7 +29,7 @@ const Items = ({ index, inputField, setInputFields, inputFields, selectBox }) =>
             required
             onChange={(event) => handleChangeInput(event, index)}
           >
-          
+          <option hidden selected value = ""> أختار مادة </option>
           {selectBox && selectBox.map((select)=>{
             return <option key ={select.pk} value={select.pk} > {select.name} </option>
           })}
