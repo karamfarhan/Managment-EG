@@ -1,11 +1,12 @@
 from apps.account.models import Account
+from apps.store.serializers import StoreSelectBarSerializer
 from apps.substance.serializers import AccountSerializer
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from .models import Employee, Insurance
+from .models import Employee, EmployeeActivity, Insurance
 
 
 class InsuranceSerializer(serializers.ModelSerializer):
@@ -29,6 +30,7 @@ class InsuranceSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
     insurance = InsuranceSerializer(allow_null=True, required=False)
+    store_address = serializers.SerializerMethodField("get_store_address")
     # TODO should return the store name when read, not the id
 
     class Meta:
@@ -46,13 +48,16 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "criminal_record_image",
             "years_of_experiance",
             "days_off",
+            "signin_date",
+            "store",
+            "store_address",
             "note",
             "is_primary",
             "insurance",
             "created_at",
             "created_by",
         ]
-        read_only_fields = ["id", "created_by", "created_at", "email_verified"]
+        read_only_fields = ["id", "created_by", "created_at", "email_verified", "store_address"]
 
     def create(self, validated_data):
         employee = self.create_employee(validated_data)
@@ -106,6 +111,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
         instance.years_of_experiance = validated_data.get("years_of_experiance", instance.years_of_experiance)
         instance.days_off = validated_data.get("days_off", instance.days_off)
         instance.note = validated_data.get("note", instance.note)
+        instance.signin_date = validated_data.get("signin_date", instance.signin_date)
+        instance.store = validated_data.get("store", instance.store)
         instance.is_primary = validated_data.get("is_primary", instance.is_primary)
         instance.save(
             update_fields=[
@@ -120,7 +127,35 @@ class EmployeeSerializer(serializers.ModelSerializer):
                 "years_of_experiance",
                 "days_off",
                 "note",
+                "signin_date",
+                "store",
                 "is_primary",
             ]
         )
         return instance
+
+    def get_store_address(self, employee):
+        if employee.store:
+            return employee.store.address
+        return None
+
+
+class EmployeeActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeActivity
+        fields = [
+            "id",
+            "date",
+            "phase_in",
+            "phase_out",
+            "is_holiday",
+        ]
+        read_only_fields = ["id", "date"]
+
+    def create(self, validated_data):
+        try:
+            return EmployeeActivity.objects.create(**validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError(
+                {"error": "Employee activity for today were already created, can't create again"}
+            )

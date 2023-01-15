@@ -21,7 +21,7 @@ class StoreInvoicesSerializer(serializers.ModelSerializer):
 class StoreSelectBarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = ("name", "pk")
+        fields = ("address", "pk")
         read_only_fields = fields
 
 

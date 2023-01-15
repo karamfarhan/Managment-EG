@@ -9,8 +9,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Employee, Insurance
-from .serializers import EmployeeSerializer
+from .models import Employee, EmployeeActivity, Insurance
+from .serializers import EmployeeActivitySerializer, EmployeeSerializer
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -42,3 +42,28 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
         return Response(serializer.data)
+
+
+class EmployeeActivityViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = EmployeeActivity.objects.all()
+    pagination_class = PageNumberPagination
+    serializer_class = EmployeeActivitySerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = [
+        "date",
+    ]
+    ordering_fields = ["date"]
+
+    def get_queryset(self):
+        employee_id = self.kwargs.get("id")
+        return EmployeeActivity.objects.filter(employee_id=employee_id)
+
+    def create(self, request, *args, **kwargs):
+        employee_id = self.kwargs.get("id")
+        employee = get_object_or_404(Employee, id=employee_id)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(employee=employee)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

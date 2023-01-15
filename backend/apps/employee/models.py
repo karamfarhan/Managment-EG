@@ -124,13 +124,18 @@ class Employee(models.Model):
         default=0,
         verbose_name=_("employee's days off number"),
     )
+    signin_date = models.DateField(
+        verbose_name=_("employee information"),
+    )
+    store = models.ForeignKey(
+        "store.Store", on_delete=models.SET_NULL, related_name="employee_store", null=True, blank=True
+    )
     note = models.TextField(
         default="No description",
         max_length=500,
         null=True,
-        unique=False,
         blank=True,
-        verbose_name=_("instrument information"),
+        verbose_name=_("employee note"),
     )
     is_primary = models.BooleanField(
         default=False,
@@ -150,6 +155,40 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class EmployeeActivity(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employeeactivity_employee")
+    is_holiday = models.BooleanField(
+        default=False,
+        verbose_name=_("is today is holiday day"),
+    )
+    # created_by = models.ForeignKey(
+    #     "account.Account",
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     related_name="insurance_created_by",
+    # )
+    date = models.DateField(
+        auto_now_add=True,
+        verbose_name=_("employee phase in/out date"),
+        editable=False,
+    )
+    phase_in = models.TimeField(
+        verbose_name=_("employee phase in time"),
+        null=False,
+        blank=False,
+    )
+    phase_out = models.TimeField(verbose_name=_("employee phase out time"), null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Employee Activity"
+        verbose_name_plural = "Employee Activities"
+        ordering = ["-date"]
+        unique_together = ["date", "employee"]
+
+    def __str__(self):
+        return f"{self.employee.name}-{self.date}"
 
 
 @receiver(post_delete, sender=Employee)
