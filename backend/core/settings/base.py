@@ -19,6 +19,7 @@ AUTHENTICATION_BACKENDS = (
 
 INSTALLED_APPS = [
     # Third party apps
+    "import_export",
     "jazzmin",
     "django_cleanup.apps.CleanupConfig",
     "rest_framework",

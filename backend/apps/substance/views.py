@@ -1,5 +1,5 @@
 from django.db.models import Prefetch
-from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, authentication_classes
@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Category, Instrument, Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, Substance
+from .resources import SubstanceResource
 from .serializers import (
     CategorySerializer,
     InstrumentSelectBarSerializer,
@@ -61,8 +62,10 @@ class SubstanceViewSet(viewsets.ModelViewSet):
         "category__name",
         "units",
         "unit_type",
-    ]  # fields you want to search against
+    ]
     ordering_fields = ["name", "created_at", "units"]
+    # resource_class = SubstanceResource
+    # actions = ['export_to_excel']
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -70,6 +73,21 @@ class SubstanceViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def export(self, request, *args, **kwargs):
+        qs = self.get_queryset()
+        dataset = SubstanceResource().export(qs)
+        file_format = self.kwargs.get("file_format")
+
+        if file_format == "xls":
+            ds = dataset.xls
+        elif file_format == "csv":
+            ds = dataset.csv
+        elif file_format == "json":
+            ds = dataset.json
+        response = HttpResponse(ds, content_type=f"{file_format}")
+        response["Content-Disposition"] = f"attachment: filename=substance.{file_format}"
+        return response
 
 
 class SubstanceSelectBarView(ListAPIView):
