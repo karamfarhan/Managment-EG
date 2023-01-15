@@ -63,20 +63,16 @@ class Employee(models.Model):
     name = models.CharField(
         max_length=250,
         null=False,
-        unique=False,
         blank=False,
         verbose_name=_("employee name"),
     )
     type = models.CharField(
         max_length=250,
         null=False,
-        unique=False,
         blank=False,
         verbose_name=_("employee type"),
     )
-    email = models.EmailField(
-        verbose_name="employee email address", max_length=60, unique=False, null=False, blank=False
-    )
+    email = models.EmailField(verbose_name="employee email address", max_length=60, null=False, blank=False)
     email_verified = models.BooleanField(default=False)
     number = models.CharField(verbose_name="employee number", max_length=60, null=True, blank=True)
     created_by = models.ForeignKey(
@@ -159,4 +155,5 @@ class Employee(models.Model):
 @receiver(post_delete, sender=Employee)
 def delete_related_items_on_invoice_delete(sender, instance, **kwargs):
     # instance is the deleted invoice object
-    instance.insurance.delete()
+    if instance.insurance:
+        instance.insurance.delete()

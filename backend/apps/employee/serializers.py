@@ -28,7 +28,7 @@ class InsuranceSerializer(serializers.ModelSerializer):
 
 class EmployeeSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
-    insurance = InsuranceSerializer()
+    insurance = InsuranceSerializer(allow_null=True, required=False)
     # TODO should return the store name when read, not the id
 
     class Meta:
@@ -72,19 +72,29 @@ class EmployeeSerializer(serializers.ModelSerializer):
             # ! maybe the if statment on .is_valid() is not required
             # ! i can make it like the ModelViewSet (look at it)
             if serializer.is_valid(raise_exception=True):
-                insruance_obj = serializer.save(created_by=employee.created_by)
+                insruance_obj = serializer.save(created_by=validated_data["created_by"])
                 employee.insurance = insruance_obj
         employee.save()
         return employee
 
     @transaction.atomic
     def update_employee(self, instance, validated_data):
+        # TODO i think you should move the updation of the insurance to the end
         insurance_data = validated_data.pop("insurance", None)
         if insurance_data:
             insurance = instance.insurance
-            serializer = InsuranceSerializer(insurance, data=insurance_data, partial=True)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
+            if insurance:
+                serializer = InsuranceSerializer(insurance, data=insurance_data, partial=True)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+            else:
+                serializer = InsuranceSerializer(data=insurance_data)
+                # ! maybe the if statment on .is_valid() is not required
+                # ! i can make it like the ModelViewSet (look at it)
+                if serializer.is_valid(raise_exception=True):
+                    insruance_obj = serializer.save(created_by=validated_data["created_by"])
+                    instance.insurance = insruance_obj
+                    instance.save()
         instance.name = validated_data.get("name", instance.name)
         instance.type = validated_data.get("type", instance.type)
         instance.email = validated_data.get("email", instance.email).lower()
