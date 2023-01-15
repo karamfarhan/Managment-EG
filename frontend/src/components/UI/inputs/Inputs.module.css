@@ -4,9 +4,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 .inputs input {
-  width: 332px;
+  width: var(--input-width);
   padding: 14px 16px;
   background-color: transparent;
   border-radius: 6px;

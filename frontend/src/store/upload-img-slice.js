@@ -4,7 +4,7 @@ export const uploadImgs = createAsyncThunk(
   "upload/img",
   async (arg, ThunkAPI) => {
     try {
-      console.log(arg)
+      console.log(arg);
       const formdata = new FormData();
 
       formdata.append("store", arg.selectVal);
@@ -24,7 +24,7 @@ export const uploadImgs = createAsyncThunk(
       ThunkAPI.dispatch(fetchImgs(arg));
 
       const data = await res.json();
-      return data
+      return data;
     } catch (err) {
       console.log(err);
     }
@@ -40,67 +40,85 @@ export const fetchImgs = createAsyncThunk("fetch/img", async (arg) => {
       },
     });
     const data = await res.json();
-    console.log(data)
+    console.log(data);
     return data;
   } catch (err) {
-
     console.log(err);
   }
 });
-
 
 // images pagination
-export const imagesPagination = createAsyncThunk("pagination/img", async (arg) => {
-  try {
-    const res = await fetch(`http://127.0.0.1:8000/images/?page=${arg.page}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${arg.token}`,
-      },
-    });
-    const data = await res.json();
-    console.log(data)
-    return data;
-  } catch (err) {
-
-    console.log(err);
+export const imagesPagination = createAsyncThunk(
+  "pagination/img",
+  async (arg) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/images/?page=${arg.page}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
-
-
-
+);
 
 //search
-export const searchImgs = createAsyncThunk("search/imgs", async (arg, ThunkAPI) => {
-  try {
-    const res = await fetch(`http://127.0.0.1:8000/images/?search=${arg.search}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${arg.token}`,
-      },
+export const searchImgs = createAsyncThunk(
+  "search/imgs",
+  async (arg, ThunkAPI) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/images/?search=${arg.search}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error(res.statusText || "حدث خطأ");
+      }
 
-    });
-    if (!res.ok) {
-      throw new Error(res.statusText || "حدث خطأ");
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err);
     }
-    
-    const data = await res.json()
-    console.log(data)
-    return data
-
-   
-  } catch (err) {
-    console.log(err);
   }
-});
+);
 
-
-
-
-
-
-
-
+//search pagination
+export const imageSearchPagination = createAsyncThunk(
+  "store/search",
+  async (arg) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/images/?page=${arg.page}&search=${arg.search}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${arg.token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+);
 
 const images_slice = createSlice({
   name: "images",
@@ -119,10 +137,7 @@ const images_slice = createSlice({
       console.log(state);
     },
 
-
-
     // image pagination
-
 
     [imagesPagination.pending]: (state) => {
       console.log(state);
@@ -135,9 +150,9 @@ const images_slice = createSlice({
       console.log(state);
     },
 
-    // search image 
+    // search image
 
-  [searchImgs.pending]: (state) => {
+    [searchImgs.pending]: (state) => {
       console.log(state);
     },
     [searchImgs.fulfilled]: (state, action) => {
@@ -147,9 +162,17 @@ const images_slice = createSlice({
     [searchImgs.rejected]: (state) => {
       console.log(state);
     },
-
-
-
+    // search image pagination
+    [imageSearchPagination.pending]: (state) => {
+      console.log(state);
+    },
+    [imageSearchPagination.fulfilled]: (state, action) => {
+      console.log(action);
+      state.data = action.payload;
+    },
+    [imageSearchPagination.rejected]: (state) => {
+      console.log(state);
+    },
   },
 });
 

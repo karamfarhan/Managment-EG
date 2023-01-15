@@ -131,7 +131,7 @@
 .comment textarea {
   width: 100%;
   resize: none;
-  /* position: relative; */
+  padding: 10px;
   border: 1px solid;
   min-height: 60px;
 }

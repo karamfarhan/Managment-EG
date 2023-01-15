@@ -26,12 +26,12 @@ const StoreDetail = () => {
     });
 
     const data = await res.json();
+    console.log(data);
     setData(data);
   }, [storeId, token]);
 
   useEffect(() => {
     getTheStore();
-    console.log("hey");
   }, [getTheStore]);
 
   return (

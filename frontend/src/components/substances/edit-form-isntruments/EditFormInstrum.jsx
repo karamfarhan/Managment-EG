@@ -68,6 +68,7 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
       });
       dispatch(getInstruments(token));
       const data = await res.json();
+      return data;
     } catch (err) {
       console.log(err);
     }
@@ -81,9 +82,9 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
     setCurrentPage(1);
     navigate("/create_subs");
   };
-  const backHandler = () => {
-    navigate("/create_subs");
-  };
+  // const backHandler = () => {
+  //   navigate("/create_subs");
+  // };
   console.log(instrumData);
   return (
     <Fragment>
@@ -117,14 +118,16 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
             }
           />
 
-          <select
-            value={instrumData.in_action}
-            onChange={(e) =>
-              setInstrumData({ ...instrumData, in_action: e.target.value })
-            }>
-            <option value={false}> موجودة بالمخزن </option>
-            <option value={true}> غير موجودة </option>
-          </select>
+          <div className={classes.select}>
+            <select
+              value={instrumData.in_action}
+              onChange={(e) =>
+                setInstrumData({ ...instrumData, in_action: e.target.value })
+              }>
+              <option value={false}> موجودة بالمخزن </option>
+              <option value={true}> غير موجودة </option>
+            </select>
+          </div>
 
           <Inputs
             type="text"

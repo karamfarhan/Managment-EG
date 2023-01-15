@@ -1,0 +1,42 @@
+.form {
+  width: 70%;
+  margin: auto;
+  text-align: center;
+  background-color: #fff;
+}
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+.actions button {
+  padding: 7px 20px;
+  width: 20%;
+  color: #fff;
+  font-size: 20px;
+  border: none;
+}
+.actions button[type="submit"] {
+  background-color: #007bff;
+}
+.actions button[type="button"] {
+  background-color: #e72a16;
+}
+.select {
+  width: 100%;
+  padding: 6px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.select select {
+  width: 332px;
+  padding: 10px;
+  border: none;
+  outline: 1px solid #ddd;
+}
+@media (max-width: 767px) {
+  .select select {
+    width: 100%;
+  }
+}

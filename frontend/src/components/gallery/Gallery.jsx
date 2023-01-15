@@ -3,6 +3,7 @@ import { AiOutlineFileImage } from "react-icons/ai";
 import Bar from "../UI/bars/Bar";
 import {
   fetchImgs,
+  imageSearchPagination,
   imagesPagination,
   searchImgs,
 } from "../../store/upload-img-slice.js";
@@ -32,7 +33,6 @@ const Gallery = () => {
   // pagination details
   let curPage = sessionStorage.getItem("current-page");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
   const { data } = useSelector((state) => state.imageReducer);
   const { count } = data !== null && data;
 
@@ -52,10 +52,10 @@ const Gallery = () => {
     if (searchValue === "" && currentPage === 1) {
       dispatch(fetchImgs(obj));
     }
-    if (searchValue === "" && currentPage > 1) {
-      obj.page = currentPage;
-      dispatch(imagesPagination(obj));
-    }
+    // if (searchValue === "" && currentPage > 1) {
+    //   obj.page = currentPage;
+    //   dispatch(imagesPagination(obj));
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, searchValue, currentPage]);
 
@@ -103,6 +103,7 @@ const Gallery = () => {
   //search handler
   const searchHandler = (e) => {
     setSearchValue(e.target.value);
+    setCurrentPage(1);
   };
 
   //fetch search data
@@ -113,7 +114,10 @@ const Gallery = () => {
     };
     dispatch(searchImgs(obj));
   };
-
+  //search pagnation
+  const searchPagination = (obj) => {
+    dispatch(imageSearchPagination(obj));
+  };
   //pagination
 
   const paginationFun = (obj) => {
@@ -143,20 +147,22 @@ const Gallery = () => {
       )}
 
       <Bar>
-        <button className={classes.addImg} onClick={selectImgModelHandler}>
-          <span>
-            <AiOutlineFileImage />
-          </span>
-          اضافة صور
-        </button>
+        <div className="toolBar">
+          <Search
+            placeholder=" أبحث من خلال التاريخ أسم الموقع أو أسم المستخدم"
+            onChange={searchHandler}
+            value={searchValue}
+            searchData={fetchSearchHandler}
+          />
+          <button className={classes.addImg} onClick={selectImgModelHandler}>
+            <span>
+              <AiOutlineFileImage />
+            </span>
+            اضافة صور
+          </button>
+        </div>
       </Bar>
 
-      <Search
-        placeholder=" أبحث من خلال التاريخ أسم الموقع أو أسم المستخدم"
-        onChange={searchHandler}
-        value={searchValue}
-        searchData={fetchSearchHandler}
-      />
       {allImgs && allImgs.length === 0 && (
         <p className="validation-msg">لا يوجد صور في اليوميات</p>
       )}
@@ -175,21 +181,21 @@ const Gallery = () => {
                       <img src={el.image} alt="f" />
                     </figure>
                     <div>
-                      <h3> {el.media_pack.store_name} </h3>
+                      <h3> {el.media_pack && el.media_pack.store_name} </h3>
                       <p className={classes.uploaded}>
-                        {" "}
-                        تم رفع الصور عن طريق :{" "}
-                        <span>{el.media_pack.created_by} </span>
+                        تم رفع الصور عن طريق :
+                        <span>
+                          {el.media_pack && el.media_pack.created_by}{" "}
+                        </span>
                       </p>
                       <p className={classes.description_parag}>
-                        {" "}
-                        وصف الصورة : <span>{el.media_pack.alt_text}</span>{" "}
+                        وصف الصورة :{" "}
+                        <span>{el.media_pack && el.media_pack.alt_text}</span>
                       </p>
                       <p className={classes.date}>
-                        {" "}
                         {new Date(
-                          el.media_pack.created_at
-                        ).toLocaleString()}{" "}
+                          el.media_pack && el.media_pack.created_at
+                        ).toLocaleString()}
                       </p>
                     </div>
                   </div>
@@ -203,6 +209,9 @@ const Gallery = () => {
             setCurrentPage={setCurrentPage}
             count={count}
             paginationFun={paginationFun}
+            search={searchValue}
+            searchFn={fetchSearchHandler}
+            searchPagination={searchPagination}
           />
         )}
       </div>

@@ -28,10 +28,10 @@ export const ImgSelect = ({
   const dispatch = useDispatch();
 
   //form validation
-  let formIsValid = false
+  let formIsValid = false;
 
-  if(selectedVal !== "" && description.trim() !== "") {
-    formIsValid = true
+  if (selectedVal !== "" && description.trim() !== "") {
+    formIsValid = true;
   }
   //select store
   useEffect(() => {
@@ -105,11 +105,9 @@ export const ImgSelect = ({
   };
   const isDisable = imgSrc.length === 0;
 
-
-
   return (
     <Fragment>
-      <div className={classes["popup-container"]}>
+      <div className={classes["popup-container"]} dir="rtl">
         <div className={classes.actions}>
           <button className={classes.addImg}>
             <span>
@@ -153,7 +151,7 @@ export const ImgSelect = ({
                     </figure>
                     <div className={classes.prev}>
                       <p> {index + 1} </p>
-           {/*           <button onClick={() => deleteHandler(el, index)}>
+                      {/*           <button onClick={() => deleteHandler(el, index)}>
                         {<AiOutlineDelete />}
                 </button>*/}
                     </div>

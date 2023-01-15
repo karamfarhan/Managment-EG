@@ -30,8 +30,8 @@ const Store = () => {
 
   //create invoice
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
-  const [storeName, setStoreName] = useState('');
-  const [storeId, setStoreId] = useState('');
+  const [storeName, setStoreName] = useState("");
+  const [storeId, setStoreId] = useState("");
 
   //paginationFun
   const paginationFun = (obj) => {
@@ -115,21 +115,27 @@ const Store = () => {
     dispatch(storeSearchPagination(obj));
   };
 
-  //show invoice handler 
-  const showInvoiceHandler = (name, id)=>{
-    setShowInvoiceForm(true)
-    setStoreName(name)
-    setStoreIdInvoice(id)
-  }
+  //show invoice handler
+  const showInvoiceHandler = (name, id) => {
+    setShowInvoiceForm(true);
+    setStoreName(name);
+    setStoreIdInvoice(id);
+  };
 
-   //hide invoice handler 
-   const hideInvoiceHandler = ()=>{
-    setShowInvoiceForm(false)
-  }
+  //hide invoice handler
+  const hideInvoiceHandler = () => {
+    setShowInvoiceForm(false);
+  };
 
   return (
     <Fragment>
-      {showInvoiceForm && <AddInvoice storeId = {storeIdInvoice} storeName = {storeName} hideModel = {hideInvoiceHandler}/>}
+      {showInvoiceForm && (
+        <AddInvoice
+          storeId={storeIdInvoice}
+          storeName={storeName}
+          hideModel={hideInvoiceHandler}
+        />
+      )}
 
       {showForm && <CreateStoreUi hideFormHandler={hideFormHandler} />}
       {isDelete && (
@@ -140,20 +146,22 @@ const Store = () => {
         />
       )}
       <Bar>
-        <button
-          onClick={showFormHandler}
-          type="button"
-          className={classes.addInventory}
-        >
-          <SiHomeassistantcommunitystore /> انشاء مخزن
-        </button>
+        <div className="toolBar">
+          <Search
+            placeholder="أبحث بأسم المخزن أو التاريخ YYYY-DD-MM"
+            onChange={searchHandler}
+            value={searchValue}
+            searchData={fetchSearchHandler}
+          />
+          <button
+            onClick={showFormHandler}
+            type="button"
+            className={classes.addInventory}>
+            <SiHomeassistantcommunitystore /> انشاء مخزن
+          </button>
+        </div>
       </Bar>
-      <Search
-        placeholder="أبحث بأسم المخزن أو التاريخ YYYY-DD-MM"
-        onChange={searchHandler}
-        value={searchValue}
-        searchData={fetchSearchHandler}
-      />
+
       {store_data && store_data.length === 0 && (
         <p className={classes.msg_p}> لا يوجد مخازن </p>
       )}
@@ -188,12 +196,17 @@ const Store = () => {
                       <td>
                         <button
                           type="button"
-                          onClick={() => deleteModelHandler(store.id)}
-                        >
+                          onClick={() => deleteModelHandler(store.id)}>
                           حذف
                         </button>
 
-                        <button type="button" onClick = {()=>{showInvoiceHandler(store.name, store.id)}}>تحويل</button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            showInvoiceHandler(store.name, store.id);
+                          }}>
+                          تحويل
+                        </button>
                       </td>
                     </tr>
                   );
