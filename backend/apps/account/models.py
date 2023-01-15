@@ -1,5 +1,6 @@
 import uuid
 
+from apps.employee.models import Employee
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from PIL import Image
@@ -21,7 +22,13 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
-
+    employee_info = models.OneToOneField(
+        Employee,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="account_employee",
+    )
     # is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

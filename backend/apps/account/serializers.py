@@ -224,6 +224,7 @@ class AccountWriteSerializer(serializers.ModelSerializer):
             "hide_email",
             "first_name",
             "last_name",
+            "employee_info",
         ]
 
     def update(self, instance, validated_data):
@@ -234,6 +235,7 @@ class AccountWriteSerializer(serializers.ModelSerializer):
         instance.hide_email = validated_data.get("hide_email", instance.hide_email)
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.employee_info = validated_data.get("employee_info", instance.employee_info)
         instance.save(update_fields=["email", "username", "profile_image", "hide_email", "first_name", "last_name"])
         return instance
 

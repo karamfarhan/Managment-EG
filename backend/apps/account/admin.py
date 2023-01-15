@@ -9,7 +9,16 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 
 @admin.register(Account)
 class AccountAdmin(UserAdmin):
-    list_display = ("email", "username", "date_joined", "last_login", "is_superuser", "is_staff", "is_active")
+    list_display = (
+        "email",
+        "username",
+        "date_joined",
+        "last_login",
+        "employee_info",
+        "is_superuser",
+        "is_staff",
+        "is_active",
+    )
     search_fields = (
         "email",
         "username",
@@ -40,7 +49,7 @@ class AccountAdmin(UserAdmin):
                 )
             },
         ),
-        ("Personal", {"fields": ("hide_email", "updated_at", "date_joined", "last_login")}),
+        ("Personal", {"fields": ("hide_email", "employee_info", "updated_at", "date_joined", "last_login")}),
     )
 
     # formfield_overrides = {
@@ -62,7 +71,7 @@ class AccountAdmin(UserAdmin):
                 )
             },
         ),
-        ("Personal", {"fields": ("hide_email",)}),
+        ("Personal", {"fields": ("hide_email", "employee_info")}),
     )
 
     form = UpdateAccountForm
@@ -79,6 +88,7 @@ class AccountAdmin(UserAdmin):
             form.base_fields["is_superuser"].disabled = True
             form.base_fields["user_permissions"].disabled = True
             form.base_fields["groups"].disabled = True
+            form.base_fields["employee_info"].disabled = True
         return form
 
     # def add_fields_for_superusers(self, request, fieldsets):
