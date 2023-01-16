@@ -77,17 +77,22 @@ class SubstanceViewSet(viewsets.ModelViewSet):
     def export(self, request, *args, **kwargs):
         qs = self.get_queryset()
         dataset = SubstanceResource().export(qs)
-        file_format = self.kwargs.get("file_format")
+        file_format = self.kwargs.get("format")
+        ds = self.get_dataset_formatted(file_format, dataset)
+        response = HttpResponse(ds, content_type=f"{file_format}")
+        response["Content-Disposition"] = f"attachment: filename=substance.{file_format}"
+        return response
 
+    def get_dataset_formatted(self, file_format, dataset):
         if file_format == "xls":
             ds = dataset.xls
         elif file_format == "csv":
             ds = dataset.csv
         elif file_format == "json":
             ds = dataset.json
-        response = HttpResponse(ds, content_type=f"{file_format}")
-        response["Content-Disposition"] = f"attachment: filename=substance.{file_format}"
-        return response
+        else:
+            ds = dataset.xls
+        return ds
 
 
 class SubstanceSelectBarView(ListAPIView):
@@ -104,7 +109,7 @@ class InstrumentViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     serializer_class = InstrumentSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ["created_by__username", "name", "category__name", "ins_type"]  # fields you want to search against
+    search_fields = ["created_by__username", "name", "category__name"]  # fields you want to search against
     ordering_fields = ["name", "created_at", "last_maintain"]
 
     def create(self, request, *args, **kwargs):

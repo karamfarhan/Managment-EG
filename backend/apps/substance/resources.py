@@ -10,7 +10,7 @@ class SubstanceResource(resources.ModelResource):
     class Meta:
         model = Substance
         fields = ("id", "name", "is_available", "units", "unit_type", "description")
-        export_order = ("id", "name", "is_available", "units", "unit_type", "description")
+        export_order = fields
 
     def dehydrate_is_available(self, substance):
         if substance.is_available:
