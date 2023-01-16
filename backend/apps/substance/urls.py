@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from .models import Substance
 from .views import (
     CategoryViewSet,
     InstrumentSelectBarView,
@@ -11,7 +12,7 @@ from .views import (
 )
 
 urlpatterns = [
-    # path(r"substances/categories/", SubstanceCategoryVewSet.as_view({'get': 'list','post': 'create', 'delete': 'destroy'}), name="substance_category"),
+    path("export/substances/<str:file_format>/", SubstanceViewSet.as_view({"get": "export"}), name="substance-export"),
     path("substances/select_list/", SubstanceSelectBarView.as_view(), name="substance_select"),
     path("instruments/select_list/", InstrumentSelectBarView.as_view(), name="insturment_select"),
 ]

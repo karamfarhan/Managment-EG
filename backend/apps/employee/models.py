@@ -64,6 +64,7 @@ class Employee(models.Model):
         max_length=250,
         null=False,
         blank=False,
+        unique=True,
         verbose_name=_("employee name"),
     )
     type = models.CharField(
