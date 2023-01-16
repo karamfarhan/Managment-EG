@@ -28,7 +28,7 @@ const CreateSubsModel = ({
     last_maintain: "",
     maintain_place: "",
   });
-  const [selectType, setSelectType] = useState(["T", "KL", "L"]);
+  const [selectType, setSelectType] = useState(["kilogram", "liter", "ton"]);
   const [selectBox, setSelectBox] = useState("");
 
   const dispatch = useDispatch();

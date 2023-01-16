@@ -6,12 +6,19 @@ import { AiOutlinePhone } from "react-icons/ai";
 import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import classes from "./EmpolyeeId.module.css";
 import ImgModel from "../../UI/imgModel/ImgModel";
+import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
+import { getEmpolyees } from "../../../store/empolyees-slice";
+import { useDispatch } from "react-redux";
 const EmpolyeeId = () => {
+  const dispatch = useDispatch();
   const [imgSrc, setImgSrc] = useState("");
   const [imgModel, setImgModel] = useState(false);
   //about page
   const [isAbout, setIsAbout] = useState(true);
   const authCtx = useContext(AuthContext);
+  const [isDelete, setIsDelete] = useState(false);
+  const [staffId, setStaffId] = useState("");
+
   const { token } = authCtx;
   const navigate = useNavigate();
 
@@ -48,17 +55,48 @@ const EmpolyeeId = () => {
   //hide image model
   const closeModelHandler = () => {
     setImgModel(false);
-  };
+  }; //delete staff
+  const deleteHandler = async (id) => {
+    const res = await fetch(`http://127.0.0.1:8000/employees/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setIsDelete(false);
+    if (res.ok) {
+      navigate(`/staff`);
+      dispatch(getEmpolyees(token));
+    }
+    const data = await res.json();
 
+    return data;
+  };
+  //hide delete mode
+  const hideDeleteModel = () => {
+    setIsDelete(false);
+  };
   //edit handler
   const editHanlder = (id) => {
     navigate(`/staff/edit/${id}`);
+  };
+  //show delete model
+  const deleteModelHandler = (id) => {
+    setIsDelete(true);
+    setStaffId(id);
   };
   if (!empolyee) return;
   return (
     <Fragment>
       {imgModel && (
         <ImgModel imgSrc={imgSrc} closeModelHandler={closeModelHandler} />
+      )}
+      {isDelete && (
+        <DeleteConfirmation
+          deleteHandler={deleteHandler}
+          id={staffId}
+          hideModel={hideDeleteModel}
+        />
       )}
       <div dir="rtl" className={classes.box}>
         <div className={classes.content}>
@@ -75,9 +113,14 @@ const EmpolyeeId = () => {
                 سنوات الخبرة : <span> {empolyee.years_of_experiance} </span>
               </h3>
             </div>
-            <button type="button" onClick={() => editHanlder(empolyee.id)}>
-              تحديث البيانات
-            </button>
+            <div className={classes.actions}>
+              <button type="button" onClick={() => editHanlder(empolyee.id)}>
+                تحديث البيانات
+              </button>
+              <button onClick={() => deleteModelHandler(empolyee.id)}>
+                حذف
+              </button>
+            </div>
           </header>
           {/* body */}
           <div className={classes.body}>
@@ -147,9 +190,8 @@ const EmpolyeeId = () => {
                   <div className={classes.insurance}>
                     <h4>التأمينات</h4>
 
-                    {empolyee.insurance && empolyee.insurance === null ? (
-                      <p>ليس مؤمن عليه</p>
-                    ) : (
+                    {empolyee.insurance === null && <p> ليس مؤمن عليه </p>}
+                    {empolyee.insurance && (
                       <ul>
                         <li>
                           رقم التأمين :{" "}
@@ -174,44 +216,62 @@ const EmpolyeeId = () => {
                   {/* images */}
 
                   <div className={classes.imgs}>
-                    <figure>
-                      <img
-                        src={empolyee.identity_image}
-                        alt="identity"
-                        onClick={() => imgModelHandler(empolyee.identity_image)}
-                      />
-                      <figcaption>اثبات الشخصية</figcaption>
-                    </figure>
-                    <figure>
-                      <img
-                        src={empolyee.certificate_image}
-                        alt="certificate"
-                        onClick={() =>
-                          imgModelHandler(empolyee.certificate_image)
-                        }
-                      />
-                      <figcaption>شهادة التخرج </figcaption>
-                    </figure>
-                    <figure>
-                      <img
-                        onClick={() =>
-                          imgModelHandler(empolyee.criminal_record_image)
-                        }
-                        src={empolyee.criminal_record_image}
-                        alt="criminal-record"
-                      />
-                      <figcaption>فيش و تشبيه</figcaption>
-                    </figure>
-                    <figure>
-                      <img
-                        src={empolyee.experience_image}
-                        alt="experience"
-                        onClick={() =>
-                          imgModelHandler(empolyee.experience_image)
-                        }
-                      />
-                      <figcaption>شهادات الخبرة</figcaption>
-                    </figure>
+                    {empolyee.identity_image !== null ? (
+                      <figure>
+                        <img
+                          src={empolyee.identity_image}
+                          alt="identity"
+                          onClick={() =>
+                            imgModelHandler(empolyee.identity_image)
+                          }
+                        />
+                        <figcaption>اثبات الشخصية</figcaption>
+                      </figure>
+                    ) : (
+                      ""
+                    )}
+                    {empolyee.certificate_image !== null ? (
+                      <figure>
+                        <img
+                          src={empolyee.certificate_image}
+                          alt="certificate"
+                          onClick={() =>
+                            imgModelHandler(empolyee.certificate_image)
+                          }
+                        />
+                        <figcaption>شهادة التخرج </figcaption>
+                      </figure>
+                    ) : (
+                      ""
+                    )}
+                    {empolyee.criminal_record_image !== null ? (
+                      <figure>
+                        <img
+                          onClick={() =>
+                            imgModelHandler(empolyee.criminal_record_image)
+                          }
+                          src={empolyee.criminal_record_image}
+                          alt="criminal-record"
+                        />
+                        <figcaption>فيش و تشبيه</figcaption>
+                      </figure>
+                    ) : (
+                      ""
+                    )}
+                    {empolyee.experience_image !== null ? (
+                      <figure>
+                        <img
+                          src={empolyee.experience_image}
+                          alt="experience"
+                          onClick={() =>
+                            imgModelHandler(empolyee.experience_image)
+                          }
+                        />
+                        <figcaption>شهادات الخبرة</figcaption>
+                      </figure>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               )}

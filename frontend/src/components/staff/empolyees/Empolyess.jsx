@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Fragment, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContext from "../../../context/Auth-ctx";
-import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./Empolyess.module.css";
 import {
   empolyeePagination,
@@ -11,9 +10,7 @@ import {
   getEmpolyees,
 } from "../../../store/empolyees-slice";
 import Paginate from "../../UI/pagination/Paginate";
-import { useEffect } from "react";
-import ImgModel from "../../UI/imgModel/ImgModel";
-import EditEmpolyee from "./edit-empolyee/EditEmpolyee";
+
 const Empolyess = ({
   data,
   currentPage,
@@ -27,10 +24,6 @@ const Empolyess = ({
   const { token } = authCtx;
 
   const [isDelete, setIsDelete] = useState(false);
-  const [staffId, setStaffId] = useState("");
-  const [editId, setEditId] = useState("");
-
-  const navigate = useNavigate();
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
@@ -52,15 +45,7 @@ const Empolyess = ({
     console.log(data);
     return data;
   };
-  //show delete model
-  const deleteModelHandler = (id) => {
-    setIsDelete(true);
-    setStaffId(id);
-  };
-  //hide delete mode
-  const hideDeleteModel = () => {
-    setIsDelete(false);
-  };
+
   //paginationFun
   const paginationFun = (obj) => {
     dispatch(empolyeePagination(obj));
@@ -70,20 +55,9 @@ const Empolyess = ({
     // //search pagination
     dispatch(empolyeeSearchPagination(obj));
   };
-  //edit handler
-  const editHanlder = (id) => {
-    navigate(`/staff/edit/${id}`);
-  };
 
   return (
     <Fragment>
-      {isDelete && (
-        <DeleteConfirmation
-          deleteHandler={deleteHandler}
-          id={staffId}
-          hideModel={hideDeleteModel}
-        />
-      )}
       <div className={classes["table_content"]}>
         <table>
           <thead>
@@ -129,11 +103,7 @@ const Empolyess = ({
                     </td>
                     <td> {el.days_off}</td>
                     <td> {el.note}</td>
-                    <td style={{ display: "flex" }}>
-                      <button onClick={() => deleteModelHandler(el.id)}>
-                        حذف
-                      </button>
-                    </td>
+                    <td style={{ display: "flex" }}></td>
                   </tr>
                 );
               })}
