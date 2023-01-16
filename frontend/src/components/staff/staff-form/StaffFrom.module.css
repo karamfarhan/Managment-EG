@@ -35,6 +35,12 @@
   border: none;
   outline: 1px solid #ddd;
 }
+.form textarea {
+  width: var(--input-width);
+  height: 90px;
+  resize: none;
+  padding: 10px;
+}
 @media (max-width: 767px) {
   .select select {
     width: 100%;

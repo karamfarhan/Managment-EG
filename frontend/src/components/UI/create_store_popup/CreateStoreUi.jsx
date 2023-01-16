@@ -23,16 +23,16 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   const dispatch = useDispatch();
   const { name, address, description } = storeData;
   //form validation
-  let formIsValid = false
+  let formIsValid = false;
 
-  if(storeData.address.trim() !== "" && storeData.name.trim() !=="") {
-    formIsValid = true
+  if (storeData.address.trim() !== "" && storeData.name.trim() !== "") {
+    formIsValid = true;
   }
 
   //submit handler
   const submitHandler = (e) => {
     e.preventDefault();
-    if(formIsValid === false) return
+    if (formIsValid === false) return;
     //store obj
     const storeObj = {
       token: token,
@@ -41,12 +41,9 @@ export const InventoryCreator = ({ hideFormHandler }) => {
       description,
     };
     dispatch(createStore(storeObj));
-   //s dispatch(getStores(token));
+    //s dispatch(getStores(token));
     hideFormHandler();
   };
-
-
-
 
   return (
     <Fragment>
@@ -60,16 +57,15 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             <Inputs
               type="text"
               placeholder="أسم المخزن"
-              value = {storeData.name}
+              value={storeData.name}
               onChange={(e) =>
                 setStoreData({ ...storeData, name: e.target.value })
               }
             />
             <Inputs
               type="text"
-              placeholder="عنوان المخزن أو الموقع"  
-              value = {storeData.address}
-
+              placeholder="أسم الموقع"
+              value={storeData.address}
               onChange={(e) =>
                 setStoreData({ ...storeData, address: e.target.value })
               }
@@ -77,8 +73,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             <Inputs
               type="text"
               placeholder=" معلومات اضافية (وصف - ملاحظات- الخ..)"
-              value = {storeData.description}
-
+              value={storeData.description}
               onChange={(e) =>
                 setStoreData({ ...storeData, description: e.target.value })
               }
@@ -103,7 +98,9 @@ export const InventoryCreator = ({ hideFormHandler }) => {
           </button>
         </div> */}
 
-          <button disabled = {!formIsValid} type="submit">اضافة</button>
+          <button disabled={!formIsValid} type="submit">
+            اضافة
+          </button>
         </form>
       </div>
     </Fragment>

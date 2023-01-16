@@ -1,0 +1,45 @@
+.table_content {
+  padding: 30px 30px;
+  overflow: auto;
+  max-height: 450px;
+}
+
+.table_content table {
+  width: 100%;
+  text-align: center;
+  border-spacing: 1px;
+}
+.table_content table th,
+.table_content table td {
+  padding: 0.75rem;
+  min-width: 120px;
+}
+.table_content table thead {
+  font-size: 13px;
+  background-color: #0b9cff;
+  color: #fff;
+}
+
+.table_content table tbody {
+  font-size: 12px;
+}
+.table_content table tbody tr:nth-child(even) {
+  background-color: #ddd;
+}
+.table_content table tbody button {
+  background-color: #da3230;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: #fff;
+  margin: 0 5px;
+}
+.table_content table tbody button:last-of-type {
+  background-color: green;
+}
+.table_content tbody tr td div {
+  width: 120px;
+}
+.table_content tbody tr td div img {
+  width: 100%;
+}

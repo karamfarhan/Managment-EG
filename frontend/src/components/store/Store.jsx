@@ -167,7 +167,6 @@ const Store = () => {
       )}
       {store_data && store_data.results && store_data.results.length > 0 && (
         <div className={classes["table_content"]}>
-          <div></div>
           <table>
             <thead>
               <tr>
