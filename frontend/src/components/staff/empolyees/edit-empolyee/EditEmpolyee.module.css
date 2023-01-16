@@ -1,8 +1,16 @@
 .form {
   width: 70%;
+  height: 760px;
   margin: auto;
   text-align: center;
   background-color: #fff;
+  position: relative;
+}
+.form > div:first-of-type {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .actions {
   display: flex;
@@ -11,7 +19,6 @@
 }
 .actions button {
   padding: 7px 20px;
-  width: 20%;
   color: #fff;
   font-size: 20px;
   border: none;
@@ -26,11 +33,11 @@
   width: 100%;
   padding: 6px 0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 .select select {
-  width: 332px;
+  width: var(--input-width);
   padding: 10px;
   border: none;
   outline: 1px solid #ddd;
@@ -45,4 +52,15 @@
   .select select {
     width: 100%;
   }
+}
+.arrows {
+  display: flex;
+  gap: 5px;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.arrows button {
+  padding: 5px 30px;
 }

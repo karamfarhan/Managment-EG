@@ -9,12 +9,19 @@ const StaffForm = ({ setStaffForm }) => {
   const { token } = authCtx;
   const [isInsurance, setIsInsurance] = useState("");
 
+  //form validation
+
+  let formIsValid = false;
+
   const [data, setData] = useState("");
   //imgs
   const [identityImg, setIdentityImg] = useState("");
   const [certificateImg, setCertificateImg] = useState("");
   const [experienceImg, setExperienceImg] = useState("");
   const [criminalRec, setCriminalRec] = useState("");
+
+  //steps
+  const [steps, setSteps] = useState(1);
 
   //empolyee data
   const [empolyeeData, setEmpolyeeData] = useState({
@@ -38,10 +45,7 @@ const StaffForm = ({ setStaffForm }) => {
     start_at: "",
   });
   const { ins_code, ins_type, ins_company, start_at } = insuranceData;
-  for (let i = 0; i < Object.values(insuranceData).length; i++) {
-    let obj = Object.values(insuranceData)[i];
-    console.log(obj === "");
-  }
+
   const {
     name,
     type,
@@ -54,6 +58,16 @@ const StaffForm = ({ setStaffForm }) => {
     location,
     signin_date,
   } = empolyeeData;
+
+  //validation
+  if (
+    name.trim() !== "" &&
+    type.trim() !== "" &&
+    email.trim() !== "" &&
+    signin_date.trim() !== ""
+  ) {
+    formIsValid = true;
+  }
 
   //images
   //setbackground function
@@ -168,14 +182,23 @@ const StaffForm = ({ setStaffForm }) => {
       //setStaffForm(true);
     }
   };
-  const cancelFormHandler = () => {
-    setStaffForm(false);
-    // dispatch(getEmpolyees(token));
-  };
+
   //submit handler
   const submitHandler = (e) => {
     e.preventDefault();
     sendEmpolyeeData();
+  };
+
+  //next step
+  const nextStepHandler = () => {
+    if (steps === 3) return;
+    setSteps((prev) => prev + 1);
+  }; //prev step
+  const PrevStepHandler = () => {
+    if (steps === 1) {
+      setStaffForm(false);
+    }
+    setSteps((prev) => prev - 1);
   };
 
   return (
@@ -184,177 +207,209 @@ const StaffForm = ({ setStaffForm }) => {
 
       {/* main data  */}
       <div>
-        <div>
-          <Inputs
-            required
-            value={name}
-            onChange={(e) =>
-              setEmpolyeeData({ ...empolyeeData, name: e.target.value })
-            }
-            type="text"
-            placeholder="أسم الموظف"
-          />
-          {data && data.name && <p className="err-msg"> {data.name} </p>}
-          <Inputs
-            required
-            value={number}
-            onChange={(e) =>
-              setEmpolyeeData({ ...empolyeeData, number: e.target.value })
-            }
-            type="tel"
-            placeholder="رقم الهاتف"
-          />
-          <Inputs
-            required
-            value={email}
-            onChange={(e) =>
-              setEmpolyeeData({ ...empolyeeData, email: e.target.value })
-            }
-            type="email"
-            placeholder="البريد الألكتروني"
-          />
-          <Inputs
-            required
-            value={type}
-            onChange={(e) =>
-              setEmpolyeeData({ ...empolyeeData, type: e.target.value })
-            }
-            type="text"
-            placeholder="المسمي الوظيفي"
-          />
-          <Inputs
-            required
-            value={signin_date}
-            label="تاريخ التوظيف"
-            onChange={(e) =>
-              setEmpolyeeData({ ...empolyeeData, signin_date: e.target.value })
-            }
-            type="date"
-            placeholder="تاريخ التوظيف"
-          />
-          <Inputs
-            id="experience"
-            label="سنوات الخبرة"
-            value={years_of_experiance}
-            onChange={(e) =>
-              setEmpolyeeData({
-                ...empolyeeData,
-                years_of_experiance: e.target.value,
-              })
-            }
-            type="number"
-            placeholder="سنوات الخبرة"
-          />
-          <Inputs
-            value={days_off}
-            id="day-off"
-            label="عدد الاجازات"
-            onChange={(e) =>
-              setEmpolyeeData({ ...empolyeeData, days_off: e.target.value })
-            }
-            type="number"
-            placeholder="عدد الاجازات"
-          />
-          <div className={classes.select}>
-            <select
-              value={location}
+        {steps === 1 && (
+          <div>
+            <Inputs
+              required
+              value={name}
               onChange={(e) =>
-                setEmpolyeeData({ ...empolyeeData, location: e.target.value })
-              }>
-              <option selected hidden>
-                موقع العمل
-              </option>
+                setEmpolyeeData({ ...empolyeeData, name: e.target.value })
+              }
+              type="text"
+              placeholder="أسم الموظف"
+            />
+            {data && data.name && <p className="err-msg"> {data.name} </p>}
+            <Inputs
+              required
+              value={number}
+              onChange={(e) =>
+                setEmpolyeeData({ ...empolyeeData, number: e.target.value })
+              }
+              type="tel"
+              placeholder="رقم الهاتف"
+            />
+            <Inputs
+              required
+              value={email}
+              onChange={(e) =>
+                setEmpolyeeData({ ...empolyeeData, email: e.target.value })
+              }
+              type="email"
+              placeholder="البريد الألكتروني"
+            />
+            <Inputs
+              required
+              value={type}
+              onChange={(e) =>
+                setEmpolyeeData({ ...empolyeeData, type: e.target.value })
+              }
+              type="text"
+              placeholder="المسمي الوظيفي"
+            />
+            <Inputs
+              required
+              value={signin_date}
+              label="تاريخ التوظيف"
+              onChange={(e) =>
+                setEmpolyeeData({
+                  ...empolyeeData,
+                  signin_date: e.target.value,
+                })
+              }
+              type="date"
+              placeholder="تاريخ التوظيف"
+            />
+            <Inputs
+              id="experience"
+              label="سنوات الخبرة"
+              value={years_of_experiance}
+              onChange={(e) =>
+                setEmpolyeeData({
+                  ...empolyeeData,
+                  years_of_experiance: e.target.value,
+                })
+              }
+              type="number"
+              placeholder="سنوات الخبرة"
+            />
+            <Inputs
+              value={days_off}
+              id="day-off"
+              label="عدد الاجازات"
+              onChange={(e) =>
+                setEmpolyeeData({ ...empolyeeData, days_off: e.target.value })
+              }
+              type="number"
+              placeholder="عدد الاجازات"
+            />
+            <div className={classes.select}>
+              <select
+                value={location}
+                onChange={(e) =>
+                  setEmpolyeeData({ ...empolyeeData, location: e.target.value })
+                }>
+                <option selected hidden>
+                  موقع العمل
+                </option>
 
-              {stores &&
-                stores.map((location) => {
-                  return (
-                    <option key={location.pk} value={location.pk}>
-                      {location.address}
-                    </option>
-                  );
-                })}
-            </select>
+                {stores &&
+                  stores.map((location) => {
+                    return (
+                      <option key={location.pk} value={location.pk}>
+                        {location.address}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+            <div className={classes.select}>
+              <select
+                value={is_primary}
+                onChange={(e) =>
+                  setEmpolyeeData({
+                    ...empolyeeData,
+                    is_primary: e.target.value,
+                  })
+                }>
+                ْ<option value={true}>موظف دائم</option>
+                <option value={false}>موظف مؤقت</option>
+              </select>
+            </div>
           </div>
-          <div className={classes.select}>
-            <select
-              value={is_primary}
-              onChange={(e) =>
-                setEmpolyeeData({ ...empolyeeData, is_primary: e.target.value })
-              }>
-              ْ<option value={true}>موظف دائم</option>
-              <option value={false}>موظف مؤقت</option>
-            </select>
-          </div>
-        </div>
+        )}
 
         {/* <Inputs value = {name} onChange={(e)=>setEmpolyeeData({...empolyeeData, name : e.target.value})} type="text" placeholder=" تاريخ التعيين" /> */}
 
-        <div className={classes.select}>
-          <select
-            value={isInsurance}
-            onChange={(e) => setIsInsurance(e.target.value)}>
-            <option selected hidden>
-              التأمين
-            </option>
-            <option value={true}>نعم</option>
-            <option value={false}>لا</option>
-          </select>
-        </div>
-        {/* Insurance  */}
-        {isInsurance === "true" && (
-          <Insurance
-            ins_code={ins_code}
-            ins_company={ins_company}
-            ins_type={ins_type}
-            start_at={start_at}
-            setInsuranceData={setInsuranceData}
-            insuranceData={insuranceData}
-            data={data}
-          />
+        {steps === 2 && (
+          <div>
+            <div className={classes.select}>
+              <select
+                value={isInsurance}
+                onChange={(e) => setIsInsurance(e.target.value)}>
+                <option selected hidden>
+                  التأمين
+                </option>
+                <option value={true}>نعم</option>
+                <option value={false}>لا</option>
+              </select>
+            </div>
+            {/* Insurance  */}
+            {isInsurance === "true" && (
+              <Insurance
+                ins_code={ins_code}
+                ins_company={ins_company}
+                ins_type={ins_type}
+                start_at={start_at}
+                setInsuranceData={setInsuranceData}
+                insuranceData={insuranceData}
+                data={data}
+              />
+            )}
+          </div>
         )}
+
         {/* Insurance  */}
-        <div>
-          <Inputs
-            onChange={identityImgHandler}
-            type="file"
-            accept="image/png, image/jpeg, image/png"
-            name="image_uploads"
-            id="identity"
-            label="صورة البطاقة/شهادة ميلاد"
-          />
-          <Inputs
-            type="file"
-            id="graduation"
-            label="صورة المؤهل الدراسي"
-            onChange={certificateImgHandler}
-            accept="image/png, image/jpeg, image/png"
-          />
-          <Inputs
-            type="file"
-            id="certificate"
-            label="صورة شهادات الخبرة"
-            onChange={experienceImgHandler}
-            accept="image/png, image/jpeg, image/png"
-          />
-          <Inputs
-            type="file"
-            id="criminal-record"
-            label="صورة الفيش و التشبيه"
-            onChange={criminalRecHandler}
-            accept="image/png, image/jpeg, image/png"
-          />
-          <textarea
-            placeholder="ملاحظة"
-            value={note}
-            onChange={(e) =>
-              setEmpolyeeData({ ...empolyeeData, note: e.target.value })
-            }></textarea>
-        </div>
+
+        {steps === 3 && (
+          <div>
+            <Inputs
+              onChange={identityImgHandler}
+              type="file"
+              accept="image/png, image/jpeg, image/png"
+              name="image_uploads"
+              id="identity"
+              label="صورة البطاقة/شهادة ميلاد"
+            />
+            <Inputs
+              type="file"
+              id="graduation"
+              label="صورة المؤهل الدراسي"
+              onChange={certificateImgHandler}
+              accept="image/png, image/jpeg, image/png"
+            />
+            <Inputs
+              type="file"
+              id="certificate"
+              label="صورة شهادات الخبرة"
+              onChange={experienceImgHandler}
+              accept="image/png, image/jpeg, image/png"
+            />
+            <Inputs
+              type="file"
+              id="criminal-record"
+              label="صورة الفيش و التشبيه"
+              onChange={criminalRecHandler}
+              accept="image/png, image/jpeg, image/png"
+            />
+            <textarea
+              placeholder="ملاحظة"
+              value={note}
+              onChange={(e) =>
+                setEmpolyeeData({ ...empolyeeData, note: e.target.value })
+              }></textarea>
+          </div>
+        )}
       </div>
       <div className={classes.actions}>
-        <button type="submit">اضافة</button>{" "}
-        <button type="button" onClick={cancelFormHandler}>
+        {steps === 3 && (
+          <button type="submit" disabled={!formIsValid}>
+            اضافة
+          </button>
+        )}
+        {/* <button type="button" onClick={cancelFormHandler}>
           الغاء
+        </button> */}
+      </div>
+
+      <div className={classes.arrows}>
+        {steps !== 3 && (
+          <button onClick={nextStepHandler} type="button">
+            التالي
+          </button>
+        )}
+        <button type="button" onClick={PrevStepHandler}>
+          {" "}
+          {steps === 1 ? "رجوع" : "السابق"}{" "}
         </button>
       </div>
     </form>

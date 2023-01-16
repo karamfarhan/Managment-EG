@@ -72,7 +72,6 @@ class InstrumentSerializer(serializers.ModelSerializer):
             "description",
             "is_working",
             "in_action",
-            "ins_type",
             "last_maintain",
             "maintain_place",
             "created_at",

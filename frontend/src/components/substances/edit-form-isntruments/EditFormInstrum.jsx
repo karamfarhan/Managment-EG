@@ -1,7 +1,6 @@
 import { useState, Fragment, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getSubs } from "../../../store/create-substance";
 import AuthContext from "../../../context/Auth-ctx";
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
@@ -27,8 +26,6 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
     in_action: selectedInstrument.in_action,
   });
 
-  const [unitTypes, setUnitTypes] = useState(["T", "KL", "L"]);
-
   let nameVar = selectedInstrument.name,
     descriptionVar = selectedInstrument.description,
     last_maintainVar = selectedInstrument.last_maintain;
@@ -38,9 +35,9 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
 
   if (
     instrumData.name.trim() !== "" &&
-    (instrumData.name !== selectedInstrument.name ||
-      instrumData.description !== selectedInstrument.description ||
-      instrumData.last_maintain !== selectedInstrument.unit_type)
+    (instrumData.name !== nameVar ||
+      instrumData.description !== descriptionVar ||
+      instrumData.last_maintain !== last_maintainVar)
   ) {
     formIsValid = true;
   }

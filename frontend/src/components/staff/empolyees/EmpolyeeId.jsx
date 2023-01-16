@@ -14,7 +14,7 @@ const EmpolyeeId = () => {
   const [imgSrc, setImgSrc] = useState("");
   const [imgModel, setImgModel] = useState(false);
   //about page
-  const [isAbout, setIsAbout] = useState(true);
+  const [sections, setSections] = useState("general");
   const authCtx = useContext(AuthContext);
   const [isDelete, setIsDelete] = useState(false);
   const [staffId, setStaffId] = useState("");
@@ -107,11 +107,6 @@ const EmpolyeeId = () => {
                 <h3> {empolyee.name} </h3>
                 <span> {empolyee.type} </span>
               </div>
-
-              {/* years of experience */}
-              <h3 className={classes.years_exp}>
-                سنوات الخبرة : <span> {empolyee.years_of_experiance} </span>
-              </h3>
             </div>
             <div className={classes.actions}>
               <button type="button" onClick={() => editHanlder(empolyee.id)}>
@@ -148,48 +143,62 @@ const EmpolyeeId = () => {
             <div className={classes.activities}>
               <ul>
                 <li
-                  className={isAbout === true ? classes.active : ""}
-                  onClick={() => setIsAbout(true)}>
-                  حول
+                  className={sections === "general" ? classes.active : ""}
+                  onClick={() => setSections("general")}>
+                  معلومات عامة
                 </li>
                 <li
-                  className={isAbout === false ? classes.active : ""}
-                  onClick={() => setIsAbout(false)}>
+                  className={sections === "insurance" ? classes.active : ""}
+                  onClick={() => setSections("insurance")}>
+                  التأمينات
+                </li>
+                <li
+                  className={sections === "papers" ? classes.active : ""}
+                  onClick={() => setSections("papers")}>
+                  الأوراق
+                </li>
+                <li
+                  className={sections === "absence" ? classes.active : ""}
+                  onClick={() => setSections("absence")}>
                   الحضور/الانصراف
                 </li>
               </ul>
+              <div>
+                {/* about */}
+                {sections === "general" && (
+                  <div className={classes.about}>
+                    <p>
+                      تاريخ التوظيف : <span> {empolyee.signin_date} </span>{" "}
+                    </p>
+                    <p>
+                      سنوات الخبرة :{" "}
+                      <span> {empolyee.years_of_experiance}</span>
+                    </p>
+                    <p>
+                      مقر العمل :
+                      <span>
+                        {empolyee.store_address === null
+                          ? "مقر الشركة"
+                          : empolyee.store_address}{" "}
+                      </span>
+                    </p>
+                    <p>
+                      نوع العقد :
+                      <span>
+                        {empolyee.is_primary === true
+                          ? "موظف دائم"
+                          : "موظف بعقد مؤقت"}{" "}
+                      </span>
+                    </p>
+                    <p>
+                      عدد الأجازات :<span>{empolyee.days_off} </span>
+                    </p>
+                  </div>
+                )}
+                {/* التأمينات */}
 
-              {/* about */}
-              {isAbout && (
-                <div className={classes.about}>
-                  <p>
-                    تاريخ التوظيف : <span> {empolyee.signin_date} </span>{" "}
-                  </p>
-                  <p>
-                    مقر العمل :
-                    <span>
-                      {empolyee.store_address === null
-                        ? "مقر الشركة"
-                        : empolyee.store_address}{" "}
-                    </span>
-                  </p>
-                  <p>
-                    نوع العقد :
-                    <span>
-                      {empolyee.is_primary === true
-                        ? "موظف دائم"
-                        : "موظف بعقد مؤقت"}{" "}
-                    </span>
-                  </p>
-                  <p>
-                    عدد الأجازات :<span>{empolyee.days_off} </span>
-                  </p>
-
-                  {/* التأمينات */}
-
+                {sections === "insurance" && (
                   <div className={classes.insurance}>
-                    <h4>التأمينات</h4>
-
                     {empolyee.insurance === null && <p> ليس مؤمن عليه </p>}
                     {empolyee.insurance && (
                       <ul>
@@ -212,9 +221,11 @@ const EmpolyeeId = () => {
                       </ul>
                     )}
                   </div>
+                )}
 
-                  {/* images */}
+                {/* images */}
 
+                {sections === "papers" && (
                   <div className={classes.imgs}>
                     {empolyee.identity_image !== null ? (
                       <figure>
@@ -273,8 +284,8 @@ const EmpolyeeId = () => {
                       ""
                     )}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>

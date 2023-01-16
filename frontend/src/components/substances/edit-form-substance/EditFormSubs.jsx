@@ -6,7 +6,6 @@ import AuthContext from "../../../context/Auth-ctx";
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
 import classes from "./EditFormSubs.module.css";
-import { subsPagination } from "../../../store/create-substance";
 const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   const params = useParams();
   const dispatch = useDispatch();
@@ -27,7 +26,7 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   });
 
   const [selectType, setSelectType] = useState(selectedSubs.unit_type);
-  const [unitTypes, setUnitTypes] = useState(["T", "KL", "L"]);
+  const [unitTypes, setUnitTypes] = useState(["kilogram", "liter", "ton"]);
 
   let nameVar = selectedSubs.email,
     descriptionVar = selectedSubs.description,
@@ -38,10 +37,11 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   let formIsValid = false;
 
   if (
-    subsData.name.trim() !== "" &&
-    (subsData.name !== selectedSubs.name ||
-      subsData.description !== selectedSubs.description ||
-      selectType !== subsData.unit_type)
+    (subsData.name.trim() !== "" &&
+      (subsData.name !== selectedSubs.name ||
+        subsData.description !== selectedSubs.description ||
+        selectType !== subsData.unit_type)) ||
+    quantityVar !== subsData.quantity
   ) {
     formIsValid = true;
   }
@@ -78,7 +78,7 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
         },
         body: JSON.stringify(obj),
       });
-      //  dispatch(getSubs(token));
+      dispatch(getSubs(token));
       //setCurrentPage(2);
       return await res.json();
     } catch (err) {
@@ -95,9 +95,9 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
     setCurrentPage(1);
     navigate("/create_subs");
   };
-  const backHandler = () => {
+  function backHandler() {
     navigate("/create_subs");
-  };
+  }
 
   return (
     <Fragment>
