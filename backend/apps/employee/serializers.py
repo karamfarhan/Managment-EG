@@ -84,6 +84,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update_employee(self, instance, validated_data):
+        print("update insurance start")
         # TODO i think you should move the updation of the insurance to the end
         insurance_data = validated_data.pop("insurance", None)
         if insurance_data:
@@ -100,6 +101,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
                     insruance_obj = serializer.save(created_by=validated_data["created_by"])
                     instance.insurance = insruance_obj
                     instance.save()
+        print("update insurance finished")
+        print("update employee start")
         instance.name = validated_data.get("name", instance.name)
         instance.type = validated_data.get("type", instance.type)
         instance.email = validated_data.get("email", instance.email).lower()
@@ -132,6 +135,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
                 "is_primary",
             ]
         )
+        print("update employee finish")
         return instance
 
     def get_store_address(self, employee):
