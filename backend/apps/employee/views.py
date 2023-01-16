@@ -1,3 +1,4 @@
+from core.exports import ModelViewSetExportBase
 from django.db.models import Prefetch
 from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
@@ -10,10 +11,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Employee, EmployeeActivity, Insurance
+from .resources import EmployeeActivityResource, EmployeeResource
 from .serializers import EmployeeActivitySerializer, EmployeeSerializer
 
 
-class EmployeeViewSet(viewsets.ModelViewSet):
+class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Employee.objects.select_related("created_by", "insurance")
     pagination_class = PageNumberPagination
@@ -27,6 +29,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         "email",
     ]
     ordering_fields = ["name", "created_at", "years_of_experiance"]
+    resource_class = EmployeeResource
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -44,7 +47,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class EmployeeActivityViewSet(viewsets.ModelViewSet):
+class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = EmployeeActivity.objects.all()
     pagination_class = PageNumberPagination
@@ -54,7 +57,7 @@ class EmployeeActivityViewSet(viewsets.ModelViewSet):
         "date",
     ]
     ordering_fields = ["date"]
-
+    resource_class = EmployeeActivityResource
     # TODO should update the kwargs.get("id") to more effiecent way maybe use the default self.get_objects()
 
     def get_queryset(self):
