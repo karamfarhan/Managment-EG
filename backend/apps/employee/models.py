@@ -159,6 +159,7 @@ class Employee(models.Model):
     class Meta:
         verbose_name = "Employee"
         verbose_name_plural = "Employees"
+        ordering = ("-created_at",)
 
     def __str__(self):
         return self.name

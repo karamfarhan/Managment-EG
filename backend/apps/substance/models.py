@@ -77,6 +77,7 @@ class Substance(models.Model):
     class Meta:
         verbose_name = "Substance"
         verbose_name_plural = "Substances"
+        ordering = ("-created_at",)
 
     def __str__(self):
         return self.name
@@ -142,6 +143,7 @@ class Instrument(models.Model):
     class Meta:
         verbose_name = "Instrument"
         verbose_name_plural = "Instruments"
+        ordering = ("-created_at",)
 
     def __str__(self):
         return self.name
