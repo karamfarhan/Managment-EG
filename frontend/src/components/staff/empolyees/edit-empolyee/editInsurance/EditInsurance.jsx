@@ -1,6 +1,5 @@
-import Inputs from "../../../UI/inputs/Inputs";
-
-const Insurance = ({
+import Inputs from "../../../../UI/inputs/Inputs";
+const EditInsurance = ({
   ins_code,
   ins_company,
   ins_type,
@@ -56,4 +55,4 @@ const Insurance = ({
   );
 };
 
-export default Insurance;
+export default EditInsurance;

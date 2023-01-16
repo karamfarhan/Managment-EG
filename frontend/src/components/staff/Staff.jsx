@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
-import { useQuery } from "react-query";
+import { Route, Routes, useLocation } from "react-router-dom";
+
 import Bar from "../UI/bars/Bar";
 import { AiOutlineUserAdd } from "react-icons/ai";
 
@@ -12,25 +13,32 @@ import Empolyess from "./empolyees/Empolyess";
 import classes from "./Staff.module.css";
 import { empolyeeSearch, getEmpolyees } from "../../store/empolyees-slice";
 import Search from "../UI/search/Search";
+import EditEmpolyee from "./empolyees/edit-empolyee/EditEmpolyee";
 
 export const Staff = () => {
   const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
   const { token } = authCtx;
+  const location = useLocation();
+  const { pathname } = location;
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //show staff form
   const [staffForm, setStaffForm] = useState(false);
   //search
   const [searchValue, setSearchValue] = useState("");
-  useEffect(() => {
-    dispatch(getEmpolyees(token));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
 
   //data
   const { data: empolyees } = useSelector((state) => state.empolyeeReducer);
   //fetch search data
+  //get stores
+  useEffect(() => {
+    if (currentPage === 1 && searchValue.trim() === "" && staffForm === false) {
+      dispatch(getEmpolyees(token));
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, currentPage, searchValue, staffForm, pathname]);
   function fetchSearchHandler() {
     setCurrentPage(1);
     const obj = {
@@ -60,17 +68,23 @@ export const Staff = () => {
           </div>
         </Bar>
       )}
-
+      <Routes>
+        <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
+      </Routes>
       {staffForm && <StaffForm setStaffForm={setStaffForm} />}
-      {!staffForm && (
-        <Empolyess
-          data={empolyees}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          searchValue={searchValue}
-          fetchSearchHandler={fetchSearchHandler}
-        />
-      )}
+      {!staffForm &&
+        empolyees &&
+        empolyees.count > 0 &&
+        location.pathname === "/staff" && (
+          <Empolyess
+            data={empolyees}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            searchValue={searchValue}
+            fetchSearchHandler={fetchSearchHandler}
+            staffForm={staffForm}
+          />
+        )}
     </div>
   );
 };

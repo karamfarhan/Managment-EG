@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Fragment, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContext from "../../../context/Auth-ctx";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
@@ -12,12 +12,15 @@ import {
 } from "../../../store/empolyees-slice";
 import Paginate from "../../UI/pagination/Paginate";
 import { useEffect } from "react";
+import ImgModel from "../../UI/imgModel/ImgModel";
+import EditEmpolyee from "./edit-empolyee/EditEmpolyee";
 const Empolyess = ({
   data,
   currentPage,
   setCurrentPage,
   searchValue,
   fetchSearchHandler,
+  staffForm,
 }) => {
   const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
@@ -25,19 +28,14 @@ const Empolyess = ({
 
   const [isDelete, setIsDelete] = useState(false);
   const [staffId, setStaffId] = useState("");
+  const [editId, setEditId] = useState("");
+
+  const navigate = useNavigate("");
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
   const empolyeeCount = empolyeeData && empolyeeData.count;
 
-  //get stores
-  useEffect(() => {
-    if (currentPage === 1 && searchValue.trim() === "") {
-      dispatch(getEmpolyees(token));
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, currentPage, searchValue]);
   //delete staff
   const deleteHandler = async (id) => {
     const res = await fetch(`http://127.0.0.1:8000/employees/${id}`, {
@@ -72,6 +70,11 @@ const Empolyess = ({
     // //search pagination
     dispatch(empolyeeSearchPagination(obj));
   };
+  //edit handler
+  const editHanlder = (id) => {
+    navigate(`/staff/edit/${id}`);
+  };
+
   return (
     <Fragment>
       {isDelete && (
@@ -110,17 +113,27 @@ const Empolyess = ({
                     <td> {el.email}</td>
                     <td> {el.type}</td>
                     <td> {el.signin_date}</td>
-                    <td> {el.store_address}</td>
                     <td>
-                      {el.insurance === null ? "لا يوجد تأمين" : "مؤمن عليه"}
+                      {el.store_address === null
+                        ? "مقر الشركة"
+                        : el.store_address}
+                    </td>
+                    <td>
+                      {el.insurance !== null && (
+                        <ul>
+                          <li>
+                            رقم التأمين : <span>{el.insurance.ins_code} </span>{" "}
+                          </li>
+                        </ul>
+                      )}
                     </td>
                     <td> {el.days_off}</td>
                     <td> {el.note}</td>
-                    <td>
+                    <td style={{ display: "flex" }}>
                       <button onClick={() => deleteModelHandler(el.id)}>
                         حذف
                       </button>
-                      <button>تعديل</button>
+                      <button onClick={() => editHanlder(el.id)}>تعديل</button>
                     </td>
                   </tr>
                 );

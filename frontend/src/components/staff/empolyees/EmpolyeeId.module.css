@@ -1,7 +1,6 @@
 .table_content {
   padding: 30px 30px;
   overflow: auto;
-  max-height: 450px;
 }
 
 .table_content table {
@@ -11,15 +10,20 @@
 }
 .table_content table th,
 .table_content table td {
-  padding: 0.75rem;
-  min-width: 120px;
+  padding: 0.2rem;
+  width: 50px;
 }
-.table_content table thead {
+.table_content table tr:nth-child(even) {
+  background-color: #ddd;
+}
+.table_content table th {
   font-size: 13px;
   background-color: #0b9cff;
   color: #fff;
 }
-
+.table_content table td span {
+  font-weight: bold;
+}
 .table_content table tbody {
   font-size: 12px;
 }
@@ -37,9 +41,10 @@
 .table_content table tbody button:last-of-type {
   background-color: green;
 }
-.table_content tbody tr td div {
+.table_content tr div:has(img) {
   width: 120px;
+  margin: auto;
 }
-.table_content tbody tr td div img {
+.table_content tr div img {
   width: 100%;
 }

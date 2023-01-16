@@ -1,43 +1,77 @@
 import { useContext, useState } from "react";
 import { useQuery } from "react-query";
-import AuthContext from "../../../context/Auth-ctx";
-import Inputs from "../../UI/inputs/Inputs";
-import Insurance from "./insurance/Insurance";
-import classes from "./StaffFrom.module.css";
-const StaffForm = ({ setStaffForm }) => {
+import { useNavigate, useParams } from "react-router-dom";
+import AuthContext from "../../../../context/Auth-ctx";
+import Inputs from "../../../UI/inputs/Inputs";
+import EditInsurance from "./editInsurance/EditInsurance";
+import classes from "./EditEmpolyee.module.css";
+import useSelection from "antd/es/table/hooks/useSelection";
+import { useDispatch, useSelector } from "react-redux";
+import { getEmpolyees } from "../../../../store/empolyees-slice";
+const EditEmpolyee = ({ setStaffForm, id }) => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const params = useParams();
+
+  const { data: empolyeeId } = useSelector((state) => state.empolyeeReducer);
+
+  const selectedEmpolyee =
+    empolyeeId &&
+    empolyeeId.results &&
+    empolyeeId.results.find((el) => el.id === parseInt(params.empId));
+
   const [isInsurance, setIsInsurance] = useState("");
 
   const [data, setData] = useState("");
   //imgs
-  const [identityImg, setIdentityImg] = useState("");
-  const [certificateImg, setCertificateImg] = useState("");
-  const [experienceImg, setExperienceImg] = useState("");
-  const [criminalRec, setCriminalRec] = useState("");
+  const [identityImg, setIdentityImg] = useState(
+    selectedEmpolyee.identity_image
+  );
+  const [certificateImg, setCertificateImg] = useState(
+    selectedEmpolyee.certificate_image
+  );
+  const [experienceImg, setExperienceImg] = useState(
+    selectedEmpolyee.experience_image
+  );
+  const [criminalRec, setCriminalRec] = useState(
+    selectedEmpolyee.criminal_record_image
+  );
 
   //empolyee data
   const [empolyeeData, setEmpolyeeData] = useState({
-    name: "",
-    type: "",
-    email: "",
-    number: "",
-    years_of_experiance: 0,
-    days_off: "",
-    note: "",
-    location: "",
-    is_primary: false,
-    signin_date: "",
+    name: selectedEmpolyee.name,
+    type: selectedEmpolyee.type,
+    email: selectedEmpolyee.email,
+    number: selectedEmpolyee.number,
+    years_of_experiance: selectedEmpolyee.years_of_experiance,
+    days_off: selectedEmpolyee.days_off,
+    note: selectedEmpolyee.note,
+    location:
+      selectedEmpolyee.store_address === null
+        ? ""
+        : selectedEmpolyee.store_address,
+    is_primary: selectedEmpolyee.is_primary,
+    signin_date: selectedEmpolyee.signin_date,
   });
 
   //insurance data
   const [insuranceData, setInsuranceData] = useState({
-    ins_code: "",
-    ins_type: "",
-    ins_company: "",
-    start_at: "",
+    ins_code: selectedEmpolyee.insurance.ins_code,
+    ins_type: selectedEmpolyee.insurance.ins_type,
+    ins_company: selectedEmpolyee.insurance.ins_company,
+    start_at: selectedEmpolyee.insurance.start_at,
   });
   const { ins_code, ins_type, ins_company, start_at } = insuranceData;
+
+  //INSURANCE FIRST RENDER
+  const insCode = selectedEmpolyee.insurance.ins_code,
+    insType = selectedEmpolyee.insurance.ins_type,
+    insCompany = selectedEmpolyee.insurance.ins_company,
+    startAt = selectedEmpolyee.insurance.start_at;
+
   for (let i = 0; i < Object.values(insuranceData).length; i++) {
     let obj = Object.values(insuranceData)[i];
     console.log(obj === "");
@@ -54,6 +88,15 @@ const StaffForm = ({ setStaffForm }) => {
     location,
     signin_date,
   } = empolyeeData;
+  const nameVar = selectedEmpolyee.name;
+  const emailVar = selectedEmpolyee.email;
+  const typeVar = selectedEmpolyee.type;
+  const numVar = selectedEmpolyee.number;
+  const yearsVar = selectedEmpolyee.years_of_experiance;
+  const daysVar = selectedEmpolyee.days_off;
+  const primVar = selectedEmpolyee.is_primary;
+  const locationVar = selectedEmpolyee.location;
+  const signInVar = selectedEmpolyee.signin_date;
 
   //images
   //setbackground function
@@ -118,43 +161,75 @@ const StaffForm = ({ setStaffForm }) => {
     setData("");
 
     const formdata = new FormData();
-    formdata.append("name", name);
-    formdata.append("number", number);
-    formdata.append("identity_image", identityImg);
-    formdata.append("experience_image", experienceImg);
-    formdata.append("certificate_image", certificateImg);
-    formdata.append("criminal_record_image", criminalRec);
-    formdata.append("type", type);
-    formdata.append("signin_date", signin_date);
-    formdata.append("email", email);
+
+    if (nameVar !== name || name.trim() !== "") {
+      formdata.append("name", name);
+    }
+    if (number !== numVar) {
+      formdata.append("number", number);
+    }
+    if (number !== numVar) {
+      formdata.append("number", number);
+    }
+    if (type !== typeVar) {
+      formdata.append("type", type);
+    }
+    if (signin_date !== signInVar) {
+      formdata.append("signin_date", signin_date);
+    }
+
+    if (emailVar !== email) {
+      formdata.append("email", email);
+    }
+    if (daysVar !== days_off) {
+      formdata.append("days_off", days_off);
+    }
+    if (yearsVar !== years_of_experiance) {
+      formdata.append("years_of_experiance", years_of_experiance);
+    }
+    if (selectedEmpolyee.identity_image !== identityImg) {
+      formdata.append("identity_image", identityImg);
+    }
+    if (selectedEmpolyee.experience_image !== experienceImg) {
+      formdata.append("experience_image", experienceImg);
+    }
+    if (selectedEmpolyee.certificate_image !== certificateImg) {
+      formdata.append("certificate_image", certificateImg);
+    }
+    if (selectedEmpolyee.criminal_record_image !== criminalRec) {
+      formdata.append("criminal_record_image", criminalRec);
+    }
     formdata.append("is_primary", is_primary);
-    if (location !== "") {
+    if (locationVar !== location) {
       formdata.append("store", location);
     }
-    formdata.append("days_off", days_off);
-    formdata.append("years_of_experiance", years_of_experiance);
 
-    for (let i = 0; i < Object.values(insuranceData).length; i++) {
-      let obj = Object.values(insuranceData)[i];
-
-      if (obj !== "") {
-        formdata.append("insurance.ins_code", ins_code);
-        formdata.append("insurance.ins_type", ins_type);
-        formdata.append("insurance.start_at", start_at);
-        formdata.append("insurance.ins_company", ins_company);
-      }
+    if (ins_code !== insCode) {
+      formdata.append("insurance.ins_code", ins_code);
+    }
+    if (ins_type !== insType) {
+      formdata.append("insurance.ins_type", ins_type);
+    }
+    if (start_at !== startAt) {
+      formdata.append("insurance.start_at", start_at);
+    }
+    if (ins_company !== insCompany) {
+      formdata.append("insurance.ins_company", ins_company);
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/employees/", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formdata,
-      });
+      const res = await fetch(
+        `http://127.0.0.1:8000/employees/${parseInt(params.empId)}/`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formdata,
+        }
+      );
       if (res.ok) {
-        // setStaffForm(false);
+        navigate("/staff");
       }
 
       //setStaffForm(false);
@@ -168,8 +243,7 @@ const StaffForm = ({ setStaffForm }) => {
     }
   };
   const cancelFormHandler = () => {
-    setStaffForm(false);
-    // dispatch(getEmpolyees(token));
+    navigate("/staff");
   };
   //submit handler
   const submitHandler = (e) => {
@@ -179,7 +253,7 @@ const StaffForm = ({ setStaffForm }) => {
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
-      <h3> برجاء ادخال بيانات الموظف </h3>
+      <h3> تعديل بيانات الموظف</h3>
       <Inputs
         required
         value={name}
@@ -296,7 +370,7 @@ const StaffForm = ({ setStaffForm }) => {
       </div>
       {/* Insurance  */}
       {isInsurance === "true" && (
-        <Insurance
+        <EditInsurance
           ins_code={ins_code}
           ins_company={ins_company}
           ins_type={ins_type}
@@ -343,7 +417,7 @@ const StaffForm = ({ setStaffForm }) => {
           setEmpolyeeData({ ...empolyeeData, note: e.target.value })
         }></textarea>
       <div className={classes.actions}>
-        <button type="submit">اضافة</button>{" "}
+        <button type="submit">تعديل</button>{" "}
         <button type="button" onClick={cancelFormHandler}>
           الغاء
         </button>
@@ -352,4 +426,4 @@ const StaffForm = ({ setStaffForm }) => {
   );
 };
 
-export default StaffForm;
+export default EditEmpolyee;
