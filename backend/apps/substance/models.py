@@ -164,6 +164,11 @@ class InvoiceSubstanceItem(models.Model):
         blank=True,
         verbose_name=_("invoice substance information"),
     )
+    # invoice = models.ForeignKey(
+    #     "substance.Invoice",
+    #     on_delete=models.CASCADE,
+    #     related_name="substance_items"
+    # )
 
 
 class InvoiceInstrumentItem(models.Model):
@@ -178,6 +183,11 @@ class InvoiceInstrumentItem(models.Model):
         blank=True,
         verbose_name=_("invoice instrument information"),
     )
+    # invoice = models.ForeignKey(
+    #     "substance.Invoice",
+    #     on_delete=models.CASCADE,
+    #     related_name="instrument_items"
+    # )
 
 
 class Invoice(models.Model):
@@ -198,6 +208,7 @@ class Invoice(models.Model):
     )
     # TODO i think there a mistake here, the item istance should be in one invoice
     # TODO so many to many here is wrong, should re-design the relationship
+    # TODO -> make the relation on the items model and change the relation to
     substances = models.ManyToManyField(InvoiceSubstanceItem, related_name="invoice")
     instruments = models.ManyToManyField(InvoiceInstrumentItem, related_name="invoice")
     note = models.TextField(
