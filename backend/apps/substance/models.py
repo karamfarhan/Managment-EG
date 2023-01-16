@@ -29,12 +29,12 @@ class Category(models.Model):
 
 
 class Substance(models.Model):
-    UNIT_TYPE = (("KL", "KILOGRAM"), ("L", "LITER"), ("T", "TON"))
+    UNIT_TYPE = (("kilogram", "kilogram"), ("liter", "liter"), ("ton", "ton"))
     created_by = models.ForeignKey(
         Account,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="substance_account",
+        related_name="substances_created",
     )
     name = models.CharField(
         max_length=250,
@@ -44,7 +44,10 @@ class Substance(models.Model):
         verbose_name=_("substance name"),
     )
     category = models.ManyToManyField(
-        Category, related_name="substance_categories", verbose_name=_("substance Category"), blank=True
+        Category,
+        verbose_name=_("substance Category"),
+        blank=True,
+        related_name="substances",
     )
     description = models.TextField(
         default="No description",
@@ -87,12 +90,11 @@ class Substance(models.Model):
 
 
 class Instrument(models.Model):
-    TYPE = (("Handed", "Handed"), ("Mechian", "Mechian"))
     created_by = models.ForeignKey(
         Account,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="instrument_account",
+        related_name="instruments_created",
     )
     name = models.CharField(
         max_length=250,
@@ -102,7 +104,7 @@ class Instrument(models.Model):
         verbose_name=_("instrument name"),
     )
     category = models.ManyToManyField(
-        Category, related_name="instrument_categories", verbose_name=_("instrumen Category"), blank=True
+        Category, verbose_name=_("instrumen Category"), blank=True, related_name="instruments"
     )
     description = models.TextField(
         default="No description",
@@ -127,8 +129,6 @@ class Instrument(models.Model):
         verbose_name=_("creatred at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
-    # TODO delete the ins_type we don't need it
-    ins_type = models.CharField(max_length=20, choices=TYPE, verbose_name=_("Unit Type"))
     last_maintain = models.DateField(
         # format=None,
         # input_formats=['%Y-%m-%d',],
@@ -148,7 +148,9 @@ class Instrument(models.Model):
 
 
 class InvoiceSubstanceItem(models.Model):
-    substance = models.ForeignKey(Substance, on_delete=models.CASCADE, null=True, blank=True)
+    substance = models.ForeignKey(
+        Substance, on_delete=models.CASCADE, null=True, blank=True, related_name="invoices_items"
+    )
     mass = models.BigIntegerField(
         null=False,
         blank=False,
@@ -166,10 +168,7 @@ class InvoiceSubstanceItem(models.Model):
 
 class InvoiceInstrumentItem(models.Model):
     instrument = models.ForeignKey(
-        Instrument,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        Instrument, on_delete=models.CASCADE, null=True, blank=True, related_name="invoices_items"
     )
     description = models.TextField(
         default="No description",
@@ -190,15 +189,17 @@ class Invoice(models.Model):
         Account,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="invoice_account",
+        related_name="invoices_created",
     )
     store = models.ForeignKey(
         Store,
         on_delete=models.CASCADE,
-        related_name="invoice_store",
+        related_name="invoices",
     )
-    substances = models.ManyToManyField(InvoiceSubstanceItem)
-    instruments = models.ManyToManyField(InvoiceInstrumentItem)
+    # TODO i think there a mistake here, the item istance should be in one invoice
+    # TODO so many to many here is wrong, should re-design the relationship
+    substances = models.ManyToManyField(InvoiceSubstanceItem, related_name="invoice")
+    instruments = models.ManyToManyField(InvoiceInstrumentItem, related_name="invoice")
     note = models.TextField(
         null=True,
         blank=True,

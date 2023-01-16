@@ -16,7 +16,7 @@ class Store(models.Model):
         Account,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="store_account",
+        related_name="stores_created",
     )
     name = models.CharField(
         max_length=250,
@@ -70,7 +70,7 @@ class MediaPack(models.Model):
     store = models.ForeignKey(
         Store,
         on_delete=models.CASCADE,
-        related_name="mediapack_store",
+        related_name="mediapacks",
     )
     alt_text = models.CharField(
         max_length=255,
@@ -83,7 +83,7 @@ class MediaPack(models.Model):
         Account,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="mediapack_account",
+        related_name="mediapacks_created",
     )
 
 
@@ -94,7 +94,7 @@ class Image(models.Model):
         null=False,
         blank=False,
     )
-    media_pack = models.ForeignKey(MediaPack, on_delete=models.CASCADE, related_name="media_mediapack")
+    media_pack = models.ForeignKey(MediaPack, on_delete=models.CASCADE, related_name="images")
 
     class Meta:
         verbose_name = "Image"

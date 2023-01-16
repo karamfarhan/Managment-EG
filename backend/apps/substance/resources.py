@@ -12,7 +12,7 @@ class SubstanceResource(resources.ModelResource):
         fields = ("id", "name", "is_available", "units", "unit_type", "description")
         export_order = ("id", "name", "is_available", "units", "unit_type", "description")
 
-    def dehydrate_is_available(self, obj):
-        if obj.is_available:
+    def dehydrate_is_available(self, substance):
+        if substance.is_available:
             return "Yes"
         return "No"

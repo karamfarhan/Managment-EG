@@ -91,6 +91,7 @@ class SubstanceViewSet(viewsets.ModelViewSet):
 
 
 class SubstanceSelectBarView(ListAPIView):
+    # TODO should update the quere to get the fields i need not all fields->(id,name)
     queryset = Substance.objects.all()
     serializer_class = SubstanceSelectBarSerializer
     permission_classes = (IsAuthenticated,)
@@ -115,6 +116,7 @@ class InstrumentViewSet(viewsets.ModelViewSet):
 
 
 class InstrumentSelectBarView(ListAPIView):
+    #  TODO should update the quere to get the fields i need not all fields->(id,name)
     queryset = Instrument.objects.all()
     serializer_class = InstrumentSelectBarSerializer
     permission_classes = (IsAuthenticated,)
@@ -123,6 +125,7 @@ class InstrumentSelectBarView(ListAPIView):
 
 class InvoiceViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
+    # TODO the quere should be optimized
     queryset = Invoice.objects.all().prefetch_related(
         Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),
         Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()),

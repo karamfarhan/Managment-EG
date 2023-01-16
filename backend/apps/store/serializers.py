@@ -47,8 +47,9 @@ class StoreSerializer(serializers.ModelSerializer):
     def get_username(self, store):
         return store.created_by.username
 
+    # TODO update the querey after setting the related name in invoice model
     def get_invoices(self, store):
-        invoices = store.invoice_store.all()
+        invoices = store.invoices.all()
         serializer = StoreInvoicesSerializer(invoices, many=True)
         return serializer.data
 

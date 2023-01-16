@@ -22,12 +22,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
-    employee_info = models.OneToOneField(
+    employee = models.OneToOneField(
         Employee,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="account_employee",
+        related_name="account",
     )
     # is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

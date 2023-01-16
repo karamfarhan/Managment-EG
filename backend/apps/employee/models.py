@@ -37,7 +37,7 @@ class Insurance(models.Model):
         "account.Account",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="insurance_created_by",
+        related_name="insurances_created",
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -80,7 +80,7 @@ class Employee(models.Model):
         "account.Account",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="employee_created_by",
+        related_name="employees_created",
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -88,7 +88,9 @@ class Employee(models.Model):
         verbose_name=_("creatred at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
-    insurance = models.OneToOneField(Insurance, on_delete=models.SET_NULL, null=True, blank=True)
+    insurance = models.OneToOneField(
+        Insurance, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee"
+    )
     certificate_image = models.ImageField(
         max_length=255,
         upload_to=get_certificate_image_filepath,
@@ -126,10 +128,14 @@ class Employee(models.Model):
         verbose_name=_("employee's days off number"),
     )
     signin_date = models.DateField(
-        verbose_name=_("employee information"),
+        verbose_name=_("employee signed in date"),
     )
     store = models.ForeignKey(
-        "store.Store", on_delete=models.SET_NULL, related_name="employee_store", null=True, blank=True
+        "store.Store",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employees",
     )
     note = models.TextField(
         default="No description",
@@ -159,7 +165,7 @@ class Employee(models.Model):
 
 
 class EmployeeActivity(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employeeactivity_employee")
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="activities")
     is_holiday = models.BooleanField(
         default=False,
         verbose_name=_("is today is holiday day"),

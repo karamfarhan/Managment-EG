@@ -55,9 +55,11 @@ class EmployeeActivityViewSet(viewsets.ModelViewSet):
     ]
     ordering_fields = ["date"]
 
+    # TODO should update the kwargs.get("id") to more effiecent way maybe use the default self.get_objects()
+
     def get_queryset(self):
         employee_id = self.kwargs.get("id")
-        return EmployeeActivity.objects.filter(employee_id=employee_id)
+        return self.queryset.filter(employee__id=employee_id)
 
     def create(self, request, *args, **kwargs):
         employee_id = self.kwargs.get("id")
