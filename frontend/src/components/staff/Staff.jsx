@@ -21,6 +21,12 @@ export const Staff = () => {
   const { token } = authCtx;
   const location = useLocation();
   const { pathname } = location;
+
+  const { unAuth } = useSelector((state) => state.empolyeeReducer);
+  if (unAuth !== null) {
+    authCtx.logout();
+  }
+  console.log(unAuth);
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //show staff form
@@ -50,7 +56,7 @@ export const Staff = () => {
   }
   return (
     <div dir="rtl">
-      {!staffForm && (
+      {!staffForm && location.pathname === "/staff" && (
         <Bar>
           <div className="toolBar">
             <Search

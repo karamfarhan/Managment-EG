@@ -154,7 +154,7 @@ const StaffForm = ({ setStaffForm }) => {
         body: formdata,
       });
       if (res.ok) {
-        // setStaffForm(false);
+        setStaffForm(false);
       }
 
       //setStaffForm(false);

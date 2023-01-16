@@ -1,14 +1,19 @@
 import { Fragment, useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import AuthContext from "../../../context/Auth-ctx";
+import { AiOutlinePhone } from "react-icons/ai";
+import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import classes from "./EmpolyeeId.module.css";
 import ImgModel from "../../UI/imgModel/ImgModel";
 const EmpolyeeId = () => {
   const [imgSrc, setImgSrc] = useState("");
   const [imgModel, setImgModel] = useState(false);
+  //about page
+  const [isAbout, setIsAbout] = useState(true);
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
+  const navigate = useNavigate();
 
   const params = useParams();
   const { empolyeeId } = params;
@@ -45,144 +50,174 @@ const EmpolyeeId = () => {
     setImgModel(false);
   };
 
+  //edit handler
+  const editHanlder = (id) => {
+    navigate(`/staff/edit/${id}`);
+  };
   if (!empolyee) return;
   return (
     <Fragment>
       {imgModel && (
         <ImgModel imgSrc={imgSrc} closeModelHandler={closeModelHandler} />
       )}
-      <div dir="rtl" className={classes["table_content"]}>
-        <table>
-          <tr>
-            <th>أسم الموظف</th>
-            <td>{empolyee.name}</td>
-          </tr>
-          <tr>
-            <th>المسمي الوظيفي</th>
-            <td>{empolyee.type}</td>
-          </tr>
+      <div dir="rtl" className={classes.box}>
+        <div className={classes.content}>
+          <header>
+            <div>
+              {/* name  */}
+              <div>
+                <h3> {empolyee.name} </h3>
+                <span> {empolyee.type} </span>
+              </div>
 
-          <tr>
-            <th>البريد الاكتروني</th>
-            <td>{empolyee.email}</td>
-          </tr>
+              {/* years of experience */}
+              <h3 className={classes.years_exp}>
+                سنوات الخبرة : <span> {empolyee.years_of_experiance} </span>
+              </h3>
+            </div>
+            <button type="button" onClick={() => editHanlder(empolyee.id)}>
+              تحديث البيانات
+            </button>
+          </header>
+          {/* body */}
+          <div className={classes.body}>
+            {/* connects */}
+            <div className={classes.contacts}>
+              <ul>
+                <li>
+                  <span>
+                    <AiOutlinePhone />
+                  </span>
 
-          <tr>
-            <th>رقم الهاتف</th>
-            <td>{empolyee.number}</td>
-          </tr>
+                  <a href={`tel:${empolyee.number}`}>{empolyee.number}</a>
+                </li>
+                <li>
+                  <span>
+                    <MdOutlineMarkEmailUnread />{" "}
+                  </span>
+                  <a href={`mailto: ${empolyee.email}`}>{empolyee.email}</a>
+                </li>
+              </ul>
+            </div>
 
-          <tr>
-            <th>سنوات الخبرة</th>
-            <td>{empolyee.years_of_experiance}</td>
-          </tr>
-          <tr>
-            <th>تاريخ التوظيف</th>
-            <td>{empolyee.signin_date}</td>
-          </tr>
+            {/* activities */}
 
-          <tr>
-            <th>التأمين</th>
-            <td>
-              {empolyee.insurance === null && "لا يوجد تأمين"}
-              {empolyee.insurance !== null && (
-                <ul>
-                  <li>
-                    رقم التأمين <span>: {empolyee.insurance.ins_code}</span>
-                  </li>
-                  <li>
-                    شركة التأمين <span>: {empolyee.insurance.ins_company}</span>
-                  </li>
-                  <li>
-                    تاريخ التأمين <span>: {empolyee.insurance.start_at}</span>
-                  </li>
-                  <li>
-                    نوع التأمين <span>: {empolyee.insurance.ins_type}</span>
-                  </li>
-                </ul>
+            <div className={classes.activities}>
+              <ul>
+                <li
+                  className={isAbout === true ? classes.active : ""}
+                  onClick={() => setIsAbout(true)}>
+                  حول
+                </li>
+                <li
+                  className={isAbout === false ? classes.active : ""}
+                  onClick={() => setIsAbout(false)}>
+                  الحضور/الانصراف
+                </li>
+              </ul>
+
+              {/* about */}
+              {isAbout && (
+                <div className={classes.about}>
+                  <p>
+                    تاريخ التوظيف : <span> {empolyee.signin_date} </span>{" "}
+                  </p>
+                  <p>
+                    مقر العمل :
+                    <span>
+                      {empolyee.store_address === null
+                        ? "مقر الشركة"
+                        : empolyee.store_address}{" "}
+                    </span>
+                  </p>
+                  <p>
+                    نوع العقد :
+                    <span>
+                      {empolyee.is_primary === true
+                        ? "موظف دائم"
+                        : "موظف بعقد مؤقت"}{" "}
+                    </span>
+                  </p>
+                  <p>
+                    عدد الأجازات :<span>{empolyee.days_off} </span>
+                  </p>
+
+                  {/* التأمينات */}
+
+                  <div className={classes.insurance}>
+                    <h4>التأمينات</h4>
+
+                    {empolyee.insurance && empolyee.insurance === null ? (
+                      <p>ليس مؤمن عليه</p>
+                    ) : (
+                      <ul>
+                        <li>
+                          رقم التأمين :{" "}
+                          <span> {empolyee.insurance.ins_code} </span>
+                        </li>
+                        <li>
+                          شركة التأمين :{" "}
+                          <span> {empolyee.insurance.ins_company} </span>
+                        </li>
+                        <li>
+                          نوع التأمين :{" "}
+                          <span> {empolyee.insurance.ins_type} </span>
+                        </li>
+                        <li>
+                          تاريخ التأمين :{" "}
+                          <span> {empolyee.insurance.start_at} </span>
+                        </li>
+                      </ul>
+                    )}
+                  </div>
+
+                  {/* images */}
+
+                  <div className={classes.imgs}>
+                    <figure>
+                      <img
+                        src={empolyee.identity_image}
+                        alt="identity"
+                        onClick={() => imgModelHandler(empolyee.identity_image)}
+                      />
+                      <figcaption>اثبات الشخصية</figcaption>
+                    </figure>
+                    <figure>
+                      <img
+                        src={empolyee.certificate_image}
+                        alt="certificate"
+                        onClick={() =>
+                          imgModelHandler(empolyee.certificate_image)
+                        }
+                      />
+                      <figcaption>شهادة التخرج </figcaption>
+                    </figure>
+                    <figure>
+                      <img
+                        onClick={() =>
+                          imgModelHandler(empolyee.criminal_record_image)
+                        }
+                        src={empolyee.criminal_record_image}
+                        alt="criminal-record"
+                      />
+                      <figcaption>فيش و تشبيه</figcaption>
+                    </figure>
+                    <figure>
+                      <img
+                        src={empolyee.experience_image}
+                        alt="experience"
+                        onClick={() =>
+                          imgModelHandler(empolyee.experience_image)
+                        }
+                      />
+                      <figcaption>شهادات الخبرة</figcaption>
+                    </figure>
+                  </div>
+                </div>
               )}
-            </td>
-          </tr>
-          <tr>
-            <th>مقر العمل</th>
-            <td>
-              {empolyee.store_address === null
-                ? "مقر الشركة"
-                : empolyee.store_address}
-            </td>
-          </tr>
-          <tr>
-            <th>حالة الموظف</th>
-            <td>{empolyee.is_primary ? "موظف دائم" : "موظف بعقد سنوي"}</td>
-          </tr>
-          <tr>
-            <th>اثبات الشخصية</th>
-            <td>
-              <div>
-                {empolyee.identity_image === null ? (
-                  "لا يوجد"
-                ) : (
-                  <img
-                    onClick={() => imgModelHandler(empolyee.identity_image)}
-                    src={empolyee.identity_image}
-                    alt="identity"
-                  />
-                )}
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <th>الفيش و التشبيه</th>
-            <td>
-              <div>
-                {empolyee.criminal_record_image === null ? (
-                  "لا يوجد"
-                ) : (
-                  <img
-                    onClick={() =>
-                      imgModelHandler(empolyee.criminal_record_image)
-                    }
-                    src={empolyee.criminal_record_image}
-                    alt="criminal-record"
-                  />
-                )}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>المؤهل الدراسي</th>
-            <td>
-              <div>
-                {empolyee.certificate_image === null ? (
-                  "لا يوجد"
-                ) : (
-                  <img
-                    onClick={() => imgModelHandler(empolyee.certificate_image)}
-                    src={empolyee.certificate_image}
-                    alt="certificate_image"
-                  />
-                )}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>شهادات أخري</th>
-            <td>
-              <div>
-                {empolyee.experience_image === null ? (
-                  "لا يوجد"
-                ) : (
-                  <img
-                    onClick={() => imgModelHandler(empolyee.experience_image)}
-                    src={empolyee.experience_image}
-                    alt="experience_image"
-                  />
-                )}
-              </div>
-            </td>
-          </tr>
-        </table>
+            </div>
+          </div>
+        </div>
       </div>
     </Fragment>
   );

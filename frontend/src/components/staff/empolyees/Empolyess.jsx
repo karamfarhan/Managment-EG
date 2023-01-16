@@ -30,7 +30,7 @@ const Empolyess = ({
   const [staffId, setStaffId] = useState("");
   const [editId, setEditId] = useState("");
 
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
@@ -133,7 +133,6 @@ const Empolyess = ({
                       <button onClick={() => deleteModelHandler(el.id)}>
                         حذف
                       </button>
-                      <button onClick={() => editHanlder(el.id)}>تعديل</button>
                     </td>
                   </tr>
                 );
