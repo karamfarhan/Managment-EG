@@ -12,6 +12,7 @@ import {
 import Paginate from "../../UI/pagination/Paginate";
 import EmpolyeePhases from "../../UI/phase in/out/EmpolyeePhases";
 import { useQuery } from "react-query";
+import ExportExcel from "../../UI/export/ExportExcel";
 
 const Empolyess = ({
   data,
@@ -60,6 +61,7 @@ const Empolyess = ({
         <EmpolyeePhases id={staffId} hideForm={hidePhaseFormHandler} />
       )}
       <div className={classes["table_content"]}>
+        <ExportExcel matter="employees" />
         <table>
           <thead>
             <th>أسم الموظف</th>

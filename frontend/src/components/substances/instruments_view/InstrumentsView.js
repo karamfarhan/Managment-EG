@@ -110,6 +110,7 @@ const InstrumentsView = ({
 
           {instrumentsData && instrumentsData.results.length > 0 && (
             <div className={classes["table-content"]}>
+              <ExportExcel matter="instruments" />
               <table>
                 <thead>
                   <tr>

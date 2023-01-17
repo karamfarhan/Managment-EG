@@ -55,7 +55,6 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     },
     { refetchOnWindowFocus: false }
   );
-  console.log(substances_name);
   //fetch all machine name
   const { data: instruments_name } = useQuery(
     "fetch/instruments_name",

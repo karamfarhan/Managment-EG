@@ -14,6 +14,7 @@ import classes from "./SubstancesView.module.css";
 import Paginate from "../../UI/pagination/Paginate";
 import Search from "../../UI/search/Search";
 import { subsPagination } from "../../../store/create-substance";
+import ExportExcel from "../../UI/export/ExportExcel";
 const SubstancesView = ({
   currentPage,
   setCurrentPage,
@@ -117,6 +118,7 @@ const SubstancesView = ({
           searchData={searchDispatch}
         />
         <div className={classes["table_content"]}>
+          <ExportExcel matter="substances" />
           {subsData && subsData.results && subsData.results.length === 0 && (
             <p className={classes.msg_p}> لا يوجد مواد </p>
           )}
