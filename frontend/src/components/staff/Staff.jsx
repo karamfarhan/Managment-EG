@@ -26,7 +26,7 @@ export const Staff = () => {
   if (unAuth !== null) {
     authCtx.logout();
   }
-  console.log(unAuth);
+  console.log(unAuth, "ll");
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //show staff form

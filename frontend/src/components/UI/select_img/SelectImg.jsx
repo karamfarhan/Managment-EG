@@ -30,7 +30,7 @@ export const ImgSelect = ({
   //form validation
   let formIsValid = false;
 
-  if (selectedVal !== "" && description.trim() !== "") {
+  if (selectedVal !== "" && description.trim() !== "" && img.length > 0) {
     formIsValid = true;
   }
   //select store
@@ -133,7 +133,7 @@ export const ImgSelect = ({
               {selectStores.map((el) => {
                 return (
                   <option value={el.pk} key={el.pk}>
-                    {el.name}
+                    {el.address}
                   </option>
                 );
               })}

@@ -21,9 +21,8 @@ const Paginate = ({
       page: number,
       token,
     };
-    console.log(search);
     // store current page in session storage
-    sessionStorage.setItem("current-page", number);
+    // sessionStorage.setItem("current-page", number);
     if (number > 1 && search.trim() === "") {
       paginationFun(obj);
     }

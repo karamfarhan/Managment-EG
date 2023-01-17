@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import AuthContext from "../../../../../context/Auth-ctx";
 
 //style
-import classes from './InvoiceDetail.module.css'
+import classes from "./InvoiceDetail.module.css";
 
 const InvoiceDetail = () => {
   const authCtx = useContext(AuthContext);
@@ -15,7 +15,7 @@ const InvoiceDetail = () => {
   const { invoiceId } = param;
 
   //fetch invoices
-  const { data: invoice, error } = useQuery("fetch/invoice", async () => {
+  const { data: invoice } = useQuery("fetch/invoice", async () => {
     try {
       const res = await fetch(`http://127.0.0.1:8000/invoices/${invoiceId}`, {
         method: "GET",
@@ -29,12 +29,16 @@ const InvoiceDetail = () => {
     } catch (err) {}
   });
 
-
   return (
-    <div dir="rtl" className = {classes['invoice-container']}>
-     <div>  <h2>بيانات المخزن</h2>
-     <p>تاريخ الانشاء : {new Date(invoice && invoice.created_at).toLocaleString()} </p>
-     <h3> الملاحظات المهمة : {invoice && invoice.note} </h3></div>
+    <div dir="rtl" className={classes["invoice-container"]}>
+      <div>
+        <h2>بيانات المخزن</h2>
+        <p>
+          تاريخ الانشاء :
+          {new Date(invoice && invoice.created_at).toLocaleString()}
+        </p>
+        <h3> الملاحظات المهمة : {invoice && invoice.note} </h3>
+      </div>
 
       <table>
         <thead>
@@ -43,52 +47,41 @@ const InvoiceDetail = () => {
           <th>الوصف </th>
         </thead>
         <tbody>
-          {invoice && invoice.substances && invoice.substances.map((subs) => {
-            return (
-              <tr key={subs.id}>
-                <td> {subs.substance_name} </td>
-                <td> {subs.mass} </td>
-                <td> {subs.description} </td>
-              </tr>
-            );
-          })}
+          {invoice &&
+            invoice.substance_items &&
+            invoice.substance_items.map((subs) => {
+              return (
+                <tr key={subs.id}>
+                  <td> {subs.substance_name} </td>
+                  <td> {subs.mass} </td>
+                  <td> {subs.description} </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 
+      {/*instruments*/}
 
+      <table>
+        <thead>
+          <th> المواد المحولة الي المخزن </th>
 
-
-          {/*instruments*/}
-
-          <table>
-          <thead>
-            <th> المواد المحولة الي المخزن </th>
-           
-            <th>الوصف </th>
-          </thead>
-          <tbody>
-            {invoice && invoice.instruments && invoice.instruments.map((instru) => {
+          <th>الوصف </th>
+        </thead>
+        <tbody>
+          {invoice &&
+            invoice.instrument_items &&
+            invoice.instrument_items.map((instru) => {
               return (
                 <tr key={instru.id}>
                   <td> {instru.instrument_name} </td>
-            
                   <td> {instru.description} </td>
                 </tr>
               );
             })}
-          </tbody>
-        </table>
-
-
-
-
-
-
-
-
-
-
-
+        </tbody>
+      </table>
     </div>
   );
 };

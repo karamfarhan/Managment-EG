@@ -18,6 +18,11 @@
   width: 50%;
   border-radius: 30px;
 }
+@media (max-width: 767px) {
+  .form {
+    width: 90%;
+  }
+}
 .form form {
   width: 70%;
   margin: 0 auto;

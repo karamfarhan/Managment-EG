@@ -96,11 +96,17 @@ const empolyeeSlice = createSlice({
     data: null,
     unAuth: null,
   },
+  reducers: {
+    login: (state) => {
+      state.unAuth = null;
+    },
+  },
   extraReducers: {
     [getEmpolyees.pending]: (state, action) => {
       state.unAuth = null;
     },
     [getEmpolyees.fulfilled]: (state, action) => {
+      state.unAuth = null;
       state.data = action.payload;
     },
     [getEmpolyees.rejected]: (state, action) => {

@@ -5,9 +5,13 @@ const Backdrop = ({ children, hideModel }) => {
   return (
     <Fragment>
       {ReactDOM.createPortal(
-        <div onClick={hideModel} className={classes.backdrop}>
-          {children}
-        </div>,
+        <>
+          {" "}
+          <div onClick={hideModel} className={classes.backdrop}></div>
+          <div dir="rtl" className={classes.child}>
+            {children}
+          </div>
+        </>,
         document.getElementById("backdrop")
       )}
     </Fragment>

@@ -63,7 +63,7 @@
 .contacts {
   padding: 10px 0;
 }
-.activities ul:first-of-type {
+.activities > ul:first-of-type {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -122,4 +122,16 @@
 .imgs figure img {
   width: 100%;
   height: 100%;
+}
+
+/* phase in/out */
+
+.absence form {
+  display: flex;
+  align-items: center;
+  width: 90%;
+}
+.absence form > div {
+  margin: unset;
+  width: 100%;
 }

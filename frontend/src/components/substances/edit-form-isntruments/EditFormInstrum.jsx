@@ -28,16 +28,21 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
 
   let nameVar = selectedInstrument.name,
     descriptionVar = selectedInstrument.description,
-    last_maintainVar = selectedInstrument.last_maintain;
+    last_maintainVar = selectedInstrument.last_maintain,
+    maintainSite = selectedInstrument.maintain_place,
+    inAction = selectedInstrument.in_action;
 
   //validation form
   let formIsValid = false;
 
   if (
-    instrumData.name.trim() !== "" &&
-    (instrumData.name !== nameVar ||
-      instrumData.description !== descriptionVar ||
-      instrumData.last_maintain !== last_maintainVar)
+    (instrumData.name.trim() !== "" &&
+      (instrumData.name !== nameVar ||
+        instrumData.description !== descriptionVar ||
+        instrumData.last_maintain !== last_maintainVar)) ||
+    (instrumData.maintain_site.trim() !== "" &&
+      maintainSite !== instrumData.maintain_site) ||
+    instrumData.in_action !== inAction
   ) {
     formIsValid = true;
   }

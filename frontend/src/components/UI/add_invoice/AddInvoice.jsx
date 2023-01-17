@@ -18,7 +18,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     { instrument: "", description: "" },
   ]);
   //note
-  const [note, setNote] = useState('')
+  const [note, setNote] = useState("");
 
   //context
   const authCtx = useContext(AuthContext);
@@ -27,20 +27,10 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   const { token } = authCtx;
 
   //form validation
-  let formIsValid = false
-  if(inputFields.length !== 0 || instrumentInputFields.length !== 0 ){
-    formIsValid = true
+  let formIsValid = false;
+  if (inputFields.length !== 0 || instrumentInputFields.length !== 0) {
+    formIsValid = true;
   }
-
-
-
-
-
-
-
-
-
-
 
   //fetch all substances name
   const { data: substances_name } = useQuery(
@@ -65,7 +55,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     },
     { refetchOnWindowFocus: false }
   );
-
+  console.log(substances_name);
   //fetch all machine name
   const { data: instruments_name } = useQuery(
     "fetch/instruments_name",
@@ -106,44 +96,49 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   };
 
   //create invoice
-  const { data: invoice, error , refetch : createInvoice } = useQuery("create/invoice", async () => {
+  const {
+    data: invoice,
 
-    try {
-    
-      const res = await fetch("http://127.0.0.1:8000/invoices/", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          store: storeId,
-          note: note,
-          substances: inputFields,
-          instruments: instrumentInputFields,
-        }),
-      });
-      const data2 = await res.json();
-      console.log(data2);
-      return data2
-    } catch (err) {
+    refetch: createInvoice,
+  } = useQuery(
+    "create/invoice",
+    async () => {
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8000/stores/${storeId}/invoices/`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              note: note,
+              substances: inputFields,
+              instruments: instrumentInputFields,
+            }),
+          }
+        );
+        const data2 = await res.json();
+
+        return data2;
+      } catch (err) {
         console.log(err);
+      }
+    },
+    { refetchOnWindowFocus: false, enabled: false }
+  );
 
-    }
-  }, {refetchOnWindowFocus : false, enabled : false});
-
-console.log(invoice)
-  //submit handler 
-  const submitHandler = (e)=>{
-    e.preventDefault()
-    createInvoice()
-    hideModel()
-  }
-
+  //submit handler
+  const submitHandler = (e) => {
+    e.preventDefault();
+    createInvoice();
+    hideModel();
+  };
 
   return (
     <Backdrop>
-      <form className={classes.form} onSubmit = {submitHandler}>
+      <form className={classes.form} onSubmit={submitHandler}>
         <span className={classes.close} onClick={hideModel}>
           <AiOutlineCloseCircle />
         </span>
@@ -165,7 +160,7 @@ console.log(invoice)
             );
           })}
         </div>
-        {invoice && invoice.mass && <p className = "err-msg"> {invoice.mass} </p>}
+        {invoice && invoice.mass && <p className="err-msg"> {invoice.mass} </p>}
         <button type="button" onClick={handleAddFields}>
           <BsPlusLg /> اضافة المزيد
         </button>
@@ -191,14 +186,18 @@ console.log(invoice)
         <button
           style={{ backgroundColor: "rgb(233, 30, 99)" }}
           type="button"
-          onClick={instrumentsFiled}
-        >
+          onClick={instrumentsFiled}>
           <BsPlusLg /> اضافة المزيد
         </button>
         <div className={classes.note} dir="rtl">
-          <textarea placeholder="ملاحظة عامة" onChange = {(e)=>setNote(e.target.value)}></textarea>
+          <textarea
+            placeholder="ملاحظة عامة"
+            onChange={(e) => setNote(e.target.value)}></textarea>
         </div>
-        <button disabled = {!formIsValid} type="submit"> تحويل </button>
+        <button disabled={!formIsValid} type="submit">
+          {" "}
+          تحويل{" "}
+        </button>
       </form>
     </Backdrop>
   );

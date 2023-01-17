@@ -110,66 +110,72 @@ const SubstancesView = ({
         />
       )}
 
-      <div className={classes["table_content"]}>
+      <div>
         <Search
           onChange={searchHandler}
           value={searchVal}
           searchData={searchDispatch}
         />
-        {subsData && subsData.results && subsData.results.length === 0 && (
-          <p className={classes.msg_p}> لا يوجد مواد </p>
-        )}
-        {subsData && subsData.results.length > 0 && (
-          <table>
-            <thead>
-              <tr>
-                <th>أسم الخامة</th>
-                <th>الكمية</th>
-                <th>الوصف</th>
-                <th>متوافر</th>
-                <th>تاريخ الاضافة</th>
-                <th>حدث</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subsData &&
-                subsData.results &&
-                subsData.results.map((subs) => {
-                  return (
-                    <tr key={subs.id}>
-                      <td>{subs.name}</td>
-                      <td>
-                        {subs.units} {subs.unit_type}
-                      </td>
-                      <td>{subs.description}</td>
+        <div className={classes["table_content"]}>
+          {subsData && subsData.results && subsData.results.length === 0 && (
+            <p className={classes.msg_p}> لا يوجد مواد </p>
+          )}
+          {subsData && subsData.results.length > 0 && (
+            <table>
+              <thead>
+                <tr>
+                  <th>أسم الخامة</th>
+                  <th>الكمية</th>
+                  <th>الوصف</th>
+                  <th>متوافر</th>
+                  <th>تاريخ الاضافة</th>
+                  <th>حدث</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subsData &&
+                  subsData.results &&
+                  subsData.results.map((subs) => {
+                    return (
+                      <tr key={subs.id}>
+                        <td>{subs.name}</td>
+                        <td>
+                          {subs.units} {subs.unit_type}
+                        </td>
+                        <td>{subs.description}</td>
 
-                      <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td>
+                        <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td>
 
-                      <td>{new Date(subs.created_at).toLocaleDateString()}</td>
+                        <td>
+                          {new Date(subs.created_at).toLocaleDateString()}
+                        </td>
 
-                      <td>
-                        <button onClick={() => editForm(subs.id)}>تعديل</button>
-                        <button onClick={() => deleteModelHandler(subs.id)}>
-                          حذف
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        )}
-        {subsCount > 10 && (
-          <Paginate
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            count={subsCount}
-            paginationFun={paginationFun}
-            searchPagination={searchPagination}
-            search={searchVal}
-            searchFn={searchDispatch}
-          />
-        )}
+                        <td>
+                          <button onClick={() => editForm(subs.id)}>
+                            تعديل
+                          </button>
+                          <button onClick={() => deleteModelHandler(subs.id)}>
+                            حذف
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          )}
+          {subsCount > 10 && (
+            <Paginate
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              count={subsCount}
+              paginationFun={paginationFun}
+              searchPagination={searchPagination}
+              search={searchVal}
+              searchFn={searchDispatch}
+            />
+          )}
+        </div>
       </div>
     </Fragment>
   );

@@ -14,7 +14,6 @@ export const getStores = createAsyncThunk("createStore/data", async (arg) => {
     }
 
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (err) {
     console.log(err);
@@ -39,7 +38,7 @@ export const createStore = createAsyncThunk(
       if (!res.ok) {
         throw new Error(res.statusText || "حدث خطأ");
       }
-    ThunkAPI.dispatch(getStores(arg.token))
+      ThunkAPI.dispatch(getStores(arg.token));
     } catch (err) {
       console.log(err);
     }
@@ -81,7 +80,6 @@ export const storeSearch = createAsyncThunk("store/search", async (arg) => {
       }
     );
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (err) {
     console.log(err.message);

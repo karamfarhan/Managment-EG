@@ -13,6 +13,7 @@ import Paginate from "../../UI/pagination/Paginate";
 import classes from "./Instruments.module.css";
 import { instrumentsPagination } from "../../../store/create-instruments";
 import Search from "../../UI/search/Search";
+import ExportExcel from "../../UI/export/ExportExcel";
 const InstrumentsView = ({
   currentPage,
   setCurrentPage,
@@ -84,94 +85,101 @@ const InstrumentsView = ({
           id={instrumentId}
         />
       )}
-      <div className={classes["table_content"]}>
+      <div>
         <Search
           value={searchVal}
           onChange={(e) => setSearchVal(e.target.value)}
           searchData={searchDispatch}
         />
+        <div className={classes["table_content"]}>
+          {instrumentsData && instrumentsData.results.length === 0 && (
+            <p className={classes.msg_p}> لا يوجد أجهزة </p>
+          )}
 
-        {instrumentsData && instrumentsData.results.length === 0 && (
-          <p className={classes.msg_p}> لا يوجد أجهزة </p>
-        )}
+          <Routes>
+            <Route
+              path="/instrument/:edit"
+              element={
+                <EditFormInstrum
+                  instruments={instrumentsData}
+                  setCurrentPage={setCurrentPage}
+                />
+              }
+            />
+          </Routes>
 
-        <Routes>
-          <Route
-            path="/instrument/:edit"
-            element={
-              <EditFormInstrum
-                instruments={instrumentsData}
-                setCurrentPage={setCurrentPage}
-              />
-            }
-          />
-        </Routes>
+          {instrumentsData && instrumentsData.results.length > 0 && (
+            <div className={classes["table-content"]}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>أسم الاله</th>
+                    <th>أخر صيانة</th>
+                    <th>مكان صيانة</th>
+                    <th>متوافرة في المخزن</th>
+                    <th>الحالة</th>
+                    <th>تاريخ الاضافة</th>
+                    <th>معلومات اضافية</th>
+                    <th>حدث</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {instrumentsData &&
+                    instrumentsData.results &&
+                    instrumentsData.results.map((insruments) => {
+                      return (
+                        <tr key={insruments.id}>
+                          <td>{insruments.name}</td>
+                          <td>{insruments.last_maintain}</td>
+                          <td>{insruments.maintain_place}</td>
+                          <td
+                            style={{
+                              color:
+                                insruments.in_action === false ? "#000" : "red",
+                            }}>
+                            {insruments.in_action === false
+                              ? "متواجدة"
+                              : "خارج المخزن"}
+                          </td>
 
-        {instrumentsData && instrumentsData.results.length > 0 && (
-          <table>
-            <thead>
-              <tr>
-                <th>أسم الاله</th>
-                <th>أخر صيانة</th>
-                <th>مكان صيانة</th>
-                <th>متوافرة في المخزن</th>
-                <th>الحالة</th>
-                <th>تاريخ الاضافة</th>
-                <th>معلومات اضافية</th>
-                <th>حدث</th>
-              </tr>
-            </thead>
-            <tbody>
-              {instrumentsData &&
-                instrumentsData.results &&
-                instrumentsData.results.map((insruments) => {
-                  return (
-                    <tr key={insruments.id}>
-                      <td>{insruments.name}</td>
-                      <td>{insruments.last_maintain}</td>
-                      <td>{insruments.maintain_place}</td>
-                      <td
-                        style={{
-                          color:
-                            insruments.in_action === false ? "#000" : "red",
-                        }}>
-                        {insruments.in_action === false
-                          ? "متواجدة"
-                          : "خارج المخزن"}
-                      </td>
-
-                      <td>{insruments.is_working ? "تعمل" : "معطلة"}</td>
-                      <td>
-                        {new Date(insruments.created_at).toLocaleDateString()}
-                      </td>
-                      <td>{insruments.description}</td>
-                      <td>
-                        <button
-                          onClick={() => editInstrumentsForm(insruments.id)}>
-                          تعديل
-                        </button>
-                        <button
-                          onClick={() => deleteModelHandler(insruments.id)}>
-                          حذف
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        )}
-        {instrumentsCount > 10 && (
-          <Paginate
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            count={instrumentsCount}
-            paginationFun={paginationFun}
-            searchPagination={searchPagination}
-            search={searchVal}
-            searchFn={searchDispatch}
-          />
-        )}
+                          <td>{insruments.is_working ? "تعمل" : "معطلة"}</td>
+                          <td>
+                            {new Date(
+                              insruments.created_at
+                            ).toLocaleDateString()}
+                          </td>
+                          <td>{insruments.description}</td>
+                          <td>
+                            <button
+                              onClick={() =>
+                                editInstrumentsForm(insruments.id)
+                              }>
+                              تعديل
+                            </button>
+                            <button
+                              onClick={() => deleteModelHandler(insruments.id)}>
+                              حذف
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>{" "}
+            </div>
+          )}
+          {instrumentsCount > 10 && (
+            <Paginate
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              count={instrumentsCount}
+              paginationFun={paginationFun}
+              searchPagination={searchPagination}
+              search={searchVal}
+              searchFn={searchDispatch}
+            />
+          )}
+        </div>
       </div>
     </Fragment>
   );

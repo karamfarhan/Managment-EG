@@ -1,10 +1,11 @@
 .table_content {
   padding: 30px 0;
   overflow: auto;
-  position: relative;
+  max-height: 450px;
 }
 
 .table_content table {
+  height: 100%;
   width: 100%;
   text-align: center;
   border-spacing: 1px;
@@ -20,8 +21,8 @@
   justify-content: center;
   gap: 5px;
 }
-.table_content table td:last-of-type button:first-of-type{
-  background-color:green ;
+.table_content table td:last-of-type button:first-of-type {
+  background-color: green;
 }
 .table_content table thead {
   font-size: 13px;

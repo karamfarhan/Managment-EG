@@ -1,10 +1,15 @@
 import Inputs from "../inputs/Inputs";
 import { MdDelete } from "react-icons/md";
-import classes from './Items.module.css'
-const Items = ({ index, inputField, setInputFields, inputFields, selectBox }) => {
+import classes from "./Items.module.css";
+const Items = ({
+  index,
+  inputField,
+  setInputFields,
+  inputFields,
+  selectBox,
+}) => {
   // delete specific field
   const removeHandeler = (index) => {
-
     const list = [...inputFields];
     list.splice(index, 1);
     setInputFields(list);
@@ -20,21 +25,27 @@ const Items = ({ index, inputField, setInputFields, inputFields, selectBox }) =>
   };
 
   return (
-    <div className = {classes.items} dir = "rtl">
+    <div className={classes.items} dir="rtl">
       <ul>
         <li>
           <select
             value={inputField.substance}
             id="substance"
             required
-            onChange={(event) => handleChangeInput(event, index)}
-          >
-          <option hidden selected value = ""> أختار مادة </option>
-          {selectBox && selectBox.map((select)=>{
-            return <option key ={select.pk} value={select.pk} > {select.name} </option>
-          })}
-          
-          
+            onChange={(event) => handleChangeInput(event, index)}>
+            <option hidden selected value="">
+              {" "}
+              أختار مادة{" "}
+            </option>
+            {selectBox &&
+              selectBox.map((select) => {
+                return (
+                  <option key={select.pk} value={select.pk}>
+                    {" "}
+                    {select.name}{" "}
+                  </option>
+                );
+              })}
           </select>
           {/*  <Inputs
             type="text"
@@ -60,7 +71,7 @@ const Items = ({ index, inputField, setInputFields, inputFields, selectBox }) =>
             type="text"
             id="description"
             placeholder="ملاحظة"
-            value={inputField.description }
+            value={inputField.description}
             onChange={(event) => handleChangeInput(event, index)}
           />
         </li>

@@ -10,6 +10,8 @@ import {
   getEmpolyees,
 } from "../../../store/empolyees-slice";
 import Paginate from "../../UI/pagination/Paginate";
+import EmpolyeePhases from "../../UI/phase in/out/EmpolyeePhases";
+import { useQuery } from "react-query";
 
 const Empolyess = ({
   data,
@@ -19,32 +21,16 @@ const Empolyess = ({
   fetchSearchHandler,
   staffForm,
 }) => {
-  const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
+  const authCtx = useContext(AuthContext);
   const { token } = authCtx;
-
-  const [isDelete, setIsDelete] = useState(false);
+  //states
+  const [staffId, setStaffId] = useState("");
+  const [showPhasesForm, setShowPhasesForm] = useState(false);
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
   const empolyeeCount = empolyeeData && empolyeeData.count;
-
-  //delete staff
-  const deleteHandler = async (id) => {
-    const res = await fetch(`http://127.0.0.1:8000/employees/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setIsDelete(false);
-    if (res.ok) {
-      dispatch(getEmpolyees(token));
-    }
-    const data = await res.json();
-    console.log(data);
-    return data;
-  };
 
   //paginationFun
   const paginationFun = (obj) => {
@@ -56,8 +42,23 @@ const Empolyess = ({
     dispatch(empolyeeSearchPagination(obj));
   };
 
+  //show phases
+  const showPhasesFormHandler = (id) => {
+    //set id
+    setStaffId(id);
+    setShowPhasesForm(true);
+  };
+
+  //hide phase form
+  const hidePhaseFormHandler = () => {
+    setShowPhasesForm(false);
+  };
+
   return (
     <Fragment>
+      {showPhasesForm && (
+        <EmpolyeePhases id={staffId} hideForm={hidePhaseFormHandler} />
+      )}
       <div className={classes["table_content"]}>
         <table>
           <thead>
@@ -70,7 +71,7 @@ const Empolyess = ({
             <th>التأمين</th>
             <th>عدد الاجازات</th>
             <th>محلاظة</th>
-            <th>الاحداث</th>
+            <th>الحضور</th>
           </thead>
 
           <tbody>
@@ -103,7 +104,11 @@ const Empolyess = ({
                     </td>
                     <td> {el.days_off}</td>
                     <td> {el.note}</td>
-                    <td style={{ display: "flex" }}></td>
+                    <td>
+                      <button onClick={() => showPhasesFormHandler(el.id)}>
+                        سجل حضور
+                      </button>
+                    </td>
                   </tr>
                 );
               })}

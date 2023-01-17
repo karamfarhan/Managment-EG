@@ -9,6 +9,10 @@ import ImgModel from "../../UI/imgModel/ImgModel";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import { getEmpolyees } from "../../../store/empolyees-slice";
 import { useDispatch } from "react-redux";
+import InsuranceSection from "./InsuranceSection";
+import ImagesSecion from "./ImagesSecion";
+import AboutSecion from "./AboutSecion";
+import PhaseInOutSecion from "./PhaseInOutSecion";
 const EmpolyeeId = () => {
   const dispatch = useDispatch();
   const [imgSrc, setImgSrc] = useState("");
@@ -167,59 +171,14 @@ const EmpolyeeId = () => {
                 {/* about */}
                 {sections === "general" && (
                   <div className={classes.about}>
-                    <p>
-                      تاريخ التوظيف : <span> {empolyee.signin_date} </span>{" "}
-                    </p>
-                    <p>
-                      سنوات الخبرة :{" "}
-                      <span> {empolyee.years_of_experiance}</span>
-                    </p>
-                    <p>
-                      مقر العمل :
-                      <span>
-                        {empolyee.store_address === null
-                          ? "مقر الشركة"
-                          : empolyee.store_address}{" "}
-                      </span>
-                    </p>
-                    <p>
-                      نوع العقد :
-                      <span>
-                        {empolyee.is_primary === true
-                          ? "موظف دائم"
-                          : "موظف بعقد مؤقت"}{" "}
-                      </span>
-                    </p>
-                    <p>
-                      عدد الأجازات :<span>{empolyee.days_off} </span>
-                    </p>
+                    <AboutSecion empolyee={empolyee} />
                   </div>
                 )}
                 {/* التأمينات */}
 
                 {sections === "insurance" && (
                   <div className={classes.insurance}>
-                    {empolyee.insurance === null && <p> ليس مؤمن عليه </p>}
-                    {empolyee.insurance && (
-                      <ul>
-                        <li>
-                          رقم التأمين :{" "}
-                          <span> {empolyee.insurance.ins_code} </span>
-                        </li>
-                        <li>
-                          شركة التأمين :{" "}
-                          <span> {empolyee.insurance.ins_company} </span>
-                        </li>
-                        <li>
-                          نوع التأمين :{" "}
-                          <span> {empolyee.insurance.ins_type} </span>
-                        </li>
-                        <li>
-                          تاريخ التأمين :{" "}
-                          <span> {empolyee.insurance.start_at} </span>
-                        </li>
-                      </ul>
-                    )}
+                    <InsuranceSection empolyee={empolyee} />
                   </div>
                 )}
 
@@ -227,62 +186,16 @@ const EmpolyeeId = () => {
 
                 {sections === "papers" && (
                   <div className={classes.imgs}>
-                    {empolyee.identity_image !== null ? (
-                      <figure>
-                        <img
-                          src={empolyee.identity_image}
-                          alt="identity"
-                          onClick={() =>
-                            imgModelHandler(empolyee.identity_image)
-                          }
-                        />
-                        <figcaption>اثبات الشخصية</figcaption>
-                      </figure>
-                    ) : (
-                      ""
-                    )}
-                    {empolyee.certificate_image !== null ? (
-                      <figure>
-                        <img
-                          src={empolyee.certificate_image}
-                          alt="certificate"
-                          onClick={() =>
-                            imgModelHandler(empolyee.certificate_image)
-                          }
-                        />
-                        <figcaption>شهادة التخرج </figcaption>
-                      </figure>
-                    ) : (
-                      ""
-                    )}
-                    {empolyee.criminal_record_image !== null ? (
-                      <figure>
-                        <img
-                          onClick={() =>
-                            imgModelHandler(empolyee.criminal_record_image)
-                          }
-                          src={empolyee.criminal_record_image}
-                          alt="criminal-record"
-                        />
-                        <figcaption>فيش و تشبيه</figcaption>
-                      </figure>
-                    ) : (
-                      ""
-                    )}
-                    {empolyee.experience_image !== null ? (
-                      <figure>
-                        <img
-                          src={empolyee.experience_image}
-                          alt="experience"
-                          onClick={() =>
-                            imgModelHandler(empolyee.experience_image)
-                          }
-                        />
-                        <figcaption>شهادات الخبرة</figcaption>
-                      </figure>
-                    ) : (
-                      ""
-                    )}
+                    <ImagesSecion
+                      empolyee={empolyee}
+                      imgModelHandler={imgModelHandler}
+                    />
+                  </div>
+                )}
+
+                {sections === "absence" && (
+                  <div className={classes.absence}>
+                    <PhaseInOutSecion id={empolyee.id} />
                   </div>
                 )}
               </div>

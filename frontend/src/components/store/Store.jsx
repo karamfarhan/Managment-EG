@@ -17,6 +17,7 @@ import AuthContext from "../../context/Auth-ctx";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
 import Search from "../UI/search/Search";
 import AddInvoice from "../UI/add_invoice/AddInvoice";
+import { useCallback } from "react";
 const Store = () => {
   const dispatch = useDispatch();
   const [showForm, setShowForm] = useState(false);
@@ -34,9 +35,12 @@ const Store = () => {
   const [storeId, setStoreId] = useState("");
 
   //paginationFun
-  const paginationFun = (obj) => {
-    dispatch(storePagination(obj));
-  };
+  const paginationFun = useCallback(
+    (obj) => {
+      dispatch(storePagination(obj));
+    },
+    [dispatch]
+  );
 
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
@@ -49,12 +53,15 @@ const Store = () => {
 
   //get stores
   useEffect(() => {
+    //first render
     if (currentPage === 1 && searchValue.trim() === "") {
       dispatch(getStores(token));
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, currentPage, searchValue]);
+
+  //RESET CURRENT PAGE
+
   // //hide form handler
   const hideFormHandler = () => {
     setShowForm(false);
@@ -70,7 +77,6 @@ const Store = () => {
       const res = await fetch(`http://127.0.0.1:8000/stores/${id}/`, {
         method: "DELETE",
         headers: {
-          "Content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
