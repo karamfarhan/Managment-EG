@@ -65,6 +65,7 @@ class StoreViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
 class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
+
     # TODO the quere should be optimized
     queryset = Invoice.objects.all().prefetch_related(
         Prefetch("substance_items", queryset=InvoiceSubstanceItem.objects.all()),
@@ -82,6 +83,8 @@ class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
+        if self.action == "retrieve":
+            return self.queryset
         store_id = self.kwargs.get("id")
         store = get_object_or_404(Store, id=store_id)
         return self.queryset.filter(store=store)
@@ -96,12 +99,6 @@ class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         serializer.save(created_by=request.user, store=store, substances=substances, instruments=instruments)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    # def destroy(self, request, *args, **kwargs):
-    #     invoice = self.get_object()
-    #     invoice.substances.all().delete()
-    #     invoice.instruments.all().delete()
-    #     return super().destroy(request, *args, **kwargs)
 
 
 class ImageViewSet(viewsets.ModelViewSet):

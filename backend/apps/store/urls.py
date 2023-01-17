@@ -5,6 +5,7 @@ from .views import ImageViewSet, InvoiceViewSet, StoreSelectBarView, StoreViewSe
 
 urlpatterns = [
     path("stores/<int:id>/invoices/", InvoiceViewSet.as_view({"get": "list", "post": "create"}), name="invoices"),
+    path("invoices/<int:pk>/", InvoiceViewSet.as_view({"get": "retrieve"}), name="invoice"),
     path("export/stores/<int:id>/invoices/", InvoiceViewSet.as_view({"get": "export"}), name="invoices-export"),
     path("stores/select_list/", StoreSelectBarView.as_view(), name="stores_select_list"),
     path("export/stores/", StoreViewSet.as_view({"get": "export"}), name="stores-export"),

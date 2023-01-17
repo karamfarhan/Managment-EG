@@ -5,12 +5,14 @@ from .models import Employee, EmployeeActivity
 
 
 class EmployeeResource(resources.ModelResource):
-    store = Field()
+    id = Field(attribute="id", column_name="invoice id")
+    store = Field(attribute="store__address", column_name="store address")
+    created_by = Field(attribute="created_by__username", column_name="created by")
     is_primary = Field()
-    insurance_code = Field()
-    insurance_type = Field()
-    insurance_company = Field()
-    insurance_started_date = Field()
+    insurance_code = Field(attribute="insurance__ins_code", column_name="insurance code")
+    insurance_type = Field(attribute="insurance__ins_type", column_name="insurance type")
+    insurance_company = Field(attribute="insurance__ins_company", column_name="insurance company")
+    insurance_started_date = Field(attribute="insurance__start_at", column_name="insurance started date")
 
     class Meta:
         model = Employee
@@ -33,35 +35,10 @@ class EmployeeResource(resources.ModelResource):
         )
         export_order = fields
 
-    def dehydrate_store(self, employee):
-        if employee.store:
-            return str(employee.store.address)
-        return "None"
-
     def dehydrate_is_primary(self, employee):
         if employee.is_primary:
             return "Yes"
         return "No"
-
-    def dehydrate_insurance_code(self, employee):
-        if employee.insurance:
-            return str(employee.insurance.ins_code)
-        return "None"
-
-    def dehydrate_insurance_type(self, employee):
-        if employee.insurance:
-            return str(employee.insurance.ins_type)
-        return "None"
-
-    def dehydrate_insurance_company(self, employee):
-        if employee.insurance:
-            return str(employee.insurance.ins_company)
-        return "None"
-
-    def dehydrate_insurance_started_date(self, employee):
-        if employee.insurance:
-            return str(employee.insurance.start_at)
-        return "None"
 
 
 class EmployeeActivityResource(resources.ModelResource):

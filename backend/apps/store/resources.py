@@ -1,3 +1,5 @@
+from itertools import chain
+
 from import_export import resources
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
@@ -31,6 +33,47 @@ class StoreResource(resources.ModelResource):
         return store.invoices.all().count()
 
 
+# class InvoiceResource(resources.ModelResource):
+#     id = Field(attribute="id",column_name="invoice id")
+#     store = Field(attribute="store__address",column_name="store address")
+#     created_by = Field(attribute="created_by__username", column_name="created_by")
+#     substance = Field()
+#     instrument = Field()
+#     mass = Field()
+#     description = Field()
+
+
+#     class Meta:
+#         model = Invoice
+#         fields = ("id", "substance", "instrument", "mass", "description", "store", "created_by", "created_at", "note")
+#         export_order = fields
+
+#     def dehydrate_substance(self, invoice):
+#         data = self.get_item_data(invoice, "substance")
+#         return str(data)
+
+#     def dehydrate_instrument(self, invoice):
+#         data = self.get_item_data(invoice, "instrument")
+#         return str(data)
+
+#     def dehydrate_mass(self, invoice):
+#         data = self.get_item_data(invoice, "mass")
+#         return str(data)
+
+#     def dehydrate_description(self, invoice):
+#         data = self.get_item_data(invoice, "description")
+#         return str(data)
+
+
+#     def get_item_data(self, invoice, key):
+#         substances = invoice.substance_items.all()
+#         instruments = invoice.instrument_items.all()
+#         items = list(chain(substances,instruments))
+#         current = items.pop()
+#         return getattr(current, key ,"None")
+
+
+## from chatGPT but  it didn't work
 # class InvoiceSubstanceItemInline(resources.TabularInline):
 #     model = InvoiceSubstanceItem
 #     fields = (
@@ -74,83 +117,35 @@ class StoreResource(resources.ModelResource):
 #         return str(invoice.id)
 
 
-# class InvoiceResource(resources.ModelResource):
-#     store = Field()
-#     invoice_id = Field()
-#     created_by = Field()
-#     substances = Field(column_name='substances', attribute='substances', widget=ForeignKeyWidget(InvoiceSubstanceItem, 'substance'))
-#     instruments = Field(column_name='instruments', attribute='instruments', widget=ForeignKeyWidget(InvoiceInstrumentItem, 'instrument'))
-
-#     class Meta:
-#         model = Invoice
-#         fields = (
-#             "id",
-#             "store",
-#             "invoice_id",
-#             "substances",
-#             "instruments",
-#             "created_by",
-#             "created_at",
-#             "note"
-#         )
-#         export_order = fields
-
-#     def dehydrate_store(self, invoice):
-#         return str(invoice.store.address)
-
-#     def dehydrate_invoice_id(self, invoice):
-#         return str(invoice.id)
-#     def dehydrate_created_by(self, invoice):
-#         return str(invoice.created_by.username)
-
-
+# ## this return the the invoice items as string list
 class InvoiceResource(resources.ModelResource):
-    store = Field()
-    invoice_id = Field()
-    created_by = Field()
+    id = Field(attribute="id", column_name="invoice id")
+    store = Field(attribute="store__address", column_name="store address")
+    created_by = Field(attribute="created_by__username", column_name="created_by")
     substances = Field()
     instruments = Field()
 
     class Meta:
         model = Invoice
-        fields = ("id", "store", "invoice_id", "substances", "instruments", "created_by", "created_at", "note")
+        fields = ("id", "store", "substances", "instruments", "created_by", "created_at", "note")
         export_order = fields
 
-    def dehydrate_store(self, invoice):
-        return str(invoice.store.address)
-
-    def dehydrate_invoice_id(self, invoice):
-        return str(invoice.id)
-
-    def dehydrate_created_by(self, invoice):
-        return str(invoice.created_by.username)
-
     def dehydrate_substances(self, invoice):
-        substances = self.get_items_data(invoice.substance_items.all(), "sub")
-        return str(substances) if len(substances) > 0 else "None"
+        substances = self.get_items_data(invoice.substance_items.all())
+        return str(substances)
 
     def dehydrate_instruments(self, invoice):
-        instruments = self.get_items_data(invoice.instrument_items.all(), "ins")
-        return str(instruments) if len(instruments) > 0 else "None"
+        instruments = self.get_items_data(invoice.instrument_items.all())
+        return str(instruments)
 
-    def get_items_data(self, items, item_type):
-
+    def get_items_data(self, items):
         data = []
-        if item_type == "sub":
-            for item in items:
-                data.append(
-                    [
-                        item.substance.name,
-                        getattr(item, "mass", "None"),
-                        getattr(item, "description", "None"),
-                    ]
-                )
-        if item_type == "ins":
-            for item in items:
-                data.append(
-                    [
-                        item.instrument.name,
-                        getattr(item, "description", "None"),
-                    ]
-                )
+        for item in items:
+            item_list = []
+            if hasattr(item, "substance"):
+                item_list.extend([item.substance.name, getattr(item, "mass", "None")])
+            elif hasattr(item, "instrument"):
+                item_list.extend([item.instrument.name])
+            item_list.append(getattr(item, "description", "None"))
+            data.append(item_list)
         return data
