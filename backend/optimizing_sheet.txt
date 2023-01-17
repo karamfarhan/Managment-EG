@@ -1,0 +1,11 @@
+1 - OPTIMIZE HOW TO INTERACT WITH DICTS
+
+    i should update how i work with dictionires in the projcet, i should optimize
+    the code to be more pythonic for example instead of doing this:
+
+    `attr = object.attr`
+
+    i should do this :
+
+    `attr = getattr(object,"attr", "None")`
+    and also using setattr,hasattr and their similares

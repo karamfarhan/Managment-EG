@@ -1,17 +1,24 @@
-from apps.substance.models import Invoice
 from django.db.models import Prefetch
-from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404
+from django.http import Http404, HttpResponseNotAllowed
+
+# from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
-from rest_framework.decorators import api_view, authentication_classes
+
+# from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Image, Store
-from .serializers import ImageSerializer, MediaPackSerializer, StoreSelectBarSerializer, StoreSerializer
+from .models import Image, Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, Store
+from .serializers import (
+    ImageSerializer,
+    InvoiceSerializer,
+    MediaPackSerializer,
+    StoreSelectBarSerializer,
+    StoreSerializer,
+)
 
 SUCCESS_CREATED = "successfully created"
 SUCCESS_UPDATE = "successfully updated"
@@ -50,6 +57,37 @@ class StoreViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class InvoiceViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    # TODO the quere should be optimized
+    queryset = Invoice.objects.all().prefetch_related(
+        Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),
+        Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()),
+    )
+    serializer_class = InvoiceSerializer
+    pagination_class = PageNumberPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = [
+        "created_at",
+    ]
+    ordering_fields = [
+        "created_at",
+    ]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(created_by=request.user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def destroy(self, request, *args, **kwargs):
+        invoice = self.get_object()
+        invoice.substances.all().delete()
+        invoice.instruments.all().delete()
+        return super().destroy(request, *args, **kwargs)
 
 
 class ImageViewSet(viewsets.ModelViewSet):

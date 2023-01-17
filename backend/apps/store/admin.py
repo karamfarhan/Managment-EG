@@ -1,11 +1,14 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Image, MediaPack, Store
+from .models import Image, Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, MediaPack, Store
 
 admin.site.register(Store)
 admin.site.register(Image)
 admin.site.register(MediaPack)
+admin.site.register(Invoice)
+admin.site.register(InvoiceInstrumentItem)
+admin.site.register(InvoiceSubstanceItem)
 
 # from django.utils.html import format_html
 
