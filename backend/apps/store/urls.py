@@ -8,13 +8,6 @@ urlpatterns = [
 ]
 
 
-# GET IMAGES : images/all/      [10 per page + search  (store address _ created_at _ username) [such : invoice ] + pagination]
-
-# POST IMAGES : images/
-
-# DELETE
-
-
 router = DefaultRouter()
 router.register(r"stores", StoreViewSet, basename="store")
 router.register(r"images", ImageViewSet, basename="image")
