@@ -62,7 +62,8 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
     def get_queryset(self):
         employee_id = self.kwargs.get("id")
-        return self.queryset.filter(employee__id=employee_id)
+        employee = get_object_or_404(Employee, id=employee_id)
+        return self.queryset.filter(employee=employee)
 
     def create(self, request, *args, **kwargs):
         employee_id = self.kwargs.get("id")

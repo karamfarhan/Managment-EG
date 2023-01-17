@@ -55,13 +55,13 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class InvoiceSubstanceItemSerializer(serializers.ModelSerializer):
-    substance_name = serializers.SerializerMethodField("get_substance_name")
+    name = serializers.SerializerMethodField("get_substance_name")
     # substance = serializers.PrimaryKeyRelatedField(queryset=Substance.objects.all(),write_only=True)
 
     class Meta:
         model = InvoiceSubstanceItem
-        fields = ["substance", "substance_name", "mass", "description"]
-        read_only_fields = ["substance_name"]
+        fields = ["substance", "name", "mass", "description"]
+        read_only_fields = ["name"]
 
     def validate(self, data):
         if data["substance"].units - data["mass"] < 0:
@@ -83,12 +83,12 @@ class InvoiceSubstanceItemSerializer(serializers.ModelSerializer):
 
 
 class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
-    instrument_name = serializers.SerializerMethodField("get_instrument_name")
+    name = serializers.SerializerMethodField("get_instrument_name")
 
     class Meta:
         model = InvoiceInstrumentItem
-        fields = ["instrument_name", "instrument", "description"]
-        read_only_fields = ["instrument_name"]
+        fields = ["name", "instrument", "description"]
+        read_only_fields = ["name"]
 
     def create(self, validated_data):
         instrument = validated_data["instrument"]
@@ -102,22 +102,25 @@ class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
-    substances = InvoiceSubstanceItemSerializer(many=True)
-    instruments = InvoiceInstrumentItemSerializer(many=True)
-    # TODO should return the store name when read, not the id
+    store_address = serializers.SerializerMethodField("get_store_address")
+    substance_items = InvoiceSubstanceItemSerializer(many=True, read_only=True)
+    instrument_items = InvoiceInstrumentItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Invoice
         fields = [
             "id",
             "note",
-            "store",
-            "substances",
-            "instruments",
+            "store_address",
+            "substance_items",
+            "instrument_items",
             "created_by",
             "created_at",
         ]
-        read_only_fields = ["id", "created_by", "created_at"]
+        read_only_fields = ["id", "created_by", "created_at", "store_name", "substance_items", "instrument_items"]
+
+    def get_store_address(self, invoice):
+        return invoice.store.address
 
     def create(self, validated_data):
         invoice = self.create_invoice(validated_data)
@@ -125,24 +128,26 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create_invoice(self, validated_data):
-        substances = validated_data.pop("substances", [])
-        instruments = validated_data.pop("instruments", [])
+        substances = validated_data.pop("substances")
+        instruments = validated_data.pop("instruments")
 
         invoice = Invoice.objects.create(**validated_data)
 
         # ! serializer way
         for substance in substances:
-            substance["substance"] = substance["substance"].pk
+            # substance["substance"] = substance["substance"].pk
             serializer = InvoiceSubstanceItemSerializer(data=substance)
             serializer.is_valid(raise_exception=True)
-            sub = serializer.save()
-            invoice.substances.add(sub)
+            serializer.save(invoice=invoice)
+            # sub = serializer.save()
+            # invoice.substances.add(sub)
         for instrument in instruments:
-            instrument["instrument"] = instrument["instrument"].pk
+            # instrument["instrument"] = instrument["instrument"].pk
             serializer = InvoiceInstrumentItemSerializer(data=instrument)
             serializer.is_valid(raise_exception=True)
-            ins = serializer.save()
-            invoice.instruments.add(ins)
+            serializer.save(invoice=invoice)
+            # ins = serializer.save()
+            # invoice.instruments.add(ins)
         # ! only create way
         # substance_items_obj = [InvoiceSubstanceItem.objects.create(**substance) for substance in substances]
         # invoice.substances.add(*substance_items_obj)

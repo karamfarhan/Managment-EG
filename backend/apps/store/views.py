@@ -1,5 +1,7 @@
+from core.exports import ModelViewSetExportBase
 from django.db.models import Prefetch
 from django.http import Http404, HttpResponseNotAllowed
+from django.shortcuts import get_object_or_404
 
 # from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
@@ -12,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Image, Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, Store
+from .resources import InvoiceResource, StoreResource
 from .serializers import (
     ImageSerializer,
     InvoiceSerializer,
@@ -35,12 +38,13 @@ class StoreSelectBarView(ListAPIView):
     pagination_class = None
 
 
-class StoreViewSet(viewsets.ModelViewSet):
+class StoreViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Store.objects.select_related("created_by")
     pagination_class = PageNumberPagination
     serializer_class = StoreSerializer
     filter_backends = [SearchFilter, OrderingFilter]
+    resource_class = StoreResource
     search_fields = ["created_by__username", "name", "address"]  # fields you want to search against
     ordering_fields = ["name", "created_at"]  # fields you want to order by
 
@@ -59,16 +63,17 @@ class StoreViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class InvoiceViewSet(viewsets.ModelViewSet):
+class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     # TODO the quere should be optimized
     queryset = Invoice.objects.all().prefetch_related(
-        Prefetch("substances", queryset=InvoiceSubstanceItem.objects.all()),
-        Prefetch("instruments", queryset=InvoiceInstrumentItem.objects.all()),
+        Prefetch("substance_items", queryset=InvoiceSubstanceItem.objects.all()),
+        Prefetch("instrument_items", queryset=InvoiceInstrumentItem.objects.all()),
     )
     serializer_class = InvoiceSerializer
     pagination_class = PageNumberPagination
     filter_backends = [SearchFilter, OrderingFilter]
+    resource_class = InvoiceResource
     search_fields = [
         "created_at",
     ]
@@ -76,18 +81,27 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         "created_at",
     ]
 
+    def get_queryset(self):
+        store_id = self.kwargs.get("id")
+        store = get_object_or_404(Store, id=store_id)
+        return self.queryset.filter(store=store)
+
     def create(self, request, *args, **kwargs):
+        store_id = self.kwargs.get("id")
+        store = get_object_or_404(Store, id=store_id)
+        substances = request.data.pop("substances", [])
+        instruments = request.data.pop("instruments", [])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(created_by=request.user)
+        serializer.save(created_by=request.user, store=store, substances=substances, instruments=instruments)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def destroy(self, request, *args, **kwargs):
-        invoice = self.get_object()
-        invoice.substances.all().delete()
-        invoice.instruments.all().delete()
-        return super().destroy(request, *args, **kwargs)
+    # def destroy(self, request, *args, **kwargs):
+    #     invoice = self.get_object()
+    #     invoice.substances.all().delete()
+    #     invoice.instruments.all().delete()
+    #     return super().destroy(request, *args, **kwargs)
 
 
 class ImageViewSet(viewsets.ModelViewSet):

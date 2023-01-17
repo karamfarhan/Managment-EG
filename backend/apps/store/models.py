@@ -50,7 +50,7 @@ class Store(models.Model):
         default=True,
         verbose_name=_("Store status"),
     )
-
+    # TODO change to date filed not datetime filed
     start_at = models.DateTimeField(
         verbose_name=_("start at"),
         auto_now_add=True,
@@ -91,8 +91,8 @@ class Invoice(models.Model):
     # TODO i think there a mistake here, the item istance should be in one invoice
     # TODO so many to many here is wrong, should re-design the relationship
     # TODO -> make the relation on the items model and change the relation to
-    substances = models.ManyToManyField("store.InvoiceSubstanceItem", related_name="invoice")
-    instruments = models.ManyToManyField("store.InvoiceInstrumentItem", related_name="invoice")
+    # substances = models.ManyToManyField("store.InvoiceSubstanceItem", related_name="invoice")
+    # instruments = models.ManyToManyField("store.InvoiceInstrumentItem", related_name="invoice")
     note = models.TextField(
         null=True,
         blank=True,
@@ -109,9 +109,8 @@ class Invoice(models.Model):
 
 
 class InvoiceSubstanceItem(models.Model):
-    substance = models.ForeignKey(
-        Substance, on_delete=models.CASCADE, null=True, blank=True, related_name="invoices_items"
-    )
+    substance = models.ForeignKey(Substance, on_delete=models.CASCADE, related_name="invoices_items")
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="substance_items")
     mass = models.BigIntegerField(
         null=False,
         blank=False,
@@ -125,17 +124,15 @@ class InvoiceSubstanceItem(models.Model):
         blank=True,
         verbose_name=_("invoice substance information"),
     )
-    # invoice = models.ForeignKey(
-    #     "substance.Invoice",
-    #     on_delete=models.CASCADE,
-    #     related_name="substance_items"
-    # )
+
+    class Meta:
+        verbose_name = "Invoice Substance Item"
+        verbose_name_plural = "Invoices Substances Items"
 
 
 class InvoiceInstrumentItem(models.Model):
-    instrument = models.ForeignKey(
-        Instrument, on_delete=models.CASCADE, null=True, blank=True, related_name="invoices_items"
-    )
+    instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE, related_name="invoices_items")
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="instrument_items")
     description = models.TextField(
         default="No description",
         max_length=500,
@@ -144,11 +141,11 @@ class InvoiceInstrumentItem(models.Model):
         blank=True,
         verbose_name=_("invoice instrument information"),
     )
-    # invoice = models.ForeignKey(
-    #     "substance.Invoice",
-    #     on_delete=models.CASCADE,
-    #     related_name="instrument_items"
-    # )
+
+    class Meta:
+        verbose_name = "Invoice Instrument Item"
+        verbose_name_plural = "Invoices Instrument Items"
+        unique_together = ["instrument", "invoice"]
 
 
 class MediaPack(models.Model):
@@ -187,11 +184,11 @@ class Image(models.Model):
         ordering = ("-media_pack__created_at",)
 
 
-@receiver(pre_delete, sender=Invoice)
-def delete_related_items_on_invoice_delete(sender, instance, **kwargs):
-    # instance is the deleted invoice object
-    instance.substances.all().delete()
-    instance.instruments.all().delete()
+# @receiver(pre_delete, sender=Invoice)
+# def delete_related_items_on_invoice_delete(sender, instance, **kwargs):
+#     # instance is the deleted invoice object
+#     instance.substances.all().delete()
+#     instance.instruments.all().delete()
 
 
 @receiver(pre_delete, sender=InvoiceInstrumentItem)
