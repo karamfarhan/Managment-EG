@@ -117,7 +117,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "created_by",
             "created_at",
         ]
-        read_only_fields = ["id", "created_by", "created_at", "store_name", "substance_items", "instrument_items"]
+        read_only_fields = ["id", "created_by", "created_at", "store_address", "substance_items", "instrument_items"]
 
     def get_store_address(self, invoice):
         return invoice.store.address
