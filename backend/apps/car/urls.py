@@ -8,6 +8,8 @@ urlpatterns = [
         "cars/<int:id>/activity/",
         CarActivityViewSet.as_view({"get": "list", "post": "create"}),
     ),
+    path("export/cars/", CarViewSet.as_view({"get": "export"}), name="export-cars"),
+    path("export/cars/<int:id>/activity/", CarActivityViewSet.as_view({"get": "export"}), name="export-caractivity"),
 ]
 
 
