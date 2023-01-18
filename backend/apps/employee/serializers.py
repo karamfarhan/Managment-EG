@@ -184,8 +184,8 @@ class EmployeeActivitySerializer(serializers.ModelSerializer):
         instance.is_holiday = validated_data.get("is_holiday", instance.is_holiday)
         if not instance.phase_out:
             instance.phase_out = validated_data.get("phase_out", instance.phase_out)
+            instance.save(update_fields=["phase_out", "is_holiday"])
             return instance
-        instance.save(update_fields=["phase_out", "is_holiday"])
         raise serializers.ValidationError(
             {"phase_out": "Can't update the phase out after it has been set ,(is_holiday filed has been updated)"}
         )
