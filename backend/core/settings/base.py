@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "apps.substance",
     "apps.store",
     "apps.employee",
+    "apps.car",
 ]
 
 MIDDLEWARE = [
