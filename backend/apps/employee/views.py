@@ -2,7 +2,7 @@ from core.exports import ModelViewSetExportBase
 from django.db.models import Prefetch
 from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
@@ -60,6 +60,10 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     resource_class = EmployeeActivityResource
     # TODO should update the kwargs.get("id") to more effiecent way maybe use the default self.get_objects()
 
+    # def get_serializer_class(self, *args, **kwargs):
+    #     if self.request.method in ["PUT","PATCH"]:
+    #         return EmployeeActivityUpdateSerializer
+    #     return EmployeeActivitySerializer
     def get_queryset(self):
         employee_id = self.kwargs.get("id")
         employee = get_object_or_404(Employee, id=employee_id)
@@ -73,3 +77,13 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         serializer.save(employee=employee)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        activity_id = request.data.get("id", None)
+        if activity_id is None:
+            raise serializers.ValidationError({"id": "This field is required while setting the phase out"})
+        instance = get_object_or_404(self.queryset, id=activity_id)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
