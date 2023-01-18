@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Car, CarActivity, CarActivityRide
+from .resources import CarActivityResource, CarResource
 
 # from .resources import EmployeeActivityResource, EmployeeResource
 from .serializers import CarActivitySerializer, CarSerializer
@@ -24,7 +25,7 @@ class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["created_by__username", "car_model", "car_type", "car_number", "driver__name", "maintain_place"]
     ordering_fields = ["car_model", "created_at", "last_maintain"]
-    # resource_class = CarResource
+    resource_class = CarResource
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -42,7 +43,7 @@ class CarActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["car__model", "car__number", "driver__name", "activity_date"]
     ordering_fields = ["activity_date", "distance"]
-    # resource_class = CarResource
+    resource_class = CarActivityResource
 
     def get_queryset(self):
         car_id = self.kwargs.get("id")
