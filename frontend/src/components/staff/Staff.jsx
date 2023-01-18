@@ -22,11 +22,11 @@ export const Staff = () => {
   const location = useLocation();
   const { pathname } = location;
 
-  const { unAuth } = useSelector((state) => state.empolyeeReducer);
-  if (unAuth !== null) {
-    authCtx.logout();
-  }
-  console.log(unAuth, "ll");
+  // const { unAuth } = useSelector((state) => state.empolyeeReducer);
+  // if (unAuth !== null) {
+  //   authCtx.logout();
+  // }
+  // console.log(unAuth, "ll");
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //show staff form

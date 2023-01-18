@@ -7,6 +7,7 @@ const PhaseInOutSecion = ({ id }) => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
   const [search, setSearch] = useState("");
+
   const { data, refetch: searchData } = useQuery(
     "search/phasein",
     async () => {
@@ -25,7 +26,6 @@ const PhaseInOutSecion = ({ id }) => {
     },
     { refetchOnWindowFocus: false, enabled: false }
   );
-  console.log(data);
   return (
     <>
       <Search
@@ -35,23 +35,28 @@ const PhaseInOutSecion = ({ id }) => {
         placeholder="أبحث عن التاريخ yyyy-mm"
       />
 
-      <ul>
+      <table>
         {data && data.results && data.results.length === 0 && (
           <p>لا يوجد تسجيلات في هذا الشهر</p>
         )}
         {data &&
           data.results.map((el) => {
             return (
-              <li key={el.id}>
+              <>
                 <p> حضور/انصراف بتاريخ {el.date} </p>
-                <div>
-                  <p>حضور : {el.phase_in}</p>
-                  <p>انصراف : {el.phase_out}</p>
-                </div>
-              </li>
+
+                <tr>
+                  <th> حضور </th>
+                  <td>{el.phase_in}</td>
+                </tr>
+                <tr>
+                  <th> انصراف </th>
+                  <td>{el.phase_out}</td>
+                </tr>
+              </>
             );
           })}
-      </ul>
+      </table>
     </>
   );
 };

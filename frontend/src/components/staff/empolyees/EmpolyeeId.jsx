@@ -4,7 +4,6 @@ import { useQuery } from "react-query";
 import AuthContext from "../../../context/Auth-ctx";
 import { AiOutlinePhone } from "react-icons/ai";
 import { MdOutlineMarkEmailUnread } from "react-icons/md";
-import classes from "./EmpolyeeId.module.css";
 import ImgModel from "../../UI/imgModel/ImgModel";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import { getEmpolyees } from "../../../store/empolyees-slice";
@@ -13,6 +12,10 @@ import InsuranceSection from "./InsuranceSection";
 import ImagesSecion from "./ImagesSecion";
 import AboutSecion from "./AboutSecion";
 import PhaseInOutSecion from "./PhaseInOutSecion";
+
+//styles
+import classes from "./EmpolyeeId.module.css";
+
 const EmpolyeeId = () => {
   const dispatch = useDispatch();
   const [imgSrc, setImgSrc] = useState("");
@@ -44,7 +47,6 @@ const EmpolyeeId = () => {
         );
 
         const data = await res.json();
-        console.log(data);
         return data;
       } catch (err) {}
     },
@@ -73,7 +75,6 @@ const EmpolyeeId = () => {
       dispatch(getEmpolyees(token));
     }
     const data = await res.json();
-
     return data;
   };
   //hide delete mode

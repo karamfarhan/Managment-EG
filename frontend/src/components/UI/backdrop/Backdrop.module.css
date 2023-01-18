@@ -16,3 +16,8 @@
   z-index: 12;
   border-radius: 30px;
 }
+@media (max-width: 767px) {
+  .child {
+    width: 90%;
+  }
+}
