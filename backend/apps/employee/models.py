@@ -187,7 +187,7 @@ class EmployeeActivity(models.Model):
         null=False,
         blank=False,
     )
-    phase_out = models.TimeField(verbose_name=_("employee phase out time"), null=False, blank=False)
+    phase_out = models.TimeField(verbose_name=_("employee phase out time"), null=True, blank=True)
 
     class Meta:
         verbose_name = "Employee Activity"

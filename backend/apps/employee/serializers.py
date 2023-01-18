@@ -1,3 +1,5 @@
+import datetime
+
 from apps.account.models import Account
 from apps.store.serializers import StoreSelectBarSerializer
 from apps.substance.serializers import AccountSerializer
@@ -31,6 +33,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
     insurance = InsuranceSerializer(allow_null=True, required=False)
     store_address = serializers.SerializerMethodField("get_store_address")
+    today_activity = serializers.SerializerMethodField("get_today_activity")
     # TODO should return the store name when read, not the id
 
     class Meta:
@@ -53,15 +56,28 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "store_address",
             "note",
             "is_primary",
+            "today_activity",
             "insurance",
             "created_at",
             "created_by",
         ]
-        read_only_fields = ["id", "created_by", "created_at", "email_verified", "store_address"]
+        read_only_fields = ["id", "created_by", "created_at", "email_verified", "store_address", "today_activity"]
 
     def create(self, validated_data):
         employee = self.create_employee(validated_data)
         return employee
+
+    def get_today_activity(self, employee):
+        today_activity = employee.activities.filter(date=datetime.datetime.today())
+        if today_activity:
+            today = today_activity[0]
+            serializer = EmployeeActivitySerializer(today)
+            print(serializer.data)
+            return serializer.data
+        print("false")
+        return False
+        # serializer = StoreInvoicesSerializer(invoices, many=True)
+        # return today_activity.
 
     def update(self, instance, validated_data):
         print(validated_data)
@@ -163,3 +179,39 @@ class EmployeeActivitySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"error": "Employee activity for today were already created, can't create again"}
             )
+
+    def update(self, instance, validated_data):
+        instance.is_holiday = validated_data.get("is_holiday", instance.is_holiday)
+        if not instance.phase_out:
+            instance.phase_out = validated_data.get("phase_out", instance.phase_out)
+            return instance
+        instance.save(update_fields=["phase_out", "is_holiday"])
+        raise serializers.ValidationError(
+            {"phase_out": "Can't update the phase out after it has been set ,(is_holiday filed has been updated)"}
+        )
+        # return super().update(instance, validated_data)
+
+    # def validate_phase_out(self,value):
+    #     if not self.phase_out:
+    #         return value
+    #     raise serializers.ValidationError("Can't update the phase out after it has been set")
+
+
+# class EmployeeActivityUpdateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = EmployeeActivity
+#         fields = [
+#             "id",
+#             "date",
+#             "phase_in",
+#             "phase_out",
+#             "is_holiday",
+#         ]
+#         read_only_fields = ["phase_in", "date"]
+#     def update(self, instance, validated_data):
+#         instance.is_holiday = validated_data.get("is_holiday", instance.is_holiday)
+#         if not instance.phase_out:
+#             instance.phase_out = validated_data.get("phase_out", instance.phase_out)
+#             instance.save(update_fields=["phase_out","is_holiday"])
+#             return instance
+#         raise serializers.ValidationError({"phase_out":"Can't update the phase out after it has been set"})
