@@ -14,7 +14,6 @@ const InvoiceDetail = () => {
 
   //invoice id
   const { invoiceId } = param;
-
   //fetch invoices
   const { data: invoice } = useQuery("fetch/invoice", async () => {
     try {
@@ -25,10 +24,10 @@ const InvoiceDetail = () => {
         },
       });
 
-      const data = await res.json();
-      return data;
+      return await res.json();
     } catch (err) {}
   });
+
   return (
     <>
       <div dir="rtl" className={classes["invoice-container"]}>
@@ -40,7 +39,6 @@ const InvoiceDetail = () => {
           </p>
           <h3> الملاحظات المهمة : {invoice && invoice.note} </h3>
         </div>
-        <ExportExcel id={invoiceId} matter="invoices" />
         <table>
           <thead>
             <th> المواد المحولة الي المخزن </th>

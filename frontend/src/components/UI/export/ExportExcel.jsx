@@ -9,10 +9,14 @@ const ExportExcel = ({ matter, id }) => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
   console.log(matter);
+  console.log(id);
 
-  let link = `http://127.0.0.1:8000/export/${matter}/`;
+  let link;
 
-  if (id !== "") {
+  if (id === undefined || id === "") {
+    link = `http://127.0.0.1:8000/export/${matter}/`;
+  }
+  if (id !== undefined) {
     link = `http://127.0.0.1:8000/export/stores/${id}/${matter}/`;
   }
 

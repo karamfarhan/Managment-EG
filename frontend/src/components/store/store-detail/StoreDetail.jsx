@@ -1,6 +1,7 @@
 import { useEffect, useContext, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import AuthContext from "../../../context/Auth-ctx";
+import ExportExcel from "../../UI/export/ExportExcel";
 import Invoices from "./invoices/Invoices";
 
 //classes
@@ -26,7 +27,6 @@ const StoreDetail = () => {
     });
 
     const data = await res.json();
-    console.log(data);
     setData(data);
   }, [storeId, token]);
 
@@ -37,6 +37,8 @@ const StoreDetail = () => {
   return (
     <div className={classes.content}>
       <div dir="rtl">
+        <ExportExcel id={data.id} matter="invoices" />
+
         <h2> {data.name}</h2>
         <p>
           تم انشاء المخزن في :

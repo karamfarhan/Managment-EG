@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import classes from "./Invoices.module.css";
 const Invoices = ({ store }) => {
   const invoices = store.invoices;
-  console.log(invoices);
   return (
     <aside className={classes.invoice} dir="rtl">
       <nav>
