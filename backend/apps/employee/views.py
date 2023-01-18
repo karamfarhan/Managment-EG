@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 from .models import Employee, EmployeeActivity, Insurance
 from .resources import EmployeeActivityResource, EmployeeResource
-from .serializers import EmployeeActivitySerializer, EmployeeSerializer
+from .serializers import EmployeeActivitySerializer, EmployeeSelectBarSerializer, EmployeeSerializer
 
 
 class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
@@ -45,6 +45,13 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class EmployeeSelectBarView(ListAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSelectBarSerializer
+    permission_classes = (IsAuthenticated,)
+    pagination_class = None
 
 
 class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
