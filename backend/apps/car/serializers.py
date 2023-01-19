@@ -28,10 +28,10 @@ class CarSerializer(serializers.ModelSerializer):
             "maintain_place",
             "created_by",
         ]
-        read_only_fields = ["id", "created_by", "created_at", "email_verified"]
+        read_only_fields = ["id", "created_by", "created_at", "email_verified", "driver_name"]
 
-    def get_driver_name(self, car_activity):
-        return car_activity.driver.name
+    def get_driver_name(self, car):
+        return car.driver.name
 
 
 class CarActivityRideSerializer(serializers.ModelSerializer):
