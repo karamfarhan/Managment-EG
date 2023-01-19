@@ -33,6 +33,13 @@ class CarSerializer(serializers.ModelSerializer):
     def get_driver_name(self, car):
         return car.driver.name
 
+    def create(self, validated_data):
+        driver = validated_data.get("driver", False)
+        if not driver:
+            raise serializers.ValidationError({"driver": "this field is required"})
+
+        return super().create(validated_data)
+
 
 class CarActivityRideSerializer(serializers.ModelSerializer):
     class Meta:
