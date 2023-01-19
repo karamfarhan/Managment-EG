@@ -37,11 +37,11 @@ class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
 class CarActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = CarActivity.objects.select_related("created_by", "driver")
+    queryset = CarActivity.objects.select_related("created_by")
     pagination_class = PageNumberPagination
     serializer_class = CarActivitySerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ["car__model", "car__number", "driver__name", "activity_date"]
+    search_fields = ["car__model", "car__number", "driver", "activity_date"]
     ordering_fields = ["activity_date", "distance"]
     resource_class = CarActivityResource
 
