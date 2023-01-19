@@ -14,7 +14,8 @@
   transform: translate(-50%, -50%);
   background-color: #fff;
   z-index: 12;
-  border-radius: 30px;
+  overflow: hidden;
+  border-radius: 10px;
 }
 @media (max-width: 767px) {
   .child {

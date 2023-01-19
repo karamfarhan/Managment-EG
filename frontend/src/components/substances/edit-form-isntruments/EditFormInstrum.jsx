@@ -26,6 +26,8 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
     in_action: selectedInstrument.in_action,
   });
 
+  console.log(selectedInstrument);
+
   let nameVar = selectedInstrument.name,
     descriptionVar = selectedInstrument.description,
     last_maintainVar = selectedInstrument.last_maintain,
@@ -58,7 +60,6 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
       maintain_place: instrumData.maintain_site,
       in_action: instrumData.in_action === "true" ? true : false,
     };
-    console.log(obj);
     try {
       const res = await fetch(`http://127.0.0.1:8000/instruments/${elId}/`, {
         method: "PATCH",
@@ -84,71 +85,67 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
     setCurrentPage(1);
     navigate("/create_subs");
   };
-  // const backHandler = () => {
-  //   navigate("/create_subs");
-  // };
+
   console.log(instrumData);
   return (
-    <Fragment>
-      <Backdrop>
-        <form className={classes.form} onSubmit={submitHandler}>
-          <Inputs
-            type="text"
-            name="sub-name"
-            placeholder="أسم الماكينة"
-            value={instrumData.name}
-            onChange={(e) =>
-              setInstrumData({ ...instrumData, name: e.target.value })
-            }
-          />
-          <Inputs
-            type="date"
-            name="last_maintain"
-            placeholder="أخر صيانة"
-            value={instrumData.last_maintain}
-            onChange={(e) =>
-              setInstrumData({ ...instrumData, last_maintain: e.target.value })
-            }
-          />
-          <Inputs
-            type="text"
-            name="last_maintain"
-            placeholder="مكان الصيانة"
-            value={instrumData.maintain_site}
-            onChange={(e) =>
-              setInstrumData({ ...instrumData, maintain_site: e.target.value })
-            }
-          />
+    <Backdrop>
+      <form className={classes.form} onSubmit={submitHandler}>
+        <Inputs
+          type="text"
+          name="sub-name"
+          placeholder="أسم الماكينة"
+          value={instrumData.name}
+          onChange={(e) =>
+            setInstrumData({ ...instrumData, name: e.target.value })
+          }
+        />
+        <Inputs
+          type="date"
+          name="last_maintain"
+          placeholder="أخر صيانة"
+          value={instrumData.last_maintain}
+          onChange={(e) =>
+            setInstrumData({ ...instrumData, last_maintain: e.target.value })
+          }
+        />
+        <Inputs
+          type="text"
+          name="last_maintain"
+          placeholder="مكان الصيانة"
+          value={instrumData.maintain_site}
+          onChange={(e) =>
+            setInstrumData({ ...instrumData, maintain_site: e.target.value })
+          }
+        />
 
-          <div className={classes.select}>
-            <select
-              value={instrumData.in_action}
-              onChange={(e) =>
-                setInstrumData({ ...instrumData, in_action: e.target.value })
-              }>
-              <option value={false}> موجودة بالمخزن </option>
-              <option value={true}> غير موجودة </option>
-            </select>
-          </div>
-
-          <Inputs
-            type="text"
-            name="sub-description"
-            placeholder="معلومات اضافية"
-            value={instrumData.description}
+        <div className={classes.select}>
+          <select
+            value={instrumData.in_action}
             onChange={(e) =>
-              setInstrumData({ ...instrumData, description: e.target.value })
-            }
-          />
-          <button disabled={!formIsValid} type="submit">
-            تعديل
-          </button>
-          <button type="button" onClick={() => navigate("/create_subs")}>
-            الغاء
-          </button>
-        </form>
-      </Backdrop>
-    </Fragment>
+              setInstrumData({ ...instrumData, in_action: e.target.value })
+            }>
+            <option value={false}> موجودة بالمخزن </option>
+            <option value={true}> غير موجودة </option>
+          </select>
+        </div>
+
+        <Inputs
+          type="text"
+          name="sub-description"
+          placeholder="معلومات اضافية"
+          value={instrumData.description}
+          onChange={(e) =>
+            setInstrumData({ ...instrumData, description: e.target.value })
+          }
+        />
+        <button disabled={!formIsValid} type="submit">
+          تعديل
+        </button>
+        <button type="button" onClick={() => navigate("/create_subs")}>
+          الغاء
+        </button>
+      </form>
+    </Backdrop>
   );
 };
 

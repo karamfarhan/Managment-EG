@@ -118,7 +118,9 @@ const SubstancesView = ({
           searchData={searchDispatch}
         />
         <div className={classes["table_content"]}>
-          <ExportExcel matter="substances" />
+          {subsData && subsData.results.length > 0 && (
+            <ExportExcel matter="substances" />
+          )}
           {subsData && subsData.results && subsData.results.length === 0 && (
             <p className={classes.msg_p}> لا يوجد مواد </p>
           )}

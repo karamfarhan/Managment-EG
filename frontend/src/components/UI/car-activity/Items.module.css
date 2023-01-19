@@ -1,0 +1,15 @@
+.items ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.items ul input {
+  background-color: #fff;
+  width: 100%;
+}
+.items ul svg {
+  color: red;
+}

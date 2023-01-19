@@ -1,0 +1,48 @@
+.car {
+  background-color: #fff;
+  padding: 10px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+.car header {
+  display: flex;
+  justify-content: space-between;
+  color: #777;
+  font-weight: bold;
+  font-size: 15px;
+}
+.car span {
+  color: #1ca345;
+}
+.car button:first-of-type {
+  cursor: pointer;
+  padding: 9px;
+  border: none;
+  width: 50%;
+  color: #fff;
+  background: #267626;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 7px;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.actions > button {
+  width: 20% !important;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 7px;
+  cursor: pointer;
+  padding: 9px;
+  border: none;
+  color: #fff;
+}
+.actions button:first-of-type {
+  background-color: rgba(223, 34, 34, 0.89);
+}
+.actions button:last-of-type {
+  background-color: rgb(12, 111, 204);
+}

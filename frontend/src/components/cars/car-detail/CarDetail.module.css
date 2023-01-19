@@ -1,0 +1,55 @@
+.content {
+  min-height: 100vh;
+  background-color: rgb(48, 41, 41);
+  padding: 0 60px;
+}
+.content > div:first-child {
+  height: 160px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff1f;
+}
+.content button {
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+  color: #fff;
+  background: green;
+  width: 50%;
+}
+
+.table_content {
+  overflow: auto;
+  max-height: 800px;
+}
+
+.table_content table {
+  width: 100%;
+  text-align: center;
+  border-spacing: 1px;
+}
+.table_content table th,
+.table_content table td {
+  padding: 0.75rem;
+  min-width: 120px;
+}
+.table_content table tbody td {
+  background-color: #fff;
+}
+.table_content table thead {
+  font-size: 13px;
+  background-color: #1ca345;
+  color: #fff;
+}
+
+.table_content table tbody {
+  font-size: 12px;
+}
+.table_content table tbody tr:nth-child(even) {
+  background-color: #ddd;
+}
+.table_content table tbody span {
+  font-weight: bold;
+}

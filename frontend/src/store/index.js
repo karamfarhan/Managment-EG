@@ -1,4 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import cartActivitySlice from "./car-activity";
+import carSlice from "./cars-slice";
 import instrumentsSlice from "./create-instruments";
 import invoiceSlice from "./create-invoice-slice";
 import storeSlice from "./create-store-slice";
@@ -16,6 +18,8 @@ const store = configureStore({
     instrumentsReducer: instrumentsSlice.reducer,
     invoiceReducer: invoiceSlice.reducer,
     empolyeeReducer: empolyeeSlice.reducer,
+    carReducer: carSlice.reducer,
+    carActivityRed: cartActivitySlice.reducer,
   },
 });
 

@@ -12,6 +12,7 @@ const Paginate = ({
   search,
   searchPagination,
   searchFn,
+  id,
 }) => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
@@ -20,17 +21,19 @@ const Paginate = ({
     const obj = {
       page: number,
       token,
+      id,
     };
+
     // store current page in session storage
     // sessionStorage.setItem("current-page", number);
-    if (number > 1 && search.trim() === "") {
+    if ((number > 1 && search && search.trim() === "") || number > 1) {
       paginationFun(obj);
     }
-    if (number > 1 && search !== "") {
+    if (number > 1 && search && search !== "") {
       obj.search = search;
       searchPagination(obj);
     }
-    if (number === 1 && search !== "") {
+    if (number === 1 && search && search !== "") {
       searchFn();
     }
     setCurrentPage(number);
