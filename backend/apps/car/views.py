@@ -28,6 +28,7 @@ class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     resource_class = CarResource
 
     def create(self, request, *args, **kwargs):
+        print(f"Car-{self.request.method}-REQUEST_DATA = ", request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
@@ -51,6 +52,7 @@ class CarActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         return self.queryset.filter(car=car)
 
     def create(self, request, *args, **kwargs):
+        print(f"Car Activity-{self.request.method}-REQUEST_DATA = ", request.data)
         car_id = self.kwargs.get("id")
         car = get_object_or_404(Car, id=car_id)
         serializer = self.get_serializer(data=request.data)

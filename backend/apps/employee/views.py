@@ -32,6 +32,7 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     resource_class = EmployeeResource
 
     def create(self, request, *args, **kwargs):
+        print(f"Employee-{self.request.method}-REQUEST_DATA = ", request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
@@ -39,6 +40,7 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
+        print(f"Employee-{self.request.method}-REQUEST_DATA = ", request.data)
         # partial = kwargs.pop("partial", False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -77,6 +79,7 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         return self.queryset.filter(employee=employee)
 
     def create(self, request, *args, **kwargs):
+        print(f"Employee Activity-{self.request.method}-REQUEST_DATA = ", request.data)
         employee_id = self.kwargs.get("id")
         employee = get_object_or_404(Employee, id=employee_id)
         serializer = self.get_serializer(data=request.data)
@@ -86,6 +89,7 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
+        print(f"Employee Activity-{self.request.method}-REQUEST_DATA = ", request.data)
         activity_id = request.data.get("id", None)
         if activity_id is None:
             raise serializers.ValidationError({"id": "This field is required while setting the phase out"})

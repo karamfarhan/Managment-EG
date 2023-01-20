@@ -56,6 +56,7 @@ class StoreViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     #         # Prefetch("invoice_store", queryset=Invoice.objects.filter(store__id=instance.id)),
     #         # )
     def create(self, request, *args, **kwargs):
+        print(f"Store-{self.request.method}-REQUEST_DATA = ", request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
@@ -90,6 +91,7 @@ class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         return self.queryset.filter(store=store)
 
     def create(self, request, *args, **kwargs):
+        print(f"Invoice-{self.request.method}-REQUEST_DATA = ", request.data)
         store_id = self.kwargs.get("id")
         store = get_object_or_404(Store, id=store_id)
         substances = request.data.pop("substances", [])
@@ -135,6 +137,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         return super().get_object()
 
     def create(self, request, *args, **kwargs):
+        print(f"Image-{self.request.method}-REQUEST_DATA = ", request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
