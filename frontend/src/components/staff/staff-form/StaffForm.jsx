@@ -289,7 +289,10 @@ const StaffForm = ({ setStaffForm }) => {
                   setEmpolyeeData({ ...empolyeeData, location: e.target.value })
                 }>
                 <option selected hidden>
-                  موقع العمل
+                  موقع الشركة
+                </option>
+                <option selected value={56}>
+                  مقر الشركة
                 </option>
 
                 {stores &&

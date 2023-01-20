@@ -1,7 +1,7 @@
 const CarDetailList = ({ data }) => {
   return (
     <tr>
-      <td> {data.driver_name} </td>
+      <td> {data.driver} </td>
       <td>{new Date(data.activity_date).toDateString()} </td>
       <td> {data.distance}كم </td>
       <td>

@@ -40,7 +40,6 @@ const CarActivity = ({ hideModel, id, driver }) => {
             distance,
             description,
             rides: inputFields,
-            driver: driver,
           }),
         });
         if (res.ok) {
