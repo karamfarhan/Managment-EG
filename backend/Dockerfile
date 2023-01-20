@@ -2,7 +2,7 @@
 FROM python:3.9-slim
 
 # set work directory
-WORKDIR /app
+WORKDIR /backend
 
 # install dependencies
 RUN pip install --upgrade pip

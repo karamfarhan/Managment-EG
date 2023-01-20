@@ -4,30 +4,42 @@ services:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
+    container_name: frontend_app
+    # volumes:
+    #   - ./frontend/src:/app/src
     volumes:
-      - ./frontend/src:/app/src
-    container_name: frontend
-    ports:
-      - 3000:3000
-    command: npm start
+      - react_build:/frontend/build
+    # ports:
+    #   - 3000:3000
+    # command: npm start
 
   django:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
+    command: gunicorn core.wsgi --bind 0.0.0.0:8000
     container_name: django_app
     environment:
-      - DJANGO_SETTINGS_MODULE=core.settings.dev
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
 
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
-    # command: "python manage.py runserver 0.0.0.0:8000"
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    # volumes:
+    #   - ./backend:/app
+    # command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - pgdb
 
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:8080
+    volumes:
+      - ./nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf:ro
+      - react_build:/var/www/react
+    depends_on:
+      - django
+      - frontend
   pgdb:
     image: postgres
     container_name: pgdb
@@ -40,17 +52,4 @@ services:
 
 volumes:
     pgdata:
-
-
-  ## for channel layers
-  # redis_layer:
-  #   image: redis
-  #   container_name: redis_layer
-  #   ports:
-  #     - "6379:6379"
-  # # for cache storage
-  # redis_cache:
-  #   image: redis
-  #   container_name: redis_cache
-  #   ports:
-  #     - "6380:6380"
+    react_build:
