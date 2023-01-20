@@ -20,8 +20,6 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
     empolyeeId.results &&
     empolyeeId.results.find((el) => el.id === parseInt(params.empId));
 
-  const [isInsurance, setIsInsurance] = useState("");
-
   const [data, setData] = useState("");
   //imgs
   const [identityImg, setIdentityImg] = useState(
@@ -62,6 +60,10 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
       selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_company,
     start_at: selectedEmpolyee.insurance && selectedEmpolyee.insurance.start_at,
   });
+  const [isInsurance, setIsInsurance] = useState(
+    Object.values(insuranceData).some((x) => x !== "")
+  );
+
   const { ins_code, ins_type, ins_company, start_at } = insuranceData;
 
   //INSURANCE FIRST RENDER
@@ -97,6 +99,7 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
   const primVar = selectedEmpolyee.is_primary;
   const locationVar = selectedEmpolyee.store_address;
   const signInVar = selectedEmpolyee.signin_date;
+  const noteVar = selectedEmpolyee.note;
 
   //images
   //setbackground function
@@ -222,7 +225,9 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
     if (ins_company !== insCompany) {
       formdata.append("insurance.ins_company", ins_company);
     }
-
+    if (note !== noteVar) {
+      formdata.append("note", note);
+    }
     try {
       const res = await fetch(
         `http://127.0.0.1:8000/employees/${parseInt(params.empId)}/`,
@@ -265,8 +270,7 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
     }
     setSteps((prev) => prev - 1);
   };
-  console.log(Object.values(isInsurance).some((x) => x !== ""));
-  console.log(insuranceData);
+
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <h3> تعديل بيانات الموظف</h3>
@@ -351,7 +355,7 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
                 <option value={false}>لا</option>
               </select>
             </div>
-            {is_primary === "true" && (
+            {is_primary === "false" && (
               <div className={classes.select}>
                 <select
                   value={location}
@@ -392,30 +396,18 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
         )}
         {steps === 2 && (
           <div>
-            <div className={classes.select}>
-              <select
-                value={isInsurance}
-                onChange={(e) => setIsInsurance(e.target.value)}>
-                <option selected disabled>
-                  التأمين
-                </option>
-                <option value={true}>نعم</option>
-                <option value={false}>لا</option>
-              </select>
-            </div>
             {/* Insurance  */}
-            {Object.values(insuranceData).some((x) => x !== "") === true &&
-              isInsurance === true && (
-                <EditInsurance
-                  ins_code={ins_code}
-                  ins_company={ins_company}
-                  ins_type={ins_type}
-                  start_at={start_at}
-                  setInsuranceData={setInsuranceData}
-                  insuranceData={insuranceData}
-                  data={data}
-                />
-              )}
+            {Object.values(insuranceData).some((x) => x !== "") === true && (
+              <EditInsurance
+                ins_code={ins_code}
+                ins_company={ins_company}
+                ins_type={ins_type}
+                start_at={start_at}
+                setInsuranceData={setInsuranceData}
+                insuranceData={insuranceData}
+                data={data}
+              />
+            )}
           </div>
         )}
         {/* Insurance  */}
