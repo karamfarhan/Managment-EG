@@ -8,13 +8,7 @@ import {
 } from "react-icons/ai";
 import Backdrop from "../backdrop/Backdrop";
 
-export const ImgContainer = ({
-  imgSrc,
-  closeModelHandler,
-  nextImg,
-  prevImg,
-  i,
-}) => {
+export const ImgContainer = ({ imgSrc, closeModelHandler, description }) => {
   return (
     <Fragment>
       <Backdrop hideModel={closeModelHandler} />
@@ -23,19 +17,20 @@ export const ImgContainer = ({
       </span>
       <div className={classes["img-container"]}>
         <img src={imgSrc} alt="img" />
-
-        {/* <span className={classes.rightAngle} onClick={nextImg}>
-          <AiOutlineDoubleRight />
-        </span>
-        <span className={classes.leftAngle} onClick={prevImg}>
-          <AiOutlineDoubleLeft />
-        </span> */}
+        <p>{description}</p>
       </div>
     </Fragment>
   );
 };
 
-const ImgModel = ({ imgSrc, closeModelHandler, prevImg, nextImg, i }) => {
+const ImgModel = ({
+  imgSrc,
+  closeModelHandler,
+  prevImg,
+  nextImg,
+  i,
+  description,
+}) => {
   return (
     <Fragment>
       {ReactDOM.createPortal(
@@ -45,6 +40,7 @@ const ImgModel = ({ imgSrc, closeModelHandler, prevImg, nextImg, i }) => {
           nextImg={nextImg}
           prevImg={prevImg}
           i={i}
+          description={description}
         />,
         document.getElementById("img_popup")
       )}

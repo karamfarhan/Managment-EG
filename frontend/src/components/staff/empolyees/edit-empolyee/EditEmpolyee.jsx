@@ -5,13 +5,10 @@ import AuthContext from "../../../../context/Auth-ctx";
 import Inputs from "../../../UI/inputs/Inputs";
 import EditInsurance from "./editInsurance/EditInsurance";
 import classes from "./EditEmpolyee.module.css";
-import useSelection from "antd/es/table/hooks/useSelection";
-import { useDispatch, useSelector } from "react-redux";
-import { getEmpolyees } from "../../../../store/empolyees-slice";
+import { useSelector } from "react-redux";
 const EditEmpolyee = ({ setStaffForm, id }) => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const params = useParams();
@@ -268,6 +265,8 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
     }
     setSteps((prev) => prev - 1);
   };
+  console.log(Object.values(isInsurance).some((x) => x !== ""));
+  console.log(insuranceData);
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <h3> تعديل بيانات الموظف</h3>
@@ -347,30 +346,36 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
                     is_primary: e.target.value,
                   })
                 }>
-                ْ<option value={true}>موظف دائم</option>
-                <option value={false}>موظف مؤقت</option>
+                ْ<option disabled>موظف بمقر الشركة</option>ْ
+                <option value={true}>نعم</option>
+                <option value={false}>لا</option>
               </select>
             </div>
-            <div className={classes.select}>
-              <select
-                value={location}
-                onChange={(e) =>
-                  setEmpolyeeData({ ...empolyeeData, location: e.target.value })
-                }>
-                <option selected hidden>
-                  موقع العمل
-                </option>
+            {is_primary === "true" && (
+              <div className={classes.select}>
+                <select
+                  value={location}
+                  onChange={(e) =>
+                    setEmpolyeeData({
+                      ...empolyeeData,
+                      location: e.target.value,
+                    })
+                  }>
+                  <option selected hidden>
+                    موقع العمل
+                  </option>
 
-                {stores &&
-                  stores.map((location) => {
-                    return (
-                      <option key={location.pk} value={location.pk}>
-                        {location.address}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
+                  {stores &&
+                    stores.map((location) => {
+                      return (
+                        <option key={location.pk} value={location.pk}>
+                          {location.address}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+            )}
             {/* <Inputs value = {name} onChange={(e)=>setEmpolyeeData({...empolyeeData, name : e.target.value})} type="text" placeholder=" تاريخ التعيين" /> */}
 
             <Inputs
@@ -391,7 +396,7 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
               <select
                 value={isInsurance}
                 onChange={(e) => setIsInsurance(e.target.value)}>
-                <option selected hidden>
+                <option selected disabled>
                   التأمين
                 </option>
                 <option value={true}>نعم</option>
@@ -399,17 +404,18 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
               </select>
             </div>
             {/* Insurance  */}
-            {isInsurance === "true" && (
-              <EditInsurance
-                ins_code={ins_code}
-                ins_company={ins_company}
-                ins_type={ins_type}
-                start_at={start_at}
-                setInsuranceData={setInsuranceData}
-                insuranceData={insuranceData}
-                data={data}
-              />
-            )}
+            {Object.values(insuranceData).some((x) => x !== "") === true &&
+              isInsurance === true && (
+                <EditInsurance
+                  ins_code={ins_code}
+                  ins_company={ins_company}
+                  ins_type={ins_type}
+                  start_at={start_at}
+                  setInsuranceData={setInsuranceData}
+                  insuranceData={insuranceData}
+                  data={data}
+                />
+              )}
           </div>
         )}
         {/* Insurance  */}

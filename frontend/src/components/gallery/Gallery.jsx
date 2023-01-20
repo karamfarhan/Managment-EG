@@ -31,8 +31,8 @@ const Gallery = () => {
   /**************************/
 
   // pagination details
-  let curPage = sessionStorage.getItem("current-page");
   const [currentPage, setCurrentPage] = useState(1);
+  const [description, setDescription] = useState();
   const { data } = useSelector((state) => state.imageReducer);
   const { count } = data !== null && data;
 
@@ -52,10 +52,7 @@ const Gallery = () => {
     if (searchValue === "" && currentPage === 1) {
       dispatch(fetchImgs(obj));
     }
-    // if (searchValue === "" && currentPage > 1) {
-    //   obj.page = currentPage;
-    //   dispatch(imagesPagination(obj));
-    // }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, searchValue, currentPage]);
 
@@ -77,11 +74,11 @@ const Gallery = () => {
   };
 
   //selected image
-  const selectedImgHandler = (i, src) => {
+  const selectedImgHandler = (i, src, des) => {
     setClickedImg(src);
     // setCurrentIndex(i);
     setShowImgModel(true);
-    // setClickedImg(src);
+    setDescription(des);
     setCurrentIndex(i);
   };
   //close img model
@@ -143,6 +140,7 @@ const Gallery = () => {
           closeModelHandler={closeModelHandler}
           nextImg={nextImg}
           prevImg={prevImg}
+          description={description}
         />
       )}
 
@@ -175,7 +173,9 @@ const Gallery = () => {
                 <div
                   className={classes.fig}
                   key={index}
-                  onClick={() => selectedImgHandler(index, el.image)}>
+                  onClick={() =>
+                    selectedImgHandler(index, el.image, el.media_pack.alt_text)
+                  }>
                   <div>
                     <figure>
                       <img src={el.image} alt="f" />
@@ -188,10 +188,7 @@ const Gallery = () => {
                           {el.media_pack && el.media_pack.created_by}{" "}
                         </span>
                       </p>
-                      <p className={classes.description_parag}>
-                        وصف الصورة :{" "}
-                        <span>{el.media_pack && el.media_pack.alt_text}</span>
-                      </p>
+
                       <p className={classes.date}>
                         {new Date(
                           el.media_pack && el.media_pack.created_at

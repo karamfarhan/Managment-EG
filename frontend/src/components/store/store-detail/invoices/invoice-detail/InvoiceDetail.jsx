@@ -65,7 +65,7 @@ const InvoiceDetail = () => {
 
         <table>
           <thead>
-            <th> المواد المحولة الي المخزن </th>
+            <th> الالات الي المخزن </th>
 
             <th>الوصف </th>
           </thead>
