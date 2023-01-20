@@ -15,12 +15,7 @@ const AboutSecion = ({ empolyee }) => {
             : empolyee.store_address}{" "}
         </span>
       </p>
-      <p>
-        نوع العقد :
-        <span>
-          {empolyee.is_primary === true ? "موظف دائم" : "موظف بعقد مؤقت"}{" "}
-        </span>
-      </p>
+
       <p>
         عدد الأجازات :<span>{empolyee.days_off} </span>
       </p>
