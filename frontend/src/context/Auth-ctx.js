@@ -8,29 +8,29 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = (props) => {
-  const storedToken = localStorage.getItem("token");
-  const storedUser = localStorage.getItem("user");
+  const storedToken = sessionStorage.getItem("token-management");
+  const storedUser = sessionStorage.getItem("user");
 
   const [token, setToken] = useState(storedToken);
   const [userInfom, setUserInform] = useState(JSON.parse(storedUser));
 
   const userIsLoggedIn = !!token;
-  console.log(token)
+  console.log(token);
 
   const logoutHandler = useCallback(() => {
     setToken(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token-management");
+    sessionStorage.removeItem("user");
     sessionStorage.removeItem("current-page");
-    localStorage.removeItem("filter");
-  }, []); 
+    sessionStorage.removeItem("filter");
+  }, []);
 
   const loginHandler = (token, data) => {
     setToken(token);
     setUserInform(data);
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(data));
-    localStorage.removeItem("filter");
+    sessionStorage.setItem("token-management", token);
+    sessionStorage.setItem("user", JSON.stringify(data));
+    sessionStorage.removeItem("filter");
   };
   const updateToken = useCallback(() => {
     fetch("http://127.0.0.1:8000/account/token/refresh/", {
@@ -43,10 +43,11 @@ export const AuthContextProvider = (props) => {
       if (res.status === 200) {
         return res.json().then((data) => {
           setToken(data.access);
-          localStorage.setItem("token", data.access);
+          localStorage.setItem("token-management", data.access);
         });
       }
       if (res.status === 401) {
+        logoutHandler();
         console.log(res.detail || "something went wrong");
       }
     });
@@ -64,16 +65,14 @@ export const AuthContextProvider = (props) => {
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
-    userInfom
+    userInfom,
   };
 
-  
-useEffect(()=> {
-  if(token === '') {
-  
-    logoutHandler()
-  }
-}, [logoutHandler])
+  useEffect(() => {
+    if (token === "") {
+      logoutHandler();
+    }
+  }, [logoutHandler]);
   return (
     <AuthContext.Provider value={contextValue}>
       {props.children}
