@@ -33,6 +33,14 @@ class CarSerializer(serializers.ModelSerializer):
     def get_driver_name(self, car):
         return car.driver.name
 
+    # TODO make sure that he can't update the driver to null, should alwaays be a valid driver
+    def create(self, validated_data):
+        driver = validated_data.get("driver", False)
+        if not driver:
+            raise serializers.ValidationError({"driver": "this field is required"})
+
+        return super().create(validated_data)
+
 
 class CarActivityRideSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,26 +56,28 @@ class CarActivityRideSerializer(serializers.ModelSerializer):
 class CarActivitySerializer(serializers.ModelSerializer):
     rides = CarActivityRideSerializer(many=True, allow_null=True, required=False)
     created_by = AccountSerializer(read_only=True)
-    driver_name = serializers.SerializerMethodField("get_driver_name")
+    # driver_name = serializers.SerializerMethodField("get_driver_name")
 
     class Meta:
         model = CarActivity
         fields = [
             "id",
             "driver",
-            "driver_name",
+            # "driver_name",
             "description",
             "activity_date",
             "distance",
             "rides",
             "created_by",
         ]
-        read_only_fields = ["id", "driver_name"]
+        read_only_fields = ["id", "driver"]
 
     def create(self, validated_data):
         car_activity = self.create_car_activity(validated_data)
         return car_activity
 
+    # TODO maybe if i make the driver for the activity==the car driver at the time of
+    # TODO creating the activity, i can make it to be a char filed,
     @transaction.atomic
     def create_car_activity(self, validated_data):
         rides = validated_data.pop("rides", [])
@@ -82,5 +92,5 @@ class CarActivitySerializer(serializers.ModelSerializer):
                     ride_obj.save()
         return car_activity
 
-    def get_driver_name(self, car_activity):
-        return car_activity.driver.name
+    # def get_driver_name(self, car_activity):
+    #     return car_activity.driver.name

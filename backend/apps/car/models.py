@@ -72,8 +72,11 @@ class CarActivity(models.Model):
         verbose_name=_("creatred at"),
         help_text=_("format: Y-m-d H:M:S"),
     )
-    driver = models.ForeignKey(
-        Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="car_activities"
+    driver = models.CharField(
+        max_length=250,
+        null=True,
+        blank=True,
+        verbose_name=_("the driver"),
     )
     car = models.ForeignKey(Car, on_delete=models.CASCADE, null=False, blank=False, related_name="activities")
 
@@ -97,6 +100,10 @@ class CarActivity(models.Model):
 
     def __str__(self):
         return f"{self.driver}-{self.car}-{self.activity_date}"
+
+    def save(self, *args, **kwargs):
+        self.driver = self.car.driver.name
+        return super().save(*args, **kwargs)
 
 
 class CarActivityRide(models.Model):
