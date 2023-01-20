@@ -148,16 +148,11 @@ const StaffForm = ({ setStaffForm }) => {
     }
     formdata.append("days_off", days_off);
     formdata.append("years_of_experiance", years_of_experiance);
-
-    for (let i = 0; i < Object.values(insuranceData).length; i++) {
-      let obj = Object.values(insuranceData)[i];
-
-      if (obj !== "") {
-        formdata.append("insurance.ins_code", ins_code);
-        formdata.append("insurance.ins_type", ins_type);
-        formdata.append("insurance.start_at", start_at);
-        formdata.append("insurance.ins_company", ins_company);
-      }
+    if (Object.values(insuranceData).some((x) => x !== "")) {
+      formdata.append("insurance.ins_code", ins_code);
+      formdata.append("insurance.ins_type", ins_type);
+      formdata.append("insurance.start_at", start_at);
+      formdata.append("insurance.ins_company", ins_company);
     }
 
     try {
@@ -179,7 +174,7 @@ const StaffForm = ({ setStaffForm }) => {
       }
       console.log(data);
     } catch (err) {
-      //setStaffForm(true);
+      console.log(err);
     }
   };
 
