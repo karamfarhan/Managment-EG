@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getCars } from "../../../store/cars-slice";
 import AuthContext from "../../../context/Auth-ctx";
+import { FiEdit } from "react-icons/fi";
+import { MdOutlineDeleteForever } from "react-icons/md";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./CarList.module.css";
 const CarList = ({
@@ -52,6 +54,11 @@ const CarList = ({
   const hideDeleteModel = () => {
     setIsDelete(false);
   };
+
+  //navigate to edit
+  const navigateEditHandler = () => {
+    navigate(`/cars/edit/${id}`);
+  };
   return (
     <Fragment>
       {isDelete && (
@@ -64,12 +71,27 @@ const CarList = ({
 
       <div className={classes.car}>
         <header>
-          <p>
-            سائق السيارة <span>{driver_name}</span>{" "}
-          </p>
-          <p>
-            سيارة رقم <span>{car_number}</span>{" "}
-          </p>
+          <div>
+            {" "}
+            <p>
+              سائق السيارة <span>{driver_name}</span>{" "}
+            </p>
+            <p>
+              سيارة رقم <span>{car_number}</span>{" "}
+            </p>
+          </div>
+          <div className={classes.actions}>
+            <button
+              className={classes.deleteBtn}
+              onClick={() => deleteModelHandler(id)}>
+              {" "}
+              <MdOutlineDeleteForever />{" "}
+            </button>
+            <button onClick={navigateEditHandler} className={classes.deleteBtn}>
+              {" "}
+              <FiEdit />
+            </button>
+          </div>
         </header>
         <div>
           <p>
@@ -85,16 +107,6 @@ const CarList = ({
         </div>
 
         <button onClick={detailPageHandler}> تحركات السيارة </button>
-
-        <div className={classes.actions}>
-          <button
-            className={classes.deleteBtn}
-            onClick={() => deleteModelHandler(id)}>
-            {" "}
-            حذف{" "}
-          </button>
-          <button className={classes.deleteBtn}> تعديل </button>
-        </div>
       </div>
     </Fragment>
   );

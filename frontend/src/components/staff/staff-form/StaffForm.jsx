@@ -33,7 +33,7 @@ const StaffForm = ({ setStaffForm }) => {
     days_off: "",
     note: "",
     location: "",
-    is_primary: false,
+    is_primary: "",
     signin_date: "",
   });
 
@@ -284,29 +284,6 @@ const StaffForm = ({ setStaffForm }) => {
             />
             <div className={classes.select}>
               <select
-                value={location}
-                onChange={(e) =>
-                  setEmpolyeeData({ ...empolyeeData, location: e.target.value })
-                }>
-                <option selected hidden>
-                  موقع الشركة
-                </option>
-                <option selected value={56}>
-                  مقر الشركة
-                </option>
-
-                {stores &&
-                  stores.map((location) => {
-                    return (
-                      <option key={location.pk} value={location.pk}>
-                        {location.address}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-            <div className={classes.select}>
-              <select
                 value={is_primary}
                 onChange={(e) =>
                   setEmpolyeeData({
@@ -314,10 +291,38 @@ const StaffForm = ({ setStaffForm }) => {
                     is_primary: e.target.value,
                   })
                 }>
-                ْ<option value={true}>موظف دائم</option>
-                <option value={false}>موظف مؤقت</option>
+                <option selected disabled>
+                  موظف في مقر الشركة
+                </option>
+                ْ<option value={true}>نعم</option>
+                <option value={false}>لا</option>
               </select>
             </div>
+            {is_primary === "false" && (
+              <div className={classes.select}>
+                <select
+                  value={location}
+                  onChange={(e) =>
+                    setEmpolyeeData({
+                      ...empolyeeData,
+                      location: e.target.value,
+                    })
+                  }>
+                  <option selected hidden>
+                    موقع الشركة
+                  </option>
+
+                  {stores &&
+                    stores.map((location) => {
+                      return (
+                        <option key={location.pk} value={location.pk}>
+                          {location.address}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+            )}
           </div>
         )}
 

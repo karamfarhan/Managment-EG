@@ -15,6 +15,8 @@ import {
 import AuthContext from "../../context/Auth-ctx";
 import Paginate from "../UI/pagination/Paginate";
 import CarList from "./car-list/CarList";
+import { Route, Routes } from "react-router-dom";
+import EditCar from "./edit-car/EditCar";
 const Cars = () => {
   const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
@@ -44,7 +46,6 @@ const Cars = () => {
   };
 
   //pagination functions
-
   const paginationFun = (obj) => {
     dispatch(CarsPaginations(obj));
   };

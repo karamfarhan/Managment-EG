@@ -1,28 +1,54 @@
-import { useState, useContext } from "react";
-import AuthContext from "../../../context/Auth-ctx";
-import Backdrop from "../backdrop/Backdrop";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Backdrop from "../../UI/backdrop/Backdrop";
+import Inputs from "../../UI/inputs/Inputs";
 import { FaCarSide } from "react-icons/fa";
-import Inputs from "../inputs/Inputs";
-
-import classes from "./CreateCar.module.css";
+import AuthContext from "../../../context/Auth-ctx";
 import { useQuery } from "react-query";
-import { useDispatch } from "react-redux";
-import { getCars } from "../../../store/cars-slice";
-const CreateCar = ({ hideModel }) => {
-  const dispatch = useDispatch();
+//classes
+import classes from "./EditCar.module.css";
+
+const EditCar = ({ hideModel }) => {
+  const [car, setCar] = useState({});
+  const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
-  //hide model
+  const params = useParams();
+  //car id
+  const { driverId } = params;
+
+  useEffect(() => {
+    const fetchCar = async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/cars/${driverId}/`, {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+        setCar(data);
+        return data;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCar();
+  }, [driverId, token]);
+
+  const carSelected = car;
 
   const [carData, setCarData] = useState({
-    car_model: "",
-    car_type: "",
-    car_number: "",
-    driver: "", //select box
-    last_maintain: "",
-    maintain_place: "",
-    note: "",
+    car_model: carSelected.car_model,
+    car_type: carSelected.car_type,
+    car_number: carSelected.car_number,
+    driver: carSelected.driver, //select box
+    last_maintain: carSelected.last_maintain,
+    maintain_place: carSelected.maintain_place,
+    note: carSelected.note,
   });
+
   const {
     car_model,
     car_type,
@@ -32,6 +58,42 @@ const CreateCar = ({ hideModel }) => {
     maintain_place,
     note,
   } = carData;
+
+  //get Car
+  //Edit car
+
+  //Edit car
+  const { refetch: sendCarData } = useQuery(
+    "edit/car",
+    async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/cars/${driverId}/`, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(carData),
+        });
+        if (res.ok) {
+          navigate("/cars");
+        }
+        const data = await res.json();
+        console.log(data);
+        return await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    { refetchOnWindowFocus: false, enabled: false }
+  );
+
+  //submit handler
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    sendCarData();
+  };
 
   //empolyees
   const { data: employeesName } = useQuery(
@@ -55,45 +117,11 @@ const CreateCar = ({ hideModel }) => {
     },
     { refetchOnWindowFocus: false }
   );
-
-  //create car
-  const { refetch: sendCarData } = useQuery(
-    "send/car",
-    async () => {
-      try {
-        const res = await fetch("http://127.0.0.1:8000/cars/", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(carData),
-        });
-        if (res.ok) {
-          dispatch(getCars(token));
-          hideModel();
-        }
-        const data = await res.json();
-        console.log(data);
-        return await res.json();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    { refetchOnWindowFocus: false, enabled: false }
-  );
-
-  //submit handler
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    sendCarData();
-  };
   return (
     <Backdrop hideModel={hideModel}>
       <div className={classes.createCar}>
         <div className={classes.title}>
-          <h3>سيارة جديدة</h3>
+          <h3>تعديل السيارة</h3>
           <span>
             <FaCarSide />
           </span>
@@ -170,11 +198,11 @@ const CreateCar = ({ hideModel }) => {
               setCarData({ ...carData, note: e.target.value })
             }></textarea>
 
-          <button type="submit"> اضافة </button>
+          <button type="submit"> تعديل </button>
         </form>
       </div>
     </Backdrop>
   );
 };
 
-export default CreateCar;
+export default EditCar;

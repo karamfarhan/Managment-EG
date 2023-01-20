@@ -13,6 +13,7 @@ import CreateSubstancePage from "./CreateSubstancePage";
 import InvoiceDetailPage from "./InvoiceDetailPage";
 import EmpolyeeData from "./EmpolyeeData";
 import CarDetailPage from "./CarDetailPage";
+import EditCarPage from "./EditCarPage";
 const Pages = () => {
   const authCtx = useContext(AuthContext);
   const { isLoggedIn } = authCtx;
@@ -48,6 +49,7 @@ const Pages = () => {
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/cars/*" element={<CarsPage />} />
         <Route path="/cars/:driverId/:carId" element={<CarDetailPage />} />
+        <Route path="/cars/edit/:driverId" element={<EditCarPage />} />
       </Route>
     </Routes>
   );
