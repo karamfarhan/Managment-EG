@@ -15,6 +15,8 @@ const CarList = ({
   note,
   driver,
   id,
+  last_maintain,
+  maintain_place,
 }) => {
   const navigate = useNavigate();
   const detailPageHandler = () => {
@@ -100,7 +102,12 @@ const CarList = ({
               {car_type} - {car_model}
             </span>
           </p>
-
+          <p>
+            أخر صيانة <span> {last_maintain} </span>
+          </p>
+          <p>
+            مكان الصيانة <span> {maintain_place} </span>
+          </p>
           <p>
             ملاحظات : <span> {note === "" ? "لا يوجد" : note} </span>
           </p>

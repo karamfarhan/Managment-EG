@@ -100,6 +100,8 @@ const Cars = () => {
                 car_type={el.car_type}
                 car_number={el.car_number}
                 driver_name={el.driver_name}
+                last_maintain={el.last_maintain}
+                maintain_place={el.maintain_place}
                 note={el.note}
               />
             );
