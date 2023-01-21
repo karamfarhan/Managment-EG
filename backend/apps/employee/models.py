@@ -64,7 +64,6 @@ class Employee(models.Model):
         max_length=250,
         null=False,
         blank=False,
-        unique=True,
         verbose_name=_("employee name"),
     )
     type = models.CharField(
@@ -148,13 +147,6 @@ class Employee(models.Model):
         default=False,
         verbose_name=_("is the employee is a primary staff"),
     )
-    # account = models.OneToOneField(
-    #     Account,
-    #     on_delete=models.SET_NULL,
-    #     null=True,
-    #     blank=True,
-    #     related_name="employee_account",
-    # )
 
     class Meta:
         verbose_name = "Employee"
@@ -164,6 +156,11 @@ class Employee(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if self.is_primary is True:
+            self.store = None
+        return super().save(*args, **kwargs)
+
 
 class EmployeeActivity(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="activities")
@@ -171,12 +168,6 @@ class EmployeeActivity(models.Model):
         default=False,
         verbose_name=_("is today is holiday day"),
     )
-    # created_by = models.ForeignKey(
-    #     "account.Account",
-    #     on_delete=models.SET_NULL,
-    #     null=True,
-    #     related_name="insurance_created_by",
-    # )
     date = models.DateField(
         auto_now_add=True,
         verbose_name=_("employee phase in/out date"),

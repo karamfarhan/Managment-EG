@@ -31,7 +31,14 @@ class Category(models.Model):
 
 
 class Substance(models.Model):
-    UNIT_TYPE = (("kilogram", "kilogram"), ("liter", "liter"), ("ton", "ton"))
+    UNIT_TYPE = (
+        ("kilogram", "kilogram"),
+        ("liter", "liter"),
+        ("ton", "ton"),
+        ("m3", "m3 "),
+        ("m2", "m2"),
+        ("item", "item"),
+    )
     created_by = models.ForeignKey(
         Account,
         on_delete=models.SET_NULL,
