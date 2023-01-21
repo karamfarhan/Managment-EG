@@ -25,7 +25,6 @@ const Login = ({ userInfo, setUserInfo }) => {
           })
         }
       />
-      <button className={classes.forgetPass}> نسيت كلمة السر؟ </button>
     </>
   );
 };

@@ -6,7 +6,7 @@ import Inputs from "../../../UI/inputs/Inputs";
 import EditInsurance from "./editInsurance/EditInsurance";
 import classes from "./EditEmpolyee.module.css";
 import { useSelector } from "react-redux";
-const EditEmpolyee = ({ setStaffForm, id }) => {
+const EditEmpolyee = () => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
   const navigate = useNavigate();
@@ -60,9 +60,9 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
       selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_company,
     start_at: selectedEmpolyee.insurance && selectedEmpolyee.insurance.start_at,
   });
-  const [isInsurance, setIsInsurance] = useState(
-    Object.values(insuranceData).some((x) => x !== "")
-  );
+  // const [isInsurance, setIsInsurance] = useState(
+  //   Object.values(insuranceData).some((x) => x !== "")
+  // );
 
   const { ins_code, ins_type, ins_company, start_at } = insuranceData;
 
@@ -74,10 +74,6 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
       selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_company,
     startAt = selectedEmpolyee.insurance && selectedEmpolyee.insurance.start_at;
 
-  for (let i = 0; i < Object.values(insuranceData).length; i++) {
-    let obj = Object.values(insuranceData)[i];
-    console.log(obj === "");
-  }
   const {
     name,
     type,
@@ -141,7 +137,6 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
       setCertificateImg(e.target.files[0]);
     }
   }
-
   //select locations
   const { data: stores } = useQuery(
     "fetch/locations",
@@ -158,9 +153,10 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
     },
     { refetchOnWindowFocus: false }
   );
-
   //send empolyee data
   const sendEmpolyeeData = async () => {
+    console.log(is_primary);
+
     setData("");
 
     const formdata = new FormData();
@@ -168,9 +164,7 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
     if (nameVar !== name) {
       formdata.append("name", name);
     }
-    if (number !== numVar) {
-      formdata.append("number", number);
-    }
+
     if (number !== numVar) {
       formdata.append("number", number);
     }
@@ -204,15 +198,15 @@ const EditEmpolyee = ({ setStaffForm, id }) => {
     }
 
     if (primVar !== is_primary) {
-      formdata.append("is_primary", is_primary);
+      console.log("d");
+
+      formdata.append("is_primary", is_primary === "true" ? true : false);
+    }
+    if (is_primary !== "true") {
+      console.log("d");
+      formdata.append("store", location);
     }
 
-    if (locationVar !== location) {
-      formdata.append("store_address", location);
-    }
-    if (locationVar !== location) {
-      formdata.append("store_address", location);
-    }
     if (ins_code !== insCode) {
       formdata.append("insurance.ins_code", ins_code);
     }
