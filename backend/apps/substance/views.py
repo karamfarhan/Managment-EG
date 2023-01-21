@@ -1,3 +1,5 @@
+import copy
+
 from core.exports import ModelViewSetExportBase
 
 # from django.db.models import Prefetch
@@ -10,7 +12,7 @@ from rest_framework import status, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Category, Instrument, Substance
@@ -28,8 +30,14 @@ SUCCESS_UPDATE = "successfully updated"
 SUCCESS_DELETE = "successfully deleted"
 
 
+class CustomDjangoModelPermission(DjangoModelPermissions):
+    def __init__(self):
+        self.perms_map = copy.deepcopy(self.perms_map)  # from EunChong's answer
+        self.perms_map["GET"] = ["%(app_label)s.view_%(model_name)s"]
+
+
 class CategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Category.objects.all()
     pagination_class = None
     serializer_class = CategorySerializer
@@ -54,7 +62,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class SubstanceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (CustomDjangoModelPermission,)
     queryset = Substance.objects.select_related("created_by")
     pagination_class = PageNumberPagination
     serializer_class = SubstanceSerializer
@@ -82,12 +90,12 @@ class SubstanceSelectBarView(ListAPIView):
     # TODO should update the quere to get the fields i need not all fields->(id,name)
     queryset = Substance.objects.all()
     serializer_class = SubstanceSelectBarSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (CustomDjangoModelPermission,)
     pagination_class = None
 
 
 class InstrumentViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (DjangoModelPermissions,)
     queryset = Instrument.objects.select_related("created_by")
     pagination_class = PageNumberPagination
     serializer_class = InstrumentSerializer
@@ -109,5 +117,5 @@ class InstrumentSelectBarView(ListAPIView):
     #  TODO should update the quere to get the fields i need not all fields->(id,name)
     queryset = Instrument.objects.all()
     serializer_class = InstrumentSelectBarSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     pagination_class = None

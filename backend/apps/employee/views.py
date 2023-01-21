@@ -16,7 +16,7 @@ from .serializers import EmployeeActivitySerializer, EmployeeSelectBarSerializer
 
 
 class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Employee.objects.select_related("created_by", "insurance")
     pagination_class = PageNumberPagination
     serializer_class = EmployeeSerializer
@@ -52,12 +52,12 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 class EmployeeSelectBarView(ListAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSelectBarSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     pagination_class = None
 
 
 class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = EmployeeActivity.objects.all()
     pagination_class = PageNumberPagination
     serializer_class = EmployeeActivitySerializer

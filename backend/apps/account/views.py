@@ -134,7 +134,7 @@ class ChangePasswordView(UpdateAPIView):
 
     serializer_class = ChangePasswordSerializer
     model = Account
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, queryset=None):
         obj = self.request.user

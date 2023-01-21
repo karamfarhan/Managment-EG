@@ -34,12 +34,12 @@ SUCCESS_DELETE = "successfully deleted"
 class StoreSelectBarView(ListAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreSelectBarSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     pagination_class = None
 
 
 class StoreViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Store.objects.select_related("created_by")
     pagination_class = PageNumberPagination
     serializer_class = StoreSerializer
@@ -65,7 +65,7 @@ class StoreViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
 
 class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     # TODO the quere should be optimized
     queryset = Invoice.objects.all().prefetch_related(
@@ -104,7 +104,7 @@ class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
 
 class ImageViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Image.objects.select_related("media_pack")
     pagination_class = PageNumberPagination
     serializer_class = ImageSerializer

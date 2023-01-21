@@ -20,14 +20,11 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Add custom claims
-
-        # token['username'] = user.username
-
-        # Add more custom fields from your custom user model, If you have a
-        # custom user model.
-        # ...
+        token["username"] = user.username
+        token["is_superuser"] = user.is_superuser
+        user_permissions = [p.codename for p in user.user_permissions.all()]
+        group_permissions = [p.codename for group in user.groups.all() for p in group.permissions.all()]
+        token["permissions"] = list(set(user_permissions).union(set(group_permissions)))
         return token
 
     def validate(self, account):
@@ -44,7 +41,11 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
             if user:
                 if user.is_active:
                     data = super().validate(account)
-                    data["username"] = user.username
+                    # data["username"] = user.username
+                    # data["is_superuser"] = user.is_superuser
+                    # user_permissions = [p.codename for p in user.user_permissions.all()]
+                    # group_permissions = [p.codename for group in user.groups.all() for p in group.permissions.all()]
+                    # data["permissions"] = list(set(user_permissions).union(set(group_permissions)))
                     return data
                 else:
                     raise AuthenticationFailed(

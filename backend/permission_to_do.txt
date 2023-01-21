@@ -1,0 +1,2 @@
+1 - the dirvers can login and create activity for the cars they are realted to.
+2 - let the user can upload images for the store he realted to.

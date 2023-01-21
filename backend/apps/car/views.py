@@ -18,7 +18,7 @@ from .serializers import CarActivitySerializer, CarSerializer
 
 
 class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Car.objects.select_related("created_by", "driver")
     pagination_class = PageNumberPagination
     serializer_class = CarSerializer
@@ -37,7 +37,7 @@ class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
 
 class CarActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = CarActivity.objects.select_related("created_by")
     pagination_class = PageNumberPagination
     serializer_class = CarActivitySerializer
