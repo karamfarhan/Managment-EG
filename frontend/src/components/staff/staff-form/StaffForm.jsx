@@ -61,10 +61,24 @@ const StaffForm = ({ setStaffForm }) => {
 
   //validation
   if (
+    steps === 1 &&
     name.trim() !== "" &&
     type.trim() !== "" &&
     email.trim() !== "" &&
+    email.includes("@") &&
     signin_date.trim() !== ""
+  ) {
+    formIsValid = true;
+  }
+  //validation insurance
+  if (
+    (steps === 2 &&
+      isInsurance === "true" &&
+      ins_code.trim() !== "" &&
+      ins_company.trim() !== "" &&
+      ins_type.trim("") &&
+      start_at.trim() !== "") ||
+    isInsurance === "false"
   ) {
     formIsValid = true;
   }
@@ -148,7 +162,11 @@ const StaffForm = ({ setStaffForm }) => {
     }
     formdata.append("days_off", days_off);
     formdata.append("years_of_experiance", years_of_experiance);
-    if (Object.values(insuranceData).some((x) => x !== "")) {
+    if (
+      Object.values(insuranceData).some(
+        (x) => x !== "" && isInsurance === "true"
+      )
+    ) {
       formdata.append("insurance.ins_code", ins_code);
       formdata.append("insurance.ins_type", ins_type);
       formdata.append("insurance.start_at", start_at);
@@ -406,7 +424,10 @@ const StaffForm = ({ setStaffForm }) => {
 
       <div className={classes.arrows}>
         {steps !== 3 && (
-          <button onClick={nextStepHandler} type="button">
+          <button
+            onClick={nextStepHandler}
+            type="button"
+            disabled={!formIsValid}>
             التالي
           </button>
         )}

@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   empolyeePagination,
   empolyeeSearchPagination,
+  getEmpolyees,
 } from "../../../store/empolyees-slice";
 import Paginate from "../../UI/pagination/Paginate";
-import EmpolyeePhases from "../../UI/phase in/out/EmpolyeePhases";
 import ExportExcel from "../../UI/export/ExportExcel";
 
 //classes
 import classes from "./Empolyess.module.css";
+import AuthContext from "../../../context/Auth-ctx";
 
 const Empolyess = ({
   data,
@@ -21,16 +22,12 @@ const Empolyess = ({
   fetchSearchHandler,
 }) => {
   const dispatch = useDispatch();
-  //states
-  const [staffId, setStaffId] = useState("");
-  const [showPhasesForm, setShowPhasesForm] = useState(false);
+  const authCtx = useContext(AuthContext);
+  const { token } = authCtx;
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
   const empolyeeCount = empolyeeData && empolyeeData.count;
-
-  //set today activity
-  const [todayActivity, setTodayActivity] = useState("");
 
   //paginationFun
   const paginationFun = (obj) => {
@@ -41,29 +38,72 @@ const Empolyess = ({
     // //search pagination
     dispatch(empolyeeSearchPagination(obj));
   };
+  const today = new Date();
+  const time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-  //show phases
-  const showPhasesFormHandler = (id, activity) => {
-    //set id
-    setStaffId(id);
-    setShowPhasesForm(true);
-    setTodayActivity(activity);
+  //send phase/in
+  const sendPhaseIn = async (id) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/employees/${id}/activity/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            phase_in: time,
+          }),
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      if (res.ok) {
+        dispatch(getEmpolyees(token));
+      }
+
+      return await res.json();
+    } catch (err) {}
   };
 
-  //hide phase form
-  const hidePhaseFormHandler = () => {
-    setShowPhasesForm(false);
+  //send phase out
+  const sendPhaseOut = async (id, today_activity) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/employees/${id}/activity/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            phase_out: time,
+            id: today_activity,
+          }),
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      if (res.ok) {
+        dispatch(getEmpolyees(token));
+      }
+
+      return await res.json();
+    } catch (err) {}
   };
 
   return (
     <Fragment>
-      {showPhasesForm && (
+      {/* {showPhasesForm && (
         <EmpolyeePhases
           id={staffId}
           today_activity={todayActivity}
           hideForm={hidePhaseFormHandler}
         />
-      )}
+      )} */}
       <div className={classes["table_content"]}>
         <ExportExcel matter="employees" />
         <table>
@@ -111,16 +151,18 @@ const Empolyess = ({
                     <td> {el.days_off}</td>
                     <td> {el.note}</td>
                     <td>
-                      {el.today_activity !== false &&
-                        el.today_activity.phase_in !== null &&
-                        el.today_activity.phase_out !== null && (
-                          <ul>
+                      {el.today_activity !== false && (
+                        <ul>
+                          {el.today_activity.phase_in !== null && (
                             <li>معاد الحضور : {el.today_activity.phase_in} </li>
+                          )}
+                          {el.today_activity.phase_out !== null && (
                             <li>
                               معاد الانصارف : {el.today_activity.phase_out}
                             </li>
-                          </ul>
-                        )}
+                          )}
+                        </ul>
+                      )}
 
                       {(el.today_activity === false ||
                         el.today_activity.phase_out === null) && (
@@ -132,7 +174,9 @@ const Empolyess = ({
                                 : "green",
                           }}
                           onClick={() =>
-                            showPhasesFormHandler(el.id, el.today_activity)
+                            el.today_activity === false
+                              ? sendPhaseIn(el.id)
+                              : sendPhaseOut(el.id, el.today_activity.id)
                           }>
                           {(el.today_activity === false ||
                             el.today_activity.phase_in === null) &&
