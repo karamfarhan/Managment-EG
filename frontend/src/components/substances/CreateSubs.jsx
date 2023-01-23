@@ -1,5 +1,5 @@
 import { Fragment, useState, useContext, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AuthContext from "../../context/Auth-ctx";
 import SubstancesView from "./substances_view/SubstancesView";
 import { GiSaddle } from "react-icons/gi";
@@ -9,7 +9,6 @@ import classes from "./CreateSubs.module.css";
 import { getSubs } from "../../store/create-substance";
 import InstrumentsView from "./instruments_view/InstrumentsView";
 import { getInstruments } from "../../store/create-instruments";
-import { subsPagination } from "../../store/create-substance";
 const CreateSubs = () => {
   //for add matters
   const [showModel, setShowModel] = useState(false);
@@ -24,9 +23,7 @@ const CreateSubs = () => {
   //search value
   const [searchVal, setSearchVal] = useState("");
 
-  const authCtx = useContext(AuthContext);
-
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
 
   const dispatch = useDispatch();
 
@@ -35,7 +32,6 @@ const CreateSubs = () => {
     setShowModel(false);
     setShowInstrumentsForm(false);
   };
-  console.log(showMatters);
   //fetch matters
   useEffect(() => {
     if (

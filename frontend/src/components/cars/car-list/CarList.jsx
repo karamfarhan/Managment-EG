@@ -1,8 +1,7 @@
-import { Fragment, useState, useContext } from "react";
-import { useDispatch } from "react-redux";
+import { Fragment, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getCars } from "../../../store/cars-slice";
-import AuthContext from "../../../context/Auth-ctx";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
@@ -22,12 +21,11 @@ const CarList = ({
   const detailPageHandler = () => {
     navigate(`/cars/${driver}/${id}`);
   };
-  const authCtx = useContext(AuthContext);
+  const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [isDelete, setIsDelete] = useState(false);
   const [carId, setCarId] = useState("");
 
-  const { token } = authCtx;
   //delete handler
   const deleteHandler = async (id) => {
     try {

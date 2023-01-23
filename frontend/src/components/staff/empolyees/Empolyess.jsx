@@ -13,6 +13,8 @@ import ExportExcel from "../../UI/export/ExportExcel";
 //classes
 import classes from "./Empolyess.module.css";
 import AuthContext from "../../../context/Auth-ctx";
+import { useEffect } from "react";
+import { addToken } from "../../../store/auth-slice";
 
 const Empolyess = ({
   data,
@@ -22,8 +24,11 @@ const Empolyess = ({
   fetchSearchHandler,
 }) => {
   const dispatch = useDispatch();
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const token = useSelector((state) => state.authReducer.token);
+  console.log(token);
+  useEffect(() => {
+    dispatch(addToken());
+  }, [dispatch]);
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);

@@ -1,8 +1,10 @@
-import { useState, useContext } from "react";
-import AuthContext from "../../context/Auth-ctx";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Login from "./Login";
 import classes from "./AuthForm.module.css";
+import { login } from "../../store/auth-slice";
 const AuthForm = () => {
+  const dispatch = useDispatch();
   //email & password
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -10,10 +12,7 @@ const AuthForm = () => {
   });
   //
   const [err, setErr] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  //auth context
-  const authCtx = useContext(AuthContext);
-  console.log(authCtx);
+
   let form = false;
 
   if (userInfo.email !== "" && userInfo.password !== "") {
@@ -21,49 +20,16 @@ const AuthForm = () => {
   }
 
   //login
-
-  const loggin = async () => {
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/account/login_token/",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-
-          body: JSON.stringify({
-            email: userInfo.email,
-            password: userInfo.password,
-          }),
-        }
-      );
-      const data = await response.json();
-      setIsLoading(false);
-      let token = data.access;
-      authCtx.login(token, data);
-      console.log(data);
-
-      if (!response.ok) {
-        throw new Error(data.detail);
-      }
-    } catch (err) {
-      console.log(err.message);
-      setErr(err.message);
-      setIsLoading(false);
-    }
+  const { isLoading } = useSelector((state) => state.authReducer);
+  const loggin = () => {
+    dispatch(login(userInfo));
   };
 
-  console.log(authCtx.isLoggedIn);
-
   //submit hanlder
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     // avoid browser behavior
     e.preventDefault();
-    await loggin();
-    //    dispatch(authAct.onLogin());
+    loggin();
   };
 
   const unAuthUser = err !== null ? classes.unauth : "";
@@ -79,8 +45,7 @@ const AuthForm = () => {
                 <button
                   disabled={!form}
                   type="submit"
-                  className={classes.submitBtn}
-                >
+                  className={classes.submitBtn}>
                   تسجيل الدخول
                 </button>
               )}

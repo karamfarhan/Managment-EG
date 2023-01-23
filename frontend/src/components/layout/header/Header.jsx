@@ -1,18 +1,17 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { AiFillSetting, AiOutlineLogout } from "react-icons/ai";
 import classes from "./Header.module.css";
-import AuthContext from "../../../context/Auth-ctx";
+import { logout } from "../../../store/auth-slice";
+
 export const Header = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const [signoutBtn, setSignoutBtn] = useState(false);
-  const authCtx = useContext(AuthContext);
-  const { userInfom } = authCtx;
-  console.log(userInfom);
   //logout handler
   const logoutHandler = () => {
-    authCtx.logout();
+    dispatch(logout());
   };
   // signout btn
   const toggleBtn = () => {
@@ -50,7 +49,7 @@ export const Header = () => {
               </div>
             )}
           </div>
-          <p>{userInfom.username} </p>
+          {/* <p>{userInfom.username} </p> */}
         </div>
         <h1>Mountain for Construction </h1>
       </div>

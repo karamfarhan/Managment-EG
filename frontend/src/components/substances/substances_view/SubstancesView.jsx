@@ -1,7 +1,6 @@
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import AuthContext from "../../../context/Auth-ctx";
 import {
   deleteSubs,
   searchSubstances,
@@ -29,8 +28,7 @@ const SubstancesView = ({
   //search value
 
   const dispatch = useDispatch();
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
 
   const navigate = useNavigate();
 

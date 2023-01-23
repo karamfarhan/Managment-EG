@@ -42,8 +42,7 @@ const Store = () => {
     [dispatch]
   );
 
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
 
   //store data
   const { store_data } = useSelector((state) => state.storeSlice);

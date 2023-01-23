@@ -1,14 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import AuthContext from "../../../../context/Auth-ctx";
 import Inputs from "../../../UI/inputs/Inputs";
 import EditInsurance from "./editInsurance/EditInsurance";
 import classes from "./EditEmpolyee.module.css";
 import { useSelector } from "react-redux";
 const EditEmpolyee = () => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
   const navigate = useNavigate();
 
   const params = useParams();

@@ -1,17 +1,16 @@
-import { useState, useContext } from "react";
-import AuthContext from "../../../context/Auth-ctx";
+import { useState } from "react";
 import Backdrop from "../backdrop/Backdrop";
 import { FaCarSide } from "react-icons/fa";
 import Inputs from "../inputs/Inputs";
 
 import classes from "./CreateCar.module.css";
 import { useQuery } from "react-query";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCars } from "../../../store/cars-slice";
 const CreateCar = ({ hideModel }) => {
   const dispatch = useDispatch();
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   //hide model
 
   const [carData, setCarData] = useState({

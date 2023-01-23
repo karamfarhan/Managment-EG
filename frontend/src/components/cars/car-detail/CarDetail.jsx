@@ -1,8 +1,7 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import Paginate from "../../UI/pagination/Paginate";
-import AuthContext from "../../../context/Auth-ctx";
 import classes from "./CarDetail.module.css";
 import CarActivity from "../../UI/car-activity/CarActivity";
 import CarDetailList from "./CarDetailList";
@@ -12,8 +11,8 @@ import { getCarPagination } from "../../../store/car-activity";
 const CarDetail = () => {
   const [showForm, setShowForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const dispatch = useDispatch();
   const params = useParams();
 

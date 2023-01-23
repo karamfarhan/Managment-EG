@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import Bar from "../UI/bars/Bar";
 import Search from "../UI/search/Search";
 import { AiFillCar } from "react-icons/ai";
@@ -12,20 +12,17 @@ import {
   CarsSearchPagination,
   getCars,
 } from "../../store/cars-slice";
-import AuthContext from "../../context/Auth-ctx";
 import Paginate from "../UI/pagination/Paginate";
 import CarList from "./car-list/CarList";
-import { Route, Routes } from "react-router-dom";
-import EditCar from "./edit-car/EditCar";
+
 const Cars = () => {
-  const authCtx = useContext(AuthContext);
+  const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [shoeForm, setShowForm] = useState(false);
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //search
   const [searchValue, setSearchValue] = useState("");
-  const { token } = authCtx;
   //fetch cars
   useEffect(() => {
     if (currentPage === 1 && searchValue.trim() === "") {

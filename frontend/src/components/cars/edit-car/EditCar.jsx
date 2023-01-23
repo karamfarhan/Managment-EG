@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
 import { FaCarSide } from "react-icons/fa";
-import AuthContext from "../../../context/Auth-ctx";
 import { useQuery } from "react-query";
 //classes
 import classes from "./EditCar.module.css";
+import { useSelector } from "react-redux";
 
 const EditCar = ({ hideModel }) => {
   const [car, setCar] = useState({});
   const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const params = useParams();
   //car id
   const { driverId } = params;

@@ -1,14 +1,11 @@
-import { Fragment, useState, useContext } from "react";
-import { useDispatch } from "react-redux";
-import AuthContext from "../../../context/Auth-ctx";
+import { Fragment, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "../backdrop/Backdrop";
 import Inputs from "../inputs/Inputs";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import classes from "./CreateSubsModel.module.css";
 import { createSubs } from "../../../store/create-substance";
-import { getSubs } from "../../../store/create-substance";
 import { createInstruments } from "../../../store/create-instruments";
-import { getInstruments } from "../../../store/create-instruments";
 const CreateSubsModel = ({
   hideSubstancesHandler,
   showMattersForm,
@@ -16,8 +13,7 @@ const CreateSubsModel = ({
   showMattersPage,
   instrumentsPage,
 }) => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
 
   const [substancesData, setSubstancesData] = useState({
     name: "",
@@ -27,8 +23,6 @@ const CreateSubsModel = ({
     last_maintain: "",
     maintain_place: "",
   });
-
-
 
   const [selectType, setSelectType] = useState(["kilogram", "liter", "ton"]);
   const [selectBox, setSelectBox] = useState("");

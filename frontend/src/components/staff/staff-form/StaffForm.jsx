@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import AuthContext from "../../../context/Auth-ctx";
+import { useSelector } from "react-redux";
 import Inputs from "../../UI/inputs/Inputs";
 import Insurance from "./insurance/Insurance";
 import classes from "./StaffFrom.module.css";
 const StaffForm = ({ setStaffForm }) => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const [isInsurance, setIsInsurance] = useState("");
 
   //form validation
@@ -66,7 +66,8 @@ const StaffForm = ({ setStaffForm }) => {
     type.trim() !== "" &&
     email.trim() !== "" &&
     email.includes("@") &&
-    signin_date.trim() !== "" && is_primary !== ""
+    signin_date.trim() !== "" &&
+    is_primary !== ""
   ) {
     formIsValid = true;
   }
@@ -412,12 +413,7 @@ const StaffForm = ({ setStaffForm }) => {
         )}
       </div>
       <div className={classes.actions}>
-        {steps === 3 && (
-          <button type="submit">
-            اضافة
-          </button>
-        )}
-    
+        {steps === 3 && <button type="submit">اضافة</button>}
       </div>
 
       <div className={classes.arrows}>

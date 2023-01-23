@@ -1,15 +1,11 @@
-import { useContext } from "react";
 import { useQuery } from "react-query";
-import AuthContext from "../../../context/Auth-ctx";
+import { useSelector } from "react-redux";
 
 //classes
 import classes from "./Excel.module.css";
 
 const ExportExcel = ({ matter, id }) => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
-  console.log(matter);
-  console.log(id);
+  const { token } = useSelector((state) => state.authReducer);
 
   let link;
 

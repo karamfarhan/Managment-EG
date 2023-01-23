@@ -1,8 +1,7 @@
-import { useState, Fragment, useContext } from "react";
+import { useState, Fragment } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getSubs } from "../../../store/create-substance";
-import AuthContext from "../../../context/Auth-ctx";
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
 import classes from "./EditFormSubs.module.css";
@@ -10,8 +9,8 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   const params = useParams();
   const dispatch = useDispatch();
   const elId = parseInt(params.edit);
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const selectedSubs =
     subsEl && subsEl.results && subsEl.results.find((el) => el.id === elId);
   if (selectedSubs === null) {

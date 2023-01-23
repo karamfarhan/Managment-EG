@@ -24,9 +24,7 @@ const Gallery = () => {
 
   const [searchValue, setSearchValue] = useState("");
 
-  const authCtx = useContext(AuthContext);
-
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
 
   /**************************/
 

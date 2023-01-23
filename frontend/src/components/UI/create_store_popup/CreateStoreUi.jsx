@@ -1,25 +1,21 @@
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState } from "react";
 import ReactDOM from "react-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Inputs from "../inputs/Inputs";
 import { AiOutlineClose } from "react-icons/ai";
 import classes from "./CreateStoreUI.module.css";
-import { createStore, getStores } from "../../../store/create-store-slice";
-import AuthContext from "../../../context/Auth-ctx";
+import { createStore } from "../../../store/create-store-slice";
 import Backdrop from "../backdrop/Backdrop";
 
 export const InventoryCreator = ({ hideFormHandler }) => {
-  const [inputFields, setInputFields] = useState([
-    { name: "", quantity: "", category: "" },
-  ]);
-
   const [storeData, setStoreData] = useState({
     name: "",
     address: "",
     description: "",
   });
-  const { token } = useContext(AuthContext);
+  const { token } = useSelector((state) => state.authReducer);
+
   const dispatch = useDispatch();
   const { name, address, description } = storeData;
   //form validation

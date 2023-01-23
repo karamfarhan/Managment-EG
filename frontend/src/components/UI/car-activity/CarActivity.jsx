@@ -1,15 +1,15 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Backdrop from "../backdrop/Backdrop";
 import Inputs from "../inputs/Inputs";
 import Items from "./Items";
 import { BsPlusLg } from "react-icons/bs";
 import classes from "./CarActivity.module.css";
 import { useQuery } from "react-query";
-import AuthContext from "../../../context/Auth-ctx";
+import { useSelector } from "react-redux";
 
 const CarActivity = ({ hideModel, id, driver }) => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const [carData, setCarData] = useState({
     activity_date: "",
     distance: "",

@@ -1,24 +1,18 @@
-import { useContext, useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-
 import Bar from "../UI/bars/Bar";
 import { AiOutlineUserAdd } from "react-icons/ai";
-
-//style
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import StaffForm from "./staff-form/StaffForm";
-import AuthContext from "../../context/Auth-ctx";
 import Empolyess from "./empolyees/Empolyess";
-import classes from "./Staff.module.css";
 import { empolyeeSearch, getEmpolyees } from "../../store/empolyees-slice";
 import Search from "../UI/search/Search";
 import EditEmpolyee from "./empolyees/edit-empolyee/EditEmpolyee";
-
+import classes from "./Staff.module.css";
 export const Staff = () => {
-  const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const location = useLocation();
   const { pathname } = location;
 

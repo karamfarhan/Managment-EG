@@ -1,7 +1,6 @@
-import { useState, Fragment, useContext } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import AuthContext from "../../../context/Auth-ctx";
+import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
 import classes from "./EditFormInstrum.module.css";
@@ -10,8 +9,8 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
   const params = useParams();
   const dispatch = useDispatch();
   const elId = parseInt(params.edit);
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const selectedInstrument =
     instruments &&
     instruments.results &&
@@ -25,8 +24,6 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
     maintain_site: selectedInstrument.maintain_place,
     in_action: selectedInstrument.in_action,
   });
-
-  console.log(selectedInstrument);
 
   let nameVar = selectedInstrument.name,
     descriptionVar = selectedInstrument.description,

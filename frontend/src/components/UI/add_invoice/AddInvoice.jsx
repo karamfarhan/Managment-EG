@@ -7,6 +7,7 @@ import InstrumentsItems from "./InstrumentsItems";
 import { BsPlusLg } from "react-icons/bs";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import classes from "./AddInvoice.module.css";
+import { useSelector } from "react-redux";
 
 const AddInvoice = ({ hideModel, storeName, storeId }) => {
   const [inputFields, setInputFields] = useState([
@@ -20,11 +21,8 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   //note
   const [note, setNote] = useState("");
 
-  //context
-  const authCtx = useContext(AuthContext);
-
   //token
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
 
   //form validation
   let formIsValid = false;

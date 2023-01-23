@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import authSlice from "./auth-slice";
 import cartActivitySlice from "./car-activity";
 import carSlice from "./cars-slice";
 import instrumentsSlice from "./create-instruments";
@@ -11,6 +12,7 @@ import images_slice from "./upload-img-slice";
 
 const store = configureStore({
   reducer: {
+    authReducer: authSlice.reducer,
     storeSlice: storeSlice.reducer,
     imageReducer: images_slice.reducer,
     notificationRed: notificationSlice.reducer,

@@ -1,11 +1,7 @@
 import { Fragment } from "react";
 import ReactDOM from "react-dom";
 import classes from "./ImgModel.module.css";
-import {
-  AiOutlineClose,
-  AiOutlineDoubleRight,
-  AiOutlineDoubleLeft,
-} from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import Backdrop from "../backdrop/Backdrop";
 
 export const ImgContainer = ({ imgSrc, closeModelHandler, description }) => {

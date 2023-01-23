@@ -1,7 +1,6 @@
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Routes, Route } from "react-router-dom";
-import AuthContext from "../../../context/Auth-ctx";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import {
   deleteInstruments,
@@ -20,9 +19,8 @@ const InstrumentsView = ({
   searchVal,
   setSearchVal,
 }) => {
-  const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [isDelete, setIsDelete] = useState(false);
   const [instrumentId, setInstrumentId] = useState("");
