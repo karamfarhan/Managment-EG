@@ -18,7 +18,6 @@ const CreateSubsModel = ({
 }) => {
   const authCtx = useContext(AuthContext);
   const { token } = authCtx;
-  const [categortyBtn, setCategoryBtn] = useState(["مادة سائلة", "مادة صلبة"]);
 
   const [substancesData, setSubstancesData] = useState({
     name: "",
@@ -28,6 +27,9 @@ const CreateSubsModel = ({
     last_maintain: "",
     maintain_place: "",
   });
+
+
+
   const [selectType, setSelectType] = useState(["kilogram", "liter", "ton"]);
   const [selectBox, setSelectBox] = useState("");
 

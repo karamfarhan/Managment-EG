@@ -66,7 +66,7 @@ const StaffForm = ({ setStaffForm }) => {
     type.trim() !== "" &&
     email.trim() !== "" &&
     email.includes("@") &&
-    signin_date.trim() !== ""
+    signin_date.trim() !== "" && is_primary !== ""
   ) {
     formIsValid = true;
   }
@@ -304,7 +304,7 @@ const StaffForm = ({ setStaffForm }) => {
                     is_primary: e.target.value,
                   })
                 }>
-                <option selected disabled>
+                <option selected hidden>
                   موظف في مقر الشركة
                 </option>
                 ْ<option value={true}>نعم</option>
@@ -413,13 +413,11 @@ const StaffForm = ({ setStaffForm }) => {
       </div>
       <div className={classes.actions}>
         {steps === 3 && (
-          <button type="submit" disabled={!formIsValid}>
+          <button type="submit">
             اضافة
           </button>
         )}
-        {/* <button type="button" onClick={cancelFormHandler}>
-          الغاء
-        </button> */}
+    
       </div>
 
       <div className={classes.arrows}>
