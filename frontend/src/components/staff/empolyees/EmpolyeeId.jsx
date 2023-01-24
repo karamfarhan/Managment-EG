@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import AuthContext from "../../../context/Auth-ctx";
@@ -7,7 +7,7 @@ import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import ImgModel from "../../UI/imgModel/ImgModel";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import { getEmpolyees } from "../../../store/empolyees-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InsuranceSection from "./InsuranceSection";
 import ImagesSecion from "./ImagesSecion";
 import AboutSecion from "./AboutSecion";
@@ -22,11 +22,10 @@ const EmpolyeeId = () => {
   const [imgModel, setImgModel] = useState(false);
   //about page
   const [sections, setSections] = useState("general");
-  const authCtx = useContext(AuthContext);
   const [isDelete, setIsDelete] = useState(false);
   const [staffId, setStaffId] = useState("");
 
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
   const navigate = useNavigate();
 
   const params = useParams();
