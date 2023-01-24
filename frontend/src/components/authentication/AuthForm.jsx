@@ -20,7 +20,7 @@ const AuthForm = () => {
   }
 
   //login
-  const { isLoading } = useSelector((state) => state.authReducer);
+  const { isLoading, httpErr } = useSelector((state) => state.authReducer);
   const loggin = () => {
     dispatch(login(userInfo));
   };
@@ -50,7 +50,7 @@ const AuthForm = () => {
                 </button>
               )}
               {isLoading && <p> انتظر..... </p>}
-              {err && <p className="err-msg"> {err} </p>}
+              {httpErr !== ""  && !isLoading && <p className="err-msg"> {httpErr} </p>}
             </div>
           </form>
         </div>
