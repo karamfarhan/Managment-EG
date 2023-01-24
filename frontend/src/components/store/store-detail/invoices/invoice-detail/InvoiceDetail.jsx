@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
+import {useSelector} from "react-redux"
 import { useQuery } from "react-query";
 import AuthContext from "../../../../../context/Auth-ctx";
 
@@ -8,8 +9,8 @@ import classes from "./InvoiceDetail.module.css";
 import ExportExcel from "../../../../UI/export/ExportExcel";
 
 const InvoiceDetail = () => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const param = useParams();
 
   //invoice id
