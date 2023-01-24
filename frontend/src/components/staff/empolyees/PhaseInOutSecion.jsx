@@ -1,11 +1,12 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
+import {useSelector} from "react-redux"
 import { useQuery } from "react-query";
 import AuthContext from "../../../context/Auth-ctx";
 import Search from "../../UI/search/Search";
 
 const PhaseInOutSecion = ({ id }) => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   const [search, setSearch] = useState("");
 
   const { data, refetch: searchData } = useQuery(
