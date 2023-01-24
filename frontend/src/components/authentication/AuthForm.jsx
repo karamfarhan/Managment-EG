@@ -11,7 +11,6 @@ const AuthForm = () => {
     password: "",
   });
   //
-  const [err, setErr] = useState(null);
 
   let form = false;
 
@@ -32,8 +31,8 @@ const AuthForm = () => {
     loggin();
   };
 
-  const unAuthUser = err !== null ? classes.unauth : "";
-
+  const unAuthUser = httpErr && httpErr !== "" ? classes.unauth : "";
+  console.log(httpErr);
   return (
     <main>
       <div className={`${classes.main} ${unAuthUser}`}>
@@ -50,7 +49,9 @@ const AuthForm = () => {
                 </button>
               )}
               {isLoading && <p> انتظر..... </p>}
-              {httpErr !== ""  && !isLoading && <p className="err-msg"> {httpErr} </p>}
+              {httpErr !== null && httpErr !== "" && !isLoading && (
+                <p className="err-msg"> {httpErr} </p>
+              )}
             </div>
           </form>
         </div>

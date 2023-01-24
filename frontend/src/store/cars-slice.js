@@ -1,21 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { logout } from "./auth-slice";
 
 //GET CARS
-export const getCars = createAsyncThunk("get/carts", async (arg) => {
-  try {
-    const res = await fetch("http://127.0.0.1:8000/cars/", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${arg}`,
-      },
-    });
-    if (!res.ok) throw new Error(res.statusText);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.log(err);
+export const getCars = createAsyncThunk(
+  "get/carts",
+  async (arg, { dispatch }) => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/cars/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${arg}`,
+        },
+      });
+      if (!res.ok) throw new Error(res.statusText);
+      if (res.status === 401) {
+        return dispatch(logout());
+      }
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
+);
 
 // CARS PAGINATION
 export const CarsPaginations = createAsyncThunk(

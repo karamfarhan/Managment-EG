@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { logout } from "./auth-slice";
 //pagination
 
 export const getCarPagination = createAsyncThunk(
   "get/carsPagination",
-  async (arg) => {
+  async (arg, { dispatch }) => {
     try {
       const res = await fetch(
         `http://127.0.0.1:8000/cars/${arg.id}/activity/?page=${arg.page}`,
@@ -14,6 +15,9 @@ export const getCarPagination = createAsyncThunk(
           },
         }
       );
+      if (res.status === 401) {
+        return dispatch(logout());
+      }
       const data = await res.json();
       return data;
     } catch (err) {

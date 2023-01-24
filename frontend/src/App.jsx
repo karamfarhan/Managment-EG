@@ -8,8 +8,7 @@ function App() {
   console.log(refresh);
   useEffect(() => {
     const timer = setInterval(() => {
-      if (isAuth) {
-        console.log(refresh);
+      if (isAuth && refresh) {
         dispatch(updateToken(refresh));
       }
     }, 24000);

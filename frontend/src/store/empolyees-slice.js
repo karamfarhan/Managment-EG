@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { logout } from "./auth-slice";
 
 //GET
 export const getEmpolyees = createAsyncThunk(
   "get/empolyees",
-  async (arg, { rejectWithValue }) => {
+  async (arg, ThunkAPI) => {
     try {
       const res = await fetch("http://127.0.0.1:8000/employees/", {
         method: "GET",
@@ -13,12 +14,12 @@ export const getEmpolyees = createAsyncThunk(
         },
       });
       if (res.status === 401) {
-        throw new Error(res.statusText);
+        return;
       }
       const data = await res.json();
       return data;
     } catch (err) {
-      return rejectWithValue(err);
+      ThunkAPI.dispatch(logout());
     }
   }
 );

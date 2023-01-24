@@ -1,24 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { logout } from "./auth-slice";
 
-export const getStores = createAsyncThunk("createStore/data", async (arg) => {
-  try {
-    const res = await fetch("http://127.0.0.1:8000/stores/", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${arg}`,
-      },
-    });
-    if (!res.ok) {
-      throw new Error(res.statusText || "حدث خطأ");
+export const getStores = createAsyncThunk(
+  "createStore/data",
+  async (arg, ThunkAPI) => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/stores/", {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${arg}`,
+        },
+      });
+      if (res.status === 401) {
+        return;
+      }
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      ThunkAPI.dispatch(logout());
     }
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.log(err);
   }
-});
+);
 export const createStore = createAsyncThunk(
   "createStore/data",
   async (arg, ThunkAPI) => {

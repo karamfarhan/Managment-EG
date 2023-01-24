@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,9 +11,6 @@ import ExportExcel from "../../UI/export/ExportExcel";
 
 //classes
 import classes from "./Empolyess.module.css";
-import AuthContext from "../../../context/Auth-ctx";
-import { useEffect } from "react";
-import { addToken } from "../../../store/auth-slice";
 
 const Empolyess = ({
   data,
@@ -25,10 +21,6 @@ const Empolyess = ({
 }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
-  console.log(token);
-  useEffect(() => {
-    dispatch(addToken());
-  }, [dispatch]);
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
