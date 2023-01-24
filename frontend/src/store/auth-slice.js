@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 //Login
-export const login = createAsyncThunk("login/token", async (arg) => {
+export const login = createAsyncThunk("login/token", async (arg, {rejectWithValue}) => {
   try {
     const response = await fetch("http://127.0.0.1:8000/account/login_token/", {
       method: "POST",
@@ -14,13 +14,14 @@ export const login = createAsyncThunk("login/token", async (arg) => {
         password: arg.password,
       }),
     });
-    return await response.json();
 
-    // if (!response.ok) {
-    //   throw new Error(data.detail);
-    // }
+    if (!response.ok) {
+      return rejectWithValue(response.statusText);
+    }
+    return await response.json();
+  
   } catch (err) {
-    console.log(err.message);
+    throw rejectWithValue(err.message)
   }
 });
 
@@ -45,20 +46,19 @@ export const updateToken = createAsyncThunk("refresh/token", async (arg) => {
 const authSlice = createSlice({
   name: "login",
   initialState: {
+    httpErr: "",
     msg: "",
     user: "",
-    token: localStorage.getItem("token-management") || "",
-    refresh: localStorage.getItem("refresh-token") || "",
+    token: localStorage.getItem("token-management") || null,
+    refresh: localStorage.getItem("refresh-token") || null,
     isLoading: false,
-    error: "",
     isAuth: localStorage.getItem("token-management") ? true : false,
   },
   reducers: {
-    addToken: (state) => {
-      state.token = localStorage.getItem("token-management");
-    },
+
     logout: (state) => {
       state.token = null;
+      state.refresh = null;
       localStorage.clear();
       state.isAuth = false;
     },
@@ -74,11 +74,16 @@ const authSlice = createSlice({
       state.isAuth = true;
       localStorage.setItem("token-management", action.payload.access);
       localStorage.setItem("refresh-token", action.payload.refresh);
-      console.log(state.refresh);
+      console.log(action);
+      state.httpErr = action.payload;
+      console.log(state.httpErr)
     },
     [login.rejected]: (state, action) => {
       state.isLoading = false;
       state.isAuth = false;
+      state.httpErr = action.payload;
+      console.log(state.httpErr)
+
     },
   },
 });
