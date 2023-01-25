@@ -18,6 +18,7 @@ const EditEmpolyee = () => {
     empolyeeId.results &&
     empolyeeId.results.find((el) => el.id === parseInt(params.empId));
 
+    console.log(params.empId)
   const [data, setData] = useState("");
   //imgs
   const [identityImg, setIdentityImg] = useState(

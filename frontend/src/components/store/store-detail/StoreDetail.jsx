@@ -1,4 +1,5 @@
-import { useEffect, useContext, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
+import {useSelector} from 'react-redux'
 import { useParams } from "react-router-dom";
 import AuthContext from "../../../context/Auth-ctx";
 import ExportExcel from "../../UI/export/ExportExcel";
@@ -13,8 +14,7 @@ const StoreDetail = () => {
   const { storeId } = params;
 
   //token
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+ const {token} = useSelector((state)=>state.authReducer)
   //get store
 
   const getTheStore = useCallback(async () => {

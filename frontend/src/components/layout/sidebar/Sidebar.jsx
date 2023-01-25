@@ -74,7 +74,7 @@ const Sidebar = () => {
               <GalleryIcon />
             </span>
 
-            <p> معرض اليوميات</p>
+            <p> المشاريع</p>
           </NavLink>
         </li>
         <li>
