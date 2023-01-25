@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,6 +10,8 @@ import ExportExcel from "../../UI/export/ExportExcel";
 
 //classes
 import classes from "./Empolyess.module.css";
+import { useQuery } from "react-query";
+import { Fragment } from "react";
 
 const Empolyess = ({
   data,
@@ -38,6 +39,24 @@ const Empolyess = ({
   const today = new Date();
   const time =
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+  //get locations
+  //select locations
+  const { data: stores } = useQuery(
+    "fetch/locations",
+    async () => {
+      const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      return data;
+    },
+    { refetchOnWindowFocus: false }
+  );
 
   //send phase/in
   const sendPhaseIn = async (id) => {
@@ -91,29 +110,17 @@ const Empolyess = ({
       return await res.json();
     } catch (err) {}
   };
+  console.log(stores);
+  console.log(data);
 
   return (
     <Fragment>
-      {/* {showPhasesForm && (
-        <EmpolyeePhases
-          id={staffId}
-          today_activity={todayActivity}
-          hideForm={hidePhaseFormHandler}
-        />
-      )} */}
       <div className={classes["table_content"]}>
         <ExportExcel matter="employees" />
         <table>
           <thead>
             <th>أسم الموظف</th>
-            <th>رقم الهاتف</th>
-            <th>البريد الاكتروني</th>
             <th>المسمي الوظيفي</th>
-            <th>تاريخ التوظيف</th>
-            <th>مقر العمل</th>
-            <th>التأمين</th>
-            <th>عدد الاجازات</th>
-            <th>محلاظة</th>
             <th>الحضور</th>
           </thead>
 
@@ -127,26 +134,8 @@ const Empolyess = ({
                       <Link to={`/staff/${el.id}`}>{el.name}</Link>
                     </td>
 
-                    <td> {el.number}</td>
-                    <td> {el.email}</td>
                     <td> {el.type}</td>
-                    <td> {el.signin_date}</td>
-                    <td>
-                      {el.store_address === null
-                        ? "مقر الشركة"
-                        : el.store_address}
-                    </td>
-                    <td>
-                      {el.insurance !== null && (
-                        <ul>
-                          <li>
-                            رقم التأمين : <span>{el.insurance.ins_code} </span>{" "}
-                          </li>
-                        </ul>
-                      )}
-                    </td>
-                    <td> {el.days_off}</td>
-                    <td> {el.note}</td>
+
                     <td>
                       {el.today_activity !== false && (
                         <ul>
