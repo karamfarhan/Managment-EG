@@ -16,11 +16,6 @@ export const Staff = () => {
   const location = useLocation();
   const { pathname } = location;
 
-  // const { unAuth } = useSelector((state) => state.empolyeeReducer);
-  // if (unAuth !== null) {
-  //   authCtx.logout();
-  // }
-  // console.log(unAuth, "ll");
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //show staff form
@@ -48,6 +43,19 @@ export const Staff = () => {
 
     dispatch(empolyeeSearch(obj));
   }
+  console.log(empolyees.results);
+
+  let result =
+    empolyees &&
+    empolyees.results &&
+    empolyees.results.reduce(function (r, a) {
+      r[a.store_address] = r[a.store_address] || [];
+      r[a.store_address].push(a);
+      return r;
+    }, Object.create(null));
+
+  console.log(result);
+
   return (
     <div dir="rtl">
       {!staffForm && location.pathname === "/staff" && (
@@ -77,7 +85,7 @@ export const Staff = () => {
         empolyees.count > 0 &&
         location.pathname === "/staff" && (
           <Empolyess
-            data={empolyees}
+            data={result}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             searchValue={searchValue}

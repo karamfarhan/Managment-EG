@@ -1,9 +1,10 @@
-.table_content {
+.content h2 {
   padding: 30px 0;
-  overflow: auto;
-  max-height: 450px;
+  text-align: center;
 }
-
+.content {
+  overflow: auto;
+}
 .table_content table {
   width: 100%;
   text-align: center;
@@ -13,6 +14,8 @@
 .table_content table td {
   padding: 0.75rem;
   min-width: 120px;
+  font-size: 20px;
+  border: 1px solid;
 }
 .table_content table thead {
   font-size: 13px;

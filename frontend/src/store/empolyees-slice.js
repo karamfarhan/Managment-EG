@@ -14,12 +14,12 @@ export const getEmpolyees = createAsyncThunk(
         },
       });
       if (res.status === 401) {
-        return;
+        return ThunkAPI.dispatch(logout());
       }
       const data = await res.json();
       return data;
     } catch (err) {
-      ThunkAPI.dispatch(logout());
+      return ThunkAPI.dispatch(logout());
     }
   }
 );

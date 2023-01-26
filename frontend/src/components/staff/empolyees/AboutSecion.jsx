@@ -19,6 +19,9 @@ const AboutSecion = ({ empolyee }) => {
       <p>
         عدد الأجازات :<span>{empolyee.days_off} </span>
       </p>
+      <p>
+        ملاحظات :<span>{empolyee.note} </span>
+      </p>
     </>
   );
 };

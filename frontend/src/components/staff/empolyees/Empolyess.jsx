@@ -117,7 +117,79 @@ const Empolyess = ({
     <Fragment>
       <div className={classes["table_content"]}>
         <ExportExcel matter="employees" />
-        <table>
+
+        {Object.entries(data).map(([key, value], i) => {
+          return (
+            <div key={i} className={classes.content}>
+              <h2>
+                {" "}
+                كشف العاملين ({key === "null" ? "المكتب الاداري" : key}){" "}
+              </h2>
+              <table>
+                <thead>
+                  <th>أسم الموظف</th>
+                  <th>المسمي الوظيفي</th>
+                  <th>الحضور</th>
+                </thead>
+                {value.map((e, i) => {
+                  return (
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Link to={`/staff/${e.id}`}>{e.name}</Link>
+                        </td>
+                        <td> {e.type} </td>
+                        <td>
+                          {e.today_activity !== false && (
+                            <ul>
+                              {e.today_activity.phase_in !== null && (
+                                <li>
+                                  معاد الحضور : {e.today_activity.phase_in}{" "}
+                                </li>
+                              )}
+                              {e.today_activity.phase_out !== null && (
+                                <li>
+                                  معاد الانصارف : {e.today_activity.phase_out}
+                                </li>
+                              )}
+                            </ul>
+                          )}
+
+                          {(e.today_activity === false ||
+                            e.today_activity.phase_out === null) && (
+                            <button
+                              style={{
+                                backgroundColor:
+                                  e.today_activity.phase_out === null
+                                    ? "#da3230"
+                                    : "green",
+                              }}
+                              onClick={() =>
+                                e.today_activity === false
+                                  ? sendPhaseIn(e.id)
+                                  : sendPhaseOut(e.id, e.today_activity.id)
+                              }>
+                              {(e.today_activity === false ||
+                                e.today_activity.phase_in === null) &&
+                                "سجل الحضور"}
+
+                              {e.today_activity &&
+                                e.today_activity.phase_in !== "" &&
+                                e.today_activity.phase_out === null &&
+                                "سجل الانصراف"}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
+              </table>
+            </div>
+          );
+        })}
+
+        {/* <table>
           <thead>
             <th>أسم الموظف</th>
             <th>المسمي الوظيفي</th>
@@ -125,61 +197,9 @@ const Empolyess = ({
           </thead>
 
           <tbody>
-            {data &&
-              data.results &&
-              data.results.map((el) => {
-                return (
-                  <tr key={el.id}>
-                    <td>
-                      <Link to={`/staff/${el.id}`}>{el.name}</Link>
-                    </td>
-
-                    <td> {el.type}</td>
-
-                    <td>
-                      {el.today_activity !== false && (
-                        <ul>
-                          {el.today_activity.phase_in !== null && (
-                            <li>معاد الحضور : {el.today_activity.phase_in} </li>
-                          )}
-                          {el.today_activity.phase_out !== null && (
-                            <li>
-                              معاد الانصارف : {el.today_activity.phase_out}
-                            </li>
-                          )}
-                        </ul>
-                      )}
-
-                      {(el.today_activity === false ||
-                        el.today_activity.phase_out === null) && (
-                        <button
-                          style={{
-                            backgroundColor:
-                              el.today_activity.phase_out === null
-                                ? "#da3230"
-                                : "green",
-                          }}
-                          onClick={() =>
-                            el.today_activity === false
-                              ? sendPhaseIn(el.id)
-                              : sendPhaseOut(el.id, el.today_activity.id)
-                          }>
-                          {(el.today_activity === false ||
-                            el.today_activity.phase_in === null) &&
-                            "سجل الحضور"}
-
-                          {el.today_activity &&
-                            el.today_activity.phase_in !== "" &&
-                            el.today_activity.phase_out === null &&
-                            "سجل الانصراف"}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+          
           </tbody>
-        </table>
+        </table> */}
         {empolyeeCount > 10 && (
           <Paginate
             setCurrentPage={setCurrentPage}
