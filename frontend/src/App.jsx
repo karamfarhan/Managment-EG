@@ -5,13 +5,12 @@ import { updateToken } from "./store/auth-slice";
 function App() {
   const dispatch = useDispatch();
   const { refresh, isAuth } = useSelector((state) => state.authReducer);
-  console.log(refresh);
   useEffect(() => {
     const timer = setInterval(() => {
       if (refresh) {
         dispatch(updateToken(refresh));
       }
-    }, 60000);
+    }, 55000);
     return () => clearInterval(timer);
   }, [dispatch, isAuth, refresh]);
 

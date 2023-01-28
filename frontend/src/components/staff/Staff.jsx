@@ -43,7 +43,6 @@ export const Staff = () => {
 
     dispatch(empolyeeSearch(obj));
   }
-  console.log(empolyees.results);
 
   let result =
     empolyees &&
@@ -53,8 +52,6 @@ export const Staff = () => {
       r[a.store_address].push(a);
       return r;
     }, Object.create(null));
-
-  console.log(result);
 
   return (
     <div dir="rtl">

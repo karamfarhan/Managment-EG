@@ -4,7 +4,6 @@ export const uploadImgs = createAsyncThunk(
   "upload/img",
   async (arg, ThunkAPI) => {
     try {
-      console.log(arg);
       const formdata = new FormData();
 
       formdata.append("store", arg.selectVal);
@@ -89,7 +88,6 @@ export const searchImgs = createAsyncThunk(
       }
 
       const data = await res.json();
-      console.log(data);
       return data;
     } catch (err) {
       console.log(err);

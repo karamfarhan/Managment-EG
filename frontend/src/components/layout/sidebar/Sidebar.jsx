@@ -1,6 +1,8 @@
+import { useState } from "react";
 import jwt_decode from "jwt-decode";
-import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink, useLocation } from "react-router-dom";
 import { StaffIcon } from "../../icons/StaffIcon";
 import { StoreIcon } from "../../icons/StoreIcon";
 
@@ -9,19 +11,57 @@ import { FaCarSide } from "react-icons/fa";
 import { GiPaddles } from "react-icons/gi";
 import classes from "./Sidebar.module.css";
 import { GalleryIcon } from "../../icons/GalleryIcon";
+import { searchImgs } from "../../../store/upload-img-slice";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const [selectedStore, setSelectedStore] = useState("");
+  const [showGalleries, setShowGalleries] = useState(
+    location.pathname === "/gallery" ? true : false
+  );
+  const [activeClass, setActiveClass] = useState(null);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
 
   const { is_superuser, permissions } = decoded;
-  console.log(is_superuser);
-
   const allPermissions = permissions.join(" ");
+
+  const selectedStoreHandler = (e, id) => {
+    const obj = {
+      search: e.target.innerText,
+      token,
+    };
+
+    setSelectedStore(e.target.innerText);
+    dispatch(searchImgs(obj));
+    setActiveClass(id);
+  };
+
+  //stores
+
+  const { data } = useQuery(
+    "get/stores",
+    async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    { refetchOnWindowFocus: false }
+  );
+
   return (
     <aside dir="rtl" className={classes.sidebar}>
       <ul>
-        {" "}
         {(is_superuser === true ||
           allPermissions.includes("employee") ||
           allPermissions.includes("insurance")) && (
@@ -96,6 +136,21 @@ const Sidebar = () => {
               </span>
               <p> المشاريع</p>
             </NavLink>
+
+            <ul className={showGalleries === true ? classes.active : ""}>
+              {data &&
+                data.map((el) => {
+                  return (
+                    <li
+                      className={activeClass === el.pk ? classes.active : ""}
+                      onClick={(e) => selectedStoreHandler(e, el.pk)}
+                      key={el.pk}>
+                      {" "}
+                      {el.address}{" "}
+                    </li>
+                  );
+                })}
+            </ul>
           </li>
         )}
         <li>

@@ -24,8 +24,29 @@
     padding: 10px;
   }
 }
-.sidebar ul {
+.sidebar ul:not(.sidebar ul li ul) {
   padding: 60px 10px 0 10px;
+}
+.sidebar li {
+  cursor: pointer;
+}
+.sidebar li ul {
+  display: none;
+}
+.sidebar li ul li {
+  padding: 0 10px;
+}
+.sidebar li ul li.active {
+  background-color: #000;
+}
+.sidebar li ul.active {
+  display: block;
+  background: rgb(42, 75, 247);
+  color: #fff;
+  text-align: right;
+  padding: 11px .;
+  margin: 2px 0;
+  border-radius: 12px;
 }
 .sidebar li a {
   display: flex;

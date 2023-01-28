@@ -1,10 +1,8 @@
-import { Fragment, useState, useEffect, useContext } from "react";
-import { useQuery } from "react-query";
+import { Fragment, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImgs } from "../../../store/upload-img-slice.js";
-import AuthContext from "../../../context/Auth-ctx";
-import { AiOutlineFileImage, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineFileImage } from "react-icons/ai";
 import classes from "./SelectImg.module.css";
 
 export const Backdrop = ({ hideImageHandler }) => {
@@ -22,8 +20,8 @@ export const ImgSelect = ({
   const [selectedVal, setSelectVal] = useState("");
   const [img, setImg] = useState([]);
   const [description, setDescription] = useState("");
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
+
   let dateNow = new Date().toLocaleString();
   const dispatch = useDispatch();
 

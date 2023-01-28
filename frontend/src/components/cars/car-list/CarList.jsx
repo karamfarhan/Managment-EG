@@ -71,8 +71,7 @@ const CarList = ({
 
       <div className={classes.car}>
         <header>
-          <div>
-            {" "}
+          <div onClick={detailPageHandler}>
             <p>
               سائق السيارة <span>{driver_name}</span>{" "}
             </p>
@@ -93,7 +92,7 @@ const CarList = ({
             </button>
           </div>
         </header>
-        <div>
+        {/* <div>
           <p>
             نوع و طراز السيارة{" "}
             <span>
@@ -109,9 +108,7 @@ const CarList = ({
           <p>
             ملاحظات : <span> {note === "" ? "لا يوجد" : note} </span>
           </p>
-        </div>
-
-        <button onClick={detailPageHandler}> تحركات السيارة </button>
+        </div> */}
       </div>
     </Fragment>
   );
