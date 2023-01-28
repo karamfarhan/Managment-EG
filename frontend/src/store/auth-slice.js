@@ -34,22 +34,18 @@ export const login = createAsyncThunk(
 export const updateToken = createAsyncThunk(
   "refresh/token",
   async (arg, { dispatch }) => {
-    fetch("http://127.0.0.1:8000/account/token/refresh/", {
+ const res = await   fetch("http://127.0.0.1:8000/account/token/refresh/", {
       method: "POST",
       body: JSON.stringify({ refresh: arg }),
       headers: {
         "Content-type": "Application/json",
       },
-    }).then((res) => {
-      if (res.status === 200) {
-        return res.json().then((data) => {
-          localStorage.setItem("token-management", data.access);
-        });
-      }
-      if (res.status === 401) {
-        dispatch(logout);
-      }
-    });
+    })
+
+    return await res.json()
+
+
+    
   }
 );
 
@@ -91,6 +87,13 @@ const authSlice = createSlice({
       state.isAuth = false;
       state.httpErr = action.payload;
       console.log(action.payload);
+    },
+
+
+    [updateToken.fulfilled]: (state, action) => {
+      state.token = action.payload.access;
+      localStorage.setItem("token-management", action.payload.access);
+      console.log(action.payload)
     },
   },
 });
