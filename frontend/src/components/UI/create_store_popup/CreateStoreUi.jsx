@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
+import jwt_decode from "jwt-decode";
 
 import Inputs from "../inputs/Inputs";
 import { AiOutlineClose } from "react-icons/ai";
@@ -15,7 +16,13 @@ export const InventoryCreator = ({ hideFormHandler }) => {
     description: "",
   });
   const { token } = useSelector((state) => state.authReducer);
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
 
+  const getSoresPremission = ["change_store", "view_store", "delete_store"];
+  const getAllStores = permissions.some((el) =>
+    getSoresPremission.includes(el)
+  );
   const dispatch = useDispatch();
   const { name, address, description } = storeData;
   //form validation
@@ -35,6 +42,8 @@ export const InventoryCreator = ({ hideFormHandler }) => {
       name,
       address,
       description,
+      superUser: is_superuser,
+      permission: getAllStores,
     };
     dispatch(createStore(storeObj));
     //s dispatch(getStores(token));

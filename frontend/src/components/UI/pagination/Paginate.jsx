@@ -1,6 +1,5 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { Pagination } from "antd";
-import AuthContext from "../../../context/Auth-ctx";
 
 import classes from "./Paginate.module.css";
 
@@ -14,8 +13,7 @@ const Paginate = ({
   searchFn,
   id,
 }) => {
-  const authCtx = useContext(AuthContext);
-  const { token } = authCtx;
+  const { token } = useSelector((state) => state.authReducer);
 
   const paginationHandler = (number) => {
     const obj = {
@@ -26,7 +24,7 @@ const Paginate = ({
 
     // store current page in session storage
     // sessionStorage.setItem("current-page", number);
-    if ((number > 1 && search && search.trim() === "") || number > 1) {
+    if (number > 1 && search === "") {
       paginationFun(obj);
     }
     if (number > 1 && search && search !== "") {

@@ -35,7 +35,7 @@ export const fetchImgs = createAsyncThunk("fetch/img", async (arg) => {
     const res = await fetch("http://127.0.0.1:8000/images/", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${arg.token}`,
+        Authorization: `Bearer ${arg}`,
       },
     });
     const data = await res.json();
@@ -122,7 +122,15 @@ const images_slice = createSlice({
   name: "images",
   initialState: {
     data: null,
+    selected_store: "",
   },
+
+  reducers: {
+    selectedAddress: (state, action) => {
+      state.selected_store = action.payload;
+    },
+  },
+
   extraReducers: {
     [fetchImgs.pending]: (state) => {
       console.log(state);
@@ -173,5 +181,7 @@ const images_slice = createSlice({
     },
   },
 });
+
+export const { selectedAddress } = images_slice.actions;
 
 export default images_slice;

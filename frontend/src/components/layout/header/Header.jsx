@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+
 import { AiFillSetting, AiOutlineLogout } from "react-icons/ai";
 import classes from "./Header.module.css";
 import { logout } from "../../../store/auth-slice";
@@ -9,6 +11,10 @@ export const Header = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [signoutBtn, setSignoutBtn] = useState(false);
+  const { token } = useSelector((state) => state.authReducer);
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
+  console.log(decoded);
   //logout handler
   const logoutHandler = () => {
     dispatch(logout());
@@ -49,7 +55,7 @@ export const Header = () => {
               </div>
             )}
           </div>
-          {/* <p>{userInfom.username} </p> */}
+          <p>{decoded.username} </p>
         </div>
         <h1>Mountain for Construction </h1>
       </div>

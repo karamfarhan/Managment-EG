@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
-import AuthContext from "../../../context/Auth-ctx";
+import jwt_decode from "jwt-decode";
 import { AiOutlinePhone } from "react-icons/ai";
 import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import ImgModel from "../../UI/imgModel/ImgModel";
@@ -26,6 +26,8 @@ const EmpolyeeId = () => {
   const [staffId, setStaffId] = useState("");
 
   const { token } = useSelector((state) => state.authReducer);
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   const navigate = useNavigate();
 
   const params = useParams();
@@ -113,12 +115,16 @@ const EmpolyeeId = () => {
               </div>
             </div>
             <div className={classes.actions}>
-              <button type="button" onClick={() => editHanlder(empolyee.id)}>
-                تحديث البيانات
-              </button>
-              <button onClick={() => deleteModelHandler(empolyee.id)}>
-                حذف
-              </button>
+              {(is_superuser || permissions.includes("change_employee")) && (
+                <button type="button" onClick={() => editHanlder(empolyee.id)}>
+                  تحديث البيانات
+                </button>
+              )}
+              {(is_superuser || permissions.includes("delete_employee")) && (
+                <button onClick={() => deleteModelHandler(empolyee.id)}>
+                  حذف
+                </button>
+              )}
             </div>
           </header>
           {/* body */}

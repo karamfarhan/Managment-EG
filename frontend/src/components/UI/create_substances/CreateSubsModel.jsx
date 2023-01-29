@@ -24,7 +24,20 @@ const CreateSubsModel = ({
     maintain_place: "",
   });
 
-  const [selectType, setSelectType] = useState(["kilogram", "liter", "ton"]);
+  const [selectType, setSelectType] = useState([
+    "كيلوجرام",
+    "لتر",
+    "طن",
+    "متر طولي",
+    "متر مربع",
+    "متر مكعب",
+    "دهان",
+    "شكارة 20",
+    "شكارة 25",
+    "شكارة 50",
+    "شكارة معجون",
+    "قطعة",
+  ]);
   const [selectBox, setSelectBox] = useState("");
 
   const dispatch = useDispatch();
@@ -151,8 +164,7 @@ const CreateSubsModel = ({
                 {selectType.map((value, i) => {
                   return (
                     <option value={value} key={i}>
-                      {" "}
-                      {value}{" "}
+                      {value}
                     </option>
                   );
                 })}

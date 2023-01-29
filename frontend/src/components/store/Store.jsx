@@ -1,24 +1,24 @@
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import jwt_decode from "jwt-decode";
 import { SiHomeassistantcommunitystore } from "react-icons/si";
-import classes from "./Store.module.css";
 import CreateStoreUi from "../UI/create_store_popup/CreateStoreUi";
 import Paginate from "../UI/pagination/Paginate";
 import Bar from "../UI/bars/Bar";
-import { useEffect } from "react";
 import {
   getStores,
   storePagination,
   storeSearch,
   storeSearchPagination,
 } from "../../store/create-store-slice";
-import AuthContext from "../../context/Auth-ctx";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
 import Search from "../UI/search/Search";
 import AddInvoice from "../UI/add_invoice/AddInvoice";
-import { useCallback } from "react";
+import classes from "./Store.module.css";
+
 const Store = () => {
+  const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [showForm, setShowForm] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -34,6 +34,16 @@ const Store = () => {
   const [storeName, setStoreName] = useState("");
   const [storeId, setStoreId] = useState("");
 
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
+
+  const getSoresPremission = ["change_store", "view_store", "delete_store"];
+  const getAllStores = permissions.some((el) =>
+    getSoresPremission.includes(el)
+  );
+
+  console.log(getAllStores);
+
   //paginationFun
   const paginationFun = useCallback(
     (obj) => {
@@ -41,8 +51,6 @@ const Store = () => {
     },
     [dispatch]
   );
-
-  const { token } = useSelector((state) => state.authReducer);
 
   //store data
   const { store_data } = useSelector((state) => state.storeSlice);
@@ -53,11 +61,15 @@ const Store = () => {
   //get stores
   useEffect(() => {
     //first render
-    if (currentPage === 1 && searchValue.trim() === "") {
+    if (
+      currentPage === 1 &&
+      searchValue.trim() === "" &&
+      (is_superuser || getAllStores)
+    ) {
       dispatch(getStores(token));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, currentPage, searchValue]);
+  }, [dispatch, currentPage, searchValue, is_superuser, getAllStores]);
 
   //RESET CURRENT PAGE
 
@@ -72,21 +84,22 @@ const Store = () => {
 
   //delete handler
   const deleteHandler = async (id) => {
-    try {
-      const res = await fetch(`http://127.0.0.1:8000/stores/${id}/`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setIsDelete(false);
-      dispatch(getStores(token));
+    if (is_superuser === false || !permissions.includes("delete_store"))
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/stores/${id}/`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setIsDelete(false);
+        dispatch(getStores(token));
 
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      console.log(err.message);
-    }
+        const data = await res.json();
+        return data;
+      } catch (err) {
+        console.log(err.message);
+      }
   };
 
   //show delete mode
@@ -152,18 +165,22 @@ const Store = () => {
       )}
       <Bar>
         <div className="toolBar">
-          <Search
-            placeholder="أبحث بأسم المخزن أو التاريخ YYYY-DD-MM"
-            onChange={searchHandler}
-            value={searchValue}
-            searchData={fetchSearchHandler}
-          />
-          <button
-            onClick={showFormHandler}
-            type="button"
-            className={classes.addInventory}>
-            <SiHomeassistantcommunitystore /> انشاء مخزن
-          </button>
+          {(is_superuser || getAllStores) && (
+            <Search
+              placeholder="أبحث بأسم المخزن أو التاريخ YYYY-DD-MM"
+              onChange={searchHandler}
+              value={searchValue}
+              searchData={fetchSearchHandler}
+            />
+          )}
+          {(is_superuser || permissions.includes("add_store")) && (
+            <button
+              onClick={showFormHandler}
+              type="button"
+              className={classes.addInventory}>
+              <SiHomeassistantcommunitystore /> انشاء مخزن
+            </button>
+          )}
         </div>
       </Bar>
 
@@ -198,19 +215,25 @@ const Store = () => {
                       <td>{new Date(store.created_at).toDateString()} </td>
                       <td> {store.description} </td>
                       <td>
-                        <button
-                          type="button"
-                          onClick={() => deleteModelHandler(store.id)}>
-                          حذف
-                        </button>
+                        {(is_superuser ||
+                          permissions.includes("delete_store")) && (
+                          <button
+                            type="button"
+                            onClick={() => deleteModelHandler(store.id)}>
+                            حذف
+                          </button>
+                        )}
 
-                        <button
-                          type="button"
-                          onClick={() => {
-                            showInvoiceHandler(store.name, store.id);
-                          }}>
-                          تحويل
-                        </button>
+                        {(is_superuser ||
+                          permissions.includes("add_invoice")) && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              showInvoiceHandler(store.name, store.id);
+                            }}>
+                            تحويل
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );

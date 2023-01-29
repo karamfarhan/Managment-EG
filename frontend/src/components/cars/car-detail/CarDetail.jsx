@@ -7,8 +7,10 @@ import CarActivity from "../../UI/car-activity/CarActivity";
 import CarDetailList from "./CarDetailList";
 import { useDispatch, useSelector } from "react-redux";
 import { getCarPagination } from "../../../store/car-activity";
+import Car from "./Car";
 
 const CarDetail = () => {
+  const [sections, setSections] = useState("cars");
   const [showForm, setShowForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { token } = useSelector((state) => state.authReducer);
@@ -37,7 +39,25 @@ const CarDetail = () => {
         console.log(err);
       }
     },
-    { refetchOnWindowFocus: false, enabled: false }
+    { refetchOnWindowFocus: false }
+  );
+  const { data: car, refetch: carFetch } = useQuery(
+    "car/detail",
+    async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/cars/${carId}/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    { refetchOnWindowFocus: false }
   );
 
   useEffect(() => {
@@ -48,7 +68,6 @@ const CarDetail = () => {
 
   //count
   const count = data && data.count;
-  console.log(data);
   const closeFormHandler = () => {
     setShowForm(false);
   };
@@ -58,7 +77,7 @@ const CarDetail = () => {
   };
 
   const { data: carAct } = useSelector((state) => state.carActivityRed);
-
+  if (!car) return;
   return (
     <Fragment>
       {showForm && (
@@ -68,8 +87,72 @@ const CarDetail = () => {
           hideModel={closeFormHandler}
         />
       )}
-      <div className={classes.content} dir="rtl">
-        <div>
+      <div className={classes.box} dir="rtl">
+        <div className={classes.content}>
+          <button onClick={() => setShowForm(true)}>
+            اضافة أخر تحركات للسيارة
+          </button>
+          <header>
+            <nav>
+              <ul>
+                <li
+                  className={sections === "cars" ? classes.active : ""}
+                  onClick={() => setSections("cars")}>
+                  بيانات السيارة{" "}
+                </li>
+                <li
+                  className={sections === "carActivity" ? classes.active : ""}
+                  onClick={() => setSections("carActivity")}>
+                  تحركات السائق{" "}
+                </li>
+              </ul>
+            </nav>
+          </header>
+
+          {/* body  */}
+          <div className={classes.body}>
+            {sections === "cars" && <Car car={car} />}
+            {sections === "carActivity" && (
+              <div className={classes["table_content"]}>
+                <table className={classes.activities}>
+                  <thead>
+                    <tr>
+                      <th>أسم السائق</th>
+                      <th>تاريخ التحرك</th>
+                      <th>المسافة المقطوعة</th>
+                      <th>خط السير</th>
+                      <th>ملاحظات</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data &&
+                      currentPage === 1 &&
+                      data.results.map((el) => {
+                        return <CarDetailList key={el.id} data={el} />;
+                      })}
+
+                    {carAct &&
+                      carAct.count > 10 &&
+                      carAct.results.map((el) => {
+                        return <CarDetailList key={el.id} data={el} />;
+                      })}
+                  </tbody>
+                </table>
+                {count > 10 && (
+                  <Paginate
+                    count={count}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    paginationFun={paginationFun}
+                    id={carId}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* <div>
           <button onClick={() => setShowForm(true)}>
             اضافة أخر تحركات للسيارة
           </button>
@@ -110,7 +193,7 @@ const CarDetail = () => {
             paginationFun={paginationFun}
             id={carId}
           />
-        )}
+        )} */}
       </div>
     </Fragment>
   );

@@ -1,18 +1,14 @@
-import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
-import AuthContext from "../../../../../context/Auth-ctx";
 
 //style
 import classes from "./InvoiceDetail.module.css";
-import ExportExcel from "../../../../UI/export/ExportExcel";
 
 const InvoiceDetail = () => {
   const { token } = useSelector((state) => state.authReducer);
 
   const param = useParams();
-
   //invoice id
   const { invoiceId } = param;
   //fetch invoices
@@ -28,6 +24,8 @@ const InvoiceDetail = () => {
       return await res.json();
     } catch (err) {}
   });
+
+  console.log(invoice);
 
   return (
     <>
@@ -50,9 +48,9 @@ const InvoiceDetail = () => {
             {invoice &&
               invoice &&
               invoice.substance_items &&
-              invoice.substance_items.map((subs) => {
+              invoice.substance_items.map((subs, i) => {
                 return (
-                  <tr key={subs.id}>
+                  <tr key={i}>
                     <td> {subs.name} </td>
                     <td> {subs.mass} </td>
                     <td> {subs.description} </td>
@@ -67,16 +65,15 @@ const InvoiceDetail = () => {
         <table>
           <thead>
             <th> الالات الي المخزن </th>
-
             <th>الوصف </th>
           </thead>
           <tbody>
             {invoice &&
               invoice &&
               invoice.instrument_items &&
-              invoice.instrument_items.map((instru) => {
+              invoice.instrument_items.map((instru, i) => {
                 return (
-                  <tr key={instru.id}>
+                  <tr key={i}>
                     <td> {instru.name} </td>
                     <td> {instru.description} </td>
                   </tr>

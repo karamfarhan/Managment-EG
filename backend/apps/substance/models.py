@@ -32,12 +32,18 @@ class Category(models.Model):
 
 class Substance(models.Model):
     UNIT_TYPE = (
-        ("kilogram", "kilogram"),
-        ("liter", "liter"),
-        ("ton", "ton"),
-        ("m3", "m3 "),
-        ("m2", "m2"),
-        ("item", "item"),
+        ("كيلوجرام", "كيلوجرام"),
+        ("لتر", "لتر"),
+        ("طن", "طن"),
+        ("متر طولي", "متر طولي"),
+        ("متر مربع", "متر مربع"),
+        ("متر مكعب", "متر مكعب"),
+        ("دهان", "دهان"),
+        ("شكارة 20", "شكارة 20"),
+        ("شكارة 25", "شكارة 25"),
+        ("شكارة 50", "شكارة 50"),
+        ("شكارة معجون", "شكارة معجون"),
+        ("قطعة", "قطعة"),
     )
     created_by = models.ForeignKey(
         Account,
@@ -81,7 +87,8 @@ class Substance(models.Model):
         default=1,
         verbose_name=_("units available in stock"),
     )
-    unit_type = models.CharField(max_length=20, choices=UNIT_TYPE, verbose_name=_("Unit Type"))
+    unit_type = models.CharField(
+        max_length=20, choices=UNIT_TYPE, verbose_name=_("Unit Type"))
 
     class Meta:
         verbose_name = "Substance"

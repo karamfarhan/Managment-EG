@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,10 +12,21 @@ import EditEmpolyee from "./empolyees/edit-empolyee/EditEmpolyee";
 import classes from "./Staff.module.css";
 export const Staff = () => {
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.authReducer);
-
   const location = useLocation();
   const { pathname } = location;
+  const { token } = useSelector((state) => state.authReducer);
+
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
+  const empolyeePremission = [
+    "change_employee",
+    "delete_employee",
+    "view_employeeactivity",
+    "change_employeeactivity",
+    "delete_employeeactivity",
+    "view_employee",
+  ];
+  const getStaff = permissions.some((el) => empolyeePremission.includes(el));
 
   //current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,22 +40,36 @@ export const Staff = () => {
   //fetch search data
   //get stores
   useEffect(() => {
-    if (currentPage === 1 && searchValue.trim() === "" && staffForm === false) {
+    if (
+      currentPage === 1 &&
+      searchValue.trim() === "" &&
+      staffForm === false &&
+      (getStaff || is_superuser)
+    ) {
       dispatch(getEmpolyees(token));
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, currentPage, searchValue, staffForm, pathname]);
+  }, [
+    dispatch,
+    currentPage,
+    searchValue,
+    staffForm,
+    pathname,
+    getStaff,
+    is_superuser,
+  ]);
+
   function fetchSearchHandler() {
     setCurrentPage(1);
     const obj = {
       token,
       search: searchValue,
     };
-
-    dispatch(empolyeeSearch(obj));
+    // if true allow search empolyee
+    if (getEmpolyees || is_superuser === true) {
+      dispatch(empolyeeSearch(obj));
+    }
   }
-
   let result =
     empolyees &&
     empolyees.results &&
@@ -58,30 +84,39 @@ export const Staff = () => {
       {!staffForm && location.pathname === "/staff" && (
         <Bar>
           <div className="toolBar">
-            <Search
-              placeholder="أبحث عن أسم الموظف أو الموقع"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              searchData={fetchSearchHandler}
-            />
-            <button className={classes.btn} onClick={() => setStaffForm(true)}>
-              انشاء موظف
-              <span>
-                <AiOutlineUserAdd />
-              </span>
-            </button>
+            {(is_superuser || getStaff) && (
+              <Search
+                placeholder="أبحث عن أسم الموظف أو الموقع"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                searchData={fetchSearchHandler}
+              />
+            )}
+            {(is_superuser || permissions.includes("add_employee")) && (
+              <button
+                className={classes.btn}
+                onClick={() => setStaffForm(true)}>
+                انشاء موظف
+                <span>
+                  <AiOutlineUserAdd />
+                </span>
+              </button>
+            )}
           </div>
         </Bar>
       )}
       <Routes>
         <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
       </Routes>
-      {staffForm && <StaffForm setStaffForm={setStaffForm} />}
+      {(is_superuser || permissions.includes("add_employee")) && staffForm && (
+        <StaffForm setStaffForm={setStaffForm} />
+      )}
       {!staffForm &&
         empolyees &&
         empolyees.count > 0 &&
         location.pathname === "/staff" && (
           <Empolyess
+            decoded={decoded}
             data={result}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

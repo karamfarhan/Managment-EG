@@ -37,16 +37,17 @@
   padding: 0 10px;
 }
 .sidebar li ul li.active {
-  background-color: #000;
+  background-color: rgb(237, 234, 234);
 }
 .sidebar li ul.active {
   display: block;
-  background: rgb(42, 75, 247);
-  color: #fff;
+  color: #777;
   text-align: right;
-  padding: 11px .;
+  padding: 11px 0;
   margin: 2px 0;
   border-radius: 12px;
+  max-height: 177px;
+  overflow: auto;
 }
 .sidebar li a {
   display: flex;
@@ -79,8 +80,7 @@
 .sidebar li:nth-child(4) a svg {
   color: #11cdef !important;
 }
-.active {
-}
+
 .sidebar li:hover a {
   background: "#fff";
   color: "#2150d8";

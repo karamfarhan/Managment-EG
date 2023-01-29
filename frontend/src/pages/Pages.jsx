@@ -1,4 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { useSelector } from "react-redux";
+
 //pages
 import AuthPage from "./AuthPage";
 import CarsPage from "./CarsPage";
@@ -12,14 +15,28 @@ import InvoiceDetailPage from "./InvoiceDetailPage";
 import EmpolyeeData from "./EmpolyeeData";
 import CarDetailPage from "./CarDetailPage";
 import EditCarPage from "./EditCarPage";
-import { useSelector } from "react-redux";
 const Pages = () => {
+  const { token } = useSelector((state) => state.authReducer);
+
   const { isAuth } = useSelector((state) => state.authReducer);
+
+  const ar = ["staff"];
+  // let decoded;
+  // if (token !== null) {
+  //   decoded = jwt_decode(token);
+  // }
+  // const permissions = token && decoded.permissions;
+  // const allPermissions = token && permissions.join(" ");
+
+  // if (isAuth && token && allPermissions.includes("employee")) {
+  //   Navigate("/s");
+  // }
+
   return (
     <Routes>
       <Route
         path="/login"
-        element={isAuth ? <Navigate to="/staff" /> : <AuthPage />}
+        element={isAuth ? <Navigate to={`/${ar[0]}`} /> : <AuthPage />}
       />
       <Route
         path="/"

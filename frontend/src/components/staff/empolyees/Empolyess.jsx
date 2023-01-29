@@ -19,9 +19,11 @@ const Empolyess = ({
   setCurrentPage,
   searchValue,
   fetchSearchHandler,
+  decoded,
 }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.authReducer.token);
+  const { is_superuser, permissions } = decoded;
 
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
@@ -110,9 +112,7 @@ const Empolyess = ({
       return await res.json();
     } catch (err) {}
   };
-  console.log(stores);
-  console.log(data);
-
+  console.log(permissions.includes("add_employeeactivity"));
   return (
     <Fragment>
       <div className={classes["table_content"]}>
@@ -121,15 +121,13 @@ const Empolyess = ({
         {Object.entries(data).map(([key, value], i) => {
           return (
             <div key={i} className={classes.content}>
-              <h2>
-                {" "}
-                كشف العاملين ({key === "null" ? "المكتب الاداري" : key}){" "}
-              </h2>
+              <h2>كشف العاملين ({key === "null" ? "المكتب الاداري" : key}) </h2>
               <table>
                 <thead>
                   <th>أسم الموظف</th>
                   <th>المسمي الوظيفي</th>
-                  <th>الحضور</th>
+                  {(permissions.includes("add_employeeactivity") ||
+                    is_superuser) && <th>الحضور</th>}
                 </thead>
                 {value.map((e, i) => {
                   return (
@@ -139,47 +137,50 @@ const Empolyess = ({
                           <Link to={`/staff/${e.id}`}>{e.name}</Link>
                         </td>
                         <td> {e.type} </td>
-                        <td>
-                          {e.today_activity !== false && (
-                            <ul>
-                              {e.today_activity.phase_in !== null && (
-                                <li>
-                                  معاد الحضور : {e.today_activity.phase_in}{" "}
-                                </li>
-                              )}
-                              {e.today_activity.phase_out !== null && (
-                                <li>
-                                  معاد الانصارف : {e.today_activity.phase_out}
-                                </li>
-                              )}
-                            </ul>
-                          )}
+                        {(permissions.includes("add_employeeactivity") ||
+                          is_superuser) && (
+                          <td>
+                            {e.today_activity !== false && (
+                              <ul>
+                                {e.today_activity.phase_in !== null && (
+                                  <li>
+                                    معاد الحضور : {e.today_activity.phase_in}{" "}
+                                  </li>
+                                )}
+                                {e.today_activity.phase_out !== null && (
+                                  <li>
+                                    معاد الانصارف : {e.today_activity.phase_out}
+                                  </li>
+                                )}
+                              </ul>
+                            )}
 
-                          {(e.today_activity === false ||
-                            e.today_activity.phase_out === null) && (
-                            <button
-                              style={{
-                                backgroundColor:
-                                  e.today_activity.phase_out === null
-                                    ? "#da3230"
-                                    : "green",
-                              }}
-                              onClick={() =>
-                                e.today_activity === false
-                                  ? sendPhaseIn(e.id)
-                                  : sendPhaseOut(e.id, e.today_activity.id)
-                              }>
-                              {(e.today_activity === false ||
-                                e.today_activity.phase_in === null) &&
-                                "سجل الحضور"}
+                            {(e.today_activity === false ||
+                              e.today_activity.phase_out === null) && (
+                              <button
+                                style={{
+                                  backgroundColor:
+                                    e.today_activity.phase_out === null
+                                      ? "#da3230"
+                                      : "green",
+                                }}
+                                onClick={() =>
+                                  e.today_activity === false
+                                    ? sendPhaseIn(e.id)
+                                    : sendPhaseOut(e.id, e.today_activity.id)
+                                }>
+                                {(e.today_activity === false ||
+                                  e.today_activity.phase_in === null) &&
+                                  "سجل الحضور"}
 
-                              {e.today_activity &&
-                                e.today_activity.phase_in !== "" &&
-                                e.today_activity.phase_out === null &&
-                                "سجل الانصراف"}
-                            </button>
-                          )}
-                        </td>
+                                {e.today_activity &&
+                                  e.today_activity.phase_in !== "" &&
+                                  e.today_activity.phase_out === null &&
+                                  "سجل الانصراف"}
+                              </button>
+                            )}
+                          </td>
+                        )}
                       </tr>
                     </tbody>
                   );

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import jwt_decode from "jwt-decode";
 import Inputs from "../../UI/inputs/Inputs";
 import Insurance from "./insurance/Insurance";
 import classes from "./StaffFrom.module.css";
 const StaffForm = ({ setStaffForm }) => {
   const { token } = useSelector((state) => state.authReducer);
-
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   const [isInsurance, setIsInsurance] = useState("");
 
   //form validation
@@ -144,8 +146,8 @@ const StaffForm = ({ setStaffForm }) => {
 
   //send empolyee data
   const sendEmpolyeeData = async () => {
+    if (!is_superuser || !permissions.includes("add_empolyee")) return;
     setData("");
-
     const formdata = new FormData();
     formdata.append("name", name);
     formdata.append("number", number);

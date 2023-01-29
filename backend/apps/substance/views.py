@@ -32,7 +32,8 @@ SUCCESS_DELETE = "successfully deleted"
 
 class CustomDjangoModelPermission(DjangoModelPermissions):
     def __init__(self):
-        self.perms_map = copy.deepcopy(self.perms_map)  # from EunChong's answer
+        self.perms_map = copy.deepcopy(
+            self.perms_map)  # from EunChong's answer
         self.perms_map["GET"] = ["%(app_label)s.view_%(model_name)s"]
 
 
@@ -90,7 +91,7 @@ class SubstanceSelectBarView(ListAPIView):
     # TODO should update the quere to get the fields i need not all fields->(id,name)
     queryset = Substance.objects.all()
     serializer_class = SubstanceSelectBarSerializer
-    # permission_classes = (CustomDjangoModelPermission,)
+    permission_classes = (IsAuthenticated,)
     pagination_class = None
 
 
@@ -100,12 +101,14 @@ class InstrumentViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     serializer_class = InstrumentSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ["created_by__username", "name", "category__name"]  # fields you want to search against
+    search_fields = ["created_by__username", "name",
+                     "category__name"]  # fields you want to search against
     ordering_fields = ["name", "created_at", "last_maintain"]
     resource_class = InstrumentResource
 
     def create(self, request, *args, **kwargs):
-        print(f"Instrument-{self.request.method}-REQUEST_DATA = ", request.data)
+        print(
+            f"Instrument-{self.request.method}-REQUEST_DATA = ", request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
@@ -117,5 +120,5 @@ class InstrumentSelectBarView(ListAPIView):
     #  TODO should update the quere to get the fields i need not all fields->(id,name)
     queryset = Instrument.objects.all()
     serializer_class = InstrumentSelectBarSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     pagination_class = None

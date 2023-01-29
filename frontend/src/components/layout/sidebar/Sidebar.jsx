@@ -2,6 +2,7 @@ import { useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
+import { selectedAddress } from "../../../store/upload-img-slice";
 import { NavLink, useLocation } from "react-router-dom";
 import { StaffIcon } from "../../icons/StaffIcon";
 import { StoreIcon } from "../../icons/StoreIcon";
@@ -16,14 +17,12 @@ import { searchImgs } from "../../../store/upload-img-slice";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [selectedStore, setSelectedStore] = useState("");
   const [showGalleries, setShowGalleries] = useState(
     location.pathname === "/gallery" ? true : false
   );
   const [activeClass, setActiveClass] = useState(null);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
-
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
 
@@ -33,12 +32,11 @@ const Sidebar = () => {
       token,
     };
 
-    setSelectedStore(e.target.innerText);
+    dispatch(selectedAddress(e.target.innerText));
     dispatch(searchImgs(obj));
     setActiveClass(id);
   };
-
-  //stores
+  console.log(is_superuser);
 
   const { data } = useQuery(
     "get/stores",
@@ -102,28 +100,31 @@ const Sidebar = () => {
         )}
         {(is_superuser ||
           allPermissions.includes("substance") ||
-          allPermissions.includes("instrument")) && (
-          <li>
-            <NavLink
-              to="/create_subs"
-              style={({ isActive }) => {
-                return {
-                  background: isActive ? "#edeaea" : "inherit",
-                  color: isActive ? "#2150d8" : "#fff",
-                  borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
-                };
-              }}>
-              <span>
-                <GiPaddles />
-              </span>
-              <p>ادارة الموارد</p>
-            </NavLink>
-          </li>
-        )}
-        {(is_superuser === true || allPermissions.includes("substance")) && (
+          allPermissions.includes("instrument")) &&
+          (!allPermissions.includes("invoice") ||
+            !allPermissions.includes("store")) && (
+            <li>
+              <NavLink
+                to="/create_subs"
+                style={({ isActive }) => {
+                  return {
+                    background: isActive ? "#edeaea" : "inherit",
+                    color: isActive ? "#2150d8" : "#fff",
+                    borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
+                  };
+                }}>
+                <span>
+                  <GiPaddles />
+                </span>
+                <p>ادارة الموارد</p>
+              </NavLink>
+            </li>
+          )}
+        {(is_superuser === true || allPermissions.includes("media")) && (
           <li>
             <NavLink
               to="/gallery"
+              onClick={() => dispatch(selectedAddress(""))}
               style={({ isActive }) => {
                 return {
                   background: isActive ? "#edeaea" : "inherit",
@@ -145,30 +146,31 @@ const Sidebar = () => {
                       className={activeClass === el.pk ? classes.active : ""}
                       onClick={(e) => selectedStoreHandler(e, el.pk)}
                       key={el.pk}>
-                      {" "}
-                      {el.address}{" "}
+                      {el.address}
                     </li>
                   );
                 })}
             </ul>
           </li>
         )}
-        <li>
-          <NavLink
-            to="/cars"
-            style={({ isActive }) => {
-              return {
-                background: isActive ? "#edeaea" : "inherit",
-                color: isActive ? "#2150d8" : "#fff",
-                borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
-              };
-            }}>
-            <span>
-              <FaCarSide />
-            </span>
-            <p>السيارات</p>
-          </NavLink>
-        </li>
+        {(is_superuser === true || allPermissions.includes("car")) && (
+          <li>
+            <NavLink
+              to="/cars"
+              style={({ isActive }) => {
+                return {
+                  background: isActive ? "#edeaea" : "inherit",
+                  color: isActive ? "#2150d8" : "#fff",
+                  borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
+                };
+              }}>
+              <span>
+                <FaCarSide />
+              </span>
+              <p>السيارات</p>
+            </NavLink>
+          </li>
+        )}
       </ul>
     </aside>
   );
