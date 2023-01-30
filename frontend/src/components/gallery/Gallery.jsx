@@ -146,15 +146,15 @@ const Gallery = () => {
         />
       )}
 
-      {selected_store === "" && (
+ 
         <Bar>
           <div className="toolBar">
-            <Search
+            {/* <Search
               placeholder=" أبحث من خلال التاريخ أسم الموقع أو أسم المستخدم"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}
-            />
+            /> */}
             <button className={classes.addImg} onClick={selectImgModelHandler}>
               <span>
                 <AiOutlineFileImage />
@@ -163,7 +163,7 @@ const Gallery = () => {
             </button>
           </div>
         </Bar>
-      )}
+   
 
       {allImgs &&
         result &&

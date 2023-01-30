@@ -146,7 +146,7 @@ const SubstancesView = ({
                         </td>
                         <td>{subs.description}</td>
 
-                        <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td>
+                        <td>{subs.is_available ? "متوافر" : "غير متوافر" }</td>
 
                         <td>
                           {new Date(subs.created_at).toLocaleDateString()}

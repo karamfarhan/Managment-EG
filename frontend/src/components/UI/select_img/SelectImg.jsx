@@ -80,6 +80,8 @@ export const ImgSelect = ({
   function validFileType(file) {
     return fileTypes.includes(file.type);
   }
+  const { selected_store } = useSelector((state) => state.imageReducer);
+
   //add images
   const addImgsHandler = () => {
     const obj = {
@@ -87,6 +89,7 @@ export const ImgSelect = ({
       img,
       selectVal: parseInt(selectedVal),
       description: description,
+      search : selected_store
     };
     setAddImgs(true);
     hideImageHandler();

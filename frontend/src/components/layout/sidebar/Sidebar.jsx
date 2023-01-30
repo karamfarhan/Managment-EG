@@ -31,7 +31,7 @@ const Sidebar = () => {
       search: e.target.innerText,
       token,
     };
-
+    console.log(e.target.innerText)
     dispatch(selectedAddress(e.target.innerText));
     dispatch(searchImgs(obj));
     setActiveClass(id);
@@ -124,7 +124,7 @@ const Sidebar = () => {
           <li>
             <NavLink
               to="/gallery"
-              onClick={() => dispatch(selectedAddress(""))}
+              onClick = {()=>dispatch(selectedAddress(""))}
               style={({ isActive }) => {
                 return {
                   background: isActive ? "#edeaea" : "inherit",

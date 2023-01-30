@@ -42,7 +42,6 @@ const Store = () => {
     getSoresPremission.includes(el)
   );
 
-  console.log(getAllStores);
 
   //paginationFun
   const paginationFun = useCallback(
@@ -167,7 +166,7 @@ const Store = () => {
         <div className="toolBar">
           {(is_superuser || getAllStores) && (
             <Search
-              placeholder="أبحث بأسم المخزن أو التاريخ YYYY-DD-MM"
+              placeholder="أسم المخزن أو التاريخ YYYY-DD-MM"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}

@@ -146,7 +146,7 @@ const StaffForm = ({ setStaffForm }) => {
 
   //send empolyee data
   const sendEmpolyeeData = async () => {
-    if (!is_superuser || !permissions.includes("add_empolyee")) return;
+ //   if (!is_superuser || !permissions.includes("add_empolyee")) return;
     setData("");
     const formdata = new FormData();
     formdata.append("name", name);

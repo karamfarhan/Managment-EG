@@ -20,7 +20,7 @@ export const uploadImgs = createAsyncThunk(
         },
         body: formdata,
       });
-      ThunkAPI.dispatch(fetchImgs(arg));
+      ThunkAPI.dispatch(searchImgs(arg));
 
       const data = await res.json();
       return data;
