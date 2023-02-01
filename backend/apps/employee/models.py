@@ -175,10 +175,16 @@ class EmployeeActivity(models.Model):
     )
     phase_in = models.TimeField(
         verbose_name=_("employee phase in time"),
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
     phase_out = models.TimeField(verbose_name=_("employee phase out time"), null=True, blank=True)
+    address = models.CharField(
+        max_length=250,
+        null=True,
+        blank=True,
+        verbose_name=_("address of phas in time"),
+    )
 
     class Meta:
         verbose_name = "Employee Activity"

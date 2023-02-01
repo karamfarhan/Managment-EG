@@ -86,80 +86,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
         insurance_data = validated_data.pop("insurance", None)
         self.handle_insurance(instance, insurance_data, validated_data["created_by"])
         return super().update(instance, validated_data)
-        # employee = self.update_employee(instance, validated_data)
-        # return employee
-
-    # @transaction.atomic
-    # def create_employee(self, validated_data):
-    #     insurance_data = validated_data.pop("insurance", None)
-    #     employee = Employee(**validated_data)
-    #     self.handle_insurance(employee, insurance_data, validated_data["created_by"])
-    #     # if insurance_data:
-    #     #     serializer = InsuranceSerializer(data=insurance_data)
-    #     #     # ! maybe the if statment on .is_valid() is not required
-    #     #     # ! i can make it like the ModelViewSet (look at it)
-    #     #     if serializer.is_valid(raise_exception=True):
-    #     #         insruance_obj = serializer.save(created_by=validated_data["created_by"])
-    #     #         employee.insurance = insruance_obj
-    #     # employee.save()
-    #     return employee
-
-    # @transaction.atomic
-    # def update_employee(self, instance, validated_data):
-    #     print("update insurance start")
-    #     # TODO i think you should move the updation of the insurance to the end
-    #     insurance_data = validated_data.pop("insurance", None)
-    #     self.handle_insurance(instance, insurance_data, validated_data["created_by"])
-    #     # if insurance_data:
-    #     #     insurance = instance.insurance
-    #     #     if insurance:
-    #     #         serializer = InsuranceSerializer(insurance, data=insurance_data, partial=True)
-    #     #         if serializer.is_valid(raise_exception=True):
-    #     #             serializer.save()
-    #     #     else:
-    #     #         serializer = InsuranceSerializer(data=insurance_data)
-    #     #         # ! maybe the if statment on .is_valid() is not required
-    #     #         # ! i can make it like the ModelViewSet (look at it)
-    #     #         if serializer.is_valid(raise_exception=True):
-    #     #             insruance_obj = serializer.save(created_by=validated_data["created_by"])
-    #     #             instance.insurance = insruance_obj
-    #     #             instance.save()
-    #     print("update insurance finished")
-    #     print("update employee start")
-    #     instance.name = validated_data.get("name", instance.name)
-    #     instance.type = validated_data.get("type", instance.type)
-    #     instance.email = validated_data.get("email", instance.email).lower()
-    #     instance.number = validated_data.get("number", instance.number)
-    #     instance.certificate_image = validated_data.get("certificate_image", instance.certificate_image)
-    #     instance.experience_image = validated_data.get("experience_image", instance.experience_image)
-    #     instance.identity_image = validated_data.get("identity_image", instance.identity_image)
-    #     instance.criminal_record_image = validated_data.get("criminal_record_image", instance.criminal_record_image)
-    #     instance.years_of_experiance = validated_data.get("years_of_experiance", instance.years_of_experiance)
-    #     instance.days_off = validated_data.get("days_off", instance.days_off)
-    #     instance.note = validated_data.get("note", instance.note)
-    #     instance.signin_date = validated_data.get("signin_date", instance.signin_date)
-    #     instance.store = validated_data.get("store", instance.store)
-    #     instance.is_primary = validated_data.get("is_primary", instance.is_primary)
-    #     instance.save(
-    #         update_fields=[
-    #             "name",
-    #             "type",
-    #             "email",
-    #             "number",
-    #             "certificate_image",
-    #             "experience_image",
-    #             "identity_image",
-    #             "criminal_record_image",
-    #             "years_of_experiance",
-    #             "days_off",
-    #             "note",
-    #             "signin_date",
-    #             "store",
-    #             "is_primary",
-    #         ]
-    #     )
-    #     print("update employee finish")
-    #     return instance
 
     def get_store_address(self, employee):
         if employee.store:
@@ -202,12 +128,22 @@ class EmployeeActivitySerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "date"]
 
     def create(self, validated_data):
+        if not validated_data.get("is_holiday", False) and not validated_data.get("phase_in", False):
+            raise serializers.ValidationError({"phase_in": "if the holiday is false you should provide phase_in time"})
         try:
             return EmployeeActivity.objects.create(**validated_data)
         except IntegrityError:
             raise serializers.ValidationError(
                 {"error": "Employee activity for today were already created, can't create again"}
             )
+
+    # ! the problem with validate is it will run on the .create and .update methods
+    # ! and i want it to run only on .create method.
+    # ? maybe if you check the type of the action before run the check
+    # def validate(self, attrs):
+    #     if not attrs.get("is_holiday",False) and not attrs.get("phase_in",False):
+    #         raise serializers.ValidationError({"phase_in":"if the holiday is false you should provide phase_in time"})
+    #     return super().validate(attrs)
 
     def update(self, instance, validated_data):
         instance.is_holiday = validated_data.get("is_holiday", instance.is_holiday)

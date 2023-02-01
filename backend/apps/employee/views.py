@@ -1,7 +1,11 @@
+import datetime
+
 from core.exports import ModelViewSetExportBase
 from django.db.models import Prefetch
 from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
+
+# from ipware.ip import get_client_ip
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -13,6 +17,9 @@ from rest_framework.response import Response
 from .models import Employee, EmployeeActivity, Insurance
 from .resources import EmployeeActivityResource, EmployeeResource
 from .serializers import EmployeeActivitySerializer, EmployeeSelectBarSerializer, EmployeeSerializer
+
+# import geoip2
+# from django_ip_geolocation.decorators import with_ip_geolocation
 
 
 class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
@@ -69,17 +76,22 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     resource_class = EmployeeActivityResource
     # TODO should update the kwargs.get("id") to more effiecent way maybe use the default self.get_objects()
 
-    # def get_serializer_class(self, *args, **kwargs):
-    #     if self.request.method in ["PUT","PATCH"]:
-    #         return EmployeeActivityUpdateSerializer
-    #     return EmployeeActivitySerializer
     def get_queryset(self):
         employee_id = self.kwargs.get("id")
         employee = get_object_or_404(Employee, id=employee_id)
         return self.queryset.filter(employee=employee)
 
+    # ! this decorator will add the location of the user in the request object
+    # @with_ip_geolocation
     def create(self, request, *args, **kwargs):
         print(f"Employee Activity-{self.request.method}-REQUEST_DATA = ", request.data)
+
+        # ip, is_routable = get_client_ip(request)
+        # TODO this method doesn't work i have to find a way to convert the ip to location
+        # if ip is not None:
+        #     location_data = geoip2.geolite2.lookup(ip)
+        #     print(location_data.location.latitude, location_data.location.longitude)
+
         employee_id = self.kwargs.get("id")
         employee = get_object_or_404(Employee, id=employee_id)
         serializer = self.get_serializer(data=request.data)
@@ -93,8 +105,26 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         activity_id = request.data.get("id", None)
         if activity_id is None:
             raise serializers.ValidationError({"id": "This field is required while setting the phase out"})
-        instance = get_object_or_404(self.queryset, id=activity_id)
+        # TODO should search the activity based on the date also, for more secure
+        # TODO because now he can send the id and update an activity from the last month
+        instance = get_object_or_404(self.queryset, id=activity_id, date=datetime.datetime.today())
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get_client_ip(self, request):
+        ip = request.META.get("HTTP_X_FORWARDED_FOR")
+        if ip is None:
+            ip = request.META.get("REMOTE_ADDR")
+        return ip
+
+
+# TODO i think you can use the action deocrator in the export methnod instead to
+# TODO determine the url for the method instead of setting it in the url file
+# class MyViewSet(viewsets.ViewSet):
+# @action(methods=['get'], detail=False, url_path='my-view', suffix='custom')
+# @with_ip_geolocation
+# def my_view(self, request):
+#     location_data = request.ip_geolocation
+#     print(location_data)

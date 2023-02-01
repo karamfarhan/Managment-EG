@@ -136,7 +136,8 @@ USE_TZ = True
 # DEVELOPMENT SETTINGS THIS
 # ALSO PUT THE URLS IN THE URLS FILE IN THE MAIN FOLDER OF THE PORJECT
 
-STATIC_ROOT = ""  # os.path.join(BASE_DIR, 'static_cdn')
+# ! open static_root while deploy
+STATIC_ROOT = ""  # os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
