@@ -20,23 +20,11 @@ const Pages = () => {
 
   const { isAuth } = useSelector((state) => state.authReducer);
 
-  const ar = ["staff"];
-  // let decoded;
-  // if (token !== null) {
-  //   decoded = jwt_decode(token);
-  // }
-  // const permissions = token && decoded.permissions;
-  // const allPermissions = token && permissions.join(" ");
-
-  // if (isAuth && token && allPermissions.includes("employee")) {
-  //   Navigate("/s");
-  // }
-
   return (
     <Routes>
       <Route
         path="/login"
-        element={isAuth ? <Navigate to={`/${ar[0]}`} /> : <AuthPage />}
+        element={isAuth ? <Navigate to={`/staff`} /> : <AuthPage />}
       />
       <Route
         path="/"

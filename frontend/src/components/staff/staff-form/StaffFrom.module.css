@@ -1,6 +1,6 @@
 .form {
   width: 100%;
-  height: 760px;
+  height: auto;
   margin: auto;
   text-align: center;
   background-color: #fff;
@@ -56,11 +56,9 @@
 }
 .arrows {
   display: flex;
+  justify-content: center;
   gap: 5px;
-  position: absolute;
   bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .arrows button {
   padding: 5px 30px;
