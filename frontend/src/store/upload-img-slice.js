@@ -11,7 +11,6 @@ export const uploadImgs = createAsyncThunk(
       for (let i = 0; i < arg.img.length; i++) {
         formdata.append("images", arg.img[i]);
       }
-
       formdata.append("alt_text", arg.description);
       const res = await fetch("http://127.0.0.1:8000/images/", {
         method: "POST",
@@ -20,7 +19,10 @@ export const uploadImgs = createAsyncThunk(
         },
         body: formdata,
       });
-      ThunkAPI.dispatch(searchImgs(arg));
+
+      if (arg.authenticated === true) {
+        ThunkAPI.dispatch(searchImgs(arg));
+      }
 
       const data = await res.json();
       return data;

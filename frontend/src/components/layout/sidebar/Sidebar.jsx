@@ -31,7 +31,6 @@ const Sidebar = () => {
       search: e.target.innerText,
       token,
     };
-    console.log(e.target.innerText)
     dispatch(selectedAddress(e.target.innerText));
     dispatch(searchImgs(obj));
     setActiveClass(id);
@@ -56,7 +55,6 @@ const Sidebar = () => {
     },
     { refetchOnWindowFocus: false }
   );
-
   return (
     <aside dir="rtl" className={classes.sidebar}>
       <ul>
@@ -124,7 +122,7 @@ const Sidebar = () => {
           <li>
             <NavLink
               to="/gallery"
-              onClick = {()=>dispatch(selectedAddress(""))}
+              onClick={() => dispatch(selectedAddress(""))}
               style={({ isActive }) => {
                 return {
                   background: isActive ? "#edeaea" : "inherit",
@@ -138,19 +136,23 @@ const Sidebar = () => {
               <p> المشاريع</p>
             </NavLink>
 
-            <ul className={showGalleries === true ? classes.active : ""}>
-              {data &&
-                data.map((el) => {
-                  return (
-                    <li
-                      className={activeClass === el.pk ? classes.active : ""}
-                      onClick={(e) => selectedStoreHandler(e, el.pk)}
-                      key={el.pk}>
-                      {el.address}
-                    </li>
-                  );
-                })}
-            </ul>
+            {(is_superuser ||
+              permissions.includes("view_image") ||
+              permissions.includes("view_mediapack")) && (
+              <ul className={showGalleries === true ? classes.active : ""}>
+                {data &&
+                  data.map((el) => {
+                    return (
+                      <li
+                        className={activeClass === el.pk ? classes.active : ""}
+                        onClick={(e) => selectedStoreHandler(e, el.pk)}
+                        key={el.pk}>
+                        {el.address}
+                      </li>
+                    );
+                  })}
+              </ul>
+            )}
           </li>
         )}
         {(is_superuser === true || allPermissions.includes("car")) && (

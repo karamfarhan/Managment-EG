@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,8 +11,6 @@ import ExportExcel from "../../UI/export/ExportExcel";
 
 //classes
 import classes from "./Empolyess.module.css";
-import { useQuery } from "react-query";
-import { Fragment } from "react";
 
 const Empolyess = ({
   data,
@@ -41,24 +40,6 @@ const Empolyess = ({
   const today = new Date();
   const time =
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-  //get locations
-  //select locations
-  const { data: stores } = useQuery(
-    "fetch/locations",
-    async () => {
-      const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      return data;
-    },
-    { refetchOnWindowFocus: false }
-  );
 
   //send phase/in
   const sendPhaseIn = async (id) => {
@@ -112,95 +93,87 @@ const Empolyess = ({
       return await res.json();
     } catch (err) {}
   };
-  console.log(permissions.includes("add_employeeactivity"));
   return (
     <Fragment>
       <div className={classes["table_content"]}>
         <ExportExcel matter="employees" />
 
-        {Object.entries(data).map(([key, value], i) => {
-          return (
-            <div key={i} className={classes.content}>
-              <h2>كشف العاملين ({key === "null" ? "المكتب الاداري" : key}) </h2>
-              <table>
-                <thead>
-                  <th>أسم الموظف</th>
-                  <th>المسمي الوظيفي</th>
-                  {(permissions.includes("add_employeeactivity") ||
-                    is_superuser) && <th>الحضور</th>}
-                </thead>
-                {value.map((e, i) => {
-                  return (
-                    <tbody>
-                      <tr>
-                        <td>
-                          <Link to={`/staff/${e.id}`}>{e.name}</Link>
-                        </td>
-                        <td> {e.type} </td>
-                        {(permissions.includes("add_employeeactivity") ||
-                          is_superuser) && (
+        {data &&
+          Object.entries(data).map(([key, value], i) => {
+            return (
+              <div key={i} className={classes.content}>
+                <h2>
+                  كشف العاملين ({key === "null" ? "المكتب الاداري" : key}){" "}
+                </h2>
+                <table>
+                  <thead>
+                    <th>أسم الموظف</th>
+                    <th>المسمي الوظيفي</th>
+                    {(permissions.includes("add_employeeactivity") ||
+                      is_superuser) && <th>الحضور</th>}
+                  </thead>
+                  {value.map((e, i) => {
+                    return (
+                      <tbody>
+                        <tr>
                           <td>
-                            {e.today_activity !== false && (
-                              <ul>
-                                {e.today_activity.phase_in !== null && (
-                                  <li>
-                                    معاد الحضور : {e.today_activity.phase_in}{" "}
-                                  </li>
-                                )}
-                                {e.today_activity.phase_out !== null && (
-                                  <li>
-                                    معاد الانصارف : {e.today_activity.phase_out}
-                                  </li>
-                                )}
-                              </ul>
-                            )}
-
-                            {(e.today_activity === false ||
-                              e.today_activity.phase_out === null) && (
-                              <button
-                                style={{
-                                  backgroundColor:
-                                    e.today_activity.phase_out === null
-                                      ? "#da3230"
-                                      : "green",
-                                }}
-                                onClick={() =>
-                                  e.today_activity === false
-                                    ? sendPhaseIn(e.id)
-                                    : sendPhaseOut(e.id, e.today_activity.id)
-                                }>
-                                {(e.today_activity === false ||
-                                  e.today_activity.phase_in === null) &&
-                                  "سجل الحضور"}
-
-                                {e.today_activity &&
-                                  e.today_activity.phase_in !== "" &&
-                                  e.today_activity.phase_out === null &&
-                                  "سجل الانصراف"}
-                              </button>
-                            )}
+                            <Link to={`/staff/${e.id}`}>{e.name}</Link>
                           </td>
-                        )}
-                      </tr>
-                    </tbody>
-                  );
-                })}
-              </table>
-            </div>
-          );
-        })}
+                          <td> {e.type} </td>
+                          {(permissions.includes("add_employeeactivity") ||
+                            is_superuser) && (
+                            <td>
+                              {e.today_activity !== false && (
+                                <ul>
+                                  {e.today_activity.phase_in !== null && (
+                                    <li>
+                                      معاد الحضور : {e.today_activity.phase_in}{" "}
+                                    </li>
+                                  )}
+                                  {e.today_activity.phase_out !== null && (
+                                    <li>
+                                      معاد الانصارف :{" "}
+                                      {e.today_activity.phase_out}
+                                    </li>
+                                  )}
+                                </ul>
+                              )}
 
-        {/* <table>
-          <thead>
-            <th>أسم الموظف</th>
-            <th>المسمي الوظيفي</th>
-            <th>الحضور</th>
-          </thead>
+                              {(e.today_activity === false ||
+                                e.today_activity.phase_out === null) && (
+                                <button
+                                  style={{
+                                    backgroundColor:
+                                      e.today_activity.phase_out === null
+                                        ? "#da3230"
+                                        : "green",
+                                  }}
+                                  onClick={() =>
+                                    e.today_activity === false
+                                      ? sendPhaseIn(e.id)
+                                      : sendPhaseOut(e.id, e.today_activity.id)
+                                  }>
+                                  {(e.today_activity === false ||
+                                    e.today_activity.phase_in === null) &&
+                                    "سجل الحضور"}
 
-          <tbody>
-          
-          </tbody>
-        </table> */}
+                                  {e.today_activity &&
+                                    e.today_activity.phase_in !== "" &&
+                                    e.today_activity.phase_out === null &&
+                                    "سجل الانصراف"}
+                                </button>
+                              )}
+                            </td>
+                          )}
+                        </tr>
+                      </tbody>
+                    );
+                  })}
+                </table>
+              </div>
+            );
+          })}
+
         {empolyeeCount > 10 && (
           <Paginate
             setCurrentPage={setCurrentPage}

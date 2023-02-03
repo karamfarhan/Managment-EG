@@ -11,6 +11,8 @@ const StaffForm = ({ setStaffForm }) => {
   const { is_superuser, permissions } = decoded;
   const [isInsurance, setIsInsurance] = useState("");
 
+  console.log(decoded);
+
   //form validation
 
   let formIsValid = false;
@@ -146,7 +148,7 @@ const StaffForm = ({ setStaffForm }) => {
 
   //send empolyee data
   const sendEmpolyeeData = async () => {
- //   if (!is_superuser || !permissions.includes("add_empolyee")) return;
+    // if (is_superuser === false || !permissions.includes("add_employee")) return;
     setData("");
     const formdata = new FormData();
     formdata.append("name", name);

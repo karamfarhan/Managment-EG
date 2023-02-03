@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
+import jwt_decode from "jwt-decode";
 import { AiOutlineFileImage } from "react-icons/ai";
 import Bar from "../UI/bars/Bar";
 import {
@@ -25,14 +26,21 @@ const Gallery = () => {
   const [searchValue, setSearchValue] = useState("");
 
   const { token } = useSelector((state) => state.authReducer);
-
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
+  const allPermissions = permissions.join(" ");
   /**************************/
 
   // pagination details
   const [currentPage, setCurrentPage] = useState(1);
   const [description, setDescription] = useState();
   const { data } = useSelector((state) => state.imageReducer);
-  const { count } = data !== null && data;
+  const { count } =
+    data !== null &&
+    data &&
+    (is_superuser ||
+      permissions.includes("view_image") ||
+      permissions.includes("view_mediapack"));
 
   /**************************/
 
@@ -44,7 +52,13 @@ const Gallery = () => {
 
   //get all images
   useEffect(() => {
-    if (searchValue === "" && currentPage === 1) {
+    if (
+      searchValue === "" &&
+      currentPage === 1 &&
+      (permissions.includes("view_image") ||
+        permissions.includes("view_mediapack") ||
+        is_superuser)
+    ) {
       dispatch(fetchImgs(token));
     }
     setSearchValue(selected_store);
@@ -146,27 +160,32 @@ const Gallery = () => {
         />
       )}
 
- 
-        <Bar>
-          <div className="toolBar">
-            {/* <Search
+      <Bar>
+        <div className="toolBar">
+          {/* <Search
               placeholder=" أبحث من خلال التاريخ أسم الموقع أو أسم المستخدم"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}
             /> */}
+          {(permissions.includes("add_image") ||
+            permissions.includes("add_mediapack") ||
+            is_superuser) && (
             <button className={classes.addImg} onClick={selectImgModelHandler}>
               <span>
                 <AiOutlineFileImage />
               </span>
               اضافة صور
             </button>
-          </div>
-        </Bar>
-   
+          )}
+        </div>
+      </Bar>
 
       {allImgs &&
         result &&
+        (is_superuser ||
+          permissions.includes("view_image") ||
+          permissions.includes("view_mediapack")) &&
         Object.entries(result).map(([key, value], i) => {
           return (
             <div className={classes.content}>
@@ -201,17 +220,20 @@ const Gallery = () => {
                     </div>
                   );
                 })}
-                {count > 10 && (
-                  <Paginate
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    count={count}
-                    paginationFun={paginationFun}
-                    search={searchValue}
-                    searchFn={fetchSearchHandler}
-                    searchPagination={searchPagination}
-                  />
-                )}
+                {count > 10 &&
+                  (is_superuser ||
+                    permissions.includes("view_image") ||
+                    permissions.includes("view_mediapack")) && (
+                    <Paginate
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                      count={count}
+                      paginationFun={paginationFun}
+                      search={searchValue}
+                      searchFn={fetchSearchHandler}
+                      searchPagination={searchPagination}
+                    />
+                  )}
               </div>
             </div>
           );

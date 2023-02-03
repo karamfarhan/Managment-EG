@@ -37,6 +37,7 @@ export const Staff = () => {
 
   //data
   const { data: empolyees } = useSelector((state) => state.empolyeeReducer);
+  console.log(empolyees);
   //fetch search data
   //get stores
   useEffect(() => {
@@ -114,7 +115,8 @@ export const Staff = () => {
       {!staffForm &&
         empolyees &&
         empolyees.count > 0 &&
-        location.pathname === "/staff" && (
+        location.pathname === "/staff" &&
+        (is_superuser || getStaff) && (
           <Empolyess
             decoded={decoded}
             data={result}

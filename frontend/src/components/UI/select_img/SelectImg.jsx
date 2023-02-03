@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
+import jwt_decode from "jwt-decode";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImgs } from "../../../store/upload-img-slice.js";
@@ -21,7 +22,8 @@ export const ImgSelect = ({
   const [img, setImg] = useState([]);
   const [description, setDescription] = useState("");
   const { token } = useSelector((state) => state.authReducer);
-
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   let dateNow = new Date().toLocaleString();
   const dispatch = useDispatch();
 
@@ -82,6 +84,19 @@ export const ImgSelect = ({
   }
   const { selected_store } = useSelector((state) => state.imageReducer);
 
+  //authenticated function
+  function auth() {
+    if (
+      is_superuser ||
+      permissions.includes("view_image") ||
+      permissions.includes("view_mediapack")
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //add images
   const addImgsHandler = () => {
     const obj = {
@@ -89,7 +104,8 @@ export const ImgSelect = ({
       img,
       selectVal: parseInt(selectedVal),
       description: description,
-      search : selected_store
+      search: selected_store,
+      authenticated: auth(),
     };
     setAddImgs(true);
     hideImageHandler();
@@ -99,11 +115,11 @@ export const ImgSelect = ({
   };
 
   //delete handler
-  const deleteHandler = (el, i) => {
-    setImgSrc(imgSrc.filter((e) => e !== el));
+  // const deleteHandler = (el, i) => {
+  //   setImgSrc(imgSrc.filter((e) => e !== el));
 
-    // setImg(delete img[i]);
-  };
+  //   // setImg(delete img[i]);
+  // };
   const isDisable = imgSrc.length === 0;
 
   return (

@@ -41,7 +41,7 @@ const Store = () => {
   const getAllStores = permissions.some((el) =>
     getSoresPremission.includes(el)
   );
-
+  console.log(getAllStores);
 
   //paginationFun
   const paginationFun = useCallback(
@@ -217,6 +217,7 @@ const Store = () => {
                         {(is_superuser ||
                           permissions.includes("delete_store")) && (
                           <button
+                            className={classes.deleteBtn}
                             type="button"
                             onClick={() => deleteModelHandler(store.id)}>
                             حذف
@@ -226,6 +227,7 @@ const Store = () => {
                         {(is_superuser ||
                           permissions.includes("add_invoice")) && (
                           <button
+                            className={classes.editBtn}
                             type="button"
                             onClick={() => {
                               showInvoiceHandler(store.name, store.id);

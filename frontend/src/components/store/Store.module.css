@@ -42,17 +42,20 @@
 .table_content table tbody tr:nth-child(even) {
   background-color: #ddd;
 }
-.table_content table tbody button {
+.deleteBtn {
   background-color: #da3230;
+}
+.editBtn {
+  background-color: green;
+}
+.table_content table tbody button {
   border: none;
   padding: 5px 10px;
   border-radius: 6px;
   color: #fff;
   margin: 0 5px;
 }
-.table_content table tbody button:last-of-type {
-  background-color: green;
-}
+
 .msg_p {
   font-size: 40px;
   text-align: center;

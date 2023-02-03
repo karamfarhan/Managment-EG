@@ -31,6 +31,18 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   if (storeData.address.trim() !== "" && storeData.name.trim() !== "") {
     formIsValid = true;
   }
+  //authenticated function
+  function auth() {
+    if (
+      is_superuser ||
+      permissions.includes("view_store") ||
+      permissions.includes("delete_store")
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   //submit handler
   const submitHandler = (e) => {
@@ -42,11 +54,10 @@ export const InventoryCreator = ({ hideFormHandler }) => {
       name,
       address,
       description,
-      superUser: is_superuser,
-      permission: getAllStores,
+      authenticated: auth(),
     };
+    console.log(storeObj);
     dispatch(createStore(storeObj));
-    //s dispatch(getStores(token));
     hideFormHandler();
   };
 
@@ -86,22 +97,6 @@ export const InventoryCreator = ({ hideFormHandler }) => {
           </div>
 
           {/* محتويات المخزن */}
-
-          {/* <div className={classes.itemsContent}>
-          {" "}
-          {inputFields.map((inputField, index) => (
-            <Items
-              key={index}
-              index={index}
-              inputField={inputField}
-              inputFields={inputFields}
-              setInputFields={setInputFields}
-            />
-          ))}
-          <button type="button" onClick={handleAddFields}>
-            <BsPlusLg />
-          </button>
-        </div> */}
 
           <button disabled={!formIsValid} type="submit">
             اضافة
