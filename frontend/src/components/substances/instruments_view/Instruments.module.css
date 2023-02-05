@@ -20,9 +20,7 @@
   justify-content: center;
   gap: 5px;
 }
-.table_content table td:last-of-type button:first-of-type {
-  background-color: green;
-}
+
 .table_content table thead {
   font-size: 13px;
   background-color: rgb(70, 195, 70);
@@ -38,7 +36,6 @@
 }
 
 .table_content table tbody button {
-  background-color: #da3230;
   border: none;
   padding: 5px 10px;
   border-radius: 6px;

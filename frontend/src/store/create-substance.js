@@ -18,7 +18,10 @@ export const createSubs = createAsyncThunk(
         units: arg.quantity,
       }),
     });
-    ThunkAPI.dispatch(getSubs(arg.token));
+    if (arg.authenticated === true) {
+      ThunkAPI.dispatch(getSubs(arg.token));
+    }
+
     return await res.json();
   }
 );

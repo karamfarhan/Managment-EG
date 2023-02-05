@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import {
   deleteSubs,
   searchSubstances,
@@ -29,7 +30,8 @@ const SubstancesView = ({
 
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
-
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   const navigate = useNavigate();
 
   //pagination
@@ -146,19 +148,29 @@ const SubstancesView = ({
                         </td>
                         <td>{subs.description}</td>
 
-                        <td>{subs.is_available ? "متوافر" : "غير متوافر" }</td>
+                        <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td>
 
                         <td>
                           {new Date(subs.created_at).toLocaleDateString()}
                         </td>
 
                         <td>
-                          <button onClick={() => editForm(subs.id)}>
-                            تعديل
-                          </button>
-                          <button onClick={() => deleteModelHandler(subs.id)}>
-                            حذف
-                          </button>
+                          {(is_superuser ||
+                            permissions.includes("change_substance")) && (
+                            <button
+                              className="editBtn"
+                              onClick={() => editForm(subs.id)}>
+                              تعديل
+                            </button>
+                          )}
+                          {(is_superuser ||
+                            permissions.includes("delete_substance")) && (
+                            <button
+                              className="deleteBtn"
+                              onClick={() => deleteModelHandler(subs.id)}>
+                              حذف
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );

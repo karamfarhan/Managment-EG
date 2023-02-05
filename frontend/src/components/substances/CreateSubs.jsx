@@ -1,6 +1,6 @@
-import { Fragment, useState, useContext, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
+import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
-import AuthContext from "../../context/Auth-ctx";
 import SubstancesView from "./substances_view/SubstancesView";
 import { GiSaddle } from "react-icons/gi";
 import { TbToolsKitchen } from "react-icons/tb";
@@ -24,7 +24,8 @@ const CreateSubs = () => {
   const [searchVal, setSearchVal] = useState("");
 
   const { token } = useSelector((state) => state.authReducer);
-
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
 
   //hide model for matters
@@ -85,62 +86,68 @@ const CreateSubs = () => {
 
       <div className={classes.buttons}>
         <div className={classes.show}>
-          <div>
-            <button
-              id="material"
-              type="button"
-              name="material"
-              onClick={fetchMatters}>
-              عرض الموارد
-            </button>
-          </div>
+          {(permissions.includes("view_substance") || is_superuser) && (
+            <div>
+              <button
+                id="material"
+                type="button"
+                name="material"
+                onClick={fetchMatters}>
+                عرض الموارد
+              </button>
+            </div>
+          )}
 
-          <div>
-            <button
-              id="instruments"
-              type="button"
-              name="instruments"
-              onClick={fetchInstruments}>
-              عرض المعدات
-            </button>
-          </div>
+          {(permissions.includes("view_instrument") || is_superuser) && (
+            <div>
+              <button
+                id="instruments"
+                type="button"
+                name="instruments"
+                onClick={fetchInstruments}>
+                عرض المعدات
+              </button>
+            </div>
+          )}
         </div>
         <div className={classes.actions}>
-          <button onClick={() => setShowModel(true)}>
-            {" "}
-            اضافة مواد{" "}
-            <span>
-              {" "}
-              <TbToolsKitchen />{" "}
-            </span>{" "}
-          </button>
-          <button onClick={() => setShowInstrumentsForm(true)}>
-            {" "}
-            اضافة أجهزة / الات{" "}
-            <span>
-              {" "}
-              <GiSaddle />{" "}
-            </span>
-          </button>
+          {(permissions.includes("add_substance") || is_superuser) && (
+            <button onClick={() => setShowModel(true)}>
+              اضافة مواد
+              {/* <span>
+                <TbToolsKitchen />
+              </span> */}
+            </button>
+          )}
+          {(permissions.includes("add_instrument") || is_superuser) && (
+            <button onClick={() => setShowInstrumentsForm(true)}>
+              اضافة أجهزة / الات
+              {/* <span>
+                <GiSaddle />
+              </span> */}
+            </button>
+          )}
         </div>
       </div>
 
-      {showMatters && (
-        <SubstancesView
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          setSearchVal={setSearchVal}
-          searchVal={searchVal}
-        />
-      )}
-      {showInstrumentsPage && (
-        <InstrumentsView
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          setSearchVal={setSearchVal}
-          searchVal={searchVal}
-        />
-      )}
+      {showMatters &&
+        (permissions.includes("view_substance") || is_superuser) && (
+          <SubstancesView
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            setSearchVal={setSearchVal}
+            searchVal={searchVal}
+          />
+        )}
+      {showInstrumentsPage &&
+        (permissions.includes("view_instrument") || is_superuser) && (
+          <InstrumentsView
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            setSearchVal={setSearchVal}
+            searchVal={searchVal}
+          />
+        )}
     </Fragment>
   );
 };

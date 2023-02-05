@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Routes, Route } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import {
   deleteInstruments,
@@ -21,6 +22,8 @@ const InstrumentsView = ({
 }) => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.authReducer);
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
   const [isDelete, setIsDelete] = useState(false);
   const [instrumentId, setInstrumentId] = useState("");
@@ -149,16 +152,26 @@ const InstrumentsView = ({
                           </td>
                           <td>{insruments.description}</td>
                           <td>
-                            <button
-                              onClick={() =>
-                                editInstrumentsForm(insruments.id)
-                              }>
-                              تعديل
-                            </button>
-                            <button
-                              onClick={() => deleteModelHandler(insruments.id)}>
-                              حذف
-                            </button>
+                            {(is_superuser ||
+                              permissions.includes("change_instrument")) && (
+                              <button
+                                className="editBtn"
+                                onClick={() =>
+                                  editInstrumentsForm(insruments.id)
+                                }>
+                                تعديل
+                              </button>
+                            )}
+                            {(is_superuser ||
+                              permissions.includes("delete_instrument")) && (
+                              <button
+                                className="deleteBtn"
+                                onClick={() =>
+                                  deleteModelHandler(insruments.id)
+                                }>
+                                حذف
+                              </button>
+                            )}
                           </td>
                         </tr>
                       );

@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import jwt_decode from "jwt-decode";
 import Backdrop from "../backdrop/Backdrop";
 import Inputs from "../inputs/Inputs";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -11,10 +12,10 @@ const CreateSubsModel = ({
   showMattersForm,
   showInstrumentsForm,
   showMattersPage,
-  instrumentsPage,
 }) => {
   const { token } = useSelector((state) => state.authReducer);
-
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   const [substancesData, setSubstancesData] = useState({
     name: "",
     categorty: "",
@@ -24,7 +25,7 @@ const CreateSubsModel = ({
     maintain_place: "",
   });
 
-  const [selectType, setSelectType] = useState([
+  const [selectType] = useState([
     "كيلوجرام",
     "لتر",
     "طن",
@@ -67,6 +68,23 @@ const CreateSubsModel = ({
       formIsValid = true;
     }
   }
+
+  //authenticated function
+  function subsauth() {
+    if (is_superuser || permissions.includes("view_substance")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  //authenticated function
+  function instauth() {
+    if (is_superuser || permissions.includes("view_instrument")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   //submit handler
 
   const submitHandler = (e) => {
@@ -81,9 +99,9 @@ const CreateSubsModel = ({
         quantity,
         description,
         token: token,
+        authenticated: subsauth(),
       };
       dispatch(createSubs(obj));
-      console.log("CREATED SUBS");
     }
 
     if (showInstrumentsForm) {
@@ -93,6 +111,7 @@ const CreateSubsModel = ({
         token: token,
         last_maintain,
         maintain_place,
+        authenticated: instauth(),
       };
       dispatch(createInstruments(obj));
       console.log("CREATED INSTRUM");
@@ -155,7 +174,7 @@ const CreateSubsModel = ({
           {showMattersForm && (
             <div className={classes.selectType}>
               <select
-                value={selectBox}
+                defaultValue={selectBox}
                 onChange={(e) => setSelectBox(e.target.value)}
                 required>
                 <option hidden selected>

@@ -41,7 +41,6 @@ const Store = () => {
   const getAllStores = permissions.some((el) =>
     getSoresPremission.includes(el)
   );
-  console.log(getAllStores);
 
   //paginationFun
   const paginationFun = useCallback(

@@ -17,7 +17,7 @@ import { searchImgs } from "../../../store/upload-img-slice";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [showGalleries, setShowGalleries] = useState(
+  const [showGalleries] = useState(
     location.pathname === "/gallery" ? true : false
   );
   const [activeClass, setActiveClass] = useState(null);

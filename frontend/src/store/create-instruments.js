@@ -19,9 +19,11 @@ export const createInstruments = createAsyncThunk(
           description: arg.description,
         }),
       });
-      ThunkAPI.dispatch(getInstruments(arg.token));
+      if (arg.authenticated === true) {
+        ThunkAPI.dispatch(getInstruments(arg.token));
+      }
       const data = await res.json();
-      console.log(data);
+
       return data;
     } catch (err) {
       console.log(err);

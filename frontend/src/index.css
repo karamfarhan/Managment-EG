@@ -87,3 +87,10 @@ textarea {
   border: 1px solid #ddd;
   resize: none;
 }
+
+.deleteBtn {
+  background-color: #da3230;
+}
+.editBtn {
+  background-color: green;
+}
