@@ -1,31 +1,24 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import { getCars } from "../../../store/cars-slice";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./CarList.module.css";
-const CarList = ({
-  car_model,
-  car_type,
-  car_number,
-  driver_name,
-  note,
-  driver,
-  id,
-  last_maintain,
-  maintain_place,
-}) => {
+const CarList = ({ car_number, driver_name, driver, id }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const detailPageHandler = () => {
     navigate(`/cars/${driver}/${id}`);
   };
   const { token } = useSelector((state) => state.authReducer);
-  const dispatch = useDispatch();
+  const decoded = jwt_decode(token);
+
+  const { is_superuser, permissions } = decoded;
   const [isDelete, setIsDelete] = useState(false);
   const [carId, setCarId] = useState("");
-
   //delete handler
   const deleteHandler = async (id) => {
     try {
@@ -80,35 +73,20 @@ const CarList = ({
             </p>
           </div>
           <div className={classes.actions}>
-            <button
-              className={classes.deleteBtn}
-              onClick={() => deleteModelHandler(id)}>
-              {" "}
-              <MdOutlineDeleteForever />{" "}
-            </button>
-            <button onClick={navigateEditHandler} className={classes.deleteBtn}>
-              {" "}
-              <FiEdit />
-            </button>
+            {(is_superuser || permissions.includes("delete_car")) && (
+              <button
+                className="deleteIcon"
+                onClick={() => deleteModelHandler(id)}>
+                <MdOutlineDeleteForever />
+              </button>
+            )}
+            {(is_superuser || permissions.includes("edit_car")) && (
+              <button className="editIcon" onClick={navigateEditHandler}>
+                <FiEdit />
+              </button>
+            )}
           </div>
         </header>
-        {/* <div>
-          <p>
-            نوع و طراز السيارة{" "}
-            <span>
-              {car_type} - {car_model}
-            </span>
-          </p>
-          <p>
-            أخر صيانة <span> {last_maintain} </span>
-          </p>
-          <p>
-            مكان الصيانة <span> {maintain_place} </span>
-          </p>
-          <p>
-            ملاحظات : <span> {note === "" ? "لا يوجد" : note} </span>
-          </p>
-        </div> */}
       </div>
     </Fragment>
   );

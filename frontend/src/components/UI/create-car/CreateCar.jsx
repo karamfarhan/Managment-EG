@@ -7,6 +7,7 @@ import classes from "./CreateCar.module.css";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { getCars } from "../../../store/cars-slice";
+import { logout } from "../../../store/auth-slice";
 const CreateCar = ({ hideModel }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
@@ -46,7 +47,9 @@ const CreateCar = ({ hideModel }) => {
             },
           }
         );
-
+        if (res.status === 401) {
+          return dispatch(logout());
+        }
         return await res.json();
       } catch (err) {
         console.log(err);
@@ -72,8 +75,9 @@ const CreateCar = ({ hideModel }) => {
           dispatch(getCars(token));
           hideModel();
         }
-        const data = await res.json();
-        console.log(data);
+        if (res.status === 401) {
+          return dispatch(logout());
+        }
         return await res.json();
       } catch (err) {
         console.log(err);

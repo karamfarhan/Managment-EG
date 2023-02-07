@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
 import Search from "../UI/search/Search";
 import { AiFillCar } from "react-icons/ai";
@@ -16,8 +17,10 @@ import Paginate from "../UI/pagination/Paginate";
 import CarList from "./car-list/CarList";
 
 const Cars = () => {
-  const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.authReducer);
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
   const [shoeForm, setShowForm] = useState(false);
   //current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +28,11 @@ const Cars = () => {
   const [searchValue, setSearchValue] = useState("");
   //fetch cars
   useEffect(() => {
-    if (currentPage === 1 && searchValue.trim() === "") {
+    if (
+      currentPage === 1 &&
+      searchValue.trim() === "" &&
+      (is_superuser || permissions.includes("view_car"))
+    ) {
       dispatch(getCars(token));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,20 +75,24 @@ const Cars = () => {
       {shoeForm && <CreateCar hideModel={hideModelForm} />}
       <Bar>
         <div className="toolBar">
-          <Search
-            placeholder=" أسم السائق أو بيانات السيارة"
-            onChange={searchHandler}
-            value={searchValue}
-            searchData={fetchSearchHandler}
-          />
-          <button
-            className={classes.createBtn}
-            onClick={() => setShowForm(true)}>
-            انشاء سيارة
-            <span>
-              <AiFillCar />
-            </span>
-          </button>
+          {(is_superuser || permissions.includes("view_car")) && (
+            <Search
+              placeholder=" أسم السائق أو بيانات السيارة"
+              onChange={searchHandler}
+              value={searchValue}
+              searchData={fetchSearchHandler}
+            />
+          )}
+          {(is_superuser || permissions.includes("add_car")) && (
+            <button
+              className={classes.createBtn}
+              onClick={() => setShowForm(true)}>
+              انشاء سيارة
+              <span>
+                <AiFillCar />
+              </span>
+            </button>
+          )}
         </div>
       </Bar>
 

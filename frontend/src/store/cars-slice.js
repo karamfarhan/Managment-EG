@@ -19,7 +19,7 @@ export const getCars = createAsyncThunk(
       const data = await res.json();
       return data;
     } catch (err) {
-      console.log(err);
+      return dispatch(logout());
     }
   }
 );

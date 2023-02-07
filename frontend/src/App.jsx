@@ -10,7 +10,7 @@ function App() {
       if (refresh) {
         dispatch(updateToken(refresh));
       }
-    }, 55000);
+    }, 57000);
     return () => clearInterval(timer);
   }, [dispatch, isAuth, refresh]);
 

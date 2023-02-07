@@ -50,9 +50,3 @@
   border: none;
   color: #fff;
 }
-.actions button:first-of-type {
-  color: rgba(223, 34, 34, 0.89);
-}
-.actions button:last-of-type {
-  color: rgb(12, 111, 204);
-}

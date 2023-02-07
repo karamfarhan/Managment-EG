@@ -91,6 +91,14 @@ textarea {
 .deleteBtn {
   background-color: #da3230;
 }
+.deleteIcon {
+  color: #da3230 !important;
+}
+
 .editBtn {
-  background-color: green;
+  background-color: rgb(12, 111, 204);
+}
+
+.editIcon {
+  color: rgb(12, 111, 204) !important;
 }
