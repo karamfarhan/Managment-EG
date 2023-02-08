@@ -72,7 +72,7 @@ class Employee(models.Model):
         blank=False,
         verbose_name=_("employee type"),
     )
-    email = models.EmailField(verbose_name="employee email address", max_length=60, null=False, blank=False)
+    email = models.EmailField(verbose_name="employee email address", max_length=60, null=True, blank=True)
     email_verified = models.BooleanField(default=False)
     number = models.CharField(verbose_name="employee number", max_length=60, null=True, blank=True)
     created_by = models.ForeignKey(
@@ -127,6 +127,8 @@ class Employee(models.Model):
         verbose_name=_("employee's days off number"),
     )
     signin_date = models.DateField(
+        null=True,
+        blank=True,
         verbose_name=_("employee signed in date"),
     )
     store = models.ForeignKey(
