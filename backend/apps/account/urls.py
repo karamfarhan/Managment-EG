@@ -6,6 +6,7 @@ from . import views
 
 # app_name = "account"
 
+
 urlpatterns = [
     path("get_routs/", views.getRouts, name="routs"),
     path("login_token/", views.LoginTokenView.as_view(), name="login"),
@@ -13,7 +14,7 @@ urlpatterns = [
     path("view/", views.profileUser, name="account_view"),
     path("edit/", views.updateprofileUser, name="account_edit"),
     path("change_password/", views.ChangePasswordView.as_view(), name="change_password"),
-    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("token/refresh/", views.CustomTokenRefreshView.as_view(), name="token_refresh"),
     path("check_email/", views.does_account_exist_view, name="check_email"),
     path("activate-account/<slug:uidb46>/<slug:token>/", views.UserActivationView.as_view(), name="activate-account"),
     path("reset-password/", views.ResetPasswordView, name="reset-password"),

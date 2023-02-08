@@ -8,7 +8,8 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .email import ActivationEmail, ConfirmationEmail, PasswordChangedConfirmationEmail, PasswordResetEmail
 from .serializers import (
@@ -18,6 +19,7 @@ from .serializers import (
     AccountWriteSerializer,
     ChangePasswordSerializer,
     CheckAccountSerializer,
+    CustomTokenRefreshSerializer,
     LoginTokenObtainSerializer,
     ResetPasswordSerializer,
 )
@@ -27,6 +29,12 @@ from .utils import account_activation_token, get_user_email
 # this is an login view it's return the tokens (you can return any thing else with the tokens from the serializer)
 class LoginTokenView(TokenObtainPairView):
     serializer_class = LoginTokenObtainSerializer
+    permission_classes = ()
+    authentication_classes = ()
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    serializer_class = CustomTokenRefreshSerializer
     permission_classes = ()
     authentication_classes = ()
 

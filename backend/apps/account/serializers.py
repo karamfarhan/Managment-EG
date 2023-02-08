@@ -5,14 +5,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MinLengthValidator
 from django.db.models import Q
 from drf_extra_fields.fields import LowercaseEmailField
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
+from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from rest_framework_simplejwt.state import token_backend
 
 from .utils import decode_uid
-
-# from rest_framework_simplejwt.serializers import UniqueValidator, LowercaseEmailField
 
 
 class LoginTokenObtainSerializer(TokenObtainPairSerializer):
@@ -20,6 +20,7 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        # permissions = [str(perm) for perm in user.get_all_permissions()]
         token["username"] = user.username
         token["is_superuser"] = user.is_superuser
         user_permissions = [p.codename for p in user.user_permissions.all()]
@@ -55,6 +56,26 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
                 raise AuthenticationFailed("The Password Is Incorect.")
         else:
             raise AuthenticationFailed("Invalid credentials, Email or Password is Incorect")
+
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        decoded_payload = token_backend.decode(data["access"], verify=True)
+        user_uid = decoded_payload["user_id"]
+        user = Account.objects.get(pk=user_uid)
+
+        user_permissions = [p.codename for p in user.user_permissions.all()]
+        group_permissions = [p.codename for group in user.groups.all() for p in group.permissions.all()]
+        decoded_payload["username"] = user.username
+        decoded_payload["permissions"] = list(set(user_permissions).union(set(group_permissions)))
+        decoded_payload["is_superuser"] = user.is_superuser
+
+        token = token_backend.encode(decoded_payload)
+        data["access"] = token
+        # add filter query
+        # data.update({'custom_field': 'custom_data'})
+        return data
 
 
 # class UserRegistrationSerializer(serializers.Serializer):
