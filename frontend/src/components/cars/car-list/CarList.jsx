@@ -80,7 +80,7 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
                 <MdOutlineDeleteForever />
               </button>
             )}
-            {(is_superuser || permissions.includes("edit_car")) && (
+            {(is_superuser || permissions.includes("change_car")) && (
               <button className="editIcon" onClick={navigateEditHandler}>
                 <FiEdit />
               </button>
