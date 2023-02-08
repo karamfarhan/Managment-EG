@@ -64,15 +64,7 @@ const StaffForm = ({ setStaffForm }) => {
   } = empolyeeData;
 
   //validation
-  if (
-    steps === 1 &&
-    name.trim() !== "" &&
-    type.trim() !== "" &&
-    email.trim() !== "" &&
-    email.includes("@") &&
-    signin_date.trim() !== "" &&
-    is_primary !== ""
-  ) {
+  if (steps === 1 && name.trim() !== "" && type.trim() !== "") {
     formIsValid = true;
   }
   //validation insurance

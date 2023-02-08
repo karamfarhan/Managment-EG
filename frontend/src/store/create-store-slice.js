@@ -13,7 +13,7 @@ export const getStores = createAsyncThunk(
         },
       });
       if (res.status === 401) {
-        return;
+        return ThunkAPI.dispatch(logout());
       }
       const data = await res.json();
       return data;

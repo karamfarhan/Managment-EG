@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
@@ -10,6 +10,7 @@ import { empolyeeSearch, getEmpolyees } from "../../store/empolyees-slice";
 import Search from "../UI/search/Search";
 import EditEmpolyee from "./empolyees/edit-empolyee/EditEmpolyee";
 import classes from "./Staff.module.css";
+import Notification from "../UI/notification/Notification";
 export const Staff = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -81,52 +82,53 @@ export const Staff = () => {
     }, Object.create(null));
 
   return (
-    <div dir="rtl">
-      {!staffForm && location.pathname === "/staff" && (
-        <Bar>
-          <div className="toolBar">
-            {(is_superuser || getStaff) && (
-              <Search
-                placeholder="أبحث عن أسم الموظف أو الموقع"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                searchData={fetchSearchHandler}
-              />
-            )}
-            {(is_superuser || permissions.includes("add_employee")) && (
-              <button
-                className={classes.btn}
-                onClick={() => setStaffForm(true)}>
-                انشاء موظف
-                <span>
-                  <AiOutlineUserAdd />
-                </span>
-              </button>
-            )}
-          </div>
-        </Bar>
-      )}
-      <Routes>
-        <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
-      </Routes>
-      {(is_superuser || permissions.includes("add_employee")) && staffForm && (
-        <StaffForm setStaffForm={setStaffForm} />
-      )}
-      {!staffForm &&
-        empolyees &&
-        empolyees.count > 0 &&
-        location.pathname === "/staff" &&
-        (is_superuser || getStaff) && (
-          <Empolyess
-            decoded={decoded}
-            data={result}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            searchValue={searchValue}
-            fetchSearchHandler={fetchSearchHandler}
-            staffForm={staffForm}
-          />
+    <Fragment>
+      <div dir="rtl">
+        {!staffForm && location.pathname === "/staff" && (
+          <Bar>
+            <div className="toolBar">
+              {(is_superuser || getStaff) && (
+                <Search
+                  placeholder="أبحث عن أسم الموظف أو الموقع"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  searchData={fetchSearchHandler}
+                />
+              )}
+              {(is_superuser || permissions.includes("add_employee")) && (
+                <button
+                  className={classes.btn}
+                  onClick={() => setStaffForm(true)}>
+                  انشاء موظف
+                  <span>
+                    <AiOutlineUserAdd />
+                  </span>
+                </button>
+              )}
+            </div>
+          </Bar>
         )}
-    </div>
+        <Routes>
+          <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
+        </Routes>
+        {(is_superuser || permissions.includes("add_employee")) &&
+          staffForm && <StaffForm setStaffForm={setStaffForm} />}
+        {!staffForm &&
+          empolyees &&
+          empolyees.count > 0 &&
+          location.pathname === "/staff" &&
+          (is_superuser || getStaff) && (
+            <Empolyess
+              decoded={decoded}
+              data={result}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              searchValue={searchValue}
+              fetchSearchHandler={fetchSearchHandler}
+              staffForm={staffForm}
+            />
+          )}
+      </div>
+    </Fragment>
   );
 };

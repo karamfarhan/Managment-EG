@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { logout } from "./auth-slice";
+import { notificationAction } from "./notification-slice";
 
 //GET
 export const getEmpolyees = createAsyncThunk(
@@ -17,6 +18,7 @@ export const getEmpolyees = createAsyncThunk(
         return ThunkAPI.dispatch(logout());
       }
       const data = await res.json();
+
       return data;
     } catch (err) {
       return ThunkAPI.dispatch(logout());
