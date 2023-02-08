@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Car, CarActivity, CarActivityRide
@@ -18,7 +18,6 @@ from .serializers import CarActivitySerializer, CarSerializer
 
 
 class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
-    # permission_classes = (IsAuthenticated,)
     queryset = Car.objects.select_related("created_by", "driver")
     pagination_class = PageNumberPagination
     serializer_class = CarSerializer
@@ -26,6 +25,11 @@ class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     search_fields = ["created_by__username", "car_model", "car_type", "car_number", "driver__name", "maintain_place"]
     ordering_fields = ["car_model", "created_at", "last_maintain"]
     resource_class = CarResource
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Car.objects.select_related("created_by", "driver")
+        return Car.objects.select_related("created_by", "driver").filter(driver=self.request.user.employee)
 
     def create(self, request, *args, **kwargs):
         print(f"Car-{self.request.method}-REQUEST_DATA = ", request.data)

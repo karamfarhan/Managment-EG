@@ -38,6 +38,13 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     ordering_fields = ["name", "created_at", "years_of_experiance"]
     resource_class = EmployeeResource
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Employee.objects.select_related("created_by", "insurance")
+        else:
+            return Employee.objects.filter(account=user)
+
     def create(self, request, *args, **kwargs):
         print(f"Employee-{self.request.method}-REQUEST_DATA = ", request.data)
         serializer = self.get_serializer(data=request.data)
@@ -50,8 +57,7 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         print(f"Employee-{self.request.method}-REQUEST_DATA = ", request.data)
         # partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=True)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -85,8 +91,7 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     # ! this decorator will add the location of the user in the request object
     # @with_ip_geolocation
     def create(self, request, *args, **kwargs):
-        print(
-            f"Employee Activity-{self.request.method}-REQUEST_DATA = ", request.data)
+        print(f"Employee Activity-{self.request.method}-REQUEST_DATA = ", request.data)
 
         # ip, is_routable = get_client_ip(request)
         # TODO this method doesn't work i have to find a way to convert the ip to location
@@ -103,18 +108,14 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        print(
-            f"Employee Activity-{self.request.method}-REQUEST_DATA = ", request.data)
+        print(f"Employee Activity-{self.request.method}-REQUEST_DATA = ", request.data)
         activity_id = request.data.get("id", None)
         if activity_id is None:
-            raise serializers.ValidationError(
-                {"id": "This field is required while setting the phase out"})
+            raise serializers.ValidationError({"id": "This field is required while setting the phase out"})
         # TODO should search the activity based on the date also, for more secure
         # TODO because now he can send the id and update an activity from the last month
-        instance = get_object_or_404(
-            self.queryset, id=activity_id, date=datetime.datetime.today())
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=True)
+        instance = get_object_or_404(self.queryset, id=activity_id, date=datetime.datetime.today())
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -126,7 +127,7 @@ class EmployeeActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         return ip
 
 
-# TODO i think you can use the action deocrator in the export methnod instead to
+# TODO i think you can use the action decorator in the export method instead to
 # TODO determine the url for the method instead of setting it in the url file
 # class MyViewSet(viewsets.ViewSet):
 # @action(methods=['get'], detail=False, url_path='my-view', suffix='custom')
