@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,10 +20,14 @@ const Empolyess = ({
   fetchSearchHandler,
   decoded,
 }) => {
+  const [phases, setPhases] = useState({
+    phaseIn: "",
+    phaseOut: "",
+  });
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.authReducer.token);
+  const { token, refresh } = useSelector((state) => state.authReducer);
+  console.log(token);
   const { is_superuser, permissions } = decoded;
-
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
   const empolyeeCount = empolyeeData && empolyeeData.count;
@@ -40,7 +44,10 @@ const Empolyess = ({
   const today = new Date();
   const time =
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
+  const obj = {
+    token,
+    refresh,
+  };
   //send phase/in
   const sendPhaseIn = async (id) => {
     try {
@@ -57,11 +64,11 @@ const Empolyess = ({
           }),
         }
       );
-      const data = await res.json();
-      console.log(data);
       if (res.ok) {
-        dispatch(getEmpolyees(token));
+        dispatch(getEmpolyees(obj));
       }
+      const data = await res.json();
+      setPhases({ ...phases, phaseIn: data.phase_in });
 
       return await res.json();
     } catch (err) {}
@@ -86,16 +93,15 @@ const Empolyess = ({
       );
       const data = await res.json();
       console.log(data);
+      setPhases({ ...phases, phaseOut: data.phase_out });
       if (res.ok) {
-        dispatch(getEmpolyees(token));
+        dispatch(getEmpolyees(obj));
       }
-
-      return await res.json();
     } catch (err) {}
   };
   return (
     <Fragment>
-      <div className={classes["table_content"]}>
+      <div className={classes["table_content"]} dir="rtl">
         <ExportExcel matter="employees" />
 
         {data &&
@@ -114,7 +120,7 @@ const Empolyess = ({
                   </thead>
                   {value.map((e, i) => {
                     return (
-                      <tbody>
+                      <tbody key={i}>
                         <tr>
                           <td>
                             <Link to={`/staff/${e.id}`}>{e.name}</Link>
@@ -152,7 +158,8 @@ const Empolyess = ({
                                     e.today_activity === false
                                       ? sendPhaseIn(e.id)
                                       : sendPhaseOut(e.id, e.today_activity.id)
-                                  }>
+                                  }
+                                >
                                   {(e.today_activity === false ||
                                     e.today_activity.phase_in === null) &&
                                     "سجل الحضور"}

@@ -25,8 +25,20 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   });
 
   const [selectType, setSelectType] = useState(selectedSubs.unit_type);
-  const [unitTypes, setUnitTypes] = useState(["kilogram", "liter", "ton"]);
-
+  const [unitTypes, setUnitTypes] = useState([
+    "كيلوجرام",
+    "لتر",
+    "طن",
+    "متر طولي",
+    "متر مربع",
+    "متر مكعب",
+    "دهان",
+    "شكارة 20",
+    "شكارة 25",
+    "شكارة 50",
+    "شكارة معجون",
+    "قطعة",
+  ]);
   let nameVar = selectedSubs.email,
     descriptionVar = selectedSubs.description,
     quantityVar = selectedSubs.units,
@@ -123,7 +135,8 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
           <div className={classes.selectType}>
             <select
               value={selectType}
-              onChange={(e) => setSelectType(e.target.value)}>
+              onChange={(e) => setSelectType(e.target.value)}
+            >
               {unitTypes.map((option, i) => {
                 return (
                   <option key={i} value={option}>

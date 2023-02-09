@@ -41,6 +41,11 @@
   gap: 10px;
   flex-wrap: wrap;
 }
+@media (max-width: 767px) {
+  .preview > div {
+    display: block;
+  }
+}
 .fig {
   width: 250px;
   cursor: pointer;

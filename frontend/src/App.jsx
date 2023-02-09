@@ -4,7 +4,8 @@ import Pages from "./pages/Pages";
 import { updateToken } from "./store/auth-slice";
 function App() {
   const dispatch = useDispatch();
-  const { refresh, isAuth } = useSelector((state) => state.authReducer);
+  const { refresh } = useSelector((state) => state.authReducer);
+
   useEffect(() => {
     const timer = setInterval(() => {
       if (refresh) {
@@ -12,7 +13,7 @@ function App() {
       }
     }, 57000);
     return () => clearInterval(timer);
-  }, [dispatch, isAuth, refresh]);
+  }, [dispatch, refresh]);
 
   return <Pages />;
 }

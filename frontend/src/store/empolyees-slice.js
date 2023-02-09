@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { logout } from "./auth-slice";
-import { notificationAction } from "./notification-slice";
+import { updateToken } from "./auth-slice";
 
 //GET
 export const getEmpolyees = createAsyncThunk(
@@ -11,17 +10,15 @@ export const getEmpolyees = createAsyncThunk(
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${arg}`,
+          Authorization: `Bearer ${arg.token}`,
         },
       });
       if (res.status === 401) {
-        return ThunkAPI.dispatch(logout());
+        return ThunkAPI.dispatch(updateToken(arg.refresh));
       }
-      const data = await res.json();
-
-      return data;
+      return await res.json();
     } catch (err) {
-      return ThunkAPI.dispatch(logout());
+      console.log(err);
     }
   }
 );
@@ -97,19 +94,11 @@ const empolyeeSlice = createSlice({
   name: "empolyee",
   initialState: {
     data: null,
-    unAuth: null,
   },
-  reducers: {
-    login: (state) => {
-      state.unAuth = null;
-    },
-  },
+  reducers: {},
   extraReducers: {
-    [getEmpolyees.pending]: (state, action) => {
-      state.unAuth = null;
-    },
+    [getEmpolyees.pending]: (state, action) => {},
     [getEmpolyees.fulfilled]: (state, action) => {
-      state.unAuth = null;
       state.data = action.payload;
     },
     [getEmpolyees.rejected]: (state, action) => {

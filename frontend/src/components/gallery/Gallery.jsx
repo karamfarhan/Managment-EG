@@ -14,7 +14,6 @@ import ImgModel from "../UI/imgModel/ImgModel";
 import SelectImg from "../UI/select_img/SelectImg";
 import classes from "./Gallery.module.css";
 import Paginate from "../UI/pagination/Paginate";
-import Search from "../UI/search/Search";
 
 const Gallery = () => {
   const [imgSrc, setImgSrc] = useState([]);
@@ -28,19 +27,18 @@ const Gallery = () => {
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
-  const allPermissions = permissions.join(" ");
   /**************************/
 
   // pagination details
   const [currentPage, setCurrentPage] = useState(1);
   const [description, setDescription] = useState();
   const { data } = useSelector((state) => state.imageReducer);
-  const { count } =
-    data !== null &&
+  const count =
     data &&
     (is_superuser ||
       permissions.includes("view_image") ||
-      permissions.includes("view_mediapack"));
+      permissions.includes("view_mediapack")) &&
+    data.count;
 
   /**************************/
 
@@ -113,11 +111,13 @@ const Gallery = () => {
     setCurrentIndex((prevInx) => prevInx - 1);
   };
 
+  console.log(result);
+
   //search handler
-  const searchHandler = (e) => {
-    setSearchValue(e.target.value);
-    setCurrentPage(1);
-  };
+  // const searchHandler = (e) => {
+  //   setSearchValue(e.target.value);
+  //   setCurrentPage(1);
+  // };
 
   //fetch search data
   const fetchSearchHandler = () => {
@@ -188,7 +188,7 @@ const Gallery = () => {
           permissions.includes("view_mediapack")) &&
         Object.entries(result).map(([key, value], i) => {
           return (
-            <div className={classes.content}>
+            <div className={classes.content} key={i}>
               <h4> {new Date(key).toLocaleString()} </h4>
               <div className={classes.preview}>
                 {value.map((el, index) => {
@@ -202,7 +202,8 @@ const Gallery = () => {
                           el.image,
                           el.media_pack.alt_text
                         )
-                      }>
+                      }
+                    >
                       <div>
                         <figure>
                           <img src={el.image} alt="f" />

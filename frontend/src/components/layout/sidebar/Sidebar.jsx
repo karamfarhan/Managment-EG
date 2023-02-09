@@ -17,6 +17,7 @@ import { searchImgs } from "../../../store/upload-img-slice";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+
   const [showGalleries] = useState(
     location.pathname === "/gallery" ? true : false
   );
@@ -35,11 +36,11 @@ const Sidebar = () => {
     dispatch(searchImgs(obj));
     setActiveClass(id);
   };
-  console.log(is_superuser);
-
+  console.log(location);
   const { data } = useQuery(
     "get/stores",
     async () => {
+      if (location.pathname !== "/gallery") return;
       try {
         const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
           method: "GET",
@@ -70,7 +71,8 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StaffIcon />
               </span>
@@ -88,7 +90,8 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StoreIcon />
               </span>
@@ -110,7 +113,8 @@ const Sidebar = () => {
                     color: isActive ? "#2150d8" : "#fff",
                     borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                   };
-                }}>
+                }}
+              >
                 <span>
                   <GiPaddles />
                 </span>
@@ -118,6 +122,25 @@ const Sidebar = () => {
               </NavLink>
             </li>
           )}
+        {(is_superuser === true || allPermissions.includes("car")) && (
+          <li>
+            <NavLink
+              to="/cars"
+              style={({ isActive }) => {
+                return {
+                  background: isActive ? "#edeaea" : "inherit",
+                  color: isActive ? "#2150d8" : "#fff",
+                  borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
+                };
+              }}
+            >
+              <span>
+                <FaCarSide />
+              </span>
+              <p>السيارات</p>
+            </NavLink>
+          </li>
+        )}
         {(is_superuser === true || allPermissions.includes("media")) && (
           <li>
             <NavLink
@@ -129,7 +152,8 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <GalleryIcon />
               </span>
@@ -146,31 +170,14 @@ const Sidebar = () => {
                       <li
                         className={activeClass === el.pk ? classes.active : ""}
                         onClick={(e) => selectedStoreHandler(e, el.pk)}
-                        key={el.pk}>
+                        key={el.pk}
+                      >
                         {el.address}
                       </li>
                     );
                   })}
               </ul>
             )}
-          </li>
-        )}
-        {(is_superuser === true || allPermissions.includes("car")) && (
-          <li>
-            <NavLink
-              to="/cars"
-              style={({ isActive }) => {
-                return {
-                  background: isActive ? "#edeaea" : "inherit",
-                  color: isActive ? "#2150d8" : "#fff",
-                  borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
-                };
-              }}>
-              <span>
-                <FaCarSide />
-              </span>
-              <p>السيارات</p>
-            </NavLink>
           </li>
         )}
       </ul>

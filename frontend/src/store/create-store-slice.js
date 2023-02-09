@@ -12,13 +12,13 @@ export const getStores = createAsyncThunk(
           Authorization: `Bearer ${arg}`,
         },
       });
-      if (res.status === 401) {
-        return ThunkAPI.dispatch(logout());
-      }
+      // if (res.status === 401) {
+      //   return ThunkAPI.dispatch(logout());
+      // }
       const data = await res.json();
       return data;
     } catch (err) {
-      ThunkAPI.dispatch(logout());
+      console.log(err);
     }
   }
 );

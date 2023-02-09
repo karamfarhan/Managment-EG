@@ -15,9 +15,9 @@ export const getCarPagination = createAsyncThunk(
           },
         }
       );
-      if (res.status === 401) {
-        return dispatch(logout());
-      }
+      // if (res.status === 401) {
+      //   return dispatch(logout());
+      // }
       const data = await res.json();
       return data;
     } catch (err) {

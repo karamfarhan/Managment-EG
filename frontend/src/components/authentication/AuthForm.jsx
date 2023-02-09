@@ -5,6 +5,7 @@ import classes from "./AuthForm.module.css";
 import { login } from "../../store/auth-slice";
 const AuthForm = () => {
   const dispatch = useDispatch();
+
   //email & password
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -21,7 +22,12 @@ const AuthForm = () => {
   //login
   const { isLoading, httpErr } = useSelector((state) => state.authReducer);
   const loggin = () => {
-    dispatch(login(userInfo));
+    let obj = {
+      email: userInfo.email,
+      password: userInfo.password,
+    };
+
+    dispatch(login(obj));
   };
 
   //submit hanlder
@@ -32,7 +38,6 @@ const AuthForm = () => {
   };
 
   const unAuthUser = httpErr && httpErr !== "" ? classes.unauth : "";
-  console.log(httpErr);
   return (
     <main>
       <div className={`${classes.main} ${unAuthUser}`}>
@@ -44,7 +49,8 @@ const AuthForm = () => {
                 <button
                   disabled={!form}
                   type="submit"
-                  className={classes.submitBtn}>
+                  className={classes.submitBtn}
+                >
                   تسجيل الدخول
                 </button>
               )}

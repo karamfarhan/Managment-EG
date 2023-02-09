@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 //Login
 export const login = createAsyncThunk(
   "login/token",
-  async (arg, { rejectWithValue }) => {
+  async (arg, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
         "http://127.0.0.1:8000/account/login_token/",
@@ -34,18 +34,19 @@ export const login = createAsyncThunk(
 export const updateToken = createAsyncThunk(
   "refresh/token",
   async (arg, { dispatch }) => {
- const res = await   fetch("http://127.0.0.1:8000/account/token/refresh/", {
+    const res = await fetch("http://127.0.0.1:8000/account/token/refresh/", {
       method: "POST",
       body: JSON.stringify({ refresh: arg }),
       headers: {
         "Content-type": "Application/json",
       },
-    })
+    });
 
-    return await res.json()
+    if (res.status === 401) {
+      return dispatch(logout());
+    }
 
-
-    
+    return await res.json();
   }
 );
 
@@ -59,7 +60,7 @@ const authSlice = createSlice({
     token: localStorage.getItem("token-management") || null,
     refresh: localStorage.getItem("refresh-token") || null,
     isLoading: false,
-    isAuth: localStorage.getItem("token-management") ? true : false,
+    isAuth: localStorage.getItem("token-management") !== null ? true : false,
   },
   reducers: {
     logout: (state) => {
@@ -80,20 +81,17 @@ const authSlice = createSlice({
       state.isAuth = true;
       localStorage.setItem("token-management", action.payload.access);
       localStorage.setItem("refresh-token", action.payload.refresh);
-      console.log(action);
     },
     [login.rejected]: (state, action) => {
       state.isLoading = false;
       state.isAuth = false;
       state.httpErr = action.payload;
-      console.log(action.payload);
     },
-
 
     [updateToken.fulfilled]: (state, action) => {
       state.token = action.payload.access;
+
       localStorage.setItem("token-management", action.payload.access);
-      console.log(action.payload)
     },
   },
 });

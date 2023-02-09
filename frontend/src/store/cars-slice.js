@@ -12,20 +12,20 @@ export const getCars = createAsyncThunk(
           Authorization: `Bearer ${arg}`,
         },
       });
-      if (!res.ok) throw new Error(res.statusText);
-      if (res.status === 401) {
-        return dispatch(logout());
-      }
+      // if (res.status === 401) {
+      //   return dispatch(logout());
+      // }
       const data = await res.json();
+      console.log(data);
       return data;
     } catch (err) {
-      return dispatch(logout());
+      console.log(err);
     }
   }
 );
 
 // CARS PAGINATION
-export const CarsPaginations = createAsyncThunk(
+export const carsPaginations = createAsyncThunk(
   "get/carsPagination",
   async (arg) => {
     try {
@@ -35,7 +35,7 @@ export const CarsPaginations = createAsyncThunk(
           Authorization: `Bearer ${arg.token}`,
         },
       });
-      if (!res.ok) throw new Error(res.statusText);
+
       const data = await res.json();
       return data;
     } catch (err) {
@@ -45,7 +45,7 @@ export const CarsPaginations = createAsyncThunk(
 );
 
 // CARS SEARCH
-export const CarsSearch = createAsyncThunk("car/search", async (arg) => {
+export const carsSearch = createAsyncThunk("car/search", async (arg) => {
   try {
     const res = await fetch(
       `http://127.0.0.1:8000/cars/?search=${arg.search}`,
@@ -64,7 +64,7 @@ export const CarsSearch = createAsyncThunk("car/search", async (arg) => {
   }
 });
 // CARS SEARCH
-export const CarsSearchPagination = createAsyncThunk(
+export const carsSearchPagination = createAsyncThunk(
   "car/searchPagination",
   async (arg) => {
     try {
@@ -95,17 +95,17 @@ const carSlice = createSlice({
 
     //pagination
 
-    [CarsPaginations.fulfilled]: (state, action) => {
+    [carsPaginations.fulfilled]: (state, action) => {
       state.data = action.payload;
     },
     //search
 
-    [CarsSearch.fulfilled]: (state, action) => {
+    [carsSearch.fulfilled]: (state, action) => {
       state.data = action.payload;
     },
     //search pagination
 
-    [CarsSearchPagination.fulfilled]: (state, action) => {
+    [carsSearchPagination.fulfilled]: (state, action) => {
       state.data = action.payload;
     },
   },

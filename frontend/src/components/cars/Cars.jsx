@@ -8,9 +8,9 @@ import { Fragment } from "react";
 import CreateCar from "../UI/create-car/CreateCar";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  CarsPaginations,
-  CarsSearch,
-  CarsSearchPagination,
+  carsPaginations,
+  carsSearch,
+  carsSearchPagination,
   getCars,
 } from "../../store/cars-slice";
 import Paginate from "../UI/pagination/Paginate";
@@ -37,9 +37,9 @@ const Cars = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, currentPage, searchValue]);
-
   //cars data
-  const { data: cars } = useSelector((state) => state.carReducer);
+  const cars = useSelector((state) => state.carReducer.data);
+
   //search handler
   const searchHandler = (e) => {
     setSearchValue(e.target.value);
@@ -51,7 +51,7 @@ const Cars = () => {
 
   //pagination functions
   const paginationFun = (obj) => {
-    dispatch(CarsPaginations(obj));
+    dispatch(carsPaginations(obj));
   };
 
   //fetch search data
@@ -62,12 +62,12 @@ const Cars = () => {
       search: searchValue,
     };
 
-    dispatch(CarsSearch(obj));
+    dispatch(carsSearch(obj));
   }
   //search behavior
   const searchPagination = (obj) => {
     // //search pagination
-    dispatch(CarsSearchPagination(obj));
+    dispatch(carsSearchPagination(obj));
   };
 
   return (
@@ -86,7 +86,8 @@ const Cars = () => {
           {(is_superuser || permissions.includes("add_car")) && (
             <button
               className={classes.createBtn}
-              onClick={() => setShowForm(true)}>
+              onClick={() => setShowForm(true)}
+            >
               انشاء سيارة
               <span>
                 <AiFillCar />

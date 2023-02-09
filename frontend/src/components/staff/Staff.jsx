@@ -10,12 +10,11 @@ import { empolyeeSearch, getEmpolyees } from "../../store/empolyees-slice";
 import Search from "../UI/search/Search";
 import EditEmpolyee from "./empolyees/edit-empolyee/EditEmpolyee";
 import classes from "./Staff.module.css";
-import Notification from "../UI/notification/Notification";
 export const Staff = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { pathname } = location;
-  const { token } = useSelector((state) => state.authReducer);
+  const { token, refresh } = useSelector((state) => state.authReducer);
 
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
@@ -35,20 +34,26 @@ export const Staff = () => {
   const [staffForm, setStaffForm] = useState(false);
   //search
   const [searchValue, setSearchValue] = useState("");
-
   //data
   const { data: empolyees } = useSelector((state) => state.empolyeeReducer);
-  console.log(empolyees);
+
+  const isAuth = useSelector((state) => state.authReducer.isAuth);
   //fetch search data
   //get stores
   useEffect(() => {
+    const obj = {
+      token,
+      refresh,
+    };
     if (
       currentPage === 1 &&
       searchValue.trim() === "" &&
       staffForm === false &&
-      (getStaff || is_superuser)
+      (getStaff || is_superuser) &&
+      isAuth === true &&
+      refresh
     ) {
-      dispatch(getEmpolyees(token));
+      dispatch(getEmpolyees(obj));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -59,6 +64,8 @@ export const Staff = () => {
     pathname,
     getStaff,
     is_superuser,
+    refresh,
+    isAuth,
   ]);
 
   function fetchSearchHandler() {
@@ -68,10 +75,11 @@ export const Staff = () => {
       search: searchValue,
     };
     // if true allow search empolyee
-    if (getEmpolyees || is_superuser === true) {
+    if (getStaff || is_superuser === true) {
       dispatch(empolyeeSearch(obj));
     }
   }
+
   let result =
     empolyees &&
     empolyees.results &&
@@ -98,7 +106,8 @@ export const Staff = () => {
               {(is_superuser || permissions.includes("add_employee")) && (
                 <button
                   className={classes.btn}
-                  onClick={() => setStaffForm(true)}>
+                  onClick={() => setStaffForm(true)}
+                >
                   انشاء موظف
                   <span>
                     <AiOutlineUserAdd />
