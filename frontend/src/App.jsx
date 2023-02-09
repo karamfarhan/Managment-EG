@@ -7,6 +7,10 @@ function App() {
   const { refresh } = useSelector((state) => state.authReducer);
 
   useEffect(() => {
+    dispatch(updateToken(refresh));
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       if (refresh) {
         dispatch(updateToken(refresh));

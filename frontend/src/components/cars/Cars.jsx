@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
 import Search from "../UI/search/Search";
@@ -15,6 +16,7 @@ import {
 } from "../../store/cars-slice";
 import Paginate from "../UI/pagination/Paginate";
 import CarList from "./car-list/CarList";
+import { logout } from "../../store/auth-slice";
 
 const Cars = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ const Cars = () => {
   //search
   const [searchValue, setSearchValue] = useState("");
   //fetch cars
+  console.log(token);
   useEffect(() => {
     if (
       currentPage === 1 &&
@@ -69,7 +72,10 @@ const Cars = () => {
     // //search pagination
     dispatch(carsSearchPagination(obj));
   };
-
+  console.log(cars);
+  // if (cars === undefined || cars === null) {
+  //   dispatch(logout());
+  // }
   return (
     <Fragment>
       {shoeForm && <CreateCar hideModel={hideModelForm} />}
@@ -86,8 +92,7 @@ const Cars = () => {
           {(is_superuser || permissions.includes("add_car")) && (
             <button
               className={classes.createBtn}
-              onClick={() => setShowForm(true)}
-            >
+              onClick={() => setShowForm(true)}>
               انشاء سيارة
               <span>
                 <AiFillCar />
@@ -99,6 +104,7 @@ const Cars = () => {
 
       <div className={classes.grid}>
         {cars &&
+          cars !== undefined &&
           cars.results.map((el) => {
             return (
               <CarList

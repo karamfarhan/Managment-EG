@@ -10,12 +10,10 @@ export const getEmpolyees = createAsyncThunk(
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${arg.token}`,
+          Authorization: `Bearer ${arg}`,
         },
       });
-      if (res.status === 401) {
-        return ThunkAPI.dispatch(updateToken(arg.refresh));
-      }
+      console.log(arg);
       return await res.json();
     } catch (err) {
       console.log(err);

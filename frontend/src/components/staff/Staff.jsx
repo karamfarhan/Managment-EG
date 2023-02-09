@@ -40,32 +40,27 @@ export const Staff = () => {
   const isAuth = useSelector((state) => state.authReducer.isAuth);
   //fetch search data
   //get stores
+
+  console.log(token);
   useEffect(() => {
-    const obj = {
-      token,
-      refresh,
-    };
     if (
       currentPage === 1 &&
       searchValue.trim() === "" &&
       staffForm === false &&
       (getStaff || is_superuser) &&
-      isAuth === true &&
-      refresh
+      isAuth === true
     ) {
-      dispatch(getEmpolyees(obj));
+      dispatch(getEmpolyees(token));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
     currentPage,
     searchValue,
     staffForm,
-    pathname,
     getStaff,
     is_superuser,
-    refresh,
     isAuth,
+    token,
   ]);
 
   function fetchSearchHandler() {
@@ -106,8 +101,7 @@ export const Staff = () => {
               {(is_superuser || permissions.includes("add_employee")) && (
                 <button
                   className={classes.btn}
-                  onClick={() => setStaffForm(true)}
-                >
+                  onClick={() => setStaffForm(true)}>
                   انشاء موظف
                   <span>
                     <AiOutlineUserAdd />

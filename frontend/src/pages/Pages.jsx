@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 import { useSelector } from "react-redux";
 
 //pages
@@ -16,8 +15,6 @@ import EmpolyeeData from "./EmpolyeeData";
 import CarDetailPage from "./CarDetailPage";
 import EditCarPage from "./EditCarPage";
 const Pages = () => {
-  const { token } = useSelector((state) => state.authReducer);
-
   const { isAuth } = useSelector((state) => state.authReducer);
 
   return (

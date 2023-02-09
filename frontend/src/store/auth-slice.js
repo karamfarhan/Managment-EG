@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 //Login
 export const login = createAsyncThunk(
   "login/token",
-  async (arg, { rejectWithValue, dispatch }) => {
+  async (arg, { rejectWithValue }) => {
     try {
       const response = await fetch(
         "http://127.0.0.1:8000/account/login_token/",
@@ -42,10 +43,6 @@ export const updateToken = createAsyncThunk(
       },
     });
 
-    if (res.status === 401) {
-      return dispatch(logout());
-    }
-
     return await res.json();
   }
 );
@@ -57,16 +54,17 @@ const authSlice = createSlice({
     httpErr: "",
     msg: "",
     user: "",
-    token: localStorage.getItem("token-management") || null,
-    refresh: localStorage.getItem("refresh-token") || null,
+    token: Cookies.get("token-management") || null,
+    refresh: Cookies.get("refresh-token") || null,
     isLoading: false,
-    isAuth: localStorage.getItem("token-management") !== null ? true : false,
+    isAuth: Cookies.get("token-management") ? true : false,
   },
   reducers: {
     logout: (state) => {
       state.token = null;
       state.refresh = null;
-      localStorage.clear();
+      Cookies.remove("token-management");
+      Cookies.remove("refresh-token");
       state.isAuth = false;
     },
   },
@@ -79,8 +77,8 @@ const authSlice = createSlice({
       state.token = action.payload.access;
       state.refresh = action.payload.refresh;
       state.isAuth = true;
-      localStorage.setItem("token-management", action.payload.access);
-      localStorage.setItem("refresh-token", action.payload.refresh);
+      Cookies.set("token-management", action.payload.access);
+      Cookies.set("refresh-token", action.payload.refresh);
     },
     [login.rejected]: (state, action) => {
       state.isLoading = false;
@@ -90,8 +88,7 @@ const authSlice = createSlice({
 
     [updateToken.fulfilled]: (state, action) => {
       state.token = action.payload.access;
-
-      localStorage.setItem("token-management", action.payload.access);
+      Cookies.set("token-management", action.payload.access);
     },
   },
 });
