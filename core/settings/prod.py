@@ -14,7 +14,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # CORS_ALLOWED_ORIGINS = ["https://managementdjango.onrender.com"]
 CSRF_TRUSTED_ORIGINS = ["https://managementdjango.onrender.com"]
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
