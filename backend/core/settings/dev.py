@@ -1,5 +1,7 @@
 import os
 
+import dj_database_url
+
 from .base import *
 from .base import BASE_DIR
 
@@ -23,3 +25,5 @@ if os.environ.get("DEVELOPER") == "KARAM":
 if os.environ.get("DEVELOPER") == "ALAA":
     DATABASES["default"]["ENGINE"] = "django.db.backends.sqlite3"
     DATABASES["default"]["NAME"] = BASE_DIR / "db.sqlite3"
+if os.environ.get("DEVELOPER") == "PROD":
+    DATABASES = {"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))}
