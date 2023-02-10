@@ -1,4 +1,5 @@
 from .base import *
+from .base import MIDDLEWARE
 
 DEBUG = False
 
@@ -7,7 +8,9 @@ ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS = []
-# ### PRODUCTION SETTING -- WITH AWS SERVIER
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# ### PRODUCTION SETTING -- WITH AWS SERVER
 # # - make an account in aws
 # # - make bucket in s3
 # # - make user and give him the access to the bucket
