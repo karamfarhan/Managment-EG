@@ -43,7 +43,7 @@ const Empolyess = ({
 
   const updateEmployee = async (id) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/employees/${id}`, {
+      const res = await fetch(`${window.domain}/employees/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,19 +58,16 @@ const Empolyess = ({
   //send phase/in
   const sendPhaseIn = async (id) => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/employees/${id}/activity/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            phase_in: time,
-          }),
-        }
-      );
+      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phase_in: time,
+        }),
+      });
       if (res.ok) {
         dispatch(getEmpolyees(token));
       }
@@ -81,20 +78,17 @@ const Empolyess = ({
   //send phase out
   const sendPhaseOut = async (id, today_activity) => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/employees/${id}/activity/`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            phase_out: time,
-            id: today_activity,
-          }),
-        }
-      );
+      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phase_out: time,
+          id: today_activity,
+        }),
+      });
       await res.json();
       if (res.ok) {
         if (res.ok) {
@@ -113,75 +107,82 @@ const Empolyess = ({
         {data &&
           Object.entries(data).map(([key, value], i) => {
             return (
-              <div key={i} className={classes.content}>
+              <div key={i}>
+                {" "}
                 <h2>
                   كشف العاملين ({key === "null" ? "المكتب الاداري" : key}){" "}
                 </h2>
-                <table>
-                  <thead>
-                    <th>أسم الموظف</th>
-                    <th>المسمي الوظيفي</th>
-                    {(permissions.includes("add_employeeactivity") ||
-                      is_superuser) && <th>الحضور</th>}
-                  </thead>
-                  {value.map((e, i) => {
-                    return (
-                      <tbody key={i}>
-                        <tr>
-                          <td>
-                            <Link to={`/staff/${e.id}`}>{e.name}</Link>
-                          </td>
-                          <td> {e.type} </td>
-                          {(permissions.includes("add_employeeactivity") ||
-                            is_superuser) && (
+                <div className={classes.content}>
+                  <table>
+                    <thead>
+                      <th>أسم الموظف</th>
+                      <th>المسمي الوظيفي</th>
+                      {(permissions.includes("add_employeeactivity") ||
+                        is_superuser) && <th>الحضور</th>}
+                    </thead>
+                    {value.map((e, i) => {
+                      return (
+                        <tbody key={i}>
+                          <tr>
                             <td>
-                              {e.today_activity !== false && (
-                                <ul>
-                                  {e.today_activity.phase_in !== null && (
-                                    <li>
-                                      معاد الحضور : {e.today_activity.phase_in}{" "}
-                                    </li>
-                                  )}
-                                  {e.today_activity.phase_out !== null && (
-                                    <li>
-                                      معاد الانصارف :{" "}
-                                      {e.today_activity.phase_out}
-                                    </li>
-                                  )}
-                                </ul>
-                              )}
-
-                              {(e.today_activity === false ||
-                                e.today_activity.phase_out === null) && (
-                                <button
-                                  style={{
-                                    backgroundColor:
-                                      e.today_activity.phase_out === null
-                                        ? "#da3230"
-                                        : "green",
-                                  }}
-                                  onClick={() =>
-                                    e.today_activity === false
-                                      ? sendPhaseIn(e.id)
-                                      : sendPhaseOut(e.id, e.today_activity.id)
-                                  }>
-                                  {(e.today_activity === false ||
-                                    e.today_activity.phase_in === null) &&
-                                    "سجل الحضور"}
-
-                                  {e.today_activity &&
-                                    e.today_activity.phase_in !== "" &&
-                                    e.today_activity.phase_out === null &&
-                                    "سجل الانصراف"}
-                                </button>
-                              )}
+                              <Link to={`/staff/${e.id}`}>{e.name}</Link>
                             </td>
-                          )}
-                        </tr>
-                      </tbody>
-                    );
-                  })}
-                </table>
+                            <td> {e.type} </td>
+                            {(permissions.includes("add_employeeactivity") ||
+                              is_superuser) && (
+                              <td>
+                                {e.today_activity !== false && (
+                                  <ul>
+                                    {e.today_activity.phase_in !== null && (
+                                      <li>
+                                        معاد الحضور :{" "}
+                                        {e.today_activity.phase_in}{" "}
+                                      </li>
+                                    )}
+                                    {e.today_activity.phase_out !== null && (
+                                      <li>
+                                        معاد الانصارف :{" "}
+                                        {e.today_activity.phase_out}
+                                      </li>
+                                    )}
+                                  </ul>
+                                )}
+
+                                {(e.today_activity === false ||
+                                  e.today_activity.phase_out === null) && (
+                                  <button
+                                    style={{
+                                      backgroundColor:
+                                        e.today_activity.phase_out === null
+                                          ? "#da3230"
+                                          : "green",
+                                    }}
+                                    onClick={() =>
+                                      e.today_activity === false
+                                        ? sendPhaseIn(e.id)
+                                        : sendPhaseOut(
+                                            e.id,
+                                            e.today_activity.id
+                                          )
+                                    }>
+                                    {(e.today_activity === false ||
+                                      e.today_activity.phase_in === null) &&
+                                      "سجل الحضور"}
+
+                                    {e.today_activity &&
+                                      e.today_activity.phase_in !== "" &&
+                                      e.today_activity.phase_out === null &&
+                                      "سجل الانصراف"}
+                                  </button>
+                                )}
+                              </td>
+                            )}
+                          </tr>
+                        </tbody>
+                      );
+                    })}
+                  </table>
+                </div>
               </div>
             );
           })}

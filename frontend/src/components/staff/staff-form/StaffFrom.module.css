@@ -12,6 +12,9 @@
   justify-content: center;
   align-items: center;
 }
+.form > div:first-of-type > div:first-child {
+  width: 85%;
+}
 .actions {
   display: flex;
   justify-content: center;
@@ -38,13 +41,12 @@
   justify-content: center;
 }
 .select select {
-  width: var(--input-width);
+  width: 100%;
   padding: 10px;
   border: none;
   outline: 1px solid #ddd;
 }
 .form textarea {
-  width: var(--input-width);
   height: 90px;
   resize: none;
   padding: 10px;

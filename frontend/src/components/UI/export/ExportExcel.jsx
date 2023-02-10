@@ -10,10 +10,10 @@ const ExportExcel = ({ matter, id }) => {
   let link;
 
   if (id === undefined || id === "") {
-    link = `http://127.0.0.1:8000/export/${matter}/`;
+    link = `${window.domain}/export/${matter}/`;
   }
   if (id !== undefined) {
-    link = `http://127.0.0.1:8000/export/stores/${id}/${matter}/`;
+    link = `${window.domain}/export/stores/${id}/${matter}/`;
   }
 
   const { data, refetch } = useQuery(

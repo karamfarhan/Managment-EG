@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import {useSelector} from 'react-redux'
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import AuthContext from "../../../context/Auth-ctx";
 import ExportExcel from "../../UI/export/ExportExcel";
@@ -14,11 +14,11 @@ const StoreDetail = () => {
   const { storeId } = params;
 
   //token
- const {token} = useSelector((state)=>state.authReducer)
+  const { token } = useSelector((state) => state.authReducer);
   //get store
 
   const getTheStore = useCallback(async () => {
-    const res = await fetch(`http://127.0.0.1:8000/stores/${storeId}`, {
+    const res = await fetch(`${window.domain}/stores/${storeId}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

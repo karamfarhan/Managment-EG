@@ -6,8 +6,10 @@ import jwt_decode from "jwt-decode";
 import { AiFillSetting, AiOutlineLogout } from "react-icons/ai";
 import classes from "./Header.module.css";
 import { logout } from "../../../store/auth-slice";
+import ToggleBar from "../../icons/ToggleBar";
+import CloseBar from "../../icons/CloseBar";
 
-export const Header = () => {
+export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [signoutBtn, setSignoutBtn] = useState(false);
@@ -39,6 +41,11 @@ export const Header = () => {
 
   return (
     <header className={classes.header} style={{ backgroundColor: headerColor }}>
+      {matches && (
+        <div className={classes.toggle} onClick={sideBarHanler}>
+          {showSideBar ? <CloseBar /> : <ToggleBar />}
+        </div>
+      )}
       <div className={classes["head-content"]}>
         <div className={classes.actions}>
           <div>

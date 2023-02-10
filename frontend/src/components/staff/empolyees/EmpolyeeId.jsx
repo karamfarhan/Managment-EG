@@ -37,15 +37,12 @@ const EmpolyeeId = () => {
     "get/empolyee",
     async () => {
       try {
-        const res = await fetch(
-          `http://127.0.0.1:8000/employees/${empolyeeId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`${window.domain}/employees/${empolyeeId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const data = await res.json();
         return data;
@@ -64,7 +61,7 @@ const EmpolyeeId = () => {
     setImgModel(false);
   }; //delete staff
   const deleteHandler = async (id) => {
-    const res = await fetch(`http://127.0.0.1:8000/employees/${id}`, {
+    const res = await fetch(`${window.domain}/employees/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

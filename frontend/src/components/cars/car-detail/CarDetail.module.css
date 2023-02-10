@@ -75,9 +75,9 @@
 /* body */
 
 .body > div {
-  padding: 30px;
+  padding: 5px;
   border: 1px solid #004c79;
-  margin: 50px;
+  margin: 10px;
 }
 
 .active {

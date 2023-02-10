@@ -10,11 +10,24 @@
   bottom: 20px;
   z-index: 10;
   text-align: center;
+  transition: all ease-in-out 0.5s;
+  animation: sideBar 0.5s;
+}
+
+@keyframes sideBar {
+  0% {
+    right: 0;
+  }
+  100% {
+    right: 5px;
+  }
 }
 
 @media (max-width: 820px) {
   .sidebar {
     width: var(--side-width-mob);
+    right: 5px;
+    /* right: 100%; */
   }
   .sidebar p {
     display: none;

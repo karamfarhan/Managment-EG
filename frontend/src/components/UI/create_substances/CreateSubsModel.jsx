@@ -218,15 +218,7 @@ const CreateSubsModel = ({
               })
             }
           />
-          {/* <div className={classes.actions}>
-            {categortyBtn.map((el, i) => {
-              return (
-                <button value={el} type="button" key = {i}>
-                  {el}
-                </button>
-              );
-            })
-          </div>*/}
+
           <button type="submit" disabled={!formIsValid}>
             أضف
           </button>

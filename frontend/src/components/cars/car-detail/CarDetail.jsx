@@ -79,7 +79,7 @@ const CarDetail = () => {
   const paginationFun = (obj) => {
     dispatch(getCarPagination(obj));
   };
-
+  console.log(data);
   const { data: carAct } = useSelector((state) => state.carActivityRed);
   if (!car) return;
   return (
@@ -120,7 +120,10 @@ const CarDetail = () => {
           {/* body  */}
           <div className={classes.body}>
             {sections === "cars" && <Car car={car} />}
-            {sections === "carActivity" && (
+            {sections === "carActivity" &&
+              data &&
+              data.results.length === 0 && <p> لا يوجد سجلات للسائق </p>}
+            {sections === "carActivity" && data && data.results.length > 0 && (
               <div className={classes["table_content"]}>
                 <table className={classes.activities}>
                   <thead>
@@ -134,6 +137,7 @@ const CarDetail = () => {
                   </thead>
                   <tbody>
                     {data &&
+                      data.results.length > 0 &&
                       currentPage === 1 &&
                       data.results.map((el) => {
                         return <CarDetailList key={el.id} data={el} />;

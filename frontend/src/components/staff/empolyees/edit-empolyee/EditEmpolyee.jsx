@@ -18,7 +18,6 @@ const EditEmpolyee = () => {
     empolyeeId.results &&
     empolyeeId.results.find((el) => el.id === parseInt(params.empId));
 
-    console.log(params.empId)
   const [data, setData] = useState("");
   //imgs
   const [identityImg, setIdentityImg] = useState(
@@ -140,7 +139,7 @@ const EditEmpolyee = () => {
   const { data: stores } = useQuery(
     "fetch/locations",
     async () => {
-      const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+      const res = await fetch(`${window.domain}/stores/select_list/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -223,7 +222,7 @@ const EditEmpolyee = () => {
     }
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/employees/${parseInt(params.empId)}/`,
+        `${window.domain}/employees/${parseInt(params.empId)}/`,
         {
           method: "PATCH",
           headers: {

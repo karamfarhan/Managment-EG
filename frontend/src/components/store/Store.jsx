@@ -84,7 +84,7 @@ const Store = () => {
   const deleteHandler = async (id) => {
     if (is_superuser === false || !permissions.includes("delete_store"))
       try {
-        const res = await fetch(`http://127.0.0.1:8000/stores/${id}/`, {
+        const res = await fetch(`${window.domain}/stores/${id}/`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

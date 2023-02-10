@@ -14,7 +14,7 @@ const InvoiceDetail = () => {
   //fetch invoices
   const { data: invoice } = useQuery("fetch/invoice", async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/invoices/${invoiceId}/`, {
+      const res = await fetch(`${window.domain}/invoices/${invoiceId}/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
