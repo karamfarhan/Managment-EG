@@ -10,8 +10,6 @@ const StaffForm = ({ setStaffForm }) => {
   const decoded = jwt_decode(token);
   const [isInsurance, setIsInsurance] = useState("");
 
-  console.log(decoded);
-
   //form validation
 
   let formIsValid = false;
@@ -124,7 +122,7 @@ const StaffForm = ({ setStaffForm }) => {
   const { data: stores } = useQuery(
     "fetch/locations",
     async () => {
-      const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+      const res = await fetch(`${window.domain}/stores/select_list/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -170,7 +168,7 @@ const StaffForm = ({ setStaffForm }) => {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/employees/", {
+      const res = await fetch(`${window.domain}/employees/`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -300,8 +298,7 @@ const StaffForm = ({ setStaffForm }) => {
                     ...empolyeeData,
                     is_primary: e.target.value,
                   })
-                }
-              >
+                }>
                 <option selected hidden>
                   موظف في مقر الشركة
                 </option>
@@ -318,8 +315,7 @@ const StaffForm = ({ setStaffForm }) => {
                       ...empolyeeData,
                       location: e.target.value,
                     })
-                  }
-                >
+                  }>
                   <option selected hidden>
                     موقع الشركة
                   </option>
@@ -345,8 +341,7 @@ const StaffForm = ({ setStaffForm }) => {
             <div className={classes.select}>
               <select
                 value={isInsurance}
-                onChange={(e) => setIsInsurance(e.target.value)}
-              >
+                onChange={(e) => setIsInsurance(e.target.value)}>
                 <option selected hidden>
                   التأمين
                 </option>
@@ -407,8 +402,7 @@ const StaffForm = ({ setStaffForm }) => {
               value={note}
               onChange={(e) =>
                 setEmpolyeeData({ ...empolyeeData, note: e.target.value })
-              }
-            ></textarea>
+              }></textarea>
           </div>
         )}
       </div>
@@ -421,8 +415,7 @@ const StaffForm = ({ setStaffForm }) => {
           <button
             onClick={nextStepHandler}
             type="button"
-            disabled={!formIsValid}
-          >
+            disabled={!formIsValid}>
             التالي
           </button>
         )}

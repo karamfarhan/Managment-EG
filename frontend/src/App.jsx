@@ -4,7 +4,7 @@ import Pages from "./pages/Pages";
 import { logout, updateToken } from "./store/auth-slice";
 
 function App() {
-  window.domain = "http://127.0.0.1:8000";
+  window.domain = "http://127.0.0.1:8000/api/v1";
   const dispatch = useDispatch();
   const { refresh, token } = useSelector((state) => state.authReducer);
 

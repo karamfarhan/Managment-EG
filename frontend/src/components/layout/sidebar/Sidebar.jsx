@@ -42,7 +42,7 @@ const Sidebar = () => {
     async () => {
       if (location.pathname !== "/gallery") return;
       try {
-        const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+        const res = await fetch(`${window.domain}/stores/select_list/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
