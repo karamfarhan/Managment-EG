@@ -6,10 +6,10 @@ from .base import MIDDLEWARE, env
 DEBUG = False
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["managementdjango.onrender.com"]
 
-CORS_ALLOWED_ORIGINS = []
-CSRF_TRUSTED_ORIGINS = []
+CORS_ALLOWED_ORIGINS = ["https://managementdjango.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ["https://managementdjango.onrender.com"]
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
