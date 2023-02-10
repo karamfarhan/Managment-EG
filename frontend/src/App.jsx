@@ -2,19 +2,17 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Pages from "./pages/Pages";
 import { updateToken } from "./store/auth-slice";
-import Cookies from "js-cookie";
 
 function App() {
-  console.log(Cookies.get("token-management"));
   const dispatch = useDispatch();
-  const { refresh, token } = useSelector((state) => state.authReducer);
+  const { refresh, token, isAuth } = useSelector((state) => state.authReducer);
 
   useEffect(() => {
-    if (token !== undefined) {
+    if (token !== null) {
       dispatch(updateToken(refresh));
     }
   }, []);
-
+  console.log(isAuth);
   useEffect(() => {
     const timer = setInterval(() => {
       if (refresh) {

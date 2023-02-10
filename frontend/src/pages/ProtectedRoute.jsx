@@ -4,9 +4,11 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoutes = () => {
   const { isAuth } = useSelector((state) => state.authReducer);
+
   return (
     <Fragment>
-      {isAuth === true ? <Outlet /> : <Navigate to="/login" />}
+      {isAuth === true && <Outlet />}
+      {isAuth === false && <Navigate to="/login" />}
     </Fragment>
   );
 };
