@@ -43,7 +43,7 @@ export const updateToken = createAsyncThunk(
           "Content-type": "Application/json",
         },
       });
-      if (res.status === 401) {
+      if (res.status === 401 || res.status === 400) {
         dispatch(logout());
       }
       if (!res.ok) {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Pages from "./pages/Pages";
-import { updateToken } from "./store/auth-slice";
+import { logout, updateToken } from "./store/auth-slice";
 
 function App() {
   const dispatch = useDispatch();
@@ -10,6 +10,8 @@ function App() {
   useEffect(() => {
     if (token !== null) {
       dispatch(updateToken(refresh));
+    } else {
+      dispatch(logout());
     }
   }, []);
   console.log(isAuth);

@@ -38,25 +38,25 @@ const Sidebar = () => {
     setActiveClass(id);
   };
   console.log(location);
-  // const { data } = useQuery(
-  //   "get/stores",
-  //   async () => {
-  //     if (location.pathname !== "/gallery") return;
-  //     try {
-  //       const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
+  const { data } = useQuery(
+    "get/stores",
+    async () => {
+      if (location.pathname !== "/gallery") return;
+      try {
+        const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  //       return await res.json();
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   },
-  //   { refetchOnWindowFocus: false }
-  // );
+        return await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    { refetchOnWindowFocus: false }
+  );
 
   return (
     <aside dir="rtl" className={classes.sidebar}>
@@ -161,7 +161,7 @@ const Sidebar = () => {
               permissions.includes("view_image") ||
               permissions.includes("view_mediapack")) && (
               <ul className={showGalleries === true ? classes.active : ""}>
-                {/* {data &&
+                {data &&
                   data.map((el) => {
                     return (
                       <li
@@ -171,7 +171,7 @@ const Sidebar = () => {
                         {el.address}
                       </li>
                     );
-                  })} */}
+                  })}
               </ul>
             )}
           </li>
