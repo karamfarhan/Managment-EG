@@ -13,8 +13,7 @@ import classes from "./Staff.module.css";
 export const Staff = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { pathname } = location;
-  const { token, refresh } = useSelector((state) => state.authReducer);
+  const { token } = useSelector((state) => state.authReducer);
 
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
@@ -40,8 +39,6 @@ export const Staff = () => {
   const isAuth = useSelector((state) => state.authReducer.isAuth);
   //fetch search data
   //get stores
-
-  console.log(token);
   useEffect(() => {
     if (
       currentPage === 1 &&
@@ -52,6 +49,7 @@ export const Staff = () => {
     ) {
       dispatch(getEmpolyees(token));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
     currentPage,
@@ -60,7 +58,6 @@ export const Staff = () => {
     getStaff,
     is_superuser,
     isAuth,
-    token,
   ]);
 
   function fetchSearchHandler() {

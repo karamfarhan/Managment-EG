@@ -16,7 +16,7 @@ import CarDetailPage from "./CarDetailPage";
 import EditCarPage from "./EditCarPage";
 const Pages = () => {
   const { isAuth } = useSelector((state) => state.authReducer);
-
+  console.log(isAuth);
   return (
     <Routes>
       <Route

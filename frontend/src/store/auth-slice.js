@@ -34,16 +34,23 @@ export const login = createAsyncThunk(
 //refresh token
 export const updateToken = createAsyncThunk(
   "refresh/token",
-  async (arg, { dispatch }) => {
-    const res = await fetch("http://127.0.0.1:8000/account/token/refresh/", {
-      method: "POST",
-      body: JSON.stringify({ refresh: arg }),
-      headers: {
-        "Content-type": "Application/json",
-      },
-    });
+  async (arg, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/account/token/refresh/", {
+        method: "POST",
+        body: JSON.stringify({ refresh: arg }),
+        headers: {
+          "Content-type": "Application/json",
+        },
+      });
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
 
-    return await res.json();
+      return await res.json();
+    } catch (err) {
+      rejectWithValue(err);
+    }
   }
 );
 
@@ -57,7 +64,7 @@ const authSlice = createSlice({
     token: Cookies.get("token-management") || null,
     refresh: Cookies.get("refresh-token") || null,
     isLoading: false,
-    isAuth: Cookies.get("token-management") ? true : false,
+    isAuth: false,
   },
   reducers: {
     logout: (state) => {
@@ -88,7 +95,14 @@ const authSlice = createSlice({
 
     [updateToken.fulfilled]: (state, action) => {
       state.token = action.payload.access;
+      state.isAuth = true;
       Cookies.set("token-management", action.payload.access);
+      console.log(action);
+    },
+    [updateToken.rejected]: (state, action) => {
+      Cookies.remove("token-management");
+      Cookies.remove("refresh-token");
+      state.isAuth = false;
     },
   },
 });
