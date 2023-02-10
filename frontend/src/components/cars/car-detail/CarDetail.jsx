@@ -28,15 +28,12 @@ const CarDetail = () => {
     "car/activity",
     async () => {
       try {
-        const res = await fetch(
-          `http://127.0.0.1:8000/cars/${carId}/activity/`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`${window.domain}/cars/${carId}/activity/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         return await res.json();
       } catch (err) {
         console.log(err);
@@ -48,7 +45,7 @@ const CarDetail = () => {
     "car/detail",
     async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/cars/${carId}/`, {
+        const res = await fetch(`${window.domain}/cars/${carId}/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

@@ -5,7 +5,7 @@ export const createInstruments = createAsyncThunk(
   "create/instruments",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/instruments/", {
+      const res = await fetch(`${window.domain}/instruments/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -13,13 +13,12 @@ export const createInstruments = createAsyncThunk(
         },
         body: JSON.stringify({
           name: arg.name,
-          ins_type: "Handed",
           last_maintain: arg.last_maintain,
           maintain_place: arg.maintain_place,
           description: arg.description,
         }),
       });
-      if (arg.authenticated === true) {
+      if (arg.authenticated === true && arg.InstViewed) {
         ThunkAPI.dispatch(getInstruments(arg.token));
       }
       const data = await res.json();
@@ -36,7 +35,7 @@ export const getInstruments = createAsyncThunk(
   "get/instruments",
   async (arg) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/instruments/", {
+      const res = await fetch(`${window.domain}/instruments/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg}`,

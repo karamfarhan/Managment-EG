@@ -12,6 +12,7 @@ const CreateSubsModel = ({
   showMattersForm,
   showInstrumentsForm,
   showMattersPage,
+  instrumentsPage,
 }) => {
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
@@ -85,14 +86,15 @@ const CreateSubsModel = ({
       return false;
     }
   }
-  //submit handler
 
+  //submit handler
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(showMattersPage);
 
     if (formIsValid === false) return;
     //post subtances
-    if (showMattersPage) {
+    if (showMattersForm === true) {
       const obj = {
         name,
         unitType: selectBox,
@@ -100,11 +102,11 @@ const CreateSubsModel = ({
         description,
         token: token,
         authenticated: subsauth(),
+        subsViewed: showMattersPage,
       };
-      dispatch(createSubs(obj));
-    }
 
-    if (showInstrumentsForm) {
+      dispatch(createSubs(obj));
+    } else if (showInstrumentsForm === true) {
       const obj = {
         name,
         description,
@@ -112,11 +114,10 @@ const CreateSubsModel = ({
         last_maintain,
         maintain_place,
         authenticated: instauth(),
+        InstViewed: instrumentsPage,
       };
       dispatch(createInstruments(obj));
-      console.log("CREATED INSTRUM");
     }
-
     hideSubstancesHandler();
   };
 

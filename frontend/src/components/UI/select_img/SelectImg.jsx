@@ -36,7 +36,7 @@ export const ImgSelect = ({
   //select store
   useEffect(() => {
     const selectStore = async () => {
-      const res = await fetch("http://127.0.0.1:8000/stores/select_list/", {
+      const res = await fetch(`${window.domain}/stores/select_list/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

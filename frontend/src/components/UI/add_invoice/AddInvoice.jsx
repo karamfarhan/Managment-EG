@@ -35,15 +35,12 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     "fetch/substances",
     async () => {
       try {
-        const res = await fetch(
-          "http://127.0.0.1:8000/substances/select_list/",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`${window.domain}/substances/select_list/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         return await res.json();
         //console.log(data);
@@ -58,15 +55,12 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     "fetch/instruments_name",
     async () => {
       try {
-        const res = await fetch(
-          "http://127.0.0.1:8000/instruments/select_list/",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`${window.domain}/instruments/select_list/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         return await res.json();
         //console.log(data);
@@ -102,7 +96,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     async () => {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/stores/${storeId}/invoices/`,
+          `${window.domain}/stores/${storeId}/invoices/`,
           {
             method: "POST",
             headers: {

@@ -20,7 +20,7 @@ const EditCar = ({ hideModel }) => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/cars/${driverId}/`, {
+        const res = await fetch(`${window.domain}/cars/${driverId}/`, {
           method: "Get",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ const EditCar = ({ hideModel }) => {
     "edit/car",
     async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/cars/${driverId}/`, {
+        const res = await fetch(`${window.domain}/cars/${driverId}/`, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -100,15 +100,12 @@ const EditCar = ({ hideModel }) => {
     "fetch/empolyees",
     async () => {
       try {
-        const res = await fetch(
-          "http://127.0.0.1:8000/employees/select_list/",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`${window.domain}/employees/select_list/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         return await res.json();
       } catch (err) {

@@ -4,32 +4,37 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const createSubs = createAsyncThunk(
   "create/subs",
   async (arg, ThunkAPI) => {
-    const res = await fetch("http://127.0.0.1:8000/substances/", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${arg.token}`,
-      },
-      body: JSON.stringify({
-        name: arg.name,
-        category: arg.category,
-        unit_type: arg.unitType,
-        description: arg.description,
-        units: arg.quantity,
-      }),
-    });
-    if (arg.authenticated === true) {
-      ThunkAPI.dispatch(getSubs(arg.token));
-    }
+    try {
+      const res = await fetch(`${window.domain}/substances/`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${arg.token}`,
+        },
+        body: JSON.stringify({
+          name: arg.name,
+          category: arg.category,
+          unit_type: arg.unitType,
+          description: arg.description,
+          units: arg.quantity,
+        }),
+      });
+      console.log(arg);
+      if (arg.authenticated === true && arg.subsViewed) {
+        ThunkAPI.dispatch(getSubs(arg.token));
+      }
 
-    return await res.json();
+      return await res.json();
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
 
 // GET
 export const getSubs = createAsyncThunk("get/subs", async (arg) => {
   try {
-    const res = await fetch("http://127.0.0.1:8000/substances/", {
+    const res = await fetch(`${window.domain}/substances/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${arg}`,
@@ -49,7 +54,7 @@ export const deleteSubs = createAsyncThunk(
   "delete/subs",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/substances/${arg.id}/`, {
+      const res = await fetch(`${window.domain}/substances/${arg.id}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${arg.token}`,
@@ -70,15 +75,12 @@ export const subsPagination = createAsyncThunk(
   "delete/subs",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/substances/?page=${arg.page}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${arg.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${window.domain}/substances/?page=${arg.page}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${arg.token}`,
+        },
+      });
 
       const data = await res.json();
       console.log(data);
@@ -92,7 +94,7 @@ export const subsPagination = createAsyncThunk(
 export const searchSubstances = createAsyncThunk("get/subs", async (arg) => {
   try {
     const res = await fetch(
-      `http://127.0.0.1:8000/substances/?search=${arg.search}`,
+      `${window.domain}/substances/?search=${arg.search}`,
       {
         method: "GET",
         headers: {
@@ -115,7 +117,7 @@ export const subsSearchPagination = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/substances/?page=${arg.page}&search=${arg.search}`,
+        `${window.domain}/substances/?page=${arg.page}&search=${arg.search}`,
         {
           method: "GET",
           headers: {

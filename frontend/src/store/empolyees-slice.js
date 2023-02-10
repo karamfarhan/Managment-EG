@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { updateToken } from "./auth-slice";
 
 //GET
 export const getEmpolyees = createAsyncThunk(
   "get/empolyees",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/employees/", {
+      const res = await fetch(`${window.domain}/employees/`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -26,15 +25,12 @@ export const empolyeePagination = createAsyncThunk(
   "empolyee/pagination",
   async (arg) => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/employees/?page=${arg.page}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${arg.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${window.domain}/employees/?page=${arg.page}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${arg.token}`,
+        },
+      });
       const data = await res.json();
       return data;
     } catch (err) {
@@ -49,7 +45,7 @@ export const empolyeeSearch = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/employees/?search=${arg.search}`,
+        `${window.domain}/employees/?search=${arg.search}`,
         {
           method: "GET",
           headers: {
@@ -71,7 +67,7 @@ export const empolyeeSearchPagination = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/employees/?page=${arg.page}&search=${arg.search}`,
+        `${window.domain}/employees/?page=${arg.page}&search=${arg.search}`,
         {
           method: "GET",
           headers: {

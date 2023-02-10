@@ -38,15 +38,12 @@ const CreateCar = ({ hideModel }) => {
     "fetch/empolyees",
     async () => {
       try {
-        const res = await fetch(
-          "http://127.0.0.1:8000/employees/select_list/",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`${window.domain}/employees/select_list/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (res.status === 401) {
           return dispatch(logout());
         }
@@ -63,7 +60,7 @@ const CreateCar = ({ hideModel }) => {
     "send/car",
     async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/cars/", {
+        const res = await fetch(`${window.domain}/cars/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

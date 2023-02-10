@@ -22,7 +22,7 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
   //delete handler
   const deleteHandler = async (id) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/cars/${id}/`, {
+      const res = await fetch(`${window.domain}/cars/${id}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

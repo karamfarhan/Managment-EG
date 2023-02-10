@@ -4,8 +4,9 @@ import Pages from "./pages/Pages";
 import { logout, updateToken } from "./store/auth-slice";
 
 function App() {
+  window.domain = "http://127.0.0.1:8000";
   const dispatch = useDispatch();
-  const { refresh, token, isAuth } = useSelector((state) => state.authReducer);
+  const { refresh, token } = useSelector((state) => state.authReducer);
 
   useEffect(() => {
     if (token !== null) {
@@ -14,7 +15,6 @@ function App() {
       dispatch(logout());
     }
   }, []);
-  console.log(isAuth);
   useEffect(() => {
     const timer = setInterval(() => {
       if (refresh) {

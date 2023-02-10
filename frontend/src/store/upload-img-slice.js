@@ -12,7 +12,7 @@ export const uploadImgs = createAsyncThunk(
         formdata.append("images", arg.img[i]);
       }
       formdata.append("alt_text", arg.description);
-      const res = await fetch("http://127.0.0.1:8000/images/", {
+      const res = await fetch(`${window.domain}/images/`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${arg.token}`,
@@ -34,7 +34,7 @@ export const uploadImgs = createAsyncThunk(
 // fetch images
 export const fetchImgs = createAsyncThunk("fetch/img", async (arg) => {
   try {
-    const res = await fetch("http://127.0.0.1:8000/images/", {
+    const res = await fetch(`${window.domain}/images/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${arg}`,
@@ -53,15 +53,12 @@ export const imagesPagination = createAsyncThunk(
   "pagination/img",
   async (arg) => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/images/?page=${arg.page}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${arg.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${window.domain}/images/?page=${arg.page}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${arg.token}`,
+        },
+      });
       const data = await res.json();
       console.log(data);
       return data;
@@ -72,30 +69,24 @@ export const imagesPagination = createAsyncThunk(
 );
 
 //search
-export const searchImgs = createAsyncThunk(
-  "search/imgs",
-  async (arg, ThunkAPI) => {
-    try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/images/?search=${arg.search}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${arg.token}`,
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error(res.statusText || "حدث خطأ");
-      }
-
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      console.log(err);
+export const searchImgs = createAsyncThunk("search/imgs", async (arg) => {
+  try {
+    const res = await fetch(`${window.domain}/images/?search=${arg.search}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${arg.token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error(res.statusText || "حدث خطأ");
     }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log(err);
   }
-);
+});
 
 //search pagination
 export const imageSearchPagination = createAsyncThunk(
@@ -103,7 +94,7 @@ export const imageSearchPagination = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/images/?page=${arg.page}&search=${arg.search}`,
+        `${window.domain}/images/?page=${arg.page}&search=${arg.search}`,
         {
           method: "GET",
           headers: {

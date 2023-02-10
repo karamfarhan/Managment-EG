@@ -6,20 +6,17 @@ export const login = createAsyncThunk(
   "login/token",
   async (arg, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/account/login_token/",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
+      const response = await fetch(`${window.domain}/account/login_token/`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
 
-          body: JSON.stringify({
-            email: arg.email,
-            password: arg.password,
-          }),
-        }
-      );
+        body: JSON.stringify({
+          email: arg.email,
+          password: arg.password,
+        }),
+      });
 
       if (response.status === 401) {
         return rejectWithValue(response.statusText);
@@ -36,7 +33,7 @@ export const updateToken = createAsyncThunk(
   "refresh/token",
   async (arg, { dispatch, rejectWithValue }) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/account/token/refresh/", {
+      const res = await fetch(`${window.domain}/account/token/refresh/`, {
         method: "POST",
         body: JSON.stringify({ refresh: arg }),
         headers: {

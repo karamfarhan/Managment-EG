@@ -5,7 +5,7 @@ export const getStores = createAsyncThunk(
   "createStore/data",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/stores/", {
+      const res = await fetch(`${window.domain}/stores/`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -26,7 +26,7 @@ export const createStore = createAsyncThunk(
   "createStore/data",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/stores/", {
+      const res = await fetch(`${window.domain}/stores/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -56,15 +56,12 @@ export const storePagination = createAsyncThunk(
   "store/pagination",
   async (arg) => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/stores/?page=${arg.page}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${arg.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${window.domain}/stores/?page=${arg.page}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${arg.token}`,
+        },
+      });
       const data = await res.json();
       return data;
     } catch (err) {
@@ -76,15 +73,12 @@ export const storePagination = createAsyncThunk(
 //search
 export const storeSearch = createAsyncThunk("store/search", async (arg) => {
   try {
-    const res = await fetch(
-      `http://127.0.0.1:8000/stores/?search=${arg.search}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${arg.token}`,
-        },
-      }
-    );
+    const res = await fetch(`${window.domain}/stores/?search=${arg.search}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${arg.token}`,
+      },
+    });
     const data = await res.json();
     return data;
   } catch (err) {
@@ -99,7 +93,7 @@ export const storeSearchPagination = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/stores/?page=${arg.page}&search=${arg.search}`,
+        `${window.domain}/stores/?page=${arg.page}&search=${arg.search}`,
         {
           method: "GET",
           headers: {
@@ -125,7 +119,6 @@ const storeSlice = createSlice({
     [getStores.pending]: (state, action) => {},
     [getStores.fulfilled]: (state, action) => {
       state.store_data = action.payload;
-      console.log(action);
     },
     [getStores.rejected]: (state, action) => {},
 
@@ -133,7 +126,6 @@ const storeSlice = createSlice({
     [storePagination.pending]: (state, action) => {},
     [storePagination.fulfilled]: (state, action) => {
       state.store_data = action.payload;
-      console.log(action);
     },
     [storePagination.rejected]: (state, action) => {},
 
@@ -142,7 +134,6 @@ const storeSlice = createSlice({
     [storeSearch.pending]: (state, action) => {},
     [storeSearch.fulfilled]: (state, action) => {
       state.store_data = action.payload;
-      console.log(action);
     },
     [storeSearch.rejected]: (state, action) => {},
 
@@ -150,7 +141,6 @@ const storeSlice = createSlice({
     [storeSearchPagination.pending]: (state, action) => {},
     [storeSearchPagination.fulfilled]: (state, action) => {
       state.store_data = action.payload;
-      console.log(action);
     },
     [storeSearchPagination.rejected]: (state, action) => {},
   },

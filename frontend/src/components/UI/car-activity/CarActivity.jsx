@@ -29,7 +29,7 @@ const CarActivity = ({ hideModel, id, driver }) => {
     "send/activity",
     async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/cars/${id}/activity/`, {
+        const res = await fetch(`${window.domain}/cars/${id}/activity/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

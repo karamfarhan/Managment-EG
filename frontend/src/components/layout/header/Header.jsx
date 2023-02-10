@@ -14,7 +14,6 @@ export const Header = () => {
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
-  console.log(decoded);
   //logout handler
   const logoutHandler = () => {
     dispatch(logout());

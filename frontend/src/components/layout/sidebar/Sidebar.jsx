@@ -37,7 +37,6 @@ const Sidebar = () => {
     dispatch(searchImgs(obj));
     setActiveClass(id);
   };
-  console.log(location);
   const { data } = useQuery(
     "get/stores",
     async () => {

@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { logout } from "./auth-slice";
 
 //GET CARS
 export const getCars = createAsyncThunk(
   "get/carts",
   async (arg, { dispatch }) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/cars/", {
+      const res = await fetch(`${window.domain}/cars/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg}`,
@@ -28,7 +27,7 @@ export const carsPaginations = createAsyncThunk(
   "get/carsPagination",
   async (arg) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/cars/?page=${arg.page}`, {
+      const res = await fetch(`${window.domain}/cars/?page=${arg.page}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg.token}`,
@@ -46,15 +45,12 @@ export const carsPaginations = createAsyncThunk(
 // CARS SEARCH
 export const carsSearch = createAsyncThunk("car/search", async (arg) => {
   try {
-    const res = await fetch(
-      `http://127.0.0.1:8000/cars/?search=${arg.search}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${arg.token}`,
-        },
-      }
-    );
+    const res = await fetch(`${window.domain}/cars/?search=${arg.search}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${arg.token}`,
+      },
+    });
     if (!res.ok) throw new Error(res.statusText);
     const data = await res.json();
     return data;
@@ -68,7 +64,7 @@ export const carsSearchPagination = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/cars/?page=${arg.page}&search=${arg.search}`,
+        `${window.domain}/cars/?page=${arg.page}&search=${arg.search}`,
         {
           method: "GET",
           headers: {

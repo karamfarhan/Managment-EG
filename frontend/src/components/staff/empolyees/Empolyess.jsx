@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,14 +20,10 @@ const Empolyess = ({
   fetchSearchHandler,
   decoded,
 }) => {
-  const [phases, setPhases] = useState({
-    phaseIn: "",
-    phaseOut: "",
-  });
   const dispatch = useDispatch();
-  const { token, refresh } = useSelector((state) => state.authReducer);
-  console.log(token);
+  const { token } = useSelector((state) => state.authReducer);
   const { is_superuser, permissions } = decoded;
+
   //empolyee counts
   const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
   const empolyeeCount = empolyeeData && empolyeeData.count;
@@ -44,6 +40,20 @@ const Empolyess = ({
   const today = new Date();
   const time =
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+  const updateEmployee = async (id) => {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/employees/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      return data;
+    } catch (err) {}
+  };
 
   //send phase/in
   const sendPhaseIn = async (id) => {
@@ -64,10 +74,7 @@ const Empolyess = ({
       if (res.ok) {
         dispatch(getEmpolyees(token));
       }
-      const data = await res.json();
-      setPhases({ ...phases, phaseIn: data.phase_in });
-
-      return await res.json();
+      await res.json();
     } catch (err) {}
   };
 
@@ -88,14 +95,16 @@ const Empolyess = ({
           }),
         }
       );
-      const data = await res.json();
-      console.log(data);
-      setPhases({ ...phases, phaseOut: data.phase_out });
+      await res.json();
       if (res.ok) {
-        dispatch(getEmpolyees(token));
+        if (res.ok) {
+          dispatch(getEmpolyees(token));
+        }
+        await updateEmployee(id);
       }
     } catch (err) {}
   };
+
   return (
     <Fragment>
       <div className={classes["table_content"]} dir="rtl">

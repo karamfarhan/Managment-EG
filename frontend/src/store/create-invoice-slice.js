@@ -4,7 +4,7 @@ export const getInvoices = createAsyncThunk(
   "createInvoice/data",
   async (arg) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/invoices/", {
+      const res = await fetch(`${window.domain}/invoices/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg.token}`,
@@ -32,4 +32,4 @@ const invoiceSlice = createSlice({
   },
 });
 
-export default invoiceSlice
+export default invoiceSlice;
