@@ -8,7 +8,7 @@ from . import views
 
 
 urlpatterns = [
-    path("get_routs/", views.getRouts, name="routs"),
+    # path("get_routs/", views.getRouts, name="routs"),
     path("login_token/", views.LoginTokenView.as_view(), name="login"),
     path("register/", views.registerUser, name="register"),
     path("view/", views.profileUser, name="account_view"),
@@ -29,5 +29,5 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     # testting views
-    path("activate_test/", views.activate_for_testing, name="activate_for_testing"),
+    # path("activate_test/", views.activate_for_testing, name="activate_for_testing"),
 ]

@@ -3,13 +3,10 @@ from .base import *
 DEBUG = False
 
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-]
-
+CORS_ALLOWED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = []
 # ### PRODUCTION SETTING -- WITH AWS SERVIER
 # # - make an account in aws
 # # - make bucket in s3

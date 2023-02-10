@@ -135,7 +135,8 @@ def does_account_exist_view(request):
                 response_data["response_msg"] = "There is no Account with this email"
                 response_data["is_exists"] = False
                 response_status = status.HTTP_404_NOT_FOUND
-        return Response(response_data, status=response_status)
+            return Response(response_data, status=response_status)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordView(UpdateAPIView):

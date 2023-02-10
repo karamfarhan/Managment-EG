@@ -26,16 +26,15 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    # path('',home_screen_view, name="home"),
     path("admin/", admin.site.urls),
-    path("account/", include("apps.account.urls")),
-    path("", include("apps.store.urls")),
-    path("", include("apps.substance.urls")),
-    path("", include("apps.employee.urls")),
-    path("", include("apps.car.urls")),
-    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
-    re_path(r"^swagger/$", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    re_path(r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    path("api/v1/account/", include("apps.account.urls")),
+    path("api/v1/", include("apps.store.urls")),
+    path("api/v1/", include("apps.substance.urls")),
+    path("api/v1/", include("apps.employee.urls")),
+    path("api/v1/", include("apps.car.urls")),
+    re_path(r"^api/v1/swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    re_path(r"^api/v1/swagger/$", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    re_path(r"^api/v1/redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 ]
 
 
