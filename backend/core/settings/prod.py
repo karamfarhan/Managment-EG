@@ -1,5 +1,7 @@
+import dj_database_url
+
 from .base import *
-from .base import MIDDLEWARE
+from .base import MIDDLEWARE, env
 
 DEBUG = False
 
@@ -10,6 +12,11 @@ CORS_ALLOWED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS = []
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+DATABASES = {"default": dj_database_url.parse(env("DATABASE_URL"))}
+
+
 # ### PRODUCTION SETTING -- WITH AWS SERVER
 # # - make an account in aws
 # # - make bucket in s3

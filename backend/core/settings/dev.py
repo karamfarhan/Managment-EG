@@ -1,7 +1,5 @@
-import os
-
 from .base import *
-from .base import BASE_DIR
+from .base import BASE_DIR, env
 
 ALLOWED_HOSTS = ["*"]
 
@@ -13,13 +11,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 BASE_URL = "http://127.0.0.1:8000"
 
 DATABASES = {"default": {}}
-if os.environ.get("DEVELOPER") == "KARAM":
+if env("DEVELOPER") == "KARAM":
     DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql_psycopg2"
-    DATABASES["default"]["NAME"] = os.environ.get("DB_NAME")
-    DATABASES["default"]["USER"] = os.environ.get("DB_USER")
-    DATABASES["default"]["PASSWORD"] = os.environ.get("DB_PASSWORD")
+    DATABASES["default"]["NAME"] = env("DB_NAME")
+    DATABASES["default"]["USER"] = env("DB_USER")
+    DATABASES["default"]["PASSWORD"] = env("DB_PASSWORD")
     DATABASES["default"]["HOST"] = "pgdb"
     DATABASES["default"]["PORT"] = 5432
-if os.environ.get("DEVELOPER") == "ALAA":
+if env("DEVELOPER") == "ALAA":
     DATABASES["default"]["ENGINE"] = "django.db.backends.sqlite3"
     DATABASES["default"]["NAME"] = BASE_DIR / "db.sqlite3"
