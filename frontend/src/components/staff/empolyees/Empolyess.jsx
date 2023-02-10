@@ -44,10 +44,7 @@ const Empolyess = ({
   const today = new Date();
   const time =
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  const obj = {
-    token,
-    refresh,
-  };
+
   //send phase/in
   const sendPhaseIn = async (id) => {
     try {
@@ -65,7 +62,7 @@ const Empolyess = ({
         }
       );
       if (res.ok) {
-        dispatch(getEmpolyees(obj));
+        dispatch(getEmpolyees(token));
       }
       const data = await res.json();
       setPhases({ ...phases, phaseIn: data.phase_in });
@@ -95,7 +92,7 @@ const Empolyess = ({
       console.log(data);
       setPhases({ ...phases, phaseOut: data.phase_out });
       if (res.ok) {
-        dispatch(getEmpolyees(obj));
+        dispatch(getEmpolyees(token));
       }
     } catch (err) {}
   };
@@ -158,8 +155,7 @@ const Empolyess = ({
                                     e.today_activity === false
                                       ? sendPhaseIn(e.id)
                                       : sendPhaseOut(e.id, e.today_activity.id)
-                                  }
-                                >
+                                  }>
                                   {(e.today_activity === false ||
                                     e.today_activity.phase_in === null) &&
                                     "سجل الحضور"}
