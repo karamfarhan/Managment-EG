@@ -116,16 +116,19 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class EmployeeActivitySerializer(serializers.ModelSerializer):
+    employee = serializers.SerializerMethodField("get_employee_id")
+
     class Meta:
         model = EmployeeActivity
         fields = [
             "id",
+            "employee",
             "date",
             "phase_in",
             "phase_out",
             "is_holiday",
         ]
-        read_only_fields = ["id", "date"]
+        read_only_fields = ["id", "date", "employee"]
 
     def create(self, validated_data):
         if not validated_data.get("is_holiday", False) and not validated_data.get("phase_in", False):
@@ -154,3 +157,6 @@ class EmployeeActivitySerializer(serializers.ModelSerializer):
         raise serializers.ValidationError(
             {"phase_out": "Can't update the phase out after it has been set ,(is_holiday filed has been updated)"}
         )
+
+    def get_employee_id(self, instance):
+        return instance.employee.id
