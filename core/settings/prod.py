@@ -4,7 +4,7 @@ from .base import *
 from .base import MIDDLEWARE, env
 
 DEBUG = True
-
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ALLOWED_HOSTS = [
     "managementdjango.onrender.com",
 ]
