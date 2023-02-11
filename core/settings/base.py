@@ -94,6 +94,7 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,  # put the old refresh token to a black list
     "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
+    "SIGNING_KEY": env("SIGNING_KEY"),
     "VERIFYING_KEY": None,
     "AUDIENCE": None,
     "ISSUER": None,

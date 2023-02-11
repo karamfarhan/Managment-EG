@@ -41,18 +41,17 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
         if account_exists:
             user = authenticate(email=email, password=password)
             if user:
-                if user.is_active:
-                    data = super().validate(account)
-                    # data["username"] = user.username
-                    # data["is_superuser"] = user.is_superuser
-                    # user_permissions = [p.codename for p in user.user_permissions.all()]
-                    # group_permissions = [p.codename for group in user.groups.all() for p in group.permissions.all()]
-                    # data["permissions"] = list(set(user_permissions).union(set(group_permissions)))
-                    return data
-                else:
-                    raise AuthenticationFailed(
-                        "The Account Is not Acitve, Contact the Admin to Activate your Account."
-                    )
+                # ! i used this because the check on is_active has been set in jwt config
+                return super().validate(account)
+
+                # ! this is my code to check if the account is+active
+                # if user.is_active:
+                #     data = super().validate(account)
+                #     return data
+                # else:
+                #     raise AuthenticationFailed(
+                #         "The Account Is not Acitve, Contact the Admin to Activate your Account."
+                #     )
             else:
                 raise AuthenticationFailed("The Password Is Incorect.")
         else:
