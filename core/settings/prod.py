@@ -3,14 +3,18 @@ import dj_database_url
 from .base import *
 from .base import MIDDLEWARE, env
 
-ALLOWED_HOSTS = ["managementdjango.onrender.com", "localhost", "127.0.0.1"]
+DEBUG = True
+
+ALLOWED_HOSTS = [
+    "managementdjango.onrender.com",
+]
 CSRF_TRUSTED_ORIGINS = [
-    "https://managementdjango.onrender.com",
+    "https://mountain-system.web.app",
 ]
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://managementdjango.onrender.com",
+    "https://mountain-system.web.app",
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
