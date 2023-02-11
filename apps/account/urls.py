@@ -11,6 +11,7 @@ urlpatterns = [
     # path("get_routs/", views.getRouts, name="routs"),
     path("login_token/", views.LoginTokenView.as_view(), name="login"),
     path("register/", views.registerUser, name="register"),
+    path("logout/", views.logout, name="logout"),
     path("view/", views.profileUser, name="account_view"),
     path("edit/", views.updateprofileUser, name="account_edit"),
     path("change_password/", views.ChangePasswordView.as_view(), name="change_password"),
