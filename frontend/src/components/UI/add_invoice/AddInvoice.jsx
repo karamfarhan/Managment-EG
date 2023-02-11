@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import AuthContext from "../../../context/Auth-ctx";
 import Backdrop from "../backdrop/Backdrop";
 import Items from "./Items";
 import InstrumentsItems from "./InstrumentsItems";
@@ -177,13 +176,15 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
         <button
           style={{ backgroundColor: "rgb(233, 30, 99)" }}
           type="button"
-          onClick={instrumentsFiled}>
+          onClick={instrumentsFiled}
+        >
           <BsPlusLg /> اضافة المزيد
         </button>
         <div className={classes.note} dir="rtl">
           <textarea
             placeholder="ملاحظة عامة"
-            onChange={(e) => setNote(e.target.value)}></textarea>
+            onChange={(e) => setNote(e.target.value)}
+          ></textarea>
         </div>
         <button disabled={!formIsValid} type="submit">
           {" "}

@@ -20,9 +20,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   const { is_superuser, permissions } = decoded;
 
   const getSoresPremission = ["change_store", "view_store", "delete_store"];
-  const getAllStores = permissions.some((el) =>
-    getSoresPremission.includes(el)
-  );
+
   const dispatch = useDispatch();
   const { name, address, description } = storeData;
   //form validation

@@ -9,7 +9,7 @@ export const Layout = ({ children }) => {
   const [matches, setMatches] = useState(
     window.matchMedia("(max-width: 820px)").matches
   );
-  const [showSideBar, setShowSideBar] = useState(false);
+  const [showSideBar, setShowSideBar] = useState(true);
 
   useEffect(() => {
     const handler = (e) => {
@@ -26,6 +26,7 @@ export const Layout = ({ children }) => {
   const sideBarHanler = () => {
     setShowSideBar((prev) => !prev);
   };
+  console.log(matches);
 
   return (
     <Fragment>
