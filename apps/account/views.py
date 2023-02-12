@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.utils import aware_utcnow
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.account.models import Account
@@ -90,7 +91,8 @@ def registerUser(request):
 def logout(request):
     if request.method == "POST":
         user = request.user
-        OutstandingToken.objects.filter(user=user).delete()
+        # OutstandingToken.objects.filter(user=user,expires_at__lt=datetime.datetime.now()).delete()
+        OutstandingToken.objects.filter(user=user, expires_at__lte=aware_utcnow()).delete()
         return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 

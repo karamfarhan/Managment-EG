@@ -89,7 +89,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
+    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=1),
     "ROTATE_REFRESH_TOKENS": False,  # return a new refresh token when make refresh
     "BLACKLIST_AFTER_ROTATION": True,  # put the old refresh token to a black list
     "UPDATE_LAST_LOGIN": False,
@@ -178,6 +178,12 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
+
+# CRONJOBS = [
+#     ('* * * * *', 'apps.account.crons.delete_expired_tokens'),
+#     ('* * * * *', 'django.core.management.call_command', ['flushexpiredtokens']),
+# ]
+
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
