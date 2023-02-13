@@ -14,22 +14,30 @@ import InvoiceDetailPage from "./InvoiceDetailPage";
 import EmpolyeeData from "./EmpolyeeData";
 import CarDetailPage from "./CarDetailPage";
 import EditCarPage from "./EditCarPage";
+import HomePage from "./HomePage";
 const Pages = () => {
-  const { isAuth } = useSelector((state) => state.authReducer);
+  const { isAuth, token } = useSelector((state) => state.authReducer);
+  console.log(isAuth);
+  console.log(token);
 
   return (
     <Routes>
       <Route
         path="/login"
-        element={isAuth === true ? <Navigate to={`/staff`} /> : <AuthPage />}
+        element={isAuth === true ? <Navigate to="/main" /> : <AuthPage />}
       />
+
       <Route
         path="/"
         element={
-          isAuth === true ? <Navigate to="/staff" /> : <Navigate to="/login" />
+          isAuth === true ? <Navigate to="/main" /> : <Navigate to="/login" />
         }
       />
       <Route element={<ProtectedRoutes />}>
+        <Route
+          path="/main"
+          element={isAuth === true ? <HomePage /> : <AuthPage />}
+        />
         <Route
           path="/staff/*"
           element={isAuth === true ? <StaffPage /> : <AuthPage />}

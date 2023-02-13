@@ -4,7 +4,6 @@ import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import StaffForm from "./staff-form/StaffForm";
 import Empolyess from "./empolyees/Empolyess";
 import { empolyeeSearch, getEmpolyees } from "../../store/empolyees-slice";
 import Search from "../UI/search/Search";
@@ -29,8 +28,7 @@ export const Staff = () => {
 
   //current page
   const [currentPage, setCurrentPage] = useState(1);
-  //show staff form
-  const [staffForm, setStaffForm] = useState(false);
+
   //search
   const [searchValue, setSearchValue] = useState("");
   //data
@@ -43,22 +41,13 @@ export const Staff = () => {
     if (
       currentPage === 1 &&
       searchValue.trim() === "" &&
-      staffForm === false &&
       (getStaff || is_superuser) &&
       isAuth === true
     ) {
       dispatch(getEmpolyees(token));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dispatch,
-    currentPage,
-    searchValue,
-    staffForm,
-    getStaff,
-    is_superuser,
-    isAuth,
-  ]);
+  }, [dispatch, currentPage, searchValue, getStaff, is_superuser, isAuth]);
 
   function fetchSearchHandler() {
     setCurrentPage(1);
@@ -84,7 +73,7 @@ export const Staff = () => {
   return (
     <Fragment>
       <div dir="rtl">
-        {!staffForm && location.pathname === "/staff" && (
+        {
           <Bar>
             <div className="toolBar">
               {(is_superuser || getStaff) && (
@@ -95,26 +84,14 @@ export const Staff = () => {
                   searchData={fetchSearchHandler}
                 />
               )}
-              {(is_superuser || permissions.includes("add_employee")) && (
-                <button
-                  className={classes.btn}
-                  onClick={() => setStaffForm(true)}>
-                  انشاء موظف
-                  <span>
-                    <AiOutlineUserAdd />
-                  </span>
-                </button>
-              )}
             </div>
           </Bar>
-        )}
+        }
         <Routes>
           <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
         </Routes>
-        {(is_superuser || permissions.includes("add_employee")) &&
-          staffForm && <StaffForm setStaffForm={setStaffForm} />}
-        {!staffForm &&
-          empolyees &&
+
+        {empolyees &&
           empolyees.count > 0 &&
           location.pathname === "/staff" &&
           (is_superuser || getStaff) && (
@@ -125,7 +102,6 @@ export const Staff = () => {
               setCurrentPage={setCurrentPage}
               searchValue={searchValue}
               fetchSearchHandler={fetchSearchHandler}
-              staffForm={staffForm}
             />
           )}
       </div>

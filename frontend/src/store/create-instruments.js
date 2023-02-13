@@ -18,9 +18,9 @@ export const createInstruments = createAsyncThunk(
           description: arg.description,
         }),
       });
-      if (arg.authenticated === true && arg.InstViewed) {
-        ThunkAPI.dispatch(getInstruments(arg.token));
-      }
+      // if (arg.authenticated === true ) {
+      //   ThunkAPI.dispatch(getInstruments(arg.token));
+      // }
       const data = await res.json();
 
       return data;

@@ -14,6 +14,8 @@ import classes from "./Instruments.module.css";
 import { instrumentsPagination } from "../../../store/create-instruments";
 import Search from "../../UI/search/Search";
 import ExportExcel from "../../UI/export/ExportExcel";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 const InstrumentsView = ({
   currentPage,
   setCurrentPage,
@@ -138,7 +140,8 @@ const InstrumentsView = ({
                             style={{
                               color:
                                 insruments.in_action === false ? "#000" : "red",
-                            }}>
+                            }}
+                          >
                             {insruments.in_action === false
                               ? "متواجدة"
                               : "خارج المخزن"}
@@ -153,23 +156,25 @@ const InstrumentsView = ({
                           <td>{insruments.description}</td>
                           <td>
                             {(is_superuser ||
-                              permissions.includes("change_instrument")) && (
-                              <button
-                                className="editBtn"
-                                onClick={() =>
-                                  editInstrumentsForm(insruments.id)
-                                }>
-                                تعديل
-                              </button>
-                            )}
-                            {(is_superuser ||
                               permissions.includes("delete_instrument")) && (
                               <button
                                 className="deleteBtn"
                                 onClick={() =>
                                   deleteModelHandler(insruments.id)
-                                }>
-                                حذف
+                                }
+                              >
+                                <MdOutlineDeleteForever />
+                              </button>
+                            )}
+                            {(is_superuser ||
+                              permissions.includes("change_instrument")) && (
+                              <button
+                                className="editBtn"
+                                onClick={() =>
+                                  editInstrumentsForm(insruments.id)
+                                }
+                              >
+                                <FiEdit />
                               </button>
                             )}
                           </td>

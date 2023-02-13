@@ -10,10 +10,10 @@ import { StoreIcon } from "../../icons/StoreIcon";
 //icon
 import { FaCarSide } from "react-icons/fa";
 import { GiPaddles } from "react-icons/gi";
+import { AiOutlineHome } from "react-icons/ai";
 import classes from "./Sidebar.module.css";
 import { GalleryIcon } from "../../icons/GalleryIcon";
 import { searchImgs } from "../../../store/upload-img-slice";
-import { logout } from "../../../store/auth-slice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const Sidebar = () => {
     location.pathname === "/gallery" ? true : false
   );
   const [activeClass, setActiveClass] = useState(null);
-  const { token } = useSelector((state) => state.authReducer);
+  const token = useSelector((state) => state.authReducer.token);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
@@ -60,6 +60,23 @@ const Sidebar = () => {
   return (
     <aside dir="rtl" className={classes.sidebar}>
       <ul>
+        <li>
+          <NavLink
+            to="/main"
+            style={({ isActive }) => {
+              return {
+                background: isActive ? "#edeaea" : "inherit",
+                color: isActive ? "#2150d8" : "#fff",
+                borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
+              };
+            }}
+          >
+            <span>
+              <AiOutlineHome />
+            </span>
+            <p>الرئيسية</p>
+          </NavLink>
+        </li>
         {(is_superuser === true ||
           allPermissions.includes("employee") ||
           allPermissions.includes("insurance")) && (
@@ -72,7 +89,8 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StaffIcon />
               </span>
@@ -90,7 +108,8 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StoreIcon />
               </span>
@@ -112,7 +131,8 @@ const Sidebar = () => {
                     color: isActive ? "#2150d8" : "#fff",
                     borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                   };
-                }}>
+                }}
+              >
                 <span>
                   <GiPaddles />
                 </span>
@@ -130,7 +150,8 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <FaCarSide />
               </span>
@@ -149,7 +170,8 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <GalleryIcon />
               </span>
@@ -166,7 +188,8 @@ const Sidebar = () => {
                       <li
                         className={activeClass === el.pk ? classes.active : ""}
                         onClick={(e) => selectedStoreHandler(e, el.pk)}
-                        key={el.pk}>
+                        key={el.pk}
+                      >
                         {el.address}
                       </li>
                     );

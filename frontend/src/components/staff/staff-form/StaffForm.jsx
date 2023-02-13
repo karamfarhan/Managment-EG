@@ -1,15 +1,28 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+
 import Inputs from "../../UI/inputs/Inputs";
 import Insurance from "./insurance/Insurance";
 import classes from "./StaffFrom.module.css";
 const StaffForm = ({ setStaffForm }) => {
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
   const [isInsurance, setIsInsurance] = useState("");
+  const navigate = useNavigate();
 
+  const decoded = jwt_decode(token);
+  const { is_superuser, permissions } = decoded;
+  const empolyeePremission = [
+    "change_employee",
+    "delete_employee",
+    "view_employeeactivity",
+    "change_employeeactivity",
+    "delete_employeeactivity",
+    "view_employee",
+  ];
+  const getStaff = permissions.some((el) => empolyeePremission.includes(el));
   //form validation
 
   let formIsValid = false;
@@ -176,6 +189,9 @@ const StaffForm = ({ setStaffForm }) => {
         body: formdata,
       });
       if (res.ok) {
+        if (is_superuser || getStaff) {
+          navigate("/staff");
+        }
         setStaffForm(false);
       }
 
@@ -193,6 +209,7 @@ const StaffForm = ({ setStaffForm }) => {
   //submit handler
   const submitHandler = (e) => {
     e.preventDefault();
+
     sendEmpolyeeData();
   };
 
@@ -298,7 +315,8 @@ const StaffForm = ({ setStaffForm }) => {
                     ...empolyeeData,
                     is_primary: e.target.value,
                   })
-                }>
+                }
+              >
                 <option selected hidden>
                   موظف في مقر الشركة
                 </option>
@@ -315,7 +333,8 @@ const StaffForm = ({ setStaffForm }) => {
                       ...empolyeeData,
                       location: e.target.value,
                     })
-                  }>
+                  }
+                >
                   <option selected hidden>
                     موقع الشركة
                   </option>
@@ -341,7 +360,8 @@ const StaffForm = ({ setStaffForm }) => {
             <div className={classes.select}>
               <select
                 value={isInsurance}
-                onChange={(e) => setIsInsurance(e.target.value)}>
+                onChange={(e) => setIsInsurance(e.target.value)}
+              >
                 <option selected hidden>
                   التأمين
                 </option>
@@ -402,7 +422,8 @@ const StaffForm = ({ setStaffForm }) => {
               value={note}
               onChange={(e) =>
                 setEmpolyeeData({ ...empolyeeData, note: e.target.value })
-              }></textarea>
+              }
+            ></textarea>
           </div>
         )}
       </div>
@@ -415,7 +436,8 @@ const StaffForm = ({ setStaffForm }) => {
           <button
             onClick={nextStepHandler}
             type="button"
-            disabled={!formIsValid}>
+            disabled={!formIsValid}
+          >
             التالي
           </button>
         )}

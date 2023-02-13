@@ -42,20 +42,27 @@
 .table_content table tbody tr:nth-child(even) {
   background-color: #ddd;
 }
+
+/* .table_content table tbody button {
+  border: none;
+  padding: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+} */
 .deleteBtn {
-  background-color: #da3230;
+  background-color: rgba(255, 0, 0, 0.664);
+  border: none;
+  /* color: #fff; */
 }
 .editBtn {
   background-color: green;
 }
-.table_content table tbody button {
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  color: #fff;
-  margin: 0 5px;
-}
-
 .msg_p {
   font-size: 40px;
   text-align: center;

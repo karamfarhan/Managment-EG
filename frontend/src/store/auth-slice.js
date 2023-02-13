@@ -64,7 +64,7 @@ const authSlice = createSlice({
     token: Cookies.get("token-management") || null,
     refresh: Cookies.get("refresh-token") || null,
     isLoading: false,
-    isAuth: null,
+    isAuth: false,
   },
   reducers: {
     logout: (state) => {

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { logout } from "./auth-slice";
 
 export const getStores = createAsyncThunk(
   "createStore/data",

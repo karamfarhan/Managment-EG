@@ -69,7 +69,7 @@ const CreateSubs = () => {
 
   return (
     <Fragment>
-      {(showModel || showInstrumentsForm) && (
+      {/* {(showModel || showInstrumentsForm) && (
         <CreateSubsModel
           hideSubstancesHandler={hideSubstancesHandler}
           showMattersForm={showModel}
@@ -77,7 +77,7 @@ const CreateSubs = () => {
           showMattersPage={showMatters}
           showInstrumentsForm={showInstrumentsForm}
         />
-      )}
+      )} */}
       {/* المخزن الرئيسي*/}
 
       <div className={classes["main_inventory"]}>
@@ -92,7 +92,8 @@ const CreateSubs = () => {
                 id="material"
                 type="button"
                 name="material"
-                onClick={fetchMatters}>
+                onClick={fetchMatters}
+              >
                 عرض الموارد
               </button>
             </div>
@@ -104,28 +105,11 @@ const CreateSubs = () => {
                 id="instruments"
                 type="button"
                 name="instruments"
-                onClick={fetchInstruments}>
+                onClick={fetchInstruments}
+              >
                 عرض المعدات
               </button>
             </div>
-          )}
-        </div>
-        <div className={classes.actions}>
-          {(permissions.includes("add_substance") || is_superuser) && (
-            <button onClick={() => setShowModel(true)}>
-              اضافة مواد
-              {/* <span>
-                <TbToolsKitchen />
-              </span> */}
-            </button>
-          )}
-          {(permissions.includes("add_instrument") || is_superuser) && (
-            <button onClick={() => setShowInstrumentsForm(true)}>
-              اضافة أجهزة / الات
-              {/* <span>
-                <GiSaddle />
-              </span> */}
-            </button>
           )}
         </div>
       </div>

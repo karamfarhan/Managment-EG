@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoutes = () => {
   const { isAuth } = useSelector((state) => state.authReducer);
-
   return (
     <Fragment>
       {isAuth === true && <Outlet />}

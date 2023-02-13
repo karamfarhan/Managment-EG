@@ -15,7 +15,6 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   const [signoutBtn, setSignoutBtn] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
   //logout handler
   const logoutHandler = () => {
     dispatch(logout());
@@ -24,6 +23,10 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   const toggleBtn = () => {
     setSignoutBtn((prevState) => !prevState);
   };
+  //logout
+  // async function logoutIntegrate(){
+
+  // }
 
   let headerColor;
 

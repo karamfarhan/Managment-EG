@@ -19,10 +19,9 @@ export const createSubs = createAsyncThunk(
           units: arg.quantity,
         }),
       });
-      console.log(arg);
-      if (arg.authenticated === true && arg.subsViewed) {
-        ThunkAPI.dispatch(getSubs(arg.token));
-      }
+      // if (arg.authenticated === true && arg.subsViewed) {
+      //   ThunkAPI.dispatch(getSubs(arg.token));
+      // }
 
       return await res.json();
     } catch (err) {
