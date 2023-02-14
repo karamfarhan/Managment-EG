@@ -15,11 +15,30 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   const [signoutBtn, setSignoutBtn] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
+  const logoutEnpoint = async () => {
+    try {
+      const res = await fetch(`${window.domain}/account/logout/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        dispatch(logout());
+      }
+      const data = await res.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   //logout handler
   const logoutHandler = () => {
-    dispatch(logout());
+    //
+    logoutEnpoint();
   };
+
   // signout btn
   const toggleBtn = () => {
     setSignoutBtn((prevState) => !prevState);
