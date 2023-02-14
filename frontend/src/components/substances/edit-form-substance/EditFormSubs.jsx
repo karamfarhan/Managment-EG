@@ -112,7 +112,7 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
 
   return (
     <Fragment>
-      <Backdrop>
+      <Backdrop hideModel={() => navigate("/create_subs")}>
         <form className={classes.form} onSubmit={submitHandler}>
           <Inputs
             type="text"

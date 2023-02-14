@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 import Inputs from "../inputs/Inputs";
@@ -10,6 +11,7 @@ import { createStore } from "../../../store/create-store-slice";
 import Backdrop from "../backdrop/Backdrop";
 
 export const InventoryCreator = ({ hideFormHandler }) => {
+  const navigate = useNavigate();
   const [storeData, setStoreData] = useState({
     name: "",
     address: "",
@@ -19,7 +21,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
 
-  const getSoresPremission = ["change_store", "view_store", "delete_store"];
+  // const getSoresPremission = ["change_store", "view_store", "delete_store"];
 
   const dispatch = useDispatch();
   const { name, address, description } = storeData;
@@ -54,9 +56,11 @@ export const InventoryCreator = ({ hideFormHandler }) => {
       description,
       authenticated: auth(),
     };
-    console.log(storeObj);
     dispatch(createStore(storeObj));
     hideFormHandler();
+    if (auth()) {
+      navigate("/store");
+    }
   };
 
   return (

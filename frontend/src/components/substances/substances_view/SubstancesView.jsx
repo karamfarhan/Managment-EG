@@ -8,6 +8,8 @@ import {
   subsSearchPagination,
 } from "../../../store/create-substance";
 import EditFormSubs from "../edit-form-substance/EditFormSubs";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./SubstancesView.module.css";
@@ -156,19 +158,21 @@ const SubstancesView = ({
 
                         <td>
                           {(is_superuser ||
-                            permissions.includes("change_substance")) && (
-                            <button
-                              className="editBtn"
-                              onClick={() => editForm(subs.id)}>
-                              تعديل
-                            </button>
-                          )}
-                          {(is_superuser ||
                             permissions.includes("delete_substance")) && (
                             <button
                               className="deleteBtn"
-                              onClick={() => deleteModelHandler(subs.id)}>
-                              حذف
+                              onClick={() => deleteModelHandler(subs.id)}
+                            >
+                              <MdOutlineDeleteForever />
+                            </button>
+                          )}
+                          {(is_superuser ||
+                            permissions.includes("change_substance")) && (
+                            <button
+                              className="editBtn"
+                              onClick={() => editForm(subs.id)}
+                            >
+                              <FiEdit />
                             </button>
                           )}
                         </td>

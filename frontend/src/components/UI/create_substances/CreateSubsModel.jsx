@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Backdrop from "../backdrop/Backdrop";
 import Inputs from "../inputs/Inputs";
@@ -11,9 +12,8 @@ const CreateSubsModel = ({
   hideSubstancesHandler,
   showMattersForm,
   showInstrumentsForm,
-  showMattersPage,
-  instrumentsPage,
 }) => {
+  const navigate = useNavigate();
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
@@ -43,14 +43,8 @@ const CreateSubsModel = ({
   const [selectBox, setSelectBox] = useState("");
 
   const dispatch = useDispatch();
-  const {
-    name,
-
-    quantity,
-    description,
-    last_maintain,
-    maintain_place,
-  } = substancesData;
+  const { name, quantity, description, last_maintain, maintain_place } =
+    substancesData;
 
   //form validation
   let formIsValid = false;
@@ -90,7 +84,6 @@ const CreateSubsModel = ({
   //submit handler
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(showMattersPage);
 
     if (formIsValid === false) return;
     //post subtances
@@ -102,7 +95,6 @@ const CreateSubsModel = ({
         description,
         token: token,
         authenticated: subsauth(),
-        subsViewed: showMattersPage,
       };
 
       dispatch(createSubs(obj));
@@ -114,9 +106,11 @@ const CreateSubsModel = ({
         last_maintain,
         maintain_place,
         authenticated: instauth(),
-        InstViewed: instrumentsPage,
       };
       dispatch(createInstruments(obj));
+    }
+    if (is_superuser || subsauth() || instauth()) {
+      navigate("/create_subs");
     }
     hideSubstancesHandler();
   };
@@ -177,7 +171,8 @@ const CreateSubsModel = ({
               <select
                 defaultValue={selectBox}
                 onChange={(e) => setSelectBox(e.target.value)}
-                required>
+                required
+              >
                 <option hidden selected>
                   وحدة القياس
                 </option>

@@ -15,34 +15,42 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   const [signoutBtn, setSignoutBtn] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
-  const logoutEnpoint = async () => {
-    try {
-      const res = await fetch(`${window.domain}/account/logout/`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (res.ok) {
-        dispatch(logout());
-      }
-      const data = await res.json();
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // <<<<<<< HEAD
+  //   // const logoutEnpoint = async () => {
+  //   //   try {
+  //   //     const res = await fetch(`${window.domain}/account/logout/`, {
+  //   //       method: "POST",
+  //   //       headers: {
+  //   //         Authorization: `Bearer ${token}`,
+  //   //       },
+  //   //     });
+  //   //     if (res.ok) {
+  //   //       dispatch(logout());
+  //   //     }
+  //   //     const data = await res.json();
+  //   //     console.log(data);
+  //   //   } catch (err) {
+  //   //     console.log(err);
+  //   //   }
+  //   // };
+
+  // =======
+  // >>>>>>> 134e99f673ddf634ae3634039f18ef0b46c5fb0c
 
   //logout handler
   const logoutHandler = () => {
     //
-    logoutEnpoint();
+    // logoutEnpoint();
   };
 
   // signout btn
   const toggleBtn = () => {
     setSignoutBtn((prevState) => !prevState);
   };
+  //logout
+  // async function logoutIntegrate(){
+
+  // }
 
   let headerColor;
 

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { SiHomeassistantcommunitystore } from "react-icons/si";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import { BiTransfer } from "react-icons/bi";
 import CreateStoreUi from "../UI/create_store_popup/CreateStoreUi";
 import Paginate from "../UI/pagination/Paginate";
 import Bar from "../UI/bars/Bar";
@@ -20,7 +22,6 @@ import classes from "./Store.module.css";
 const Store = () => {
   const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
-  const [showForm, setShowForm] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [storeIdInvoice, setStoreIdInvoice] = useState("");
   //current page
@@ -70,15 +71,6 @@ const Store = () => {
   }, [dispatch, currentPage, searchValue, is_superuser, getAllStores]);
 
   //RESET CURRENT PAGE
-
-  // //hide form handler
-  const hideFormHandler = () => {
-    setShowForm(false);
-  };
-  //show form handler
-  const showFormHandler = () => {
-    setShowForm(true);
-  };
 
   //delete handler
   const deleteHandler = async (id) => {
@@ -153,7 +145,6 @@ const Store = () => {
         />
       )}
 
-      {showForm && <CreateStoreUi hideFormHandler={hideFormHandler} />}
       {isDelete && (
         <DeleteConfirmation
           hideModel={hideDeleteModel}
@@ -170,14 +161,6 @@ const Store = () => {
               value={searchValue}
               searchData={fetchSearchHandler}
             />
-          )}
-          {(is_superuser || permissions.includes("add_store")) && (
-            <button
-              onClick={showFormHandler}
-              type="button"
-              className={classes.addInventory}>
-              <SiHomeassistantcommunitystore /> انشاء مخزن
-            </button>
           )}
         </div>
       </Bar>
@@ -218,8 +201,9 @@ const Store = () => {
                           <button
                             className={classes.deleteBtn}
                             type="button"
-                            onClick={() => deleteModelHandler(store.id)}>
-                            حذف
+                            onClick={() => deleteModelHandler(store.id)}
+                          >
+                            <MdOutlineDeleteForever />
                           </button>
                         )}
 
@@ -230,8 +214,9 @@ const Store = () => {
                             type="button"
                             onClick={() => {
                               showInvoiceHandler(store.name, store.id);
-                            }}>
-                            تحويل
+                            }}
+                          >
+                            <BiTransfer />
                           </button>
                         )}
                       </td>

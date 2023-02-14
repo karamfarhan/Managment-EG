@@ -21,7 +21,6 @@ const Cars = () => {
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
-  const [shoeForm, setShowForm] = useState(false);
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //search
@@ -43,10 +42,6 @@ const Cars = () => {
   //search handler
   const searchHandler = (e) => {
     setSearchValue(e.target.value);
-  };
-  //hide form
-  const hideModelForm = () => {
-    setShowForm(false);
   };
 
   //pagination functions
@@ -72,7 +67,6 @@ const Cars = () => {
 
   return (
     <Fragment>
-      {shoeForm && <CreateCar hideModel={hideModelForm} />}
       <Bar>
         <div className="toolBar">
           {(is_superuser || permissions.includes("view_car")) && (
@@ -82,16 +76,6 @@ const Cars = () => {
               value={searchValue}
               searchData={fetchSearchHandler}
             />
-          )}
-          {(is_superuser || permissions.includes("add_car")) && (
-            <button
-              className={classes.createBtn}
-              onClick={() => setShowForm(true)}>
-              انشاء سيارة
-              <span>
-                <AiFillCar />
-              </span>
-            </button>
           )}
         </div>
       </Bar>

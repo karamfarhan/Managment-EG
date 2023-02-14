@@ -26,7 +26,6 @@ export const Layout = ({ children }) => {
   const sideBarHanler = () => {
     setShowSideBar((prev) => !prev);
   };
-  console.log(matches);
 
   return (
     <Fragment>

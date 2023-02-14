@@ -1,16 +1,25 @@
 import { useState } from "react";
-import Backdrop from "../backdrop/Backdrop";
+import { useNavigate } from "react-router-dom";
 import { FaCarSide } from "react-icons/fa";
-import Inputs from "../inputs/Inputs";
-
-import classes from "./CreateCar.module.css";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
+import Backdrop from "../backdrop/Backdrop";
+
+import jwt_decode from "jwt-decode";
+
+import Inputs from "../inputs/Inputs";
+
 import { getCars } from "../../../store/cars-slice";
 import { logout } from "../../../store/auth-slice";
+import classes from "./CreateCar.module.css";
+
 const CreateCar = ({ hideModel }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
+  const decoded = jwt_decode(token);
+
+  const { is_superuser, permissions } = decoded;
 
   //hide model
 
@@ -69,8 +78,15 @@ const CreateCar = ({ hideModel }) => {
           body: JSON.stringify(carData),
         });
         if (res.ok) {
-          dispatch(getCars(token));
-          hideModel();
+          if (
+            is_superuser ||
+            permissions.includes("view_car") ||
+            permissions.includes("update_car") ||
+            permissions.includes("delete_car")
+          ) {
+            hideModel();
+            navigate("/cars");
+          }
         }
         if (res.status === 401) {
           return dispatch(logout());
@@ -106,7 +122,8 @@ const CreateCar = ({ hideModel }) => {
               onChange={(e) =>
                 setCarData({ ...carData, driver: e.target.value })
               }
-              required>
+              required
+            >
               <option hidden> السائق </option>
               {employeesName &&
                 employeesName.map((el) => {
@@ -166,9 +183,8 @@ const CreateCar = ({ hideModel }) => {
           <textarea
             placeholder="ملاحظة"
             value={note}
-            onChange={(e) =>
-              setCarData({ ...carData, note: e.target.value })
-            }></textarea>
+            onChange={(e) => setCarData({ ...carData, note: e.target.value })}
+          ></textarea>
 
           <button type="submit"> اضافة </button>
         </form>

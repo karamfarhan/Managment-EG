@@ -83,9 +83,8 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
     navigate("/create_subs");
   };
 
-  console.log(instrumData);
   return (
-    <Backdrop>
+    <Backdrop hideModel={() => navigate("/create_subs")}>
       <form className={classes.form} onSubmit={submitHandler}>
         <Inputs
           type="text"
@@ -120,7 +119,8 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
             value={instrumData.in_action}
             onChange={(e) =>
               setInstrumData({ ...instrumData, in_action: e.target.value })
-            }>
+            }
+          >
             <option value={false}> موجودة بالمخزن </option>
             <option value={true}> غير موجودة </option>
           </select>
