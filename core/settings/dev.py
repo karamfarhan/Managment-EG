@@ -21,3 +21,22 @@ if env("DEVELOPER") == "KARAM":
 if env("DEVELOPER") == "ALAA":
     DATABASES["default"]["ENGINE"] = "django.db.backends.sqlite3"
     DATABASES["default"]["NAME"] = BASE_DIR / "db.sqlite3"
+
+
+
+# DEVELOPMENT SETTINGS THIS
+# ALSO PUT THE URLS IN THE URLS FILE IN THE MAIN FOLDER OF THE PORJECT
+# TODO make sure to try to delete thei BASE_DIR and deploy because we collectstatic
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ! open static_root while deploy
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+TEMP = os.path.join(BASE_DIR, "/media/temp")
