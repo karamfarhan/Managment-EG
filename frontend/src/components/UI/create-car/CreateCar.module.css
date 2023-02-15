@@ -1,5 +1,9 @@
 .createCar {
   padding: 30px;
+  z-index: 120;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 30px;
 }
 .title {
   text-align: center;

@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Inputs from "../../../UI/inputs/Inputs";
 import EditInsurance from "./editInsurance/EditInsurance";
 import classes from "./EditEmpolyee.module.css";
 import { useSelector } from "react-redux";
+import { getEmpolyees } from "../../../../store/empolyees-slice";
 const EditEmpolyee = () => {
+  const dispatch = useDispatch();
+  const locations = useLocation();
   const { token } = useSelector((state) => state.authReducer);
   const navigate = useNavigate();
 
@@ -91,7 +95,6 @@ const EditEmpolyee = () => {
   const yearsVar = selectedEmpolyee.years_of_experiance;
   const daysVar = selectedEmpolyee.days_off;
   const primVar = selectedEmpolyee.is_primary;
-  const locationVar = selectedEmpolyee.store_address;
   const signInVar = selectedEmpolyee.signin_date;
   const noteVar = selectedEmpolyee.note;
 
@@ -151,6 +154,7 @@ const EditEmpolyee = () => {
     },
     { refetchOnWindowFocus: false }
   );
+
   //send empolyee data
   const sendEmpolyeeData = async () => {
     console.log(is_primary);
@@ -232,6 +236,7 @@ const EditEmpolyee = () => {
         }
       );
       if (res.ok) {
+        dispatch(getEmpolyees(token));
         navigate("/staff");
       }
 
@@ -334,6 +339,7 @@ const EditEmpolyee = () => {
             />
 
             <div className={classes.select}>
+              <label>مظف بمقر الشركة</label>
               <select
                 value={is_primary}
                 onChange={(e) =>
@@ -341,7 +347,8 @@ const EditEmpolyee = () => {
                     ...empolyeeData,
                     is_primary: e.target.value,
                   })
-                }>
+                }
+              >
                 ْ<option disabled>موظف بمقر الشركة</option>ْ
                 <option value={true}>نعم</option>
                 <option value={false}>لا</option>
@@ -356,7 +363,8 @@ const EditEmpolyee = () => {
                       ...empolyeeData,
                       location: e.target.value,
                     })
-                  }>
+                  }
+                >
                   <option selected hidden>
                     موقع العمل
                   </option>
@@ -439,7 +447,8 @@ const EditEmpolyee = () => {
               value={note}
               onChange={(e) =>
                 setEmpolyeeData({ ...empolyeeData, note: e.target.value })
-              }></textarea>
+              }
+            ></textarea>
           </div>
         )}
         {steps === 3 && (

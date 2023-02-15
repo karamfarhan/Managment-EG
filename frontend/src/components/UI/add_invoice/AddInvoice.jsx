@@ -127,7 +127,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   };
 
   return (
-    <Backdrop>
+    <Backdrop hideModel={hideModel}>
       <form className={classes.form} onSubmit={submitHandler}>
         <span className={classes.close} onClick={hideModel}>
           <AiOutlineCloseCircle />

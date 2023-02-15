@@ -69,14 +69,15 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
               سائق السيارة <span>{driver_name}</span>{" "}
             </p>
             <p>
-              سيارة رقم <span>{car_number}</span>{" "}
+              رقم سيارة<span>{car_number}</span>{" "}
             </p>
           </div>
           <div className={classes.actions}>
             {(is_superuser || permissions.includes("delete_car")) && (
               <button
                 className="deleteIcon"
-                onClick={() => deleteModelHandler(id)}>
+                onClick={() => deleteModelHandler(id)}
+              >
                 <MdOutlineDeleteForever />
               </button>
             )}

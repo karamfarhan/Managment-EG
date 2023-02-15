@@ -12,7 +12,6 @@ export const getEmpolyees = createAsyncThunk(
           Authorization: `Bearer ${arg}`,
         },
       });
-      console.log(arg);
       return await res.json();
     } catch (err) {
       console.log(err);

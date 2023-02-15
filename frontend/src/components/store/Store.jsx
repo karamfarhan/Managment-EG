@@ -2,10 +2,8 @@ import { Fragment, useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
-import { SiHomeassistantcommunitystore } from "react-icons/si";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { BiTransfer } from "react-icons/bi";
-import CreateStoreUi from "../UI/create_store_popup/CreateStoreUi";
 import Paginate from "../UI/pagination/Paginate";
 import Bar from "../UI/bars/Bar";
 import {
@@ -156,7 +154,7 @@ const Store = () => {
         <div className="toolBar">
           {(is_superuser || getAllStores) && (
             <Search
-              placeholder="أسم المخزن أو التاريخ YYYY-DD-MM"
+              placeholder=" المخزن أو التاريخ YYYY-DD-MM"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}

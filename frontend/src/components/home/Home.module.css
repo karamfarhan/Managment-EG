@@ -4,6 +4,7 @@
 .home h1 {
   text-align: center;
   color: #7c7979;
+  font-size: 36px;
 }
 .actions {
   display: flex;

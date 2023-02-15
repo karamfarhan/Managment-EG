@@ -41,8 +41,6 @@ const ExportExcel = ({ matter, id }) => {
     { refetchOnWindowFocus: false, enabled: false }
   );
 
-  console.log(data);
-
   return (
     <button className={classes.btn} onClick={refetch}>
       تصدير EXECL

@@ -2,13 +2,11 @@ import { useState, useEffect, Fragment } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
-import { AiOutlineUserAdd } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import Empolyess from "./empolyees/Empolyess";
 import { empolyeeSearch, getEmpolyees } from "../../store/empolyees-slice";
 import Search from "../UI/search/Search";
 import EditEmpolyee from "./empolyees/edit-empolyee/EditEmpolyee";
-import classes from "./Staff.module.css";
 export const Staff = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -78,7 +76,7 @@ export const Staff = () => {
             <div className="toolBar">
               {(is_superuser || getStaff) && (
                 <Search
-                  placeholder="أبحث عن أسم الموظف أو الموقع"
+                  placeholder="أسم الموظف أو الموقع"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   searchData={fetchSearchHandler}

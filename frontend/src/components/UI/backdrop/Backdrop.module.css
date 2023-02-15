@@ -12,7 +12,6 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
   z-index: 12;
   overflow: hidden;
   border-radius: 10px;

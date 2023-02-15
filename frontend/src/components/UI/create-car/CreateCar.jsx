@@ -9,7 +9,6 @@ import jwt_decode from "jwt-decode";
 
 import Inputs from "../inputs/Inputs";
 
-import { getCars } from "../../../store/cars-slice";
 import { logout } from "../../../store/auth-slice";
 import classes from "./CreateCar.module.css";
 

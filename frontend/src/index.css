@@ -72,6 +72,8 @@ button:disabled {
 }
 
 .select {
+  display: flex;
+  flex-direction: column;
   height: 40px;
 }
 .select select {

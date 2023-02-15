@@ -64,7 +64,7 @@ const authSlice = createSlice({
     token: Cookies.get("token-management") || null,
     refresh: Cookies.get("refresh-token") || null,
     isLoading: false,
-    isAuth: false,
+    isAuth: null,
   },
   reducers: {
     logout: (state) => {
@@ -97,7 +97,6 @@ const authSlice = createSlice({
       state.token = action.payload.access;
       state.isAuth = true;
       Cookies.set("token-management", action.payload.access);
-      console.log(state.isAuth);
     },
     [updateToken.rejected]: (state, action) => {
       Cookies.remove("token-management");

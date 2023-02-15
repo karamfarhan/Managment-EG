@@ -108,7 +108,6 @@ const Empolyess = ({
           Object.entries(data).map(([key, value], i) => {
             return (
               <div key={i}>
-                {" "}
                 <h2>
                   كشف العاملين ({key === "null" ? "المكتب الاداري" : key}){" "}
                 </h2>
@@ -164,7 +163,8 @@ const Empolyess = ({
                                             e.id,
                                             e.today_activity.id
                                           )
-                                    }>
+                                    }
+                                  >
                                     {(e.today_activity === false ||
                                       e.today_activity.phase_in === null) &&
                                       "سجل الحضور"}
