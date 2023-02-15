@@ -38,11 +38,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # My apps
-    "apps.account",
-    "apps.substance",
-    "apps.store",
-    "apps.employee",
-    "apps.car",
+    "apps.account.apps.AccountConfig",
+    "apps.substance.apps.SubstanceConfig",
+    "apps.store.apps.StoreConfig",
+    "apps.employee.apps.EmployeeConfig",
+    "apps.car.apps.CarConfig",
 ]
 
 MIDDLEWARE = [
@@ -142,6 +142,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10mb = 10 * 1024 *1024
 
+
+# LOGIN_REDIRECT_URL = "/"
+# LOGIN_URL = "/account/login/"
 
 #  SMTP.Configuration
 

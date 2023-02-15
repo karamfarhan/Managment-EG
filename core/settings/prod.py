@@ -1,5 +1,6 @@
 import os
 
+from .base import *
 from .base import BASE_DIR, env
 
 # import dj_database_url
