@@ -1,12 +1,11 @@
 import os
 
-from .base import *
 from .base import BASE_DIR, env
 
 # import dj_database_url
 
 
-DEBUG = True
+DEBUG = False
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ALLOWED_HOSTS = [
     "managment-eg-production.up.railway.app",
