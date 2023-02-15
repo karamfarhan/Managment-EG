@@ -8,10 +8,10 @@ import environ
 # load_dotenv()
 
 env = environ.Env()
-environ.Env.read_env()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 
@@ -139,9 +139,6 @@ TIME_ZONE = "Europe/Istanbul"
 USE_I18N = True
 
 USE_TZ = True
-
-
-
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
