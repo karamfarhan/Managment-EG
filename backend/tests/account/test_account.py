@@ -1,9 +1,7 @@
 import pytest
-from apps.account.models import Account
 
 # from django.test import Client
 from rest_framework.test import APIClient
-from tests.factories import AccountFactory
 
 client = APIClient()
 

@@ -1,6 +1,3 @@
-import pytest
-from apps.account.models import Account
-
 #     )
 ### using factoryboy and Fakerlibrary to make it more effiecent
 # first we should make the factories - go to factories.py file

@@ -1,6 +1,6 @@
 import copy
 
-from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions
+from rest_framework.permissions import DjangoModelPermissions
 
 
 class CustomDjangoModelPermission(DjangoModelPermissions):

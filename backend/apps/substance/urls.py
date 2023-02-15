@@ -10,14 +10,10 @@ from .views import (
 )
 
 urlpatterns = [
-    path("export/substances/",
-         SubstanceViewSet.as_view({"get": "export"}), name="substances-export"),
-    path("export/instruments/",
-         InstrumentViewSet.as_view({"get": "export"}), name="instruments-export"),
-    path("substances/select_list/",
-         SubstanceSelectBarView.as_view(), name="substance_select"),
-    path("instruments/select_list/",
-         InstrumentSelectBarView.as_view(), name="insturment_select"),
+    path("export/substances/", SubstanceViewSet.as_view({"get": "export"}), name="substances-export"),
+    path("export/instruments/", InstrumentViewSet.as_view({"get": "export"}), name="instruments-export"),
+    path("substances/select_list/", SubstanceSelectBarView.as_view(), name="substance_select"),
+    path("instruments/select_list/", InstrumentSelectBarView.as_view(), name="insturment_select"),
 ]
 
 router = DefaultRouter()

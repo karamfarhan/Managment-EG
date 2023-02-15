@@ -13,7 +13,7 @@
     border-spacing: 1px;
     margin: 30px 0;
   }
-  
+
   .invoice-container table th,
   .invoice-container table td {
     padding: 0.75rem;
@@ -38,7 +38,7 @@
   .invoice-container table tbody {
     font-size: 12px;
   }
-  
+
   .invoice-container table tbody tr:nth-child(even) {
     background-color: #ddd;
   }

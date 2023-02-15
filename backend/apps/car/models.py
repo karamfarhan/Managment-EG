@@ -1,7 +1,5 @@
 from apps.employee.models import Employee
 from django.db import models
-from django.db.models.signals import post_delete, pre_delete, pre_save
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 

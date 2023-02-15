@@ -87,8 +87,7 @@ class Substance(models.Model):
         default=1,
         verbose_name=_("units available in stock"),
     )
-    unit_type = models.CharField(
-        max_length=20, choices=UNIT_TYPE, verbose_name=_("Unit Type"))
+    unit_type = models.CharField(max_length=20, choices=UNIT_TYPE, verbose_name=_("Unit Type"))
 
     class Meta:
         verbose_name = "Substance"

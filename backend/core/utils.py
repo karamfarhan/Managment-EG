@@ -2,7 +2,6 @@ import os
 import random
 import string
 
-# import cv2
 from django.utils.text import slugify
 
 
