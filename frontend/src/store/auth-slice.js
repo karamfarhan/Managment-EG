@@ -71,7 +71,7 @@ const authSlice = createSlice({
       state.refresh = null;
       localStorage.removeItem("token-management");
       localStorage.removeItem("refresh-token");
-      state.isAuth = null;
+      state.isAuth = false;
     },
   },
   extraReducers: {
