@@ -164,7 +164,7 @@ class AccountRegistrationSerializer(serializers.Serializer):
 
 
 class AccountRedSerializer(serializers.ModelSerializer):
-    profile_image = serializers.SerializerMethodField("validate_profile_image")
+    # profile_image = serializers.SerializerMethodField("validate_profile_image")
 
     class Meta:
         model = Account
@@ -172,30 +172,30 @@ class AccountRedSerializer(serializers.ModelSerializer):
             "pk",
             "email",
             "username",
-            "profile_image",
+            # "profile_image",
             "hide_email",
             "first_name",
             "last_name",
         ]
         read_only_fields = fields
 
-    def validate_profile_image(self, user):
-        try:
-            request = self.context["request"]
-        except KeyError:
-            raise ValueError("'request' is not defined in 'self.context'")
-        try:
-            profile_image = user.profile_image.url
-        except AttributeError:
-            raise ValueError("'user.profile_image' is not defined or does not have a 'url' attribute")
-        full_url = request.build_absolute_uri(profile_image)
-        if full_url is None:
-            raise ValueError("'request.build_absolute_uri()' returned 'None'")
-        if "?" in full_url:
-            profile_image = full_url[: full_url.rfind("?")]
-        else:
-            profile_image = full_url
-        return profile_image
+    # def validate_profile_image(self, user):
+    #     try:
+    #         request = self.context["request"]
+    #     except KeyError:
+    #         raise ValueError("'request' is not defined in 'self.context'")
+    #     try:
+    #         profile_image = user.profile_image.url
+    #     except AttributeError:
+    #         raise ValueError("'user.profile_image' is not defined or does not have a 'url' attribute")
+    #     full_url = request.build_absolute_uri(profile_image)
+    #     if full_url is None:
+    #         raise ValueError("'request.build_absolute_uri()' returned 'None'")
+    #     if "?" in full_url:
+    #         profile_image = full_url[: full_url.rfind("?")]
+    #     else:
+    #         profile_image = full_url
+    #     return profile_image
 
 
 # class AccountWriteSerializer(serializers.ModelSerializer):
@@ -242,7 +242,7 @@ class AccountWriteSerializer(serializers.ModelSerializer):
         fields = [
             "email",
             "username",
-            "profile_image",
+            # "profile_image",
             "hide_email",
             "first_name",
             "last_name",
@@ -253,12 +253,12 @@ class AccountWriteSerializer(serializers.ModelSerializer):
         print(validated_data)
         instance.email = validated_data.get("email", instance.email).lower()
         instance.username = validated_data.get("username", instance.username)
-        instance.profile_image = validated_data.get("profile_image", instance.profile_image)
+        # instance.profile_image = validated_data.get("profile_image", instance.profile_image)
         instance.hide_email = validated_data.get("hide_email", instance.hide_email)
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
         instance.employee = validated_data.get("employee", instance.employee)
-        instance.save(update_fields=["email", "username", "profile_image", "hide_email", "first_name", "last_name"])
+        instance.save(update_fields=["email", "username", "hide_email", "first_name", "last_name"])
         return instance
 
 

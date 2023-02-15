@@ -34,13 +34,13 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     hide_email = models.BooleanField(default=True)
-    profile_image = models.ImageField(
-        max_length=255,
-        upload_to=get_profile_image_filepath,
-        null=True,
-        blank=True,
-        default=get_default_profile_image,
-    )
+    # profile_image = models.ImageField(
+    #     max_length=255,
+    #     upload_to=get_profile_image_filepath,
+    #     null=True,
+    #     blank=True,
+    #     default=get_default_profile_image,
+    # )
     objects = MyAccountManager()
 
     USERNAME_FIELD = "email"
@@ -55,15 +55,15 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
 
-        img = Image.open(self.profile_image.path)
+    #     img = Image.open(self.profile_image.path)
 
-        if img.height > 500 or img.width > 500:
-            output_size = (500, 500)
-            img.thumbnail(output_size)
-            img.save(self.profile_image.path)
+    #     if img.height > 500 or img.width > 500:
+    #         output_size = (500, 500)
+    #         img.thumbnail(output_size)
+    #         img.save(self.profile_image.path)
 
     # def email_user(self, subject, message):
     #     email = EmailMessage(
@@ -75,8 +75,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     #     EmailThread(email).start()
 
-    def get_profile_image_filename(self):
-        return str(self.profile_image)[str(self.profile_image).index(f"profile_images/{str(self.pk)}/") :]
+    # def get_profile_image_filename(self):
+    #     return str(self.profile_image)[str(self.profile_image).index(f"profile_images/{str(self.pk)}/") :]
 
     # For checking permissions. to keep it simple all admin have ALL permissons
     # def has_perm(self, perm, obj=None):
