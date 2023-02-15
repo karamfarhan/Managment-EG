@@ -8,7 +8,7 @@ from .base import BASE_DIR, env
 DEBUG = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ALLOWED_HOSTS = [
-    "managementdjango.onrender.com",
+    "managment-eg-production.up.railway.app",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://mountain-system.web.app",
