@@ -1,21 +1,19 @@
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives, get_connection
-from django.template import Context, Template, engines
-from django.template.context import make_context
+from django.template.context import Context, make_context
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import get_template
-from django.utils.html import strip_tags
-from django.conf import settings
 
-
-from django.template.context import Context
 
 def bind_template(self, template):
-    processors = (template.backend.template_context_processors +
-                  self.processors)
+    processors = template.backend.template_context_processors + self.processors
     self.update(Context(self.dicts, processors))
 
+
 Context.bind_template = bind_template
+
+
 class ContextMixin:
     context = {}
 
@@ -71,6 +69,7 @@ class BaseEmailMessage(EmailMultiAlternatives, ContextMixin):
             }
         )
         return context
+
     def _get_template(self):
         try:
             return get_template(self.template_name)
@@ -101,5 +100,3 @@ class BaseEmailMessage(EmailMultiAlternatives, ContextMixin):
         self.connection = connection
 
         return super().send(*args, **kwargs)
-
-

@@ -2,9 +2,6 @@ from apps.account.forms import RegistrationForm, UpdateAccountForm
 from apps.account.models import Account
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import Group
-from rest_framework_simplejwt.token_blacklist.admin import BlacklistedTokenAdmin, OutstandingTokenAdmin
-from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 
 @admin.register(Account)

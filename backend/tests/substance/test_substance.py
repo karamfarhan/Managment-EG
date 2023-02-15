@@ -1,10 +1,7 @@
 import pytest
-from apps.account.models import Account
-from apps.substance.models import Category, Substance
 
 # from django.test import Client
 from rest_framework.test import APIClient
-from tests.factories import AccountFactory, CategoryFactory, SubstanceFactory
 
 client = APIClient()
 

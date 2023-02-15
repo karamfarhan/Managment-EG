@@ -1,20 +1,17 @@
 import datetime
 
 from core.exports import ModelViewSetExportBase
-from django.db.models import Prefetch
-from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 
 # from ipware.ip import get_client_ip
 from rest_framework import serializers, status, viewsets
-from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Employee, EmployeeActivity, Insurance
+from .models import Employee, EmployeeActivity
 from .resources import EmployeeActivityResource, EmployeeResource
 from .serializers import EmployeeActivitySerializer, EmployeeSelectBarSerializer, EmployeeSerializer
 

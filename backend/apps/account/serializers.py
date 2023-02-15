@@ -5,9 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MinLengthValidator
 from django.db.models import Q
 from drf_extra_fields.fields import LowercaseEmailField
-from rest_framework import serializers, status
+from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
-from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.state import token_backend

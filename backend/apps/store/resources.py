@@ -1,10 +1,7 @@
-from itertools import chain
-
 from import_export import resources
 from import_export.fields import Field
-from import_export.widgets import ForeignKeyWidget
 
-from .models import Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, Store
+from .models import Invoice, Store
 
 
 class StoreResource(resources.ModelResource):
