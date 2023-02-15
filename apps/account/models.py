@@ -55,15 +55,15 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
 
-        img = Image.open(self.profile_image.path)
+    #     img = Image.open(self.profile_image.path)
 
-        if img.height > 500 or img.width > 500:
-            output_size = (500, 500)
-            img.thumbnail(output_size)
-            img.save(self.profile_image.path)
+    #     if img.height > 500 or img.width > 500:
+    #         output_size = (500, 500)
+    #         img.thumbnail(output_size)
+    #         img.save(self.profile_image.path)
 
     # def email_user(self, subject, message):
     #     email = EmailMessage(

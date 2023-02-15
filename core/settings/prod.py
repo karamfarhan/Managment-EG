@@ -1,9 +1,10 @@
 import os
 
-import dj_database_url
-
 from .base import *
 from .base import BASE_DIR, env
+
+# import dj_database_url
+
 
 DEBUG = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -20,7 +21,18 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
-DATABASES = {"default": dj_database_url.parse(env("DATABASE_URL"))}
+# DATABASES = {"default": dj_database_url.parse(env("DATABASE_URL"))}
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("PGDATABASE"),
+        "USER": env("PGUSER"),
+        "PASSWORD": env("PGPASSWORD"),
+        "HOST": env("PGHOST"),
+        "PORT": env("PGPORT"),
+    }
+}
 
 
 ### PRODUCTION SETTING -- WITH AWS SERVER
