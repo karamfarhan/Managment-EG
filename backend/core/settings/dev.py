@@ -2,6 +2,7 @@ import os
 
 import dj_database_url
 
+from .base import *
 from .base import BASE_DIR, env
 
 ALLOWED_HOSTS = ["*"]
