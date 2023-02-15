@@ -20,7 +20,19 @@ CORS_ALLOWED_ORIGINS = [
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
-DATABASES = {"default": dj_database_url.parse(env("DATABASE_URL"))}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("PGDATABASE"),
+        "USER": env("PGUSER"),
+        "PASSWORD": env("PGPASSWORD"),
+        "HOST": env("PGHOST"),
+        "PORT": env("PGPORT"),
+    }
+}
+
+
+# DATABASES = {"default": dj_database_url.parse(env("DATABASE_URL"))}
 
 
 # ### PRODUCTION SETTING -- WITH AWS SERVER
