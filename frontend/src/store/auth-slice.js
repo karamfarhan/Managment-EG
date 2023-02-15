@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
 
 //Login
 export const login = createAsyncThunk(
@@ -61,8 +60,8 @@ const authSlice = createSlice({
     httpErr: "",
     msg: "",
     user: "",
-    token: Cookies.get("token-management") || null,
-    refresh: Cookies.get("refresh-token") || null,
+    token: localStorage.getItem("token-management") || null,
+    refresh: localStorage.getItem("refresh-token") || null,
     isLoading: false,
     isAuth: null,
   },
@@ -70,9 +69,9 @@ const authSlice = createSlice({
     logout: (state) => {
       state.token = null;
       state.refresh = null;
-      Cookies.remove("token-management");
-      Cookies.remove("refresh-token");
-      state.isAuth = false;
+      localStorage.removeItem("token-management");
+      localStorage.removeItem("refresh-token");
+      state.isAuth = null;
     },
   },
   extraReducers: {
@@ -84,8 +83,8 @@ const authSlice = createSlice({
       state.token = action.payload.access;
       state.refresh = action.payload.refresh;
       state.isAuth = true;
-      Cookies.set("token-management", action.payload.access);
-      Cookies.set("refresh-token", action.payload.refresh);
+      localStorage.setItem("token-management", action.payload.access);
+      localStorage.setItem("refresh-token", action.payload.refresh);
     },
     [login.rejected]: (state, action) => {
       state.isLoading = false;
@@ -96,11 +95,11 @@ const authSlice = createSlice({
     [updateToken.fulfilled]: (state, action) => {
       state.token = action.payload.access;
       state.isAuth = true;
-      Cookies.set("token-management", action.payload.access);
+      localStorage.setItem("token-management", action.payload.access);
     },
     [updateToken.rejected]: (state, action) => {
-      Cookies.remove("token-management");
-      Cookies.remove("refresh-token");
+      localStorage.removeItem("token-management");
+      localStorage.removeItem("refresh-token");
       state.isAuth = false;
     },
   },

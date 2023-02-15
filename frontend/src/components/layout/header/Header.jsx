@@ -28,14 +28,12 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
         dispatch(logout());
       }
       const data = await res.json();
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
   };
 
   // =======
-  // >>>>>>> 134e99f673ddf634ae3634039f18ef0b46c5fb0c
 
   //logout handler
   const logoutHandler = () => {
