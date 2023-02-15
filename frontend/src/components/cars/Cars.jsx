@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
 import Search from "../UI/search/Search";
-import { AiFillCar } from "react-icons/ai";
 import classes from "./Cars.module.css";
 import { Fragment } from "react";
-import CreateCar from "../UI/create-car/CreateCar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   carsPaginations,
@@ -83,6 +81,7 @@ const Cars = () => {
       <div className={classes.grid}>
         {cars &&
           cars !== undefined &&
+          (is_superuser || permissions.includes("view_car")) &&
           cars.results.map((el) => {
             return (
               <CarList

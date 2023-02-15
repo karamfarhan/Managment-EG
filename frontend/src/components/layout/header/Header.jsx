@@ -16,23 +16,23 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   // <<<<<<< HEAD
-  //   // const logoutEnpoint = async () => {
-  //   //   try {
-  //   //     const res = await fetch(`${window.domain}/account/logout/`, {
-  //   //       method: "POST",
-  //   //       headers: {
-  //   //         Authorization: `Bearer ${token}`,
-  //   //       },
-  //   //     });
-  //   //     if (res.ok) {
-  //   //       dispatch(logout());
-  //   //     }
-  //   //     const data = await res.json();
-  //   //     console.log(data);
-  //   //   } catch (err) {
-  //   //     console.log(err);
-  //   //   }
-  //   // };
+  const logoutEnpoint = async () => {
+    try {
+      const res = await fetch(`${window.domain}/account/logout/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        dispatch(logout());
+      }
+      const data = await res.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // =======
   // >>>>>>> 134e99f673ddf634ae3634039f18ef0b46c5fb0c
@@ -40,7 +40,7 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   //logout handler
   const logoutHandler = () => {
     //
-    // logoutEnpoint();
+    logoutEnpoint();
   };
 
   // signout btn
