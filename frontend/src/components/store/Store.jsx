@@ -14,6 +14,7 @@ import {
 } from "../../store/create-store-slice";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
 import Search from "../UI/search/Search";
+import LoadingSpinner from "../UI/loading/LoadingSpinner";
 import AddInvoice from "../UI/add_invoice/AddInvoice";
 import classes from "./Store.module.css";
 
@@ -50,7 +51,7 @@ const Store = () => {
   );
 
   //store data
-  const { store_data } = useSelector((state) => state.storeSlice);
+  const { store_data, isLoading } = useSelector((state) => state.storeSlice);
 
   //stores count
   const storeCount = store_data && store_data.count;
@@ -162,81 +163,84 @@ const Store = () => {
           )}
         </div>
       </Bar>
-
-      {store_data && store_data.length === 0 && (
+      {isLoading && <LoadingSpinner />}
+      {store_data && !isLoading && store_data.length === 0 && (
         <p className={classes.msg_p}> لا يوجد مخازن </p>
       )}
-      {store_data && store_data.results && store_data.results.length > 0 && (
-        <div className={classes["table_content"]}>
-          <table>
-            <thead>
-              <tr>
-                <th>أسم المخزن</th>
-                <th>عنوان المخزن</th>
-                <th>انشيء عن طريق</th>
-                <th>تاريخ الانشاء</th>
-                <th>معلومات اضافية</th>
-                <th>حدث</th>
-              </tr>
-            </thead>
+      {store_data &&
+        !isLoading &&
+        store_data.results &&
+        store_data.results.length > 0 && (
+          <div className={classes["table_content"]}>
+            <table>
+              <thead>
+                <tr>
+                  <th>أسم المخزن</th>
+                  <th>عنوان المخزن</th>
+                  <th>انشيء عن طريق</th>
+                  <th>تاريخ الانشاء</th>
+                  <th>معلومات اضافية</th>
+                  <th>حدث</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              {store_data &&
-                store_data.results &&
-                store_data.results.map((store) => {
-                  return (
-                    <tr key={store.id}>
-                      <td>
-                        <Link to={`/store/${store.id}`}>{store.name}</Link>
-                      </td>
-                      <td> {store.address} </td>
-                      <td> {store.created_by} </td>
-                      <td>{new Date(store.created_at).toDateString()} </td>
-                      <td> {store.description} </td>
-                      <td>
-                        {(is_superuser ||
-                          permissions.includes("delete_store")) && (
-                          <button
-                            className={classes.deleteBtn}
-                            type="button"
-                            onClick={() => deleteModelHandler(store.id)}
-                          >
-                            <MdOutlineDeleteForever />
-                          </button>
-                        )}
+              <tbody>
+                {store_data &&
+                  store_data.results &&
+                  store_data.results.map((store) => {
+                    return (
+                      <tr key={store.id}>
+                        <td>
+                          <Link to={`/store/${store.id}`}>{store.name}</Link>
+                        </td>
+                        <td> {store.address} </td>
+                        <td> {store.created_by} </td>
+                        <td>{new Date(store.created_at).toDateString()} </td>
+                        <td> {store.description} </td>
+                        <td>
+                          {(is_superuser ||
+                            permissions.includes("delete_store")) && (
+                            <button
+                              className={classes.deleteBtn}
+                              type="button"
+                              onClick={() => deleteModelHandler(store.id)}
+                            >
+                              <MdOutlineDeleteForever />
+                            </button>
+                          )}
 
-                        {(is_superuser ||
-                          permissions.includes("add_invoice")) && (
-                          <button
-                            className={classes.editBtn}
-                            type="button"
-                            onClick={() => {
-                              showInvoiceHandler(store.name, store.id);
-                            }}
-                          >
-                            <BiTransfer />
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
+                          {(is_superuser ||
+                            permissions.includes("add_invoice")) && (
+                            <button
+                              className={classes.editBtn}
+                              type="button"
+                              onClick={() => {
+                                showInvoiceHandler(store.name, store.id);
+                              }}
+                            >
+                              <BiTransfer />
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
 
-          {storeCount > 10 && (
-            <Paginate
-              setCurrentPage={setCurrentPage}
-              currentPage={currentPage}
-              count={storeCount}
-              search={searchValue}
-              paginationFun={paginationFun}
-              searchPagination={searchPagination}
-              searchFn={fetchSearchHandler}
-            />
-          )}
-        </div>
-      )}
+            {storeCount > 10 && (
+              <Paginate
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                count={storeCount}
+                search={searchValue}
+                paginationFun={paginationFun}
+                searchPagination={searchPagination}
+                searchFn={fetchSearchHandler}
+              />
+            )}
+          </div>
+        )}
     </Fragment>
   );
 };

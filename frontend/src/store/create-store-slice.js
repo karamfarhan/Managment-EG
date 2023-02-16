@@ -40,7 +40,6 @@ export const createStore = createAsyncThunk(
       if (!res.ok) {
         throw new Error(res.statusText || "حدث خطأ");
       }
-      console.log(arg.authenticated);
       if (arg.authenticated === true) {
         ThunkAPI.dispatch(getStores(arg.token));
       }
@@ -101,7 +100,6 @@ export const storeSearchPagination = createAsyncThunk(
         }
       );
       const data = await res.json();
-      console.log(data);
       return data;
     } catch (err) {
       console.log(err.message);
@@ -113,13 +111,19 @@ const storeSlice = createSlice({
   name: "store",
   initialState: {
     store_data: null,
+    isLoading: false,
   },
   extraReducers: {
-    [getStores.pending]: (state, action) => {},
+    [getStores.pending]: (state, action) => {
+      state.isLoading = true;
+    },
     [getStores.fulfilled]: (state, action) => {
       state.store_data = action.payload;
+      state.isLoading = false;
     },
-    [getStores.rejected]: (state, action) => {},
+    [getStores.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
 
     //pagination
     [storePagination.pending]: (state, action) => {},

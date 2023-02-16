@@ -40,9 +40,7 @@ export const getSubs = createAsyncThunk("get/subs", async (arg) => {
       },
     });
 
-    const data = await res.json();
-    console.log(data);
-    return data;
+    return await res.json();
   } catch (err) {
     console.log(err);
   }
@@ -61,8 +59,7 @@ export const deleteSubs = createAsyncThunk(
       });
       ThunkAPI.dispatch(getSubs(arg.token));
 
-      const data = await res.json();
-      console.log(data);
+      return await res.json();
       // setIsDelete(false);
     } catch (err) {}
   }
@@ -81,9 +78,8 @@ export const subsPagination = createAsyncThunk(
         },
       });
 
-      const data = await res.json();
-      console.log(data);
-      return data;
+      return await res.json();
+
       // setIsDelete(false);
     } catch (err) {}
   }
@@ -102,9 +98,7 @@ export const searchSubstances = createAsyncThunk("get/subs", async (arg) => {
       }
     );
 
-    const data = await res.json();
-
-    return data;
+    return await res.json();
   } catch (err) {
     console.log(err);
   }
@@ -124,9 +118,7 @@ export const subsSearchPagination = createAsyncThunk(
           },
         }
       );
-      const data = await res.json();
-      console.log(data);
-      return data;
+      return await res.json();
     } catch (err) {
       console.log(err.message);
     }
@@ -139,55 +131,41 @@ const createSubSlice = createSlice({
   name: "substances",
   initialState: {
     data: null,
+    isLoading: false,
   },
 
   extraReducers: {
     [getSubs.pending]: (state, action) => {
-      console.log(state);
+      state.isLoading = true;
     },
     [getSubs.fulfilled]: (state, action) => {
       state.data = action.payload;
-      console.log(action.payload);
+      state.isLoading = false;
     },
     [getSubs.rejected]: (state, action) => {
-      console.log(state);
+      state.isLoading = false;
     },
 
     //pagination
 
-    [subsPagination.pending]: (state, action) => {
-      console.log(state);
-    },
+    [subsPagination.pending]: (state, action) => {},
     [subsPagination.fulfilled]: (state, action) => {
       state.data = action.payload;
-      console.log(action.payload);
     },
-    [subsPagination.rejected]: (state, action) => {
-      console.log(state);
-    },
+    [subsPagination.rejected]: (state, action) => {},
 
     //search
-    [searchSubstances.pending]: (state, action) => {
-      console.log(state);
-    },
+    [searchSubstances.pending]: (state, action) => {},
     [searchSubstances.fulfilled]: (state, action) => {
       state.data = action.payload;
-      console.log(action.payload);
     },
-    [searchSubstances.rejected]: (state, action) => {
-      console.log(state);
-    },
+    [searchSubstances.rejected]: (state, action) => {},
     // search pagination
-    [subsSearchPagination.pending]: (state, action) => {
-      console.log(state);
-    },
+    [subsSearchPagination.pending]: (state, action) => {},
     [subsSearchPagination.fulfilled]: (state, action) => {
       state.data = action.payload;
-      console.log(action.payload);
     },
-    [subsSearchPagination.rejected]: (state, action) => {
-      console.log(state);
-    },
+    [subsSearchPagination.rejected]: (state, action) => {},
   },
 });
 export default createSubSlice;

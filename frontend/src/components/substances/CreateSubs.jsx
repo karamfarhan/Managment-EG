@@ -2,13 +2,12 @@ import { Fragment, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import SubstancesView from "./substances_view/SubstancesView";
-import { GiSaddle } from "react-icons/gi";
-import { TbToolsKitchen } from "react-icons/tb";
-import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
-import classes from "./CreateSubs.module.css";
+
 import { getSubs } from "../../store/create-substance";
 import InstrumentsView from "./instruments_view/InstrumentsView";
 import { getInstruments } from "../../store/create-instruments";
+import classes from "./CreateSubs.module.css";
+
 const CreateSubs = () => {
   //for add matters
   const [showModel, setShowModel] = useState(false);
@@ -28,11 +27,6 @@ const CreateSubs = () => {
   const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
 
-  //hide model for matters
-  const hideSubstancesHandler = () => {
-    setShowModel(false);
-    setShowInstrumentsForm(false);
-  };
   //fetch matters
   useEffect(() => {
     if (

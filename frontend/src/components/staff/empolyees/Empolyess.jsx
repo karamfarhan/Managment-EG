@@ -8,7 +8,7 @@ import {
 } from "../../../store/empolyees-slice";
 import Paginate from "../../UI/pagination/Paginate";
 import ExportExcel from "../../UI/export/ExportExcel";
-
+import LoadingSpinner from "../../UI/loading/LoadingSpinner";
 //classes
 import classes from "./Empolyess.module.css";
 
@@ -25,7 +25,9 @@ const Empolyess = ({
   const { is_superuser, permissions } = decoded;
 
   //empolyee counts
-  const { data: empolyeeData } = useSelector((state) => state.empolyeeReducer);
+  const { data: empolyeeData, isLoading } = useSelector(
+    (state) => state.empolyeeReducer
+  );
   const empolyeeCount = empolyeeData && empolyeeData.count;
 
   //paginationFun
@@ -103,8 +105,9 @@ const Empolyess = ({
     <Fragment>
       <div className={classes["table_content"]} dir="rtl">
         <ExportExcel matter="employees" />
-
+        {isLoading && <LoadingSpinner />}
         {data &&
+          !isLoading &&
           Object.entries(data).map(([key, value], i) => {
             return (
               <div key={i}>

@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import jwt_decode from "jwt-decode";
 import Bar from "../UI/bars/Bar";
 import Search from "../UI/search/Search";
 import classes from "./Cars.module.css";
-import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   carsPaginations,
@@ -12,6 +11,7 @@ import {
   getCars,
 } from "../../store/cars-slice";
 import Paginate from "../UI/pagination/Paginate";
+import LoadingSpinner from "../UI/loading/LoadingSpinner";
 import CarList from "./car-list/CarList";
 
 const Cars = () => {
@@ -35,7 +35,7 @@ const Cars = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, currentPage, searchValue]);
   //cars data
-  const cars = useSelector((state) => state.carReducer.data);
+  const { data: cars, isLoading } = useSelector((state) => state.carReducer);
 
   //search handler
   const searchHandler = (e) => {
@@ -77,10 +77,11 @@ const Cars = () => {
           )}
         </div>
       </Bar>
-
+      {isLoading && <LoadingSpinner />}
       <div className={classes.grid}>
         {cars &&
           cars !== undefined &&
+          !isLoading &&
           (is_superuser || permissions.includes("view_car")) &&
           cars.results.map((el) => {
             return (

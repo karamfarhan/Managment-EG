@@ -17,14 +17,16 @@ import Paginate from "../../UI/pagination/Paginate";
 import Search from "../../UI/search/Search";
 import { subsPagination } from "../../../store/create-substance";
 import ExportExcel from "../../UI/export/ExportExcel";
+import LoadingSpinner from "../../UI/loading/LoadingSpinner";
 const SubstancesView = ({
   currentPage,
   setCurrentPage,
   searchVal,
   setSearchVal,
 }) => {
-  const { data: subsData } = useSelector((state) => state.subsReducer);
-
+  const { data: subsData, isLoading } = useSelector(
+    (state) => state.subsReducer
+  );
   const [isDelete, setIsDelete] = useState(false);
   const [substanceId, setSubstanceId] = useState("");
 
@@ -119,14 +121,18 @@ const SubstancesView = ({
           value={searchVal}
           searchData={searchDispatch}
         />
+        {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
-          {subsData && subsData.results.length > 0 && (
+          {subsData && !isLoading && subsData.results.length > 0 && (
             <ExportExcel matter="substances" />
           )}
-          {subsData && subsData.results && subsData.results.length === 0 && (
-            <p className={classes.msg_p}> لا يوجد مواد </p>
-          )}
-          {subsData && subsData.results.length > 0 && (
+          {subsData &&
+            !isLoading &&
+            subsData.results &&
+            subsData.results.length === 0 && (
+              <p className={classes.msg_p}> لا يوجد مواد </p>
+            )}
+          {subsData && !isLoading && subsData.results.length > 0 && (
             <table>
               <thead>
                 <tr>
@@ -140,6 +146,7 @@ const SubstancesView = ({
               </thead>
               <tbody>
                 {subsData &&
+                  !isLoading &&
                   subsData.results &&
                   subsData.results.map((subs) => {
                     return (

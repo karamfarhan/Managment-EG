@@ -11,9 +11,6 @@ export const getCars = createAsyncThunk(
           Authorization: `Bearer ${arg}`,
         },
       });
-      // if (res.status === 401) {
-      //   return dispatch(logout());
-      // }
 
       return await res.json();
     } catch (err) {
@@ -82,10 +79,18 @@ export const carsSearchPagination = createAsyncThunk(
 );
 const carSlice = createSlice({
   name: "cars",
-  initialState: { data: null },
+  initialState: { data: null, isLoading: false },
   extraReducers: {
+    [getCars.pending]: (state, action) => {
+      state.data = action.payload;
+      state.isLoading = true;
+    },
     [getCars.fulfilled]: (state, action) => {
       state.data = action.payload;
+      state.isLoading = false;
+    },
+    [getCars.rejected]: (state, action) => {
+      state.isLoading = false;
     },
 
     //pagination

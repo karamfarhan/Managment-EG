@@ -21,9 +21,8 @@ export const createInstruments = createAsyncThunk(
       // if (arg.authenticated === true ) {
       //   ThunkAPI.dispatch(getInstruments(arg.token));
       // }
-      const data = await res.json();
 
-      return data;
+      return await res.json();
     } catch (err) {
       console.log(err);
     }
@@ -41,9 +40,7 @@ export const getInstruments = createAsyncThunk(
           Authorization: `Bearer ${arg}`,
         },
       });
-      const data = await res.json();
-      console.log(data);
-      return data;
+      return await res.json();
     } catch (err) {
       console.log(err);
     }
@@ -55,7 +52,7 @@ export const deleteInstruments = createAsyncThunk(
   "delete/subs",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/instruments/${arg.id}/`, {
+      const res = await fetch(`${window.domain}/instruments/${arg.id}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${arg.token}`,
@@ -77,7 +74,7 @@ export const instrumentsPagination = createAsyncThunk(
   async (arg, ThunkAPI) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/instruments/?page=${arg.page}`,
+        `${window.domain}/instruments/?page=${arg.page}`,
         {
           method: "GET",
           headers: {
@@ -101,7 +98,7 @@ export const searchInstruments = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/instruments/?search=${arg.search}`,
+        `${window.domain}/instruments/?search=${arg.search}`,
         {
           method: "GET",
           headers: {
@@ -125,7 +122,7 @@ export const instrumSearchPagination = createAsyncThunk(
   async (arg) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/instruments/?page=${arg.page}&search=${arg.search}`,
+        `${window.domain}/instruments/?page=${arg.page}&search=${arg.search}`,
         {
           method: "GET",
           headers: {
@@ -134,7 +131,6 @@ export const instrumSearchPagination = createAsyncThunk(
         }
       );
       const data = await res.json();
-      console.log(data);
       return data;
     } catch (err) {
       console.log(err.message);
@@ -147,22 +143,25 @@ const instrumentsSlice = createSlice({
   name: "instruments",
   initialState: {
     data: null,
+    isLoading: false,
   },
 
   extraReducers: {
-    [getInstruments.pending]: (state) => {},
+    [getInstruments.pending]: (state, action) => {
+      state.data = action.payload;
+      state.isLoading = true;
+    },
     [getInstruments.fulfilled]: (state, action) => {
       state.data = action.payload;
-      console.log(action.payload);
     },
-    [getInstruments.rejected]: (state) => {},
+    [getInstruments.rejected]: (state) => {
+      state.isLoading = false;
+    },
 
     //pagination
-    [instrumentsPagination.pending]: (state) => {},
     [instrumentsPagination.fulfilled]: (state, action) => {
       state.data = action.payload;
     },
-    [instrumentsPagination.rejected]: (state) => {},
 
     //search
     [searchInstruments.pending]: (state) => {},

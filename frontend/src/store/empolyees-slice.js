@@ -87,15 +87,20 @@ const empolyeeSlice = createSlice({
   name: "empolyee",
   initialState: {
     data: null,
+    isLoading: false,
   },
   reducers: {},
   extraReducers: {
-    [getEmpolyees.pending]: (state, action) => {},
+    [getEmpolyees.pending]: (state, action) => {
+      state.isLoading = true;
+    },
     [getEmpolyees.fulfilled]: (state, action) => {
       state.data = action.payload;
+      state.isLoading = false;
     },
     [getEmpolyees.rejected]: (state, action) => {
       state.unAuth = action.payload;
+      state.isLoading = false;
     },
     //pagination
     [empolyeePagination.fulfilled]: (state, action) => {
