@@ -81,7 +81,7 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
     }
     console.log(obj);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/substances/${elId}/`, {
+      const res = await fetch(`${window.domain}/substances/${elId}/`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",

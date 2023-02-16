@@ -58,7 +58,7 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
       in_action: instrumData.in_action === "true" ? true : false,
     };
     try {
-      const res = await fetch(`http://127.0.0.1:8000/instruments/${elId}/`, {
+      const res = await fetch(`${window.domain}/instruments/${elId}/`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",

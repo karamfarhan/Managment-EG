@@ -31,9 +31,9 @@ const InvoiceDetail = () => {
     <>
       <div dir="rtl" className={classes["invoice-container"]}>
         <div>
-          <h2>بيانات المخزن</h2>
+          <h2>بيانات التحويل</h2>
           <p>
-            تاريخ الانشاء :
+            تاريخ التحويل :
             {new Date(invoice && invoice.created_at).toLocaleString()}
           </p>
           <h3> الملاحظات المهمة : {invoice && invoice.note} </h3>

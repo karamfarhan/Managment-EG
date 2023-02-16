@@ -20,8 +20,13 @@
   background-color: #1ca345;
   margin-bottom: 5px;
 }
-.createCar a {
+.createCar form button:last-of-type {
   display: block;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+
   background-color: #9d4444;
   color: #fff;
   text-align: center;

@@ -1,53 +1,68 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
 import { FaCarSide } from "react-icons/fa";
 import { useQuery } from "react-query";
 //classes
 import classes from "./EditCar.module.css";
-import { useSelector } from "react-redux";
+import { getCars } from "../../../store/cars-slice";
 
-const EditCar = ({ hideModel }) => {
-  const [car, setCar] = useState({});
-  const navigate = useNavigate();
+const EditCar = ({ hideModel, id }) => {
+  const [carData, setCarData] = useState({
+    car_model: "",
+    car_type: "",
+    car_number: "",
+    driver: "", //select box
+    last_maintain: "",
+    maintain_place: "",
+    note: "",
+  });
   const { token } = useSelector((state) => state.authReducer);
-
-  const params = useParams();
+  const dispatch = useDispatch();
   //car id
-  const { driverId } = params;
+  let formIsValid = false;
+
+  if (
+    carData.car_model.trim() !== "" &&
+    carData.car_type.trim() !== "" &&
+    carData.car_number.trim() !== "" &&
+    carData.driver !== "" &&
+    carData.last_maintain !== "" &&
+    carData.maintain_place.trim() !== ""
+  ) {
+    formIsValid = true;
+  }
 
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await fetch(`${window.domain}/cars/${driverId}/`, {
+        const res = await fetch(`${window.domain}/cars/${id}/`, {
           method: "Get",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        const data = await res.json();
-        setCar(data);
-        return data;
+        const car = await res.json();
+        setCarData({
+          car_model: car.car_model,
+          car_type: car.car_type,
+          car_number: car.car_number,
+          driver: car.driver, //select box
+          last_maintain: car.last_maintain,
+          maintain_place: car.maintain_place,
+          note: car.note,
+        });
+        return car;
       } catch (err) {
         console.log(err);
       }
     };
     fetchCar();
-  }, [driverId, token]);
-
-  const carSelected = car;
-
-  const [carData, setCarData] = useState({
-    car_model: carSelected.car_model,
-    car_type: carSelected.car_type,
-    car_number: carSelected.car_number,
-    driver: carSelected.driver, //select box
-    last_maintain: carSelected.last_maintain,
-    maintain_place: carSelected.maintain_place,
-    note: carSelected.note,
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const {
     car_model,
@@ -67,7 +82,7 @@ const EditCar = ({ hideModel }) => {
     "edit/car",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/cars/${driverId}/`, {
+        const res = await fetch(`${window.domain}/cars/${id}/`, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -76,9 +91,9 @@ const EditCar = ({ hideModel }) => {
           body: JSON.stringify(carData),
         });
         if (res.ok) {
-          navigate("/cars");
+          hideModel();
+          dispatch(getCars(token));
         }
-        const data = await res.json();
         return await res.json();
       } catch (err) {
         console.log(err);
@@ -194,8 +209,11 @@ const EditCar = ({ hideModel }) => {
             onChange={(e) => setCarData({ ...carData, note: e.target.value })}
           ></textarea>
 
-          <button type="submit"> تعديل </button>
-          <Link to="/cars"> الغاء </Link>
+          <button disabled={!formIsValid} type="submit">
+            {" "}
+            تعديل{" "}
+          </button>
+          <button onClick={() => hideModel()}> الغاء </button>
         </form>
       </div>
     </Backdrop>

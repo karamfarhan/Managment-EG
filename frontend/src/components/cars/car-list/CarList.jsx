@@ -5,9 +5,13 @@ import jwt_decode from "jwt-decode";
 import { getCars } from "../../../store/cars-slice";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDeleteForever } from "react-icons/md";
+import EditCar from "../edit-car/EditCar";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./CarList.module.css";
 const CarList = ({ car_number, driver_name, driver, id }) => {
+  const [isDelete, setIsDelete] = useState(false);
+  const [carId, setCarId] = useState("");
+  const [showEditForm, setShowEditForm] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const detailPageHandler = () => {
@@ -17,8 +21,7 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
   const decoded = jwt_decode(token);
 
   const { is_superuser, permissions } = decoded;
-  const [isDelete, setIsDelete] = useState(false);
-  const [carId, setCarId] = useState("");
+
   //delete handler
   const deleteHandler = async (id) => {
     try {
@@ -49,8 +52,9 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
   };
 
   //navigate to edit
-  const navigateEditHandler = () => {
-    navigate(`/cars/edit/${id}`);
+  const navigateEditHandler = (id) => {
+    setShowEditForm(true);
+    setCarId(id);
   };
   return (
     <Fragment>
@@ -61,7 +65,9 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
           id={carId}
         />
       )}
-
+      {showEditForm && (
+        <EditCar id={carId} hideModel={() => setShowEditForm(false)} />
+      )}
       <div className={classes.car}>
         <header>
           <div onClick={detailPageHandler}>
@@ -82,7 +88,10 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
               </button>
             )}
             {(is_superuser || permissions.includes("change_car")) && (
-              <button className="editIcon" onClick={navigateEditHandler}>
+              <button
+                className="editIcon"
+                onClick={() => navigateEditHandler(id)}
+              >
                 <FiEdit />
               </button>
             )}

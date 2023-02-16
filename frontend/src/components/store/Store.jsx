@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { BiTransfer } from "react-icons/bi";
+import { FiEdit } from "react-icons/fi";
 import Paginate from "../UI/pagination/Paginate";
 import Bar from "../UI/bars/Bar";
 import {
@@ -13,6 +14,7 @@ import {
   storeSearchPagination,
 } from "../../store/create-store-slice";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
+import EditStore from "../UI/edit_store/EditStore";
 import Search from "../UI/search/Search";
 import LoadingSpinner from "../UI/loading/LoadingSpinner";
 import AddInvoice from "../UI/add_invoice/AddInvoice";
@@ -23,6 +25,7 @@ const Store = () => {
   const dispatch = useDispatch();
   const [isDelete, setIsDelete] = useState(false);
   const [storeIdInvoice, setStoreIdInvoice] = useState("");
+  const [showEditForm, setShowEditForm] = useState(false);
   //current page
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -112,7 +115,6 @@ const Store = () => {
       token,
       search: searchValue,
     };
-
     dispatch(storeSearch(obj));
   }
 
@@ -133,9 +135,22 @@ const Store = () => {
   const hideInvoiceHandler = () => {
     setShowInvoiceForm(false);
   };
+  //edit store form
+  const editStore = (id) => {
+    setShowEditForm(true);
+    setStoreId(id);
+  };
 
   return (
     <Fragment>
+      {/* edit form  */}
+      {showEditForm && (
+        <EditStore
+          id={storeId}
+          showForm={showEditForm}
+          hideFormHandler={() => setShowEditForm(false)}
+        />
+      )}
       {showInvoiceForm && (
         <AddInvoice
           storeId={storeIdInvoice}
@@ -201,6 +216,16 @@ const Store = () => {
                         <td>{new Date(store.created_at).toDateString()} </td>
                         <td> {store.description} </td>
                         <td>
+                          {(is_superuser ||
+                            permissions.includes("change_store")) && (
+                            <button
+                              className="editBtn"
+                              type="button"
+                              onClick={() => editStore(store.id)}
+                            >
+                              <FiEdit />
+                            </button>
+                          )}
                           {(is_superuser ||
                             permissions.includes("delete_store")) && (
                             <button

@@ -3,7 +3,15 @@
   padding: 30px 15px;
   margin: 60px auto;
 }
-
+.content h2 {
+  text-align: center;
+}
+.content h2 span {
+  color: red !important;
+}
+.content p {
+  text-align: center;
+}
 .content > div:first-of-type {
   padding: 10px;
   overflow: hidden;

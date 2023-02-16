@@ -22,13 +22,19 @@ const invoiceSlice = createSlice({
   name: "invoice",
   initialState: {
     data: null,
+    isLoading: false,
   },
   extraReducers: {
-    [getInvoices.pending]: (state, action) => {},
+    [getInvoices.pending]: (state, action) => {
+      state.isLoading = true;
+    },
     [getInvoices.fulfilled]: (state, action) => {
       state.data = action.payload;
+      state.isLoading = false;
     },
-    [getInvoices.rejected]: (state, action) => {},
+    [getInvoices.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
   },
 });
 
