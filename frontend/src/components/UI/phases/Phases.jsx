@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getEmpolyees } from "../../../store/empolyees-slice";
 import Backdrop from "../backdrop/Backdrop";
 import classes from "./Phases.module.css";
-const Phases = ({ employeeActivity, hideModel }) => {
+const Phases = ({ employeeActivity, hideModel, setCurrentPage }) => {
   const [time, setTime] = useState("");
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
@@ -46,6 +46,7 @@ const Phases = ({ employeeActivity, hideModel }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     sendPhaseIn();
+    setCurrentPage(1);
   };
 
   //change handler

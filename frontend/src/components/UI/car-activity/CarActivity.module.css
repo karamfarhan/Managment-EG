@@ -1,5 +1,6 @@
 .car_activity {
   padding: 30px;
+  background-color: #fff;
 }
 .car_activity button[type="button"] {
   width: 20%;

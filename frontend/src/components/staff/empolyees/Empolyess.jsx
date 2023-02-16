@@ -116,6 +116,7 @@ const Empolyess = ({
     <Fragment>
       {showPhases && (
         <Phases
+          setCurrentPage={setCurrentPage}
           hideModel={() => setShowPhases(false)}
           employeeActivity={employeeActivity}
         />
