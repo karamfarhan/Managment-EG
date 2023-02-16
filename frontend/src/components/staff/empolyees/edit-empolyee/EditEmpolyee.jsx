@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Inputs from "../../../UI/inputs/Inputs";
 import EditInsurance from "./editInsurance/EditInsurance";
@@ -9,14 +9,13 @@ import { useSelector } from "react-redux";
 import { getEmpolyees } from "../../../../store/empolyees-slice";
 const EditEmpolyee = () => {
   const dispatch = useDispatch();
-  const locations = useLocation();
   const { token } = useSelector((state) => state.authReducer);
   const navigate = useNavigate();
 
   const params = useParams();
   const [steps, setSteps] = useState(1);
   const { data: empolyeeId } = useSelector((state) => state.empolyeeReducer);
-
+  console.log(params);
   const selectedEmpolyee =
     empolyeeId &&
     empolyeeId.results &&
@@ -24,44 +23,32 @@ const EditEmpolyee = () => {
 
   const [data, setData] = useState("");
   //imgs
-  const [identityImg, setIdentityImg] = useState(
-    selectedEmpolyee.identity_image
-  );
-  const [certificateImg, setCertificateImg] = useState(
-    selectedEmpolyee.certificate_image
-  );
-  const [experienceImg, setExperienceImg] = useState(
-    selectedEmpolyee.experience_image
-  );
-  const [criminalRec, setCriminalRec] = useState(
-    selectedEmpolyee.criminal_record_image
-  );
+  const [identityImg, setIdentityImg] = useState("");
+  const [certificateImg, setCertificateImg] = useState("");
+  const [experienceImg, setExperienceImg] = useState("");
+  const [criminalRec, setCriminalRec] = useState("");
 
   //empolyee data
   const [empolyeeData, setEmpolyeeData] = useState({
-    name: selectedEmpolyee.name,
-    type: selectedEmpolyee.type,
-    email: selectedEmpolyee.email,
-    number: selectedEmpolyee.number,
-    years_of_experiance: selectedEmpolyee.years_of_experiance,
-    days_off: selectedEmpolyee.days_off,
-    note: selectedEmpolyee.note,
-    location:
-      selectedEmpolyee.store_address === null
-        ? ""
-        : selectedEmpolyee.store_address,
-    storePk: selectedEmpolyee.is_primary === true ? "" : selectedEmpolyee.store,
-    is_primary: selectedEmpolyee.is_primary,
-    signin_date: selectedEmpolyee.signin_date,
+    name: "",
+    type: "",
+    email: "",
+    number: "",
+    years_of_experiance: "",
+    days_off: "",
+    note: "",
+    location: "",
+    storePk: "",
+    is_primary: "",
+    signin_date: "",
   });
 
   //insurance data
   const [insuranceData, setInsuranceData] = useState({
-    ins_code: selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_code,
-    ins_type: selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_type,
-    ins_company:
-      selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_company,
-    start_at: selectedEmpolyee.insurance && selectedEmpolyee.insurance.start_at,
+    ins_code: "",
+    ins_type: "",
+    ins_company: "",
+    start_at: "",
   });
   // const [isInsurance, setIsInsurance] = useState(
   //   Object.values(insuranceData).some((x) => x !== "")
@@ -71,12 +58,22 @@ const EditEmpolyee = () => {
 
   //INSURANCE FIRST RENDER
   const insCode =
-      selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_code,
-    insType = selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_type,
+      selectedEmpolyee &&
+      selectedEmpolyee.insurance &&
+      selectedEmpolyee.insurance.ins_code,
+    insType =
+      selectedEmpolyee &&
+      selectedEmpolyee.insurance &&
+      selectedEmpolyee.insurance.ins_type,
     insCompany =
-      selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_company,
-    startAt = selectedEmpolyee.insurance && selectedEmpolyee.insurance.start_at;
-
+      selectedEmpolyee &&
+      selectedEmpolyee.insurance &&
+      selectedEmpolyee.insurance.ins_company,
+    startAt =
+      selectedEmpolyee &&
+      selectedEmpolyee.insurance &&
+      selectedEmpolyee.insurance.start_at;
+  console.log(insCode);
   const {
     name,
     type,
@@ -90,16 +87,68 @@ const EditEmpolyee = () => {
     signin_date,
     storePk,
   } = empolyeeData;
-  const nameVar = selectedEmpolyee.name;
-  const emailVar = selectedEmpolyee.email;
-  const typeVar = selectedEmpolyee.type;
-  const numVar = selectedEmpolyee.number;
-  const yearsVar = selectedEmpolyee.years_of_experiance;
-  const daysVar = selectedEmpolyee.days_off;
-  const primVar = selectedEmpolyee.is_primary;
-  const signInVar = selectedEmpolyee.signin_date;
-  const noteVar = selectedEmpolyee.note;
+  const nameVar = selectedEmpolyee && selectedEmpolyee.name;
+  const emailVar = selectedEmpolyee && selectedEmpolyee.email;
+  const typeVar = selectedEmpolyee && selectedEmpolyee.type;
+  const numVar = selectedEmpolyee && selectedEmpolyee.number;
+  const yearsVar = selectedEmpolyee && selectedEmpolyee.years_of_experiance;
+  const daysVar = selectedEmpolyee && selectedEmpolyee.days_off;
+  const primVar = selectedEmpolyee && selectedEmpolyee.is_primary;
+  const signInVar = selectedEmpolyee && selectedEmpolyee.signin_date;
+  const noteVar = selectedEmpolyee && selectedEmpolyee.note;
 
+  const { data: empolyee } = useQuery(
+    "get/empolyee",
+    async () => {
+      //setIsLoading(true);
+      try {
+        const res = await fetch(`${window.domain}/employees/${params.empId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const selectedEmpolyee = await res.json();
+        setEmpolyeeData({
+          name: selectedEmpolyee.name,
+          type: selectedEmpolyee.type,
+          email: selectedEmpolyee.email,
+          number: selectedEmpolyee.number,
+          years_of_experiance: selectedEmpolyee.years_of_experiance,
+          days_off: selectedEmpolyee.days_off,
+          note: selectedEmpolyee.note,
+          location:
+            selectedEmpolyee.store_address === null
+              ? ""
+              : selectedEmpolyee.store_address,
+          storePk:
+            selectedEmpolyee.is_primary === true ? "" : selectedEmpolyee.store,
+          is_primary: selectedEmpolyee.is_primary,
+          signin_date:
+            selectedEmpolyee.signin_date === null
+              ? ""
+              : selectedEmpolyee.signin_date,
+        });
+
+        setInsuranceData({
+          ins_code:
+            selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_code,
+          ins_type:
+            selectedEmpolyee.insurance && selectedEmpolyee.insurance.ins_type,
+          ins_company:
+            selectedEmpolyee.insurance &&
+            selectedEmpolyee.insurance.ins_company,
+          start_at:
+            selectedEmpolyee.insurance && selectedEmpolyee.insurance.start_at,
+        });
+
+        return data;
+        //setIsLoading(false);
+      } catch (err) {}
+    },
+    { refetchOnWindowFocus: false }
+  );
   //images
   //setbackground function
   const fileTypes = [
@@ -164,6 +213,8 @@ const EditEmpolyee = () => {
     return formdata;
   }
 
+  console.log(insuranceData);
+
   //send empolyee data
   const sendEmpolyeeData = async () => {
     setData("");
@@ -195,31 +246,40 @@ const EditEmpolyee = () => {
       formdata.append("is_primary", is_primary === "true" ? true : false);
     }
 
-    if (selectedEmpolyee.identity_image !== identityImg) {
+    if (selectedEmpolyee && selectedEmpolyee.identity_image !== identityImg) {
       formdata.append("identity_image", identityImg);
     }
-    if (selectedEmpolyee.experience_image !== experienceImg) {
+    if (
+      selectedEmpolyee &&
+      selectedEmpolyee.experience_image !== experienceImg
+    ) {
       formdata.append("experience_image", experienceImg);
     }
-    if (selectedEmpolyee.certificate_image !== certificateImg) {
+    if (
+      selectedEmpolyee &&
+      selectedEmpolyee.certificate_image !== certificateImg
+    ) {
       formdata.append("certificate_image", certificateImg);
     }
-    if (selectedEmpolyee.criminal_record_image !== criminalRec) {
+    if (
+      selectedEmpolyee &&
+      selectedEmpolyee.criminal_record_image !== criminalRec
+    ) {
       formdata.append("criminal_record_image", criminalRec);
     }
-
-    if (ins_code !== insCode) {
+    if (insuranceData.ins_code !== null) {
       formdata.append("insurance.ins_code", ins_code);
     }
-    if (ins_type !== insType) {
+    if (insuranceData.ins_type !== null) {
       formdata.append("insurance.ins_type", ins_type);
     }
-    if (start_at !== startAt) {
+    if (insuranceData.start_at !== null) {
       formdata.append("insurance.start_at", start_at);
     }
-    if (ins_company !== insCompany) {
+    if (insuranceData.ins_company !== null) {
       formdata.append("insurance.ins_company", ins_company);
     }
+
     if (note !== noteVar) {
       formdata.append("note", note);
     }
@@ -266,9 +326,7 @@ const EditEmpolyee = () => {
     }
     setSteps((prev) => prev - 1);
   };
-
-  console.log(selectedEmpolyee.store);
-  console.log(location);
+  console.log(insuranceData);
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
