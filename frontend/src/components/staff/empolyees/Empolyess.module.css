@@ -17,6 +17,12 @@
   font-size: 20px;
   border: 1px solid;
 }
+@media (max-width: 767px) {
+  .table_content table th,
+  .table_content table td {
+    font-size: 12px;
+  }
+}
 .table_content table thead {
   font-size: 13px;
   background-color: #0b9cff;
@@ -44,7 +50,7 @@
 @media (max-width: 767px) {
   .table_content table th,
   .table_content table td {
-    padding: 0;
+    padding: 10px;
   }
   .table_content table ul li {
     font-size: 12px;

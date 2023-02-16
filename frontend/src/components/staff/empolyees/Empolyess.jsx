@@ -104,7 +104,7 @@ const Empolyess = ({
   return (
     <Fragment>
       <div className={classes["table_content"]} dir="rtl">
-        <ExportExcel matter="employees" />
+        {!isLoading && <ExportExcel matter="employees" />}
         {isLoading && <LoadingSpinner />}
         {data &&
           !isLoading &&

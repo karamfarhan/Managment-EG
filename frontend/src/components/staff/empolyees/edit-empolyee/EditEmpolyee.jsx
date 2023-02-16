@@ -50,6 +50,7 @@ const EditEmpolyee = () => {
       selectedEmpolyee.store_address === null
         ? ""
         : selectedEmpolyee.store_address,
+    storePk: selectedEmpolyee.store,
     is_primary: selectedEmpolyee.is_primary,
     signin_date: selectedEmpolyee.signin_date,
   });
@@ -87,6 +88,7 @@ const EditEmpolyee = () => {
     is_primary,
     location,
     signin_date,
+    storePk,
   } = empolyeeData;
   const nameVar = selectedEmpolyee.name;
   const emailVar = selectedEmpolyee.email;
@@ -155,35 +157,44 @@ const EditEmpolyee = () => {
     { refetchOnWindowFocus: false }
   );
 
+  function removeDublicate(bodyKey, vars, key, val, formdata) {
+    if (bodyKey !== vars) {
+      formdata.append(key, val);
+    }
+    return formdata;
+  }
+
   //send empolyee data
   const sendEmpolyeeData = async () => {
     setData("");
 
     const formdata = new FormData();
 
-    if (nameVar !== name) {
-      formdata.append("name", name);
+    removeDublicate(name, nameVar, "name", name, formdata);
+    removeDublicate(number, numVar, "number", number, formdata);
+    removeDublicate(type, typeVar, "type", type, formdata);
+    removeDublicate(
+      signin_date,
+      signInVar,
+      "signin_date",
+      signin_date,
+      formdata
+    );
+    removeDublicate(email, emailVar, "email", email, formdata);
+    removeDublicate(days_off, daysVar, "days_off", days_off, formdata);
+    removeDublicate(
+      years_of_experiance,
+      yearsVar,
+      "years_of_experiance",
+      years_of_experiance,
+      formdata
+    );
+    removeDublicate(is_primary, "true", "store", storePk, formdata);
+
+    if (primVar !== is_primary) {
+      formdata.append("is_primary", is_primary === "true" ? true : false);
     }
 
-    if (number !== numVar) {
-      formdata.append("number", number);
-    }
-    if (type !== typeVar) {
-      formdata.append("type", type);
-    }
-    if (signin_date !== signInVar) {
-      formdata.append("signin_date", signin_date);
-    }
-
-    if (emailVar !== email) {
-      formdata.append("email", email);
-    }
-    if (daysVar !== days_off) {
-      formdata.append("days_off", days_off);
-    }
-    if (yearsVar !== years_of_experiance) {
-      formdata.append("years_of_experiance", years_of_experiance);
-    }
     if (selectedEmpolyee.identity_image !== identityImg) {
       formdata.append("identity_image", identityImg);
     }
@@ -195,13 +206,6 @@ const EditEmpolyee = () => {
     }
     if (selectedEmpolyee.criminal_record_image !== criminalRec) {
       formdata.append("criminal_record_image", criminalRec);
-    }
-
-    if (primVar !== is_primary) {
-      formdata.append("is_primary", is_primary === "true" ? true : false);
-    }
-    if (is_primary !== "true") {
-      formdata.append("store", location);
     }
 
     if (ins_code !== insCode) {
@@ -261,6 +265,9 @@ const EditEmpolyee = () => {
     }
     setSteps((prev) => prev - 1);
   };
+
+  console.log(selectedEmpolyee.store);
+  console.log(location);
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
@@ -333,7 +340,7 @@ const EditEmpolyee = () => {
             />
 
             <div className={classes.select}>
-              <label>مظف بمقر الشركة</label>
+              <label>موظف بمقر الشركة</label>
               <select
                 value={is_primary}
                 onChange={(e) =>
@@ -348,14 +355,14 @@ const EditEmpolyee = () => {
                 <option value={false}>لا</option>
               </select>
             </div>
-            {is_primary === "false" && (
+            {(is_primary === "false" || is_primary === false) && (
               <div className={classes.select}>
                 <select
-                  value={location}
+                  value={storePk}
                   onChange={(e) =>
                     setEmpolyeeData({
                       ...empolyeeData,
-                      location: e.target.value,
+                      storePk: e.target.value,
                     })
                   }
                 >
