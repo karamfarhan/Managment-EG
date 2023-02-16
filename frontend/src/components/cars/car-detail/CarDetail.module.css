@@ -27,6 +27,13 @@
   height: 70%;
   text-align: center;
 }
+.content > div:first-of-type p {
+  text-align: start;
+}
+.content p span {
+  width: 100%;
+  overflow-wrap: break-word;
+}
 .content button {
   border: none;
   padding: 10px;

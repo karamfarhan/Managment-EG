@@ -131,7 +131,9 @@ const CarDetail = () => {
             {sections === "carActivity" &&
               data &&
               data.results.length === 0 &&
-              !isLoading && <p> لا يوجد سجلات للسائق </p>}
+              !isLoading && (
+                <p style={{ textAlign: "center" }}> لا يوجد سجلات للسائق </p>
+              )}
             {sections === "carActivity" && data && data.results.length > 0 && (
               <div className={classes["table_content"]}>
                 <table className={classes.activities}>

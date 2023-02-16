@@ -30,6 +30,12 @@
   padding: 0.75rem;
   min-width: 120px;
 }
+@media (max-width: 767px) {
+  .table_content table th,
+  .table_content table td {
+    padding: 5px;
+  }
+}
 .table_content table thead {
   font-size: 13px;
   background-color: #f13a11;

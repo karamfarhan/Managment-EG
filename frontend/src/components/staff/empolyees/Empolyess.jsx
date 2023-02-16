@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,6 +11,7 @@ import ExportExcel from "../../UI/export/ExportExcel";
 import LoadingSpinner from "../../UI/loading/LoadingSpinner";
 //classes
 import classes from "./Empolyess.module.css";
+import Phases from "../../UI/phases/Phases";
 
 const Empolyess = ({
   data,
@@ -20,8 +21,13 @@ const Empolyess = ({
   fetchSearchHandler,
   decoded,
 }) => {
+  const [showPhases, setShowPhases] = useState(false);
+  const [employeeActivity, setEmployeeActivity] = useState({
+    id: "",
+    today_activity: false,
+  });
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.authReducer);
+  // const { token } = useSelector((state) => state.authReducer);
   const { is_superuser, permissions } = decoded;
 
   //empolyee counts
@@ -39,70 +45,81 @@ const Empolyess = ({
     // //search pagination
     dispatch(empolyeeSearchPagination(obj));
   };
-  const today = new Date();
-  const time =
-    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  // const today = new Date();
+  // const time =
+  //   today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-  const updateEmployee = async (id) => {
-    try {
-      const res = await fetch(`${window.domain}/employees/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  // const updateEmployee = async (id) => {
+  //   try {
+  //     const res = await fetch(`${window.domain}/employees/${id}`, {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      const data = await res.json();
-      return data;
-    } catch (err) {}
-  };
+  //     const data = await res.json();
+  //     return data;
+  //   } catch (err) {}
+  // };
 
   //send phase/in
-  const sendPhaseIn = async (id) => {
-    try {
-      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          phase_in: time,
-        }),
-      });
-      if (res.ok) {
-        dispatch(getEmpolyees(token));
-      }
-      await res.json();
-    } catch (err) {}
-  };
+  // const sendPhaseIn = async (id) => {
+  //   try {
+  //     const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         phase_in: time,
+  //       }),
+  //     });
+  //     if (res.ok) {
+  //       dispatch(getEmpolyees(token));
+  //     }
+  //     await res.json();
+  //   } catch (err) {}
+  // };
 
   //send phase out
-  const sendPhaseOut = async (id, today_activity) => {
-    try {
-      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
-        method: "PATCH",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          phase_out: time,
-          id: today_activity,
-        }),
-      });
-      await res.json();
-      if (res.ok) {
-        if (res.ok) {
-          dispatch(getEmpolyees(token));
-        }
-        await updateEmployee(id);
-      }
-    } catch (err) {}
+  // const sendPhaseOut = async (id, today_activity) => {
+  //   try {
+  //     const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         phase_out: time,
+  //         id: today_activity,
+  //       }),
+  //     });
+  //     await res.json();
+  //     if (res.ok) {
+  //       if (res.ok) {
+  //         dispatch(getEmpolyees(token));
+  //       }
+  //       await updateEmployee(id);
+  //     }
+  //   } catch (err) {}
+  // };
+
+  const showPhasesHandler = (id, today_activity) => {
+    setEmployeeActivity({ id, today_activity });
+    setShowPhases(true);
   };
 
   return (
     <Fragment>
+      {showPhases && (
+        <Phases
+          hideModel={() => setShowPhases(false)}
+          employeeActivity={employeeActivity}
+        />
+      )}
       <div className={classes["table_content"]} dir="rtl">
         {!isLoading && <ExportExcel matter="employees" />}
         {isLoading && <LoadingSpinner />}
@@ -160,13 +177,19 @@ const Empolyess = ({
                                           : "green",
                                     }}
                                     onClick={() =>
-                                      e.today_activity === false
-                                        ? sendPhaseIn(e.id)
-                                        : sendPhaseOut(
-                                            e.id,
-                                            e.today_activity.id
-                                          )
+                                      showPhasesHandler(
+                                        e.id,
+                                        e.today_activity.id
+                                      )
                                     }
+                                    // onClick={() =>
+                                    //   e.today_activity === false
+                                    //     ? sendPhaseIn(e.id)
+                                    //     : sendPhaseOut(
+                                    //         e.id,
+                                    //         e.today_activity.id
+                                    //       )
+                                    // }
                                   >
                                     {(e.today_activity === false ||
                                       e.today_activity.phase_in === null) &&

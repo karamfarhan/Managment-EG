@@ -50,7 +50,7 @@ const EditEmpolyee = () => {
       selectedEmpolyee.store_address === null
         ? ""
         : selectedEmpolyee.store_address,
-    storePk: selectedEmpolyee.store,
+    storePk: selectedEmpolyee.is_primary === true ? "" : selectedEmpolyee.store,
     is_primary: selectedEmpolyee.is_primary,
     signin_date: selectedEmpolyee.signin_date,
   });
@@ -241,6 +241,7 @@ const EditEmpolyee = () => {
 
       //setStaffForm(false);
       const data = await res.json();
+      console.log(data);
       if (!res.ok) {
         setData(data);
       }
