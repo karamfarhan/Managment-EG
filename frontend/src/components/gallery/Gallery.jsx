@@ -180,7 +180,11 @@ const Gallery = () => {
           )}
         </div>
       </Bar>
-
+      {allImgs &&
+        Object.entries(result).length === 0 &&
+        (is_superuser ||
+          permissions.includes("view_image") ||
+          permissions.includes("view_mediapack")) && <h1>لا يوجد صور</h1>}
       {allImgs &&
         result &&
         (is_superuser ||
