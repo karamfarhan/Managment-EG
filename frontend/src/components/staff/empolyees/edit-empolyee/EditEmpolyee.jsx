@@ -157,8 +157,6 @@ const EditEmpolyee = () => {
 
   //send empolyee data
   const sendEmpolyeeData = async () => {
-    console.log(is_primary);
-
     setData("");
 
     const formdata = new FormData();
@@ -200,12 +198,9 @@ const EditEmpolyee = () => {
     }
 
     if (primVar !== is_primary) {
-      console.log("d");
-
       formdata.append("is_primary", is_primary === "true" ? true : false);
     }
     if (is_primary !== "true") {
-      console.log("d");
       formdata.append("store", location);
     }
 
@@ -245,7 +240,6 @@ const EditEmpolyee = () => {
       if (!res.ok) {
         setData(data);
       }
-      console.log(data);
     } catch (err) {
       //setStaffForm(true);
     }

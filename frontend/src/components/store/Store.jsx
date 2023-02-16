@@ -167,6 +167,9 @@ const Store = () => {
       {store_data && !isLoading && store_data.length === 0 && (
         <p className={classes.msg_p}> لا يوجد مخازن </p>
       )}
+      {store_data && store_data.results.length === 0 && !isLoading && (
+        <h1>لا يوجد مخازن</h1>
+      )}
       {store_data &&
         !isLoading &&
         store_data.results &&

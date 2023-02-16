@@ -88,7 +88,9 @@ export const Staff = () => {
         <Routes>
           <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
         </Routes>
-
+        {empolyees && empolyees.count === 0 && (is_superuser || getStaff) && (
+          <h1>لا يوجد موظفين</h1>
+        )}
         {empolyees &&
           empolyees.count > 0 &&
           location.pathname === "/staff" &&

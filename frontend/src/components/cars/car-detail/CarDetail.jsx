@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import Paginate from "../../UI/pagination/Paginate";
 import classes from "./CarDetail.module.css";
 import CarActivity from "../../UI/car-activity/CarActivity";
+import LoadingSpinner from "../../UI/loading/LoadingSpinner";
 import CarDetailList from "./CarDetailList";
 import { useDispatch, useSelector } from "react-redux";
 import { getCarPagination } from "../../../store/car-activity";
@@ -15,6 +16,7 @@ const CarDetail = () => {
   const [sections, setSections] = useState("cars");
   const [showForm, setShowForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
@@ -41,9 +43,10 @@ const CarDetail = () => {
     },
     { refetchOnWindowFocus: false }
   );
-  const { data: car, refetch: carFetch } = useQuery(
+  const { data: car } = useQuery(
     "car/detail",
     async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(`${window.domain}/cars/${carId}/`, {
           method: "GET",
@@ -55,9 +58,12 @@ const CarDetail = () => {
         if (res.status === 401) {
           return dispatch(logout());
         }
+        setIsLoading(false);
 
         return await res.json();
       } catch (err) {
+        setIsLoading(false);
+
         console.log(err);
       }
     },
@@ -79,7 +85,6 @@ const CarDetail = () => {
   const paginationFun = (obj) => {
     dispatch(getCarPagination(obj));
   };
-  console.log(data);
   const { data: carAct } = useSelector((state) => state.carActivityRed);
   if (!car) return;
   return (
@@ -92,6 +97,7 @@ const CarDetail = () => {
         />
       )}
       <div className={classes.box} dir="rtl">
+        {isLoading && <LoadingSpinner />}
         <div className={classes.content}>
           {(is_superuser || permissions.includes("add_caractivity")) && (
             <button onClick={() => setShowForm(true)}>
@@ -103,13 +109,15 @@ const CarDetail = () => {
               <ul>
                 <li
                   className={sections === "cars" ? classes.active : ""}
-                  onClick={() => setSections("cars")}>
+                  onClick={() => setSections("cars")}
+                >
                   بيانات السيارة{" "}
                 </li>
                 {(is_superuser || carActivity) && (
                   <li
                     className={sections === "carActivity" ? classes.active : ""}
-                    onClick={() => setSections("carActivity")}>
+                    onClick={() => setSections("carActivity")}
+                  >
                     تحركات السائق{" "}
                   </li>
                 )}
@@ -122,7 +130,8 @@ const CarDetail = () => {
             {sections === "cars" && <Car car={car} />}
             {sections === "carActivity" &&
               data &&
-              data.results.length === 0 && <p> لا يوجد سجلات للسائق </p>}
+              data.results.length === 0 &&
+              !isLoading && <p> لا يوجد سجلات للسائق </p>}
             {sections === "carActivity" && data && data.results.length > 0 && (
               <div className={classes["table_content"]}>
                 <table className={classes.activities}>
@@ -137,6 +146,7 @@ const CarDetail = () => {
                   </thead>
                   <tbody>
                     {data &&
+                      isLoading &&
                       data.results.length > 0 &&
                       currentPage === 1 &&
                       data.results.map((el) => {

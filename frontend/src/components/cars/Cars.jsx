@@ -78,6 +78,11 @@ const Cars = () => {
         </div>
       </Bar>
       {isLoading && <LoadingSpinner />}
+      {cars &&
+        cars !== undefined &&
+        !isLoading &&
+        (is_superuser || permissions.includes("view_car")) &&
+        cars.results.length === 0 && <h1>لا يوجد سيارات </h1>}
       <div className={classes.grid}>
         {cars &&
           cars !== undefined &&

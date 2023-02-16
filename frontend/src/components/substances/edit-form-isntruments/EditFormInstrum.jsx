@@ -114,7 +114,7 @@ const EditFormInstrum = ({ instruments, setCurrentPage }) => {
           }
         />
 
-        <div className={classes.select}>
+        <div className="select">
           <select
             value={instrumData.in_action}
             onChange={(e) =>

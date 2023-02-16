@@ -1,5 +1,6 @@
 .form {
   padding: 30px;
+  background-color: #fff;
 }
 
 .form button {
@@ -24,10 +25,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
-.select select {
-  width: var(--input-width);
-  padding: 14px 16px;
 }
 
 .selectType {

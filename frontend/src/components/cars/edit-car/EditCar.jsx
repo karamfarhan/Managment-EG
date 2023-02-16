@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
 import { FaCarSide } from "react-icons/fa";
@@ -79,7 +79,6 @@ const EditCar = ({ hideModel }) => {
           navigate("/cars");
         }
         const data = await res.json();
-        console.log(data);
         return await res.json();
       } catch (err) {
         console.log(err);
@@ -131,7 +130,8 @@ const EditCar = ({ hideModel }) => {
               onChange={(e) =>
                 setCarData({ ...carData, driver: e.target.value })
               }
-              required>
+              required
+            >
               <option hidden> السائق </option>
               {employeesName &&
                 employeesName.map((el) => {
@@ -191,11 +191,11 @@ const EditCar = ({ hideModel }) => {
           <textarea
             placeholder="ملاحظة"
             value={note}
-            onChange={(e) =>
-              setCarData({ ...carData, note: e.target.value })
-            }></textarea>
+            onChange={(e) => setCarData({ ...carData, note: e.target.value })}
+          ></textarea>
 
           <button type="submit"> تعديل </button>
+          <Link to="/cars"> الغاء </Link>
         </form>
       </div>
     </Backdrop>

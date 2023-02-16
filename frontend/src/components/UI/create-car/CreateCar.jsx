@@ -41,6 +41,18 @@ const CreateCar = ({ hideModel }) => {
     note,
   } = carData;
 
+  let formIsValid = false;
+
+  if (
+    car_model.trim() !== "" &&
+    car_type.trim() !== "" &&
+    driver !== "" &&
+    last_maintain !== "" &&
+    maintain_place.trim() !== ""
+  ) {
+    formIsValid = true;
+  }
+
   //empolyees
   const { data: employeesName } = useQuery(
     "fetch/empolyees",
@@ -185,7 +197,10 @@ const CreateCar = ({ hideModel }) => {
             onChange={(e) => setCarData({ ...carData, note: e.target.value })}
           ></textarea>
 
-          <button type="submit"> اضافة </button>
+          <button disabled={!formIsValid} type="submit">
+            {" "}
+            اضافة{" "}
+          </button>
         </form>
       </div>
     </Backdrop>

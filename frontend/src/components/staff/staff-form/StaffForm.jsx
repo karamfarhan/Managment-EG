@@ -200,7 +200,6 @@ const StaffForm = ({ setStaffForm }) => {
       if (!res.ok) {
         setData(data);
       }
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

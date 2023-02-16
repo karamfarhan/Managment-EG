@@ -62,6 +62,9 @@ button:disabled {
 }
 
 /*toolbar*/
+h1 {
+  text-align: center !important;
+}
 .toolBar {
   display: flex;
   align-items: center;
