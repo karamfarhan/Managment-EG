@@ -1,7 +1,6 @@
 import { useState } from "react";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
-import AuthContext from "../../../context/Auth-ctx";
 import Search from "../../UI/search/Search";
 
 const PhaseInOutSecion = ({ id }) => {
@@ -14,7 +13,7 @@ const PhaseInOutSecion = ({ id }) => {
     async () => {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/employees/${id}/activity?search=${search}`,
+          `${window.domain}/employees/${id}/activity?search=${search}`,
           {
             method: "GET",
             headers: {
