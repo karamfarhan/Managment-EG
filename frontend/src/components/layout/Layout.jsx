@@ -36,7 +36,7 @@ export const Layout = ({ children }) => {
       />
       <main className={classes.layout}>
         <section dir="rtl">{children}</section>
-        {showSideBar && <Sidebar />}
+        {/* {showSideBar && <Sidebar />} */}
       </main>
     </Fragment>
   );

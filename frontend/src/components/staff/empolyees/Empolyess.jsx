@@ -137,8 +137,6 @@ const Empolyess = ({
                     <thead>
                       <th>أسم الموظف</th>
                       <th>المسمي الوظيفي</th>
-                      {(permissions.includes("add_employeeactivity") ||
-                        is_superuser) && <th>الحضور</th>}
                     </thead>
                     {value.map((e, i) => {
                       return (
@@ -148,7 +146,8 @@ const Empolyess = ({
                               <Link to={`/staff/${e.id}`}>{e.name}</Link>
                             </td>
                             <td> {e.type} </td>
-                            {(permissions.includes("add_employeeactivity") ||
+
+                            {/* {(permissions.includes("add_employeeactivity") ||
                               is_superuser) && (
                               <td>
                                 {e.today_activity !== false && (
@@ -203,7 +202,7 @@ const Empolyess = ({
                                   </button>
                                 )}
                               </td>
-                            )}
+                            )} */}
                           </tr>
                         </tbody>
                       );

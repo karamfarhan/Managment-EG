@@ -7,14 +7,12 @@
   font-size: 36px;
 }
 .actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
   margin-top: 20px;
 }
-.actions button {
+.actions a {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,29 +20,32 @@
   font-weight: bold;
   color: #fff;
   border: none;
+  text-decoration: none;
   box-shadow: -1px 4px 26px -8px rgba(0, 0, 0, 0.74);
   -webkit-box-shadow: -1px 4px 26px -8px rgba(0, 0, 0, 0.74);
   -moz-box-shadow: -1px 4px 26px -8px rgba(0, 0, 0, 0.74);
   transition: ease-in-out 0.1s;
 }
-.actions button span:last-of-type {
+
+.actions a span:last-of-type {
   font-size: 30px;
+  width: 30px;
 }
-.actions button:hover {
+.actions a:hover {
   transform: scale(1.1);
 }
-.actions button:first-of-type {
+.actions a:first-of-type {
   background-color: #c1392b;
 }
-.actions button:nth-child(2) {
+.actions a:nth-child(2) {
   background-color: #27ae61;
 }
-.actions button:nth-child(3) {
+.actions a:nth-child(3) {
   background-color: #f59c12;
 }
-.actions button:nth-child(4) {
+.actions a:nth-child(4) {
   background-color: #287eb9;
 }
-.actions button:nth-child(5) {
+.actions a:nth-child(5) {
   background-color: #5e72e4;
 }

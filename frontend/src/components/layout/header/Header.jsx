@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
-import { AiFillSetting, AiOutlineLogout } from "react-icons/ai";
+import { AiFillSetting, AiOutlineLogout, AiOutlineHome } from "react-icons/ai";
 import classes from "./Header.module.css";
 import { logout } from "../../../store/auth-slice";
-import ToggleBar from "../../icons/ToggleBar";
-import CloseBar from "../../icons/CloseBar";
 
 export const Header = ({ sideBarHanler, showSideBar, matches }) => {
   const dispatch = useDispatch();
@@ -27,7 +25,7 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
       if (res.ok) {
         dispatch(logout());
       }
-      const data = await res.json();
+      await res.json();
     } catch (err) {
       console.log(err);
     }
@@ -66,11 +64,11 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
 
   return (
     <header className={classes.header} style={{ backgroundColor: headerColor }}>
-      {matches && (
+      {/* {matches && (
         <div className={classes.toggle} onClick={sideBarHanler}>
           {showSideBar ? <CloseBar /> : <ToggleBar />}
         </div>
-      )}
+      )} */}
       <div className={classes["head-content"]}>
         <div className={classes.actions}>
           <div>
@@ -89,6 +87,11 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
           <p>{decoded.username} </p>
         </div>
         <h1> ماونتن للانشاءات </h1>
+        {location.pathname !== "/main" && (
+          <Link to="/">
+            <AiOutlineHome />
+          </Link>
+        )}
       </div>
     </header>
   );

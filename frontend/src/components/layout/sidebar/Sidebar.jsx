@@ -20,7 +20,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   const [showGalleries] = useState(
-    location.pathname === "/gallery" ? true : false
+    location.pathname === "/projects" ? true : false
   );
   const [activeClass, setActiveClass] = useState(null);
   const token = useSelector((state) => state.authReducer.token);
@@ -40,7 +40,7 @@ const Sidebar = () => {
   const { data } = useQuery(
     "get/stores",
     async () => {
-      if (location.pathname !== "/gallery") return;
+      if (location.pathname !== "/projects") return;
       try {
         const res = await fetch(`${window.domain}/stores/select_list/`, {
           method: "GET",
@@ -69,8 +69,7 @@ const Sidebar = () => {
                 color: isActive ? "#2150d8" : "#fff",
                 borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
               };
-            }}
-          >
+            }}>
             <span>
               <AiOutlineHome />
             </span>
@@ -89,8 +88,7 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}
-            >
+              }}>
               <span>
                 <StaffIcon />
               </span>
@@ -108,8 +106,7 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}
-            >
+              }}>
               <span>
                 <StoreIcon />
               </span>
@@ -131,8 +128,7 @@ const Sidebar = () => {
                     color: isActive ? "#2150d8" : "#fff",
                     borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                   };
-                }}
-              >
+                }}>
                 <span>
                   <GiPaddles />
                 </span>
@@ -150,8 +146,7 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}
-            >
+              }}>
               <span>
                 <FaCarSide />
               </span>
@@ -170,8 +165,7 @@ const Sidebar = () => {
                   color: isActive ? "#2150d8" : "#fff",
                   borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}
-            >
+              }}>
               <span>
                 <GalleryIcon />
               </span>
@@ -188,8 +182,7 @@ const Sidebar = () => {
                       <li
                         className={activeClass === el.pk ? classes.active : ""}
                         onClick={(e) => selectedStoreHandler(e, el.pk)}
-                        key={el.pk}
-                      >
+                        key={el.pk}>
                         {el.address}
                       </li>
                     );

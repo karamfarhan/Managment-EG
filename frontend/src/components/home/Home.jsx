@@ -5,13 +5,14 @@ import StaffForm from "../staff/staff-form/StaffForm";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { FaCarSide } from "react-icons/fa";
 import { VscPaintcan } from "react-icons/vsc";
-import { GiRayGun } from "react-icons/gi";
 import { FaStoreAlt } from "react-icons/fa";
 import classes from "./Home.module.css";
 import { useSelector } from "react-redux";
 import CreateStoreUi from "../UI/create_store_popup/CreateStoreUi";
 import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import CreateCar from "../UI/create-car/CreateCar";
+import { Link } from "react-router-dom";
+import { GalleryIcon } from "../icons/GalleryIcon";
 
 const Home = () => {
   const [staffForm, setStaffForm] = useState(false);
@@ -22,6 +23,7 @@ const Home = () => {
   const token = useSelector((state) => state.authReducer.token);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
+  const allPermissions = permissions.join(" ");
 
   let formsVisible = staffForm;
 
@@ -55,46 +57,52 @@ const Home = () => {
           <h1>الرئيسية</h1>
 
           <div className={classes.actions}>
-            {(is_superuser || permissions.includes("add_employee")) && (
-              <button onClick={() => setStaffForm(true)}>
-                <span>اضافة موظف</span>
+            {(is_superuser === true ||
+              allPermissions.includes("employee") ||
+              allPermissions.includes("insurance")) && (
+              <Link to="/staff">
+                <span>العاملين بالشركة</span>
                 <span>
                   <AiOutlineUserAdd />
                 </span>
-              </button>
+              </Link>
             )}
-            {(is_superuser || permissions.includes("add_store")) && (
-              <button onClick={() => setStoreForm(true)}>
-                <span>اضافة مخزن</span>
+            {(is_superuser || allPermissions.includes("store")) && (
+              <Link to="/store">
+                <span>المخازن</span>
                 <span>
                   <FaStoreAlt />
                 </span>
-              </button>
+              </Link>
             )}
 
-            {(permissions.includes("add_substance") || is_superuser) && (
-              <button onClick={() => setSubsForm(true)}>
-                <span>اضافة خامات</span>
+            {(is_superuser ||
+              allPermissions.includes("substance") ||
+              allPermissions.includes("instrument")) &&
+              (!allPermissions.includes("invoice") ||
+                !allPermissions.includes("store")) && (
+                <Link to="/create_subs">
+                  <span>المخزن الرئيسي</span>
+                  <span>
+                    <VscPaintcan />
+                  </span>
+                </Link>
+              )}
+            {(is_superuser === true || allPermissions.includes("media")) && (
+              <Link to="/projects">
+                <span>المشروعات</span>
                 <span>
-                  <VscPaintcan />
+                  <GalleryIcon />
                 </span>
-              </button>
+              </Link>
             )}
-            {(permissions.includes("add_instrument") || is_superuser) && (
-              <button onClick={() => setShowInstrumentsForm(true)}>
-                <span>اضافة أجهزة</span>
-                <span>
-                  <GiRayGun />
-                </span>
-              </button>
-            )}
-            {(is_superuser || permissions.includes("add_car")) && (
-              <button onClick={() => setShowCars(true)}>
-                <span>اضافة سيارة</span>
+            {(is_superuser === true || allPermissions.includes("car")) && (
+              <Link to="/cars">
+                <span>السيارات</span>
                 <span>
                   <FaCarSide />
                 </span>
-              </button>
+              </Link>
             )}
           </div>
         </div>
