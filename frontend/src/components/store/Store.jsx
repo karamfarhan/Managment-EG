@@ -5,7 +5,9 @@ import jwt_decode from "jwt-decode";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { BiTransfer } from "react-icons/bi";
 import { FiEdit } from "react-icons/fi";
+import { AiOutlineFileImage } from "react-icons/ai";
 import Paginate from "../UI/pagination/Paginate";
+import CreateStoreUI from "../UI/create_store_popup/CreateStoreUi";
 import Bar from "../UI/bars/Bar";
 import {
   getStores,
@@ -23,6 +25,7 @@ import classes from "./Store.module.css";
 const Store = () => {
   const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
+  const [showStoreForm, setShowStoreForm] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [storeIdInvoice, setStoreIdInvoice] = useState("");
   const [showEditForm, setShowEditForm] = useState(false);
@@ -143,6 +146,12 @@ const Store = () => {
 
   return (
     <Fragment>
+      {/* create store */}
+
+      {showStoreForm && (
+        <CreateStoreUI hideFormHandler={() => setShowStoreForm(false)} />
+      )}
+
       {/* edit form  */}
       {showEditForm && (
         <EditStore
@@ -175,6 +184,17 @@ const Store = () => {
               value={searchValue}
               searchData={fetchSearchHandler}
             />
+          )}
+          {(permissions.includes("add_store") || is_superuser) && (
+            <button
+              className={classes.addInventory}
+              onClick={() => setShowStoreForm(true)}
+            >
+              <span>
+                <AiOutlineFileImage />
+              </span>
+              انشاء مخزن جديد
+            </button>
           )}
         </div>
       </Bar>

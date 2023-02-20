@@ -1,12 +1,15 @@
 import { useState, useEffect, Fragment } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import Bar from "../UI/bars/Bar";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import Empolyess from "./empolyees/Empolyess";
+import Bar from "../UI/bars/Bar";
 import { empolyeeSearch, getEmpolyees } from "../../store/empolyees-slice";
 import Search from "../UI/search/Search";
+import StaffForm from "./staff-form/StaffForm";
 import EditEmpolyee from "./empolyees/edit-empolyee/EditEmpolyee";
+import classes from "./Staff.module.css";
 export const Staff = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -23,6 +26,8 @@ export const Staff = () => {
     "view_employee",
   ];
   const getStaff = permissions.some((el) => empolyeePremission.includes(el));
+
+  const [showStaffForm, setShowStaffForm] = useState(false);
 
   //current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,8 +75,11 @@ export const Staff = () => {
 
   return (
     <Fragment>
+      {/* create staff */}
+      {showStaffForm && <StaffForm setStaffForm={setShowStaffForm} />}
+
       <div dir="rtl">
-        {
+        {!showStaffForm && (
           <Bar>
             <div className="toolBar">
               {(is_superuser || getStaff) && (
@@ -82,16 +90,29 @@ export const Staff = () => {
                   searchData={fetchSearchHandler}
                 />
               )}
+              {(permissions.includes("add_employee") || is_superuser) && (
+                <button
+                  className={classes.btn}
+                  onClick={() => setShowStaffForm(true)}
+                >
+                  <span>
+                    <AiOutlineUserAdd />{" "}
+                  </span>
+                  اضافة موظف
+                </button>
+              )}
             </div>
           </Bar>
-        }
+        )}
         <Routes>
           <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
         </Routes>
-        {empolyees && empolyees.count === 0 && (is_superuser || getStaff) && (
-          <h1>لا يوجد موظفين</h1>
-        )}
+        {!showStaffForm &&
+          empolyees &&
+          empolyees.count === 0 &&
+          (is_superuser || getStaff) && <h1>لا يوجد موظفين</h1>}
         {empolyees &&
+          !showStaffForm &&
           empolyees.count > 0 &&
           location.pathname === "/staff" &&
           (is_superuser || getStaff) && (

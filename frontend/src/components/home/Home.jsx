@@ -69,7 +69,7 @@ const Home = () => {
             )}
             {(is_superuser || allPermissions.includes("store")) && (
               <Link to="/store">
-                <span>المخازن</span>
+                <span>مخازن الشركة</span>
                 <span>
                   <FaStoreAlt />
                 </span>
@@ -90,7 +90,7 @@ const Home = () => {
               )}
             {(is_superuser === true || allPermissions.includes("media")) && (
               <Link to="/projects">
-                <span>المشروعات</span>
+                <span>مشاريع الشركة</span>
                 <span>
                   <GalleryIcon />
                 </span>
@@ -98,7 +98,7 @@ const Home = () => {
             )}
             {(is_superuser === true || allPermissions.includes("car")) && (
               <Link to="/cars">
-                <span>السيارات</span>
+                <span>سيارات الشركة</span>
                 <span>
                   <FaCarSide />
                 </span>

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 import Inputs from "../../UI/inputs/Inputs";
 import Insurance from "./insurance/Insurance";
 import classes from "./StaffFrom.module.css";
+import { getEmpolyees } from "../../../store/empolyees-slice";
 const StaffForm = ({ setStaffForm }) => {
+  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
   const [isInsurance, setIsInsurance] = useState("");
   const navigate = useNavigate();
@@ -191,6 +193,7 @@ const StaffForm = ({ setStaffForm }) => {
       if (res.ok) {
         if (is_superuser || getStaff) {
           navigate("/staff");
+          dispatch(getEmpolyees(token));
         }
         setStaffForm(false);
       }

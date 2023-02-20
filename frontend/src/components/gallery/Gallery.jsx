@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
+import { useQuery } from "react-query";
 import { AiOutlineFileImage } from "react-icons/ai";
 import Bar from "../UI/bars/Bar";
 import {
@@ -66,15 +67,34 @@ const Gallery = () => {
   // all imgs
   const { data: all_images } = useSelector((state) => state.imageReducer);
   const allImgs = all_images && all_images.results;
-  let result =
-    allImgs &&
-    allImgs.reduce(function (r, a) {
-      r[a.media_pack.created_at] = r[a.media_pack.created_at] || [];
-      r[a.media_pack.created_at].push(a);
-      return r;
-    }, Object.create(null));
+  // let result =
+  //   allImgs &&
+  //   allImgs.reduce(function (r, a) {
+  //     r[a.media_pack.created_at] = r[a.media_pack.created_at] || [];
+  //     r[a.media_pack.created_at].push(a);
+  //     return r;
+  //   }, Object.create(null));
 
-  //mutate data
+  const { data: stores } = useQuery(
+    "get/stores",
+    async () => {
+      try {
+        const res = await fetch(`${window.domain}/stores/select_list/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return await res.json();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    { refetchOnWindowFocus: false }
+  );
+
+  console.log(stores);
 
   //show model
   const selectImgModelHandler = () => {
@@ -99,19 +119,6 @@ const Gallery = () => {
   const closeModelHandler = () => {
     setShowImgModel(false);
   };
-
-  //next img
-  const nextImg = () => {
-    setCurrentIndex((prevInx) => prevInx + 1);
-  };
-
-  //prev img
-  const prevImg = () => {
-    if (currentIndex < 0) return;
-    setCurrentIndex((prevInx) => prevInx - 1);
-  };
-
-  console.log(result);
 
   //search handler
   // const searchHandler = (e) => {
@@ -154,8 +161,6 @@ const Gallery = () => {
           i={currentIndex}
           imgSrc={clickedImg}
           closeModelHandler={closeModelHandler}
-          nextImg={nextImg}
-          prevImg={prevImg}
           description={description}
         />
       )}
@@ -168,6 +173,7 @@ const Gallery = () => {
               value={searchValue}
               searchData={fetchSearchHandler}
             /> */}
+
           {(permissions.includes("add_image") ||
             permissions.includes("add_mediapack") ||
             is_superuser) && (
@@ -180,69 +186,43 @@ const Gallery = () => {
           )}
         </div>
       </Bar>
-      {allImgs &&
+      {/* {allImgs &&
         Object.entries(result).length === 0 &&
         (is_superuser ||
           permissions.includes("view_image") ||
-          permissions.includes("view_mediapack")) && <h1>لا يوجد صور</h1>}
-      {allImgs &&
-        result &&
-        (is_superuser ||
+          permissions.includes("view_mediapack")) && (
+          <h1>لا يوجد مشاريع حاليا</h1>
+        )} */}
+      <div className={classes.box}>
+        {(is_superuser ||
           permissions.includes("view_image") ||
           permissions.includes("view_mediapack")) &&
-        Object.entries(result).map(([key, value], i) => {
-          return (
-            <div className={classes.content} key={i}>
-              <h4> {new Date(key).toLocaleString()} </h4>
-              <div className={classes.preview}>
-                {value.map((el, index) => {
-                  return (
-                    <div
-                      className={classes.fig}
-                      key={index}
-                      onClick={() =>
-                        selectedImgHandler(
-                          index,
-                          el.image,
-                          el.media_pack.alt_text
-                        )
-                      }
-                    >
-                      <div>
-                        <figure>
-                          <img src={el.image} alt="f" />
-                        </figure>
-                        <div>
-                          <h3> {el.media_pack && el.media_pack.store_name} </h3>
-                          <p className={classes.uploaded}>
-                            تم رفع الصور عن طريق :
-                            <span>
-                              {el.media_pack && el.media_pack.created_by}{" "}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-                {count > 10 &&
-                  (is_superuser ||
-                    permissions.includes("view_image") ||
-                    permissions.includes("view_mediapack")) && (
-                    <Paginate
-                      currentPage={currentPage}
-                      setCurrentPage={setCurrentPage}
-                      count={count}
-                      paginationFun={paginationFun}
-                      search={searchValue}
-                      searchFn={fetchSearchHandler}
-                      searchPagination={searchPagination}
-                    />
-                  )}
+          stores &&
+          stores.map((el, i) => {
+            return (
+              <div className={classes.content} key={i}>
+                {/* <h4> {new Date(el.pk).toLocaleString()} </h4> */}
+                <div className={classes.preview}>
+                  <h1> {el.address} </h1>
+                  {count > 10 &&
+                    (is_superuser ||
+                      permissions.includes("view_image") ||
+                      permissions.includes("view_mediapack")) && (
+                      <Paginate
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        count={count}
+                        paginationFun={paginationFun}
+                        search={searchValue}
+                        searchFn={fetchSearchHandler}
+                        searchPagination={searchPagination}
+                      />
+                    )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+      </div>
     </Fragment>
   );
 };
