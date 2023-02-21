@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ExportExcel from "../../UI/export/ExportExcel";
@@ -38,11 +39,55 @@ const StoreDetail = () => {
       console.log(err);
     }
   }, [storeId, token]);
+  //staff
+
+  // const { staff } = useQuery("staff/store", async () => {
+  //   try {
+  //     const res = await fetch(
+  //       `${window.domain}/employees/?search=${data.address}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const d = await res.json();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // });
+  //gallery
+  useEffect(() => {
+    console.log(data.name);
+
+    const fetchImg = async () => {
+      try {
+        const res = await fetch(
+          `${window.domain}/images/?search=${data.name}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const d = await res.json();
+        console.log(d);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (data !== undefined || data !== null) {
+      fetchImg();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   useEffect(() => {
     getTheStore();
   }, [getTheStore]);
-  console.log(data.invoices);
   return (
     <div className={classes.content}>
       {isLoading && <LoadingSpinner />}

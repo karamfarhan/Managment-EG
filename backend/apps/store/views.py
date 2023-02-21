@@ -52,7 +52,8 @@ class StoreViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     serializer_class = StoreSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     resource_class = StoreResource
-    search_fields = ["created_by__username", "name", "address"]  # fields you want to search against
+    search_fields = ["created_by__username", "name",
+                     "address"]  # fields you want to search against
     ordering_fields = ["name", "created_at"]  # fields you want to order by
 
     # def get_queryset(self):
@@ -77,7 +78,8 @@ class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     # TODO the quere should be optimized
     queryset = Invoice.objects.all().prefetch_related(
         Prefetch("substance_items", queryset=InvoiceSubstanceItem.objects.all()),
-        Prefetch("instrument_items", queryset=InvoiceInstrumentItem.objects.all()),
+        Prefetch("instrument_items",
+                 queryset=InvoiceInstrumentItem.objects.all()),
     )
     serializer_class = InvoiceSerializer
     pagination_class = PageNumberPagination
@@ -105,7 +107,8 @@ class InvoiceViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         instruments = request.data.pop("instruments", [])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(created_by=request.user, store=store, substances=substances, instruments=instruments)
+        serializer.save(created_by=request.user, store=store,
+                        substances=substances, instruments=instruments)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

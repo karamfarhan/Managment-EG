@@ -6,6 +6,7 @@ import SubstancesView from "./substances_view/SubstancesView";
 import { getSubs } from "../../store/create-substance";
 import InstrumentsView from "./instruments_view/InstrumentsView";
 import { getInstruments } from "../../store/create-instruments";
+import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import classes from "./CreateSubs.module.css";
 
 const CreateSubs = () => {
@@ -60,10 +61,13 @@ const CreateSubs = () => {
     setCurrentPage(1);
     setSearchVal("");
   };
-
+  const hideSubstancesHandler = () => {
+    setShowModel(false);
+    setShowInstrumentsForm(false);
+  };
   return (
     <Fragment>
-      {/* {(showModel || showInstrumentsForm) && (
+      {(showModel || showInstrumentsForm) && (
         <CreateSubsModel
           hideSubstancesHandler={hideSubstancesHandler}
           showMattersForm={showModel}
@@ -71,7 +75,7 @@ const CreateSubs = () => {
           showMattersPage={showMatters}
           showInstrumentsForm={showInstrumentsForm}
         />
-      )} */}
+      )}
       {/* المخزن الرئيسي*/}
 
       <div className={classes["main_inventory"]}>
@@ -86,9 +90,11 @@ const CreateSubs = () => {
                 id="material"
                 type="button"
                 name="material"
-                onClick={fetchMatters}
-              >
+                onClick={fetchMatters}>
                 عرض الموارد
+              </button>
+              <button type="button" onClick={() => setShowModel(true)}>
+                اضافة موارد
               </button>
             </div>
           )}
@@ -99,9 +105,13 @@ const CreateSubs = () => {
                 id="instruments"
                 type="button"
                 name="instruments"
-                onClick={fetchInstruments}
-              >
+                onClick={fetchInstruments}>
                 عرض المعدات
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowInstrumentsForm(true)}>
+                اضافة معدات
               </button>
             </div>
           )}
