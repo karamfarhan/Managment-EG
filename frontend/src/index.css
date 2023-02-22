@@ -9,6 +9,11 @@
   --main-btn-width: 20%;
   --main-btn-font-size: 19px;
   --input-width: 332px;
+  --color-1: #cac0b6;
+  --color-2: #d1d0ce;
+  --color-3: #79726c;
+  --color-4: #939290;
+  --color-5: #867e76;
 }
 
 * {
@@ -31,7 +36,11 @@
   outline: 1px solid slategrey;
 }
 body {
-  background-color: #f8f9fa;
+  background-color: #dbe0e6;
+  min-height: 100vh;
+  /* background-image: url(../public/images/logo/logo.png);
+  background-repeat: no-repeat;
+  background-position: center ; */
   font-family: "Noto Naskh Arabic", serif;
 }
 button {

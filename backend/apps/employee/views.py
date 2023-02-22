@@ -31,6 +31,7 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         "number",
         "type",
         "email",
+        "store__address"
     ]
     ordering_fields = ["name", "created_at", "years_of_experiance"]
     resource_class = EmployeeResource

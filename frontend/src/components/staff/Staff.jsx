@@ -73,15 +73,13 @@ export const Staff = () => {
       return r;
     }, Object.create(null));
 
-  console.log(empolyees);
-
   return (
     <Fragment>
       {/* create staff */}
       {showStaffForm && <StaffForm setStaffForm={setShowStaffForm} />}
 
       <div dir="rtl">
-        {!showStaffForm && (
+        {!showStaffForm && location.pathname === "/staff" && (
           <Bar>
             <div className="toolBar">
               {(is_superuser || getStaff) && (

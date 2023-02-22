@@ -12,6 +12,7 @@ import classes from "./StoreDetail.module.css";
 const StoreDetail = () => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(null);
+  const [employees, setEmployees] = useState([]);
   const params = useParams();
   const { storeId } = params;
 
@@ -38,29 +39,38 @@ const StoreDetail = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [storeId, token]);
+  }, [storeId]);
   //staff
 
-  // const { staff } = useQuery("staff/store", async () => {
-  //   try {
-  //     const res = await fetch(
-  //       `${window.domain}/employees/?search=${data.address}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     const d = await res.json();
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // });
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const res = await fetch(
+          `${window.domain}/employees/?search=${data.address}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const results = await res.json();
+        setEmployees(results.results);
+        console.log(results);
+        console.log(employees);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (data !== undefined || data !== null) {
+      fetchEmployees();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   //gallery
   useEffect(() => {
-    console.log(data.name);
-
     const fetchImg = async () => {
       try {
         const res = await fetch(
@@ -84,7 +94,7 @@ const StoreDetail = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-
+  console.log(employees);
   useEffect(() => {
     getTheStore();
   }, [getTheStore]);
@@ -98,24 +108,24 @@ const StoreDetail = () => {
           <h2>
             التحويلات الخاصة <span>{data.name}</span>{" "}
           </h2>
-          {/* <p>
-            تم انشاء المخزن في :
-            <span> {new Date(data.created_at).toLocaleString()} </span>{" "}
-          </p>
-          <div>
-            <p>
-              الموقع المرتبط بالمخزن : <span> {data.address}</span>
-            </p>
-          </div>
-          <p>
-            <span>{data.description}</span>
-          </p> */}
+
           {data.invoices.length === 0 && <p>لا يوجد تحويلات</p>}
           {data.invoices.length > 0 && (
             <div>
               <Invoices store={data} />
             </div>
           )}
+
+          <div>
+            <h2>الموظفين بالشركة</h2>
+
+            <div>
+              {employees &&
+                employees.map((el) => {
+                  return <p key={el.id}> {el.name} </p>;
+                })}
+            </div>
+          </div>
         </div>
       )}
     </div>

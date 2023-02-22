@@ -48,19 +48,19 @@ export const Header = ({ sideBarHanler, showSideBar, matches }) => {
 
   // }
 
-  let headerColor;
+  let headerColor = "#484644";
 
-  if (location.pathname === "/staff") {
-    headerColor = "#0b9cff";
-  } else if (location.pathname === "/store") {
-    headerColor = "#f13a11";
-  } else if (location.pathname === "/gallery") {
-    headerColor = "#2a4bf7";
-  } else if (location.pathname === "/cars") {
-    headerColor = "#1ca345";
-  } else {
-    headerColor = "#5e72e4";
-  }
+  // if (location.pathname === "/staff") {
+  //   headerColor = "#0b9cff";
+  // } else if (location.pathname === "/store") {
+  //   headerColor = "#f13a11";
+  // } else if (location.pathname === "/gallery") {
+  //   headerColor = "#2a4bf7";
+  // } else if (location.pathname === "/cars") {
+  //   headerColor = "#1ca345";
+  // } else {
+
+  // }
 
   return (
     <header className={classes.header} style={{ backgroundColor: headerColor }}>

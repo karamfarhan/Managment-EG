@@ -25,7 +25,8 @@
 }
 .table_content table thead {
   font-size: 13px;
-  background-color: #0b9cff;
+  /* background-color: #0b9cff; */
+  background-color: var(--color-4);
   color: #fff;
 }
 

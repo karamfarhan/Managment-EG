@@ -15,10 +15,8 @@ const EditEmpolyee = () => {
   const params = useParams();
   const [steps, setSteps] = useState(1);
   const { data: empolyeeId } = useSelector((state) => state.empolyeeReducer);
-  console.log(params);
   const selectedEmpolyee =
     empolyeeId &&
-    empolyeeId.results &&
     empolyeeId.results.find((el) => el.id === parseInt(params.empId));
 
   const [data, setData] = useState("");
@@ -73,7 +71,6 @@ const EditEmpolyee = () => {
       selectedEmpolyee &&
       selectedEmpolyee.insurance &&
       selectedEmpolyee.insurance.start_at;
-  console.log(insCode);
   const {
     name,
     type,
@@ -407,8 +404,7 @@ const EditEmpolyee = () => {
                     ...empolyeeData,
                     is_primary: e.target.value,
                   })
-                }
-              >
+                }>
                 ْ<option disabled>موظف بمقر الشركة</option>ْ
                 <option value={true}>نعم</option>
                 <option value={false}>لا</option>
@@ -423,8 +419,7 @@ const EditEmpolyee = () => {
                       ...empolyeeData,
                       storePk: e.target.value,
                     })
-                  }
-                >
+                  }>
                   <option selected hidden>
                     موقع العمل
                   </option>
@@ -507,8 +502,7 @@ const EditEmpolyee = () => {
               value={note}
               onChange={(e) =>
                 setEmpolyeeData({ ...empolyeeData, note: e.target.value })
-              }
-            ></textarea>
+              }></textarea>
           </div>
         )}
         {steps === 3 && (

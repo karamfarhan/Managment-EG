@@ -1,7 +1,9 @@
 .btn {
   width: var(--main-btn-width);
   font-size: var(--main-btn-font-size);
-  background-color: #0b9cff;
+  /* background-color: #0b9cff; */
+  background-color: var(--color-5);
+
   color: #fff;
   border: none;
   padding: 5px;
