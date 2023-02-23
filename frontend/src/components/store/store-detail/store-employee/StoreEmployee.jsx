@@ -19,6 +19,8 @@ const StoreEmployee = ({ data }) => {
           }
         );
         const results = await res.json();
+        console.log(results);
+
         setEmployees(results.results);
       } catch (err) {
         console.log(err);
@@ -30,6 +32,8 @@ const StoreEmployee = ({ data }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+  console.log(employees);
+  console.log(data.address);
   return (
     <Fragment>
       {employees.length === 0 && <h1>لا يوجد عاملين بالموقع</h1>}
