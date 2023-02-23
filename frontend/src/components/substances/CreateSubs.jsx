@@ -27,11 +27,13 @@ const CreateSubs = () => {
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
-
+  console.log(showMatters);
+  console.log(showInstrumentsPage);
   //fetch matters
   useEffect(() => {
     if (
       showMatters === true &&
+      showModel === false &&
       showInstrumentsPage === false &&
       currentPage === 1 &&
       searchVal === ""
@@ -40,11 +42,34 @@ const CreateSubs = () => {
     }
     //fetch instruments
 
-    if (showInstrumentsPage === true && currentPage === 1 && searchVal === "") {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    currentPage,
+    dispatch,
+    showMatters,
+    searchVal,
+    showInstrumentsPage,
+    showModel,
+  ]);
+
+  useEffect(() => {
+    if (
+      showInstrumentsPage === true &&
+      currentPage === 1 &&
+      showInstrumentsForm === false &&
+      showMatters === false &&
+      searchVal === ""
+    ) {
       dispatch(getInstruments(token));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, dispatch, showMatters, searchVal, showInstrumentsPage]);
+  }, [
+    currentPage,
+    dispatch,
+    searchVal,
+    showInstrumentsForm,
+    showInstrumentsPage,
+    showMatters,
+  ]);
 
   //fetch matters
   const fetchMatters = () => {
@@ -90,7 +115,8 @@ const CreateSubs = () => {
                 id="material"
                 type="button"
                 name="material"
-                onClick={fetchMatters}>
+                onClick={fetchMatters}
+              >
                 عرض الموارد
               </button>
               <button type="button" onClick={() => setShowModel(true)}>
@@ -105,12 +131,14 @@ const CreateSubs = () => {
                 id="instruments"
                 type="button"
                 name="instruments"
-                onClick={fetchInstruments}>
+                onClick={fetchInstruments}
+              >
                 عرض المعدات
               </button>
               <button
                 type="button"
-                onClick={() => setShowInstrumentsForm(true)}>
+                onClick={() => setShowInstrumentsForm(true)}
+              >
                 اضافة معدات
               </button>
             </div>

@@ -28,13 +28,14 @@
   font-weight: bold;
   position: relative;
 }
-.subtancesText::after {
+/* .subtancesText::after {
   content: "";
   position: absolute;
   height: 1px;
   width: 200%;
   transform: translateX(0);
   top: 50%;
+  left: 0;
   background: #777;
 }
 .subtancesText::before {
@@ -45,8 +46,8 @@
   transform: translateX(0);
   top: 50%;
   background: #777;
-  left: -80px;
-}
+  left: -160px;
+} */
 .items_container {
   max-height: 250px;
   overflow: auto;

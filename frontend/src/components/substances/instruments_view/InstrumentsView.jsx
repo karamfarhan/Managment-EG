@@ -90,16 +90,18 @@ const InstrumentsView = ({
         />
       )}
       <div>
-        <Search
-          value={searchVal}
-          onChange={(e) => setSearchVal(e.target.value)}
-          searchData={searchDispatch}
-        />
+        {instrumentsData && instrumentsData.results.length > 0 && (
+          <Search
+            value={searchVal}
+            onChange={(e) => setSearchVal(e.target.value)}
+            searchData={searchDispatch}
+          />
+        )}
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
           {instrumentsData &&
             instrumentsData.results.length === 0 &&
-            !isLoading && <p className={classes.msg_p}> لا يوجد أجهزة </p>}
+            !isLoading && <h1> لا يوجد أجهزة </h1>}
 
           <Routes>
             <Route

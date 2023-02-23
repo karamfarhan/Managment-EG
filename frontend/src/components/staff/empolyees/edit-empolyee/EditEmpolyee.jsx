@@ -33,6 +33,7 @@ const EditEmpolyee = () => {
     email: "",
     number: "",
     years_of_experiance: "",
+    employee_category: "",
     days_off: "",
     note: "",
     location: "",
@@ -80,6 +81,7 @@ const EditEmpolyee = () => {
     days_off,
     note,
     is_primary,
+    employee_category,
     location,
     signin_date,
     storePk,
@@ -115,6 +117,7 @@ const EditEmpolyee = () => {
           years_of_experiance: selectedEmpolyee.years_of_experiance,
           days_off: selectedEmpolyee.days_off,
           note: selectedEmpolyee.note,
+          employee_category: selectedEmpolyee.employee_category,
           location:
             selectedEmpolyee.store_address === null
               ? ""
@@ -186,6 +189,7 @@ const EditEmpolyee = () => {
       setCertificateImg(e.target.files[0]);
     }
   }
+  console.log(employee_category);
   //select locations
   const { data: stores } = useQuery(
     "fetch/locations",
@@ -323,8 +327,11 @@ const EditEmpolyee = () => {
     }
     setSteps((prev) => prev - 1);
   };
-  console.log(insuranceData);
-
+  let formIsValid = false;
+  if (storePk !== null) {
+    formIsValid = true;
+  }
+  console.log(storePk);
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <h3> تعديل بيانات الموظف</h3>
@@ -340,6 +347,32 @@ const EditEmpolyee = () => {
               type="text"
               placeholder="أسم الموظف"
             />
+            <Inputs
+              required
+              value={type}
+              onChange={(e) =>
+                setEmpolyeeData({ ...empolyeeData, type: e.target.value })
+              }
+              type="text"
+              placeholder="المسمي الوظيفي"
+            />
+            <div className={classes.select}>
+              <select
+                value={employee_category}
+                onChange={(e) =>
+                  setEmpolyeeData({
+                    ...empolyeeData,
+                    employee_category: e.target.value,
+                  })
+                }
+              >
+                <option selected hidden>
+                  تصنيف الموظف
+                </option>
+                <option value="مهندس">مهندس</option>
+                <option value="سائق">سائق</option>
+              </select>
+            </div>
             {data && data.name && <p className="err-msg"> {data.name} </p>}
             <Inputs
               required
@@ -359,15 +392,7 @@ const EditEmpolyee = () => {
               type="email"
               placeholder="البريد الألكتروني"
             />
-            <Inputs
-              required
-              value={type}
-              onChange={(e) =>
-                setEmpolyeeData({ ...empolyeeData, type: e.target.value })
-              }
-              type="text"
-              placeholder="المسمي الوظيفي"
-            />
+
             <Inputs
               required
               value={signin_date}
@@ -404,7 +429,8 @@ const EditEmpolyee = () => {
                     ...empolyeeData,
                     is_primary: e.target.value,
                   })
-                }>
+                }
+              >
                 ْ<option disabled>موظف بمقر الشركة</option>ْ
                 <option value={true}>نعم</option>
                 <option value={false}>لا</option>
@@ -419,7 +445,8 @@ const EditEmpolyee = () => {
                       ...empolyeeData,
                       storePk: e.target.value,
                     })
-                  }>
+                  }
+                >
                   <option selected hidden>
                     موقع العمل
                   </option>
@@ -502,7 +529,8 @@ const EditEmpolyee = () => {
               value={note}
               onChange={(e) =>
                 setEmpolyeeData({ ...empolyeeData, note: e.target.value })
-              }></textarea>
+              }
+            ></textarea>
           </div>
         )}
         {steps === 3 && (
@@ -512,7 +540,11 @@ const EditEmpolyee = () => {
         )}
         <div className={classes.arrows}>
           {steps !== 3 && (
-            <button onClick={nextStepHandler} type="button">
+            <button
+              disabled={!formIsValid}
+              onClick={nextStepHandler}
+              type="button"
+            >
               التالي
             </button>
           )}

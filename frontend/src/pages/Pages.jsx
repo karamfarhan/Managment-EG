@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 //pages
 import AuthPage from "./AuthPage";
 import CarsPage from "./CarsPage";
-import GalleryPage from "./GalleryPage";
+// import GalleryPage from "./GalleryPage";
 import ProtectedRoutes from "./ProtectedRoute";
 import StaffPage from "./StaffPage";
 import StoresPage from "./StoresPage";
@@ -16,7 +16,6 @@ import CarDetailPage from "./CarDetailPage";
 import HomePage from "./HomePage";
 const Pages = () => {
   const { isAuth } = useSelector((state) => state.authReducer);
-  console.log(isAuth);
   return (
     <Routes>
       <Route
@@ -50,7 +49,7 @@ const Pages = () => {
           element={<InvoiceDetailPage />}
         />
         <Route path="/create_subs/*" element={<CreateSubstancePage />} />
-        <Route path="/projects" element={<GalleryPage />} />
+        {/* <Route path="/projects" element={<GalleryPage />} /> */}
         <Route path="/cars/*" element={<CarsPage />} />
         <Route path="/cars/:driverId/:carId" element={<CarDetailPage />} />
       </Route>

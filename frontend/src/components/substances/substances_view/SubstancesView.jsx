@@ -40,7 +40,6 @@ const SubstancesView = ({
 
   //pagination
   const subsCount = subsData && subsData.count;
-
   //delete handler
   const deleteHandler = (id) => {
     const obj = {
@@ -89,7 +88,6 @@ const SubstancesView = ({
   const searchPagination = (obj) => {
     dispatch(subsSearchPagination(obj));
   };
-
   return (
     <Fragment>
       {/*edit form*/}
@@ -116,23 +114,22 @@ const SubstancesView = ({
       )}
 
       <div>
-        <Search
-          onChange={searchHandler}
-          value={searchVal}
-          searchData={searchDispatch}
-        />
+        {subsData && subsData.results.length > 0 && isLoading === false && (
+          <Search
+            onChange={searchHandler}
+            value={searchVal}
+            searchData={searchDispatch}
+          />
+        )}
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
           {subsData && !isLoading && subsData.results.length > 0 && (
             <ExportExcel matter="substances" />
           )}
-          {subsData &&
-            !isLoading &&
-            subsData.results &&
-            subsData.results.length === 0 && (
-              <p className={classes.msg_p}> لا يوجد مواد </p>
-            )}
-          {subsData && !isLoading && subsData.results.length > 0 && (
+          {subsData && subsData.results && subsData.results.length === 0 && (
+            <h1> لا يوجد مواد </h1>
+          )}
+          {subsData && subsData.results.length > 0 && isLoading === false && (
             <table>
               <thead>
                 <tr>
@@ -146,8 +143,8 @@ const SubstancesView = ({
               </thead>
               <tbody>
                 {subsData &&
-                  !isLoading &&
                   subsData.results &&
+                  isLoading === false &&
                   subsData.results.map((subs) => {
                     return (
                       <tr key={subs.id}>
