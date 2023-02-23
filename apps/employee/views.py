@@ -29,22 +29,16 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
     serializer_class = EmployeeSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = [
-        "created_by__username",
-        "name",
-        "number",
-        "type",
-        "email",
-    ]
+    search_fields = ["created_by__username", "name", "number", "type", "email", "store__address", "employee_category"]
     ordering_fields = ["name", "created_at", "years_of_experiance"]
     resource_class = EmployeeResource
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_superuser:
-            return Employee.objects.select_related("created_by", "insurance")
-        else:
-            return Employee.objects.filter(account=user)
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_superuser:
+    #         return Employee.objects.select_related("created_by", "insurance")
+    #     else:
+    #         return Employee.objects.filter(account=user)
 
     def create(self, request, *args, **kwargs):
         print(f"Employee-{self.request.method}-REQUEST_DATA = ", request.data)

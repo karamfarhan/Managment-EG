@@ -27,10 +27,10 @@ class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
     ordering_fields = ["car_model", "created_at", "last_maintain"]
     resource_class = CarResource
 
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Car.objects.select_related("created_by", "driver")
-        return Car.objects.select_related("created_by", "driver").filter(driver=self.request.user.employee)
+    # def get_queryset(self):
+    #     if self.request.user.is_superuser:
+    #         return Car.objects.select_related("created_by", "driver")
+    #     return Car.objects.select_related("created_by", "driver").filter(driver=self.request.user.employee)
 
     def create(self, request, *args, **kwargs):
         print(f"Car-{self.request.method}-REQUEST_DATA = ", request.data)

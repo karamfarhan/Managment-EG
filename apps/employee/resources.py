@@ -20,6 +20,7 @@ class EmployeeResource(resources.ModelResource):
             "id",
             "name",
             "type",
+            "employee_category",
             "email",
             "number",
             "years_of_experiance",

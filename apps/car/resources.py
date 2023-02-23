@@ -12,7 +12,17 @@ class CarResource(resources.ModelResource):
 
     class Meta:
         model = Car
-        fields = ("id", "car_model", "car_type", "car_number", "driver", "last_maintain", "maintain_place", "note")
+        fields = (
+            "id",
+            "car_model",
+            "car_type",
+            "car_number",
+            "driver",
+            "last_maintain",
+            "maintain_place",
+            "note",
+            "car_counter",
+        )
         export_order = fields
 
 
