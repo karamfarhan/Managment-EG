@@ -57,15 +57,15 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "signin_date",
             "store",
             "store_address",
+            "employee_category",
             "note",
             "is_primary",
             "today_activity",
             "insurance",
-            "employee_category",
             "created_at",
             "created_by",
         ]
-        read_only_fields = ["id", "created_by", "created_at", "email_verified", "store_address", "today_activity"]
+        read_only_fields = ["id", "created_by", "created_at", "store_address", "today_activity"]
         # extra_kwargs = {
         #     'store_address': {'method': 'get_store_address'},
         #     'today_activity': {'method': 'get_today_activity'}

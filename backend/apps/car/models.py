@@ -22,6 +22,13 @@ class Car(models.Model):
         blank=True,
         verbose_name=_("car number"),
     )
+    car_counter = models.TextField(
+        default="No description",
+        max_length=500,
+        null=True,
+        blank=True,
+        verbose_name=_("car counter"),
+    )
     created_by = models.ForeignKey(
         "account.Account",
         on_delete=models.SET_NULL,
@@ -41,13 +48,6 @@ class Car(models.Model):
         null=True,
         blank=True,
         verbose_name=_("car note"),
-    )
-    car_counter = models.TextField(
-        default="No description",
-        max_length=500,
-        null=True,
-        blank=True,
-        verbose_name=_("car counter"),
     )
     last_maintain = models.DateField(
         verbose_name=_("last maintain at"), help_text=_("format: Y-m-d H:M:S"), null=True, blank=True
