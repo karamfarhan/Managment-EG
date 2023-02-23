@@ -11,6 +11,7 @@ import Inputs from "../inputs/Inputs";
 
 import { logout } from "../../../store/auth-slice";
 import classes from "./CreateCar.module.css";
+import { getCars } from "../../../store/cars-slice";
 
 const CreateCar = ({ hideModel }) => {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const CreateCar = ({ hideModel }) => {
     last_maintain: "",
     maintain_place: "",
     note: "",
+    car_counter: "",
   });
   const {
     car_model,
@@ -39,6 +41,7 @@ const CreateCar = ({ hideModel }) => {
     last_maintain,
     maintain_place,
     note,
+    car_counter,
   } = carData;
 
   let formIsValid = false;
@@ -96,7 +99,7 @@ const CreateCar = ({ hideModel }) => {
             permissions.includes("delete_car")
           ) {
             hideModel();
-            navigate("/cars");
+            dispatch(getCars(token));
           }
         }
         if (res.status === 401) {
@@ -116,6 +119,7 @@ const CreateCar = ({ hideModel }) => {
 
     sendCarData();
   };
+  console.log(car_counter);
   return (
     <Backdrop hideModel={hideModel}>
       <div className={classes.createCar}>
@@ -189,6 +193,14 @@ const CreateCar = ({ hideModel }) => {
             value={maintain_place}
             onChange={(e) =>
               setCarData({ ...carData, maintain_place: e.target.value })
+            }
+          />
+          <Inputs
+            placeholder="عداد السيارة"
+            id="counter"
+            value={car_counter}
+            onChange={(e) =>
+              setCarData({ ...carData, car_counter: e.target.value })
             }
           />
           <textarea

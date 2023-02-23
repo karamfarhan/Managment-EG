@@ -1,8 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
 import jwt_decode from "jwt-decode";
-import Bar from "../UI/bars/Bar";
-import Search from "../UI/search/Search";
-import classes from "./Cars.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   carsPaginations,
@@ -10,9 +7,14 @@ import {
   carsSearchPagination,
   getCars,
 } from "../../store/cars-slice";
+import Bar from "../UI/bars/Bar";
+import Search from "../UI/search/Search";
 import Paginate from "../UI/pagination/Paginate";
 import LoadingSpinner from "../UI/loading/LoadingSpinner";
 import CarList from "./car-list/CarList";
+import { AiFillCar } from "react-icons/ai";
+import classes from "./Cars.module.css";
+import CreateCar from "../UI/create-car/CreateCar";
 
 const Cars = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,8 @@ const Cars = () => {
   const [currentPage, setCurrentPage] = useState(1);
   //search
   const [searchValue, setSearchValue] = useState("");
+  //car form
+  const [showCarForm, setShowCarForm] = useState(false);
   //fetch cars
   useEffect(() => {
     if (
@@ -65,6 +69,7 @@ const Cars = () => {
 
   return (
     <Fragment>
+      {showCarForm && <CreateCar hideModel={() => setShowCarForm(false)} />}
       <Bar>
         <div className="toolBar">
           {(is_superuser || permissions.includes("view_car")) && (
@@ -74,6 +79,15 @@ const Cars = () => {
               value={searchValue}
               searchData={fetchSearchHandler}
             />
+          )}
+
+          {(is_superuser || permissions.includes("add_car")) && (
+            <button
+              className={classes.createBtn}
+              onClick={() => setShowCarForm(true)}
+            >
+              <AiFillCar /> اضافة سيارة
+            </button>
           )}
         </div>
       </Bar>

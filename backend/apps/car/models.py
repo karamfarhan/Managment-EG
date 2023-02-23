@@ -37,11 +37,17 @@ class Car(models.Model):
     driver = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="cars")
 
     note = models.TextField(
-        default="No description",
         max_length=500,
         null=True,
         blank=True,
         verbose_name=_("car note"),
+    )
+    car_counter = models.TextField(
+        default="No description",
+        max_length=500,
+        null=True,
+        blank=True,
+        verbose_name=_("car counter"),
     )
     last_maintain = models.DateField(
         verbose_name=_("last maintain at"), help_text=_("format: Y-m-d H:M:S"), null=True, blank=True

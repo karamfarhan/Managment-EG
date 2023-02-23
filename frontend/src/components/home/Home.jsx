@@ -69,7 +69,7 @@ const Home = () => {
             )}
             {(is_superuser || allPermissions.includes("store")) && (
               <Link to="/store">
-                <span>مخازن الشركة</span>
+                <span>مشاريع و مخازن الشركة </span>
                 <span>
                   <FaStoreAlt />
                 </span>

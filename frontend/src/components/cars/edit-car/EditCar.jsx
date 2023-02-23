@@ -17,6 +17,7 @@ const EditCar = ({ hideModel, id }) => {
     driver: "", //select box
     last_maintain: "",
     maintain_place: "",
+    car_counter: "",
     note: "",
   });
   const { token } = useSelector((state) => state.authReducer);
@@ -54,6 +55,7 @@ const EditCar = ({ hideModel, id }) => {
           last_maintain: car.last_maintain,
           maintain_place: car.maintain_place,
           note: car.note,
+          car_counter: car.car_counter,
         });
         return car;
       } catch (err) {
@@ -71,6 +73,7 @@ const EditCar = ({ hideModel, id }) => {
     driver,
     last_maintain,
     maintain_place,
+    car_counter,
     note,
   } = carData;
 
@@ -201,6 +204,15 @@ const EditCar = ({ hideModel, id }) => {
             value={maintain_place}
             onChange={(e) =>
               setCarData({ ...carData, maintain_place: e.target.value })
+            }
+          />
+          <Inputs
+            placeholder="عداد السيارة"
+            id="car_counter "
+            type="text"
+            value={car_counter}
+            onChange={(e) =>
+              setCarData({ ...carData, car_counter: e.target.value })
             }
           />
           <textarea

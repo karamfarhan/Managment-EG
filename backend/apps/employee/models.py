@@ -59,6 +59,10 @@ class Insurance(models.Model):
 
 
 class Employee(models.Model):
+    EMPLOYEE_CATEGORY = (
+        ("مهندس", "مهندس"),
+        ("سائق", "سائق"),
+    )
     name = models.CharField(
         max_length=250,
         null=False,
@@ -71,6 +75,7 @@ class Employee(models.Model):
         blank=False,
         verbose_name=_("employee type"),
     )
+    employee_category = models.CharField(max_length=20, choices=EMPLOYEE_CATEGORY, verbose_name=_("employee category"))
     email = models.EmailField(verbose_name="employee email address", max_length=60, null=True, blank=True)
     email_verified = models.BooleanField(default=False)
     number = models.CharField(verbose_name="employee number", max_length=60, null=True, blank=True)

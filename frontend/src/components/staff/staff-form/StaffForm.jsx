@@ -45,6 +45,7 @@ const StaffForm = ({ setStaffForm }) => {
     type: "",
     email: "",
     number: "",
+    employee_category: "",
     years_of_experiance: 0,
     days_off: "",
     note: "",
@@ -66,6 +67,7 @@ const StaffForm = ({ setStaffForm }) => {
     name,
     type,
     email,
+    employee_category,
     number,
     years_of_experiance,
     days_off,
@@ -132,7 +134,7 @@ const StaffForm = ({ setStaffForm }) => {
       setCertificateImg(e.target.files[0]);
     }
   }
-
+  console.log(employee_category);
   //select locations
   const { data: stores } = useQuery(
     "fetch/locations",
@@ -158,9 +160,11 @@ const StaffForm = ({ setStaffForm }) => {
     formdata.append("name", name);
     formdata.append("number", number);
     formdata.append("identity_image", identityImg);
+    formdata.append("employee_category", employee_category);
     formdata.append("experience_image", experienceImg);
     formdata.append("certificate_image", certificateImg);
     formdata.append("criminal_record_image", criminalRec);
+    formdata.append("type", type);
     formdata.append("type", type);
     formdata.append("signin_date", signin_date);
     formdata.append("email", email);
@@ -253,6 +257,23 @@ const StaffForm = ({ setStaffForm }) => {
               type="text"
               placeholder="المسمي الوظيفي"
             />
+            <div className={classes.select}>
+              <select
+                value={employee_category}
+                onChange={(e) =>
+                  setEmpolyeeData({
+                    ...empolyeeData,
+                    employee_category: e.target.value,
+                  })
+                }
+              >
+                <option selected hidden>
+                  تصنيف الموظف
+                </option>
+                <option value="مهندس">مهندس</option>
+                <option value="سائق">سائق</option>
+              </select>
+            </div>
             {data && data.name && <p className="err-msg"> {data.name} </p>}
             <Inputs
               required
@@ -326,6 +347,7 @@ const StaffForm = ({ setStaffForm }) => {
                 <option value={false}>لا</option>
               </select>
             </div>
+
             {is_primary === "false" && (
               <div className={classes.select}>
                 <select

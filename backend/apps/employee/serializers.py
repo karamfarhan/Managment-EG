@@ -61,6 +61,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "is_primary",
             "today_activity",
             "insurance",
+            "employee_category",
             "created_at",
             "created_by",
         ]

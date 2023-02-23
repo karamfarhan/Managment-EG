@@ -8,11 +8,18 @@ import Invoices from "./invoices/Invoices";
 
 //classes
 import classes from "./StoreDetail.module.css";
+import StoreEmployee from "./store-employee/StoreEmployee";
+import StoreProjects from "./store-projects/StoreProjects";
+import StoreInvoices from "./store-invoices/StoreInvoices";
 
 const StoreDetail = () => {
   const [data, setData] = useState({});
+  const [sections, setSections] = useState({
+    invoices: false,
+    employees: false,
+    projects: false,
+  });
   const [isLoading, setIsLoading] = useState(null);
-  const [employees, setEmployees] = useState([]);
   const params = useParams();
   const { storeId } = params;
 
@@ -39,68 +46,65 @@ const StoreDetail = () => {
     } catch (err) {
       console.log(err);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeId]);
-  //staff
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const res = await fetch(
-          `${window.domain}/employees/?search=${data.address}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const results = await res.json();
-        setEmployees(results.results);
-        console.log(results);
-        console.log(employees);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    if (data !== undefined || data !== null) {
-      fetchEmployees();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
-  //gallery
-  useEffect(() => {
-    const fetchImg = async () => {
-      try {
-        const res = await fetch(
-          `${window.domain}/images/?search=${data.name}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const d = await res.json();
-        console.log(d);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    if (data !== undefined || data !== null) {
-      fetchImg();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-  console.log(employees);
   useEffect(() => {
     getTheStore();
   }, [getTheStore]);
+  console.log(data);
+  const { employees: store_employee, invoices, projects } = sections;
+
   return (
-    <div className={classes.content}>
-      {isLoading && <LoadingSpinner />}
+    <div className={classes.content} dir="rtl">
+      <nav>
+        <ul>
+          <li
+            onClick={() => setSections({ projects: true })}
+            className={projects === true ? classes.active : ""}
+          >
+            المشروعات
+          </li>
+          <li
+            onClick={() => setSections({ invoices: true })}
+            className={invoices === true ? classes.active : ""}
+          >
+            التحويلات
+          </li>
+          <li
+            onClick={() => setSections({ employees: true })}
+            className={store_employee === true ? classes.active : ""}
+          >
+            العاملين بالموقع
+          </li>
+        </ul>
+      </nav>
+
+      {/* employees  */}
+      {sections.employees === true && (
+        <div>
+          {" "}
+          <StoreEmployee data={data} />
+        </div>
+      )}
+
+      {sections.projects === true && (
+        <div>
+          {" "}
+          <StoreProjects data={data} />{" "}
+        </div>
+      )}
+      {/* invoices */}
+
+      {invoices === true && (
+        <div>
+          <StoreInvoices data={data} invoices={data.invoices} />{" "}
+        </div>
+      )}
+
+      {/* <div>{sections.invoices === true && <StoreInvoices data={data} />}</div> */}
+
+      {/* {isLoading && <LoadingSpinner />}
       {!isLoading && Object.keys(data).length !== 0 && (
         <div dir="rtl">
           <ExportExcel id={data.id} matter="invoices" />
@@ -127,7 +131,7 @@ const StoreDetail = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

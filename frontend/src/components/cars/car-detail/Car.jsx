@@ -15,6 +15,9 @@ const Car = ({ car }) => {
         طراز السيارة: <span> {car.car_model} </span>{" "}
       </p>
       <p>
+        عداد السيارة: <span> {car.car_counter} </span>{" "}
+      </p>
+      <p>
         أخر صيانة: <span> {car.last_maintain} </span>{" "}
       </p>
       <p>

@@ -1,21 +1,40 @@
 .content {
   width: 95%;
   padding: 30px 15px;
-  margin: 60px auto;
+  margin: auto;
 }
-.content h2 {
+.content nav {
+  background-color: var(--color-4);
+}
+.content nav ul {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.content nav ul li {
+  cursor: pointer;
+  color: #fff;
+  width: 33.333%;
   text-align: center;
+  padding: 5px;
 }
-.content h2 span {
+@media (max-width: 767px) {
+  .content nav ul li {
+    font-size: 12px;
+  }
+}
+.active {
+  background-color: var(--color-3) !important;
+}
+
+/* .content h2 {
+  text-align: center;
+} */
+/* .content h2 span {
   color: red !important;
-}
+} */
 .content p {
   text-align: center;
-}
-.content > div:first-of-type {
-  padding: 10px;
-  overflow: hidden;
-  border: 1px solid #000;
 }
 
 .content span {

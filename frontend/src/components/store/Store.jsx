@@ -21,14 +21,20 @@ import Search from "../UI/search/Search";
 import LoadingSpinner from "../UI/loading/LoadingSpinner";
 import AddInvoice from "../UI/add_invoice/AddInvoice";
 import classes from "./Store.module.css";
+import SelectImg from "../UI/select_img/SelectImg";
 
 const Store = () => {
   const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
-  const [showStoreForm, setShowStoreForm] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
+  const [forms, setForms] = useState({
+    uploadImgs: false,
+    showStoreForm: false,
+    isDelete: false,
+    showEditForm: false,
+    showInvoiceForm: false,
+  });
+
   const [storeIdInvoice, setStoreIdInvoice] = useState("");
-  const [showEditForm, setShowEditForm] = useState(false);
   //current page
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -36,7 +42,6 @@ const Store = () => {
   const [searchValue, setSearchValue] = useState("");
 
   //create invoice
-  const [showInvoiceForm, setShowInvoiceForm] = useState(false);
   const [storeName, setStoreName] = useState("");
   const [storeId, setStoreId] = useState("");
 
@@ -87,7 +92,7 @@ const Store = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setIsDelete(false);
+        setForms({ isDelete: false });
         dispatch(getStores(token));
 
         const data = await res.json();
@@ -99,13 +104,13 @@ const Store = () => {
 
   //show delete mode
   const deleteModelHandler = (id) => {
-    setIsDelete(true);
+    setForms({ isDelete: true });
     setStoreId(id);
   };
 
   //hide delete mode
   const hideDeleteModel = () => {
-    setIsDelete(false);
+    setForms({ isDelete: false });
   };
   //search handler
   const searchHandler = (e) => {
@@ -129,46 +134,59 @@ const Store = () => {
 
   //show invoice handler
   const showInvoiceHandler = (name, id) => {
-    setShowInvoiceForm(true);
+    setForms({ showInvoiceForm: true });
+
     setStoreName(name);
     setStoreIdInvoice(id);
   };
 
   //hide invoice handler
   const hideInvoiceHandler = () => {
-    setShowInvoiceForm(false);
+    setForms({ showInvoiceForm: false });
   };
   //edit store form
   const editStore = (id) => {
-    setShowEditForm(true);
+    setForms({ showEditForm: true });
+    setStoreId(id);
+  };
+
+  //upload image
+  const uploadImageHandler = (id) => {
+    setForms({ uploadImgs: true });
     setStoreId(id);
   };
 
   return (
     <Fragment>
-      {/* create store */}
-
-      {showStoreForm && (
-        <CreateStoreUI hideFormHandler={() => setShowStoreForm(false)} />
-      )}
-
-      {/* edit form  */}
-      {showEditForm && (
-        <EditStore
+      {/* upload images */}
+      {forms.uploadImgs && (
+        <SelectImg
           id={storeId}
-          showForm={showEditForm}
-          hideFormHandler={() => setShowEditForm(false)}
+          hideImageHandler={() => setForms({ uploadImgs: false })}
         />
       )}
-      {showInvoiceForm && (
+      {/* create store */}
+      {forms.showStoreForm && (
+        <CreateStoreUI
+          hideFormHandler={() => setForms({ showStoreForm: false })}
+        />
+      )}
+      {/* edit form  */}
+      {forms.showEditForm && (
+        <EditStore
+          id={storeId}
+          showForm={forms.showEditForm}
+          hideFormHandler={() => setForms({ showEditForm: false })}
+        />
+      )}
+      {forms.showInvoiceForm && (
         <AddInvoice
           storeId={storeIdInvoice}
           storeName={storeName}
           hideModel={hideInvoiceHandler}
         />
       )}
-
-      {isDelete && (
+      {forms.isDelete && (
         <DeleteConfirmation
           hideModel={hideDeleteModel}
           deleteHandler={deleteHandler}
@@ -188,7 +206,7 @@ const Store = () => {
           {(permissions.includes("add_store") || is_superuser) && (
             <button
               className={classes.addInventory}
-              onClick={() => setShowStoreForm(true)}
+              onClick={() => setForms({ showStoreForm: true })}
             >
               <span>
                 <AiOutlineFileImage />
@@ -215,7 +233,7 @@ const Store = () => {
                 <tr>
                   <th>أسم المخزن</th>
                   <th>عنوان المخزن</th>
-                  <th>انشيء عن طريق</th>
+                  {/* <th>انشيء عن طريق</th> */}
                   <th>تاريخ الانشاء</th>
                   <th>معلومات اضافية</th>
                   <th>حدث</th>
@@ -232,31 +250,10 @@ const Store = () => {
                           <Link to={`/store/${store.id}`}>{store.name}</Link>
                         </td>
                         <td> {store.address} </td>
-                        <td> {store.created_by} </td>
+                        {/* <td> {store.created_by} </td> */}
                         <td>{new Date(store.created_at).toDateString()} </td>
                         <td> {store.description} </td>
                         <td>
-                          {(is_superuser ||
-                            permissions.includes("change_store")) && (
-                            <button
-                              className="editBtn"
-                              type="button"
-                              onClick={() => editStore(store.id)}
-                            >
-                              <FiEdit />
-                            </button>
-                          )}
-                          {(is_superuser ||
-                            permissions.includes("delete_store")) && (
-                            <button
-                              className={classes.deleteBtn}
-                              type="button"
-                              onClick={() => deleteModelHandler(store.id)}
-                            >
-                              <MdOutlineDeleteForever />
-                            </button>
-                          )}
-
                           {(is_superuser ||
                             permissions.includes("add_invoice")) && (
                             <button
@@ -267,6 +264,38 @@ const Store = () => {
                               }}
                             >
                               <BiTransfer />
+                            </button>
+                          )}
+                          {(permissions.includes("add_image") ||
+                            permissions.includes("add_mediapack") ||
+                            is_superuser) && (
+                            <button
+                              className="add-img"
+                              type="button"
+                              onClick={() => uploadImageHandler(store.id)}
+                            >
+                              <AiOutlineFileImage />
+                            </button>
+                          )}
+                          {(is_superuser ||
+                            permissions.includes("change_store")) && (
+                            <button
+                              className="editBtn"
+                              type="button"
+                              onClick={() => editStore(store.id)}
+                            >
+                              <FiEdit />
+                            </button>
+                          )}
+
+                          {(is_superuser ||
+                            permissions.includes("delete_store")) && (
+                            <button
+                              className={classes.deleteBtn}
+                              type="button"
+                              onClick={() => deleteModelHandler(store.id)}
+                            >
+                              <MdOutlineDeleteForever />
                             </button>
                           )}
                         </td>

@@ -5,56 +5,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { uploadImgs } from "../../../store/upload-img-slice.js";
 import { AiOutlineFileImage } from "react-icons/ai";
 import classes from "./SelectImg.module.css";
+import Backdrop from "../backdrop/Backdrop.jsx";
 
-export const Backdrop = ({ hideImageHandler }) => {
-  return <div onClick={hideImageHandler} className={classes.backdrop}></div>;
-};
-
-export const ImgSelect = ({
-  setDateToday,
-  setImgSrc,
-  imgSrc,
-  setAddImgs,
-  hideImageHandler,
-}) => {
+export const SelectImg = ({ hideImageHandler, id }) => {
   const [selectStores, setSelectStores] = useState([]);
+  const [imgSrc, setImgSrc] = useState([]);
   const [selectedVal, setSelectVal] = useState("");
   const [img, setImg] = useState([]);
   const [description, setDescription] = useState("");
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
-  let dateNow = new Date().toLocaleString();
   const dispatch = useDispatch();
-
   //form validation
   let formIsValid = false;
 
-  if (selectedVal !== "" && description.trim() !== "" && img.length > 0) {
+  if (description.trim() !== "" && img.length > 0) {
     formIsValid = true;
   }
-  //select store
-  useEffect(() => {
-    const selectStore = async () => {
-      const res = await fetch(`${window.domain}/stores/select_list/`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      setSelectStores(data);
-    };
-    selectStore();
-  }, [token]);
 
   function updateImageDisplay(e) {
     const curFiles = e.target.files;
     if (curFiles.length === 0) {
       return;
     } else {
-      setDateToday(dateNow);
+      //setDateToday(dateNow);
       const selectedImages = Array.from(curFiles);
       const imagesArr = selectedImages.map((file) => {
         if (validFileType(file)) {
@@ -102,28 +77,20 @@ export const ImgSelect = ({
     const obj = {
       token,
       img,
-      selectVal: parseInt(selectedVal),
+      selectVal: parseInt(id),
       description: description,
       search: selected_store,
       authenticated: auth(),
     };
-    setAddImgs(true);
+
     hideImageHandler();
     dispatch(uploadImgs(obj));
     setImgSrc([]);
     setImg([]);
   };
 
-  //delete handler
-  // const deleteHandler = (el, i) => {
-  //   setImgSrc(imgSrc.filter((e) => e !== el));
-
-  //   // setImg(delete img[i]);
-  // };
-  const isDisable = imgSrc.length === 0;
-
   return (
-    <Fragment>
+    <Backdrop hideModel={hideImageHandler}>
       <div className={classes["popup-container"]} dir="rtl">
         <div className={classes.actions}>
           <button className={classes.addImg}>
@@ -140,10 +107,11 @@ export const ImgSelect = ({
             />
           </button>
 
-          <div className={classes.selectLocation}>
+          {/* <div className={classes.selectLocation}>
             <select
               onChange={(e) => setSelectVal(e.target.value)}
-              value={selectedVal}>
+              value={selectedVal}
+            >
               <option value="#" selected hidden>
                 أختار الموقع
               </option>
@@ -155,7 +123,7 @@ export const ImgSelect = ({
                 );
               })}
             </select>
-          </div>
+          </div> */}
         </div>
         <div className={classes.preview}>
           <div>
@@ -181,7 +149,8 @@ export const ImgSelect = ({
           <textarea
             placeholder="تعليق علي الصور"
             onChange={(e) => setDescription(e.target.value)}
-            value={description}></textarea>
+            value={description}
+          ></textarea>
         </div>
 
         <div className={classes["action_two"]}>
@@ -191,34 +160,8 @@ export const ImgSelect = ({
           <button onClick={hideImageHandler}>الغاء</button>
         </div>
       </div>
-    </Fragment>
+    </Backdrop>
   );
 };
 
-const SelectImg = ({
-  setDateToday,
-  imgSrc,
-  setImgSrc,
-  hideImageHandler,
-  setAddImgs,
-}) => {
-  return (
-    <div>
-      {ReactDOM.createPortal(
-        <Backdrop hideImageHandler={hideImageHandler} />,
-        document.getElementById("backdrop")
-      )}
-      {ReactDOM.createPortal(
-        <ImgSelect
-          imgSrc={imgSrc}
-          setImgSrc={setImgSrc}
-          setDateToday={setDateToday}
-          setAddImgs={setAddImgs}
-          hideImageHandler={hideImageHandler}
-        />,
-        document.getElementById("img_popup")
-      )}
-    </div>
-  );
-};
 export default SelectImg;

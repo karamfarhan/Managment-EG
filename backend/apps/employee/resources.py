@@ -25,6 +25,7 @@ class EmployeeResource(resources.ModelResource):
             "years_of_experiance",
             "days_off",
             "signin_date",
+            "employee_category",
             "store",
             "is_primary",
             "note",

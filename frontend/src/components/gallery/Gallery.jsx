@@ -67,13 +67,13 @@ const Gallery = () => {
   // all imgs
   const { data: all_images } = useSelector((state) => state.imageReducer);
   const allImgs = all_images && all_images.results;
-  // let result =
-  //   allImgs &&
-  //   allImgs.reduce(function (r, a) {
-  //     r[a.media_pack.created_at] = r[a.media_pack.created_at] || [];
-  //     r[a.media_pack.created_at].push(a);
-  //     return r;
-  //   }, Object.create(null));
+  let result =
+    allImgs &&
+    allImgs.reduce(function (r, a) {
+      r[a.media_pack.created_at] = r[a.media_pack.created_at] || [];
+      r[a.media_pack.created_at].push(a);
+      return r;
+    }, Object.create(null));
 
   const { data: stores } = useQuery(
     "get/stores",
