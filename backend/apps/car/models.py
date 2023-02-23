@@ -22,7 +22,7 @@ class Car(models.Model):
         blank=True,
         verbose_name=_("car number"),
     )
-    car_counter = models.TextField(
+    car_counter = models.CharField(
         default="No description",
         max_length=500,
         null=True,
