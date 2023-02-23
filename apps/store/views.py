@@ -38,12 +38,12 @@ class StoreSelectBarView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     pagination_class = None
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_superuser:
-            return Store.objects.all()
-        else:
-            return Store.objects.filter(employees__in=[user.employee])
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_superuser:
+    #         return Store.objects.all()
+    #     else:
+    #         return Store.objects.filter(employees__in=[user.employee])
 
 
 class StoreViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):

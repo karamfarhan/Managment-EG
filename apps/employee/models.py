@@ -75,6 +75,11 @@ class Employee(models.Model):
     email = models.EmailField(verbose_name="employee email address", max_length=60, null=True, blank=True)
     email_verified = models.BooleanField(default=False)
     number = models.CharField(verbose_name="employee number", max_length=60, null=True, blank=True)
+    EMPLOYEE_CATEGORY = (
+        ("مهندس", "مهندس"),
+        ("سائق", "سائق"),
+    )
+    employee_category = models.CharField(max_length=20, choices=EMPLOYEE_CATEGORY, verbose_name=_("employee category"))
     created_by = models.ForeignKey(
         "account.Account",
         on_delete=models.SET_NULL,
