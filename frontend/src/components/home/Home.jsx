@@ -88,14 +88,14 @@ const Home = () => {
                   </span>
                 </Link>
               )}
-            {(is_superuser === true || allPermissions.includes("media")) && (
+            {/* {(is_superuser === true || allPermissions.includes("media")) && (
               <Link to="/projects">
                 <span>مشاريع الشركة</span>
                 <span>
                   <GalleryIcon />
                 </span>
               </Link>
-            )}
+            )} */}
             {(is_superuser === true || allPermissions.includes("car")) && (
               <Link to="/cars">
                 <span>سيارات الشركة</span>
