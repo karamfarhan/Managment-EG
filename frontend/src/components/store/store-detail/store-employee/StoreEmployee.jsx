@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import LoadingSpinner from "../../../UI/loading/LoadingSpinner";
 
 const StoreEmployee = ({ data }) => {
   const [employees, setEmployees] = useState([]);
@@ -38,6 +39,7 @@ const StoreEmployee = ({ data }) => {
 
   return (
     <Fragment>
+      {isLoading && <LoadingSpinner />}
       {employees.length === 0 && isLoading === false && isLoading !== null && (
         <h1>لا يوجد عاملين بالموقع</h1>
       )}

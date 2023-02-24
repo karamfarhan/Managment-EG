@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useSelector } from "react-redux";
 import classes from "./StoreProjects.module.css";
+import LoadingSpinner from "../../../UI/loading/LoadingSpinner";
 const StoreProjects = ({ data }) => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(null);
@@ -47,6 +48,7 @@ const StoreProjects = ({ data }) => {
     }, Object.create(null));
   return (
     <div className={classes.box}>
+      {loading && <LoadingSpinner />}
       <div className={classes.content}>
         {/* <h4> {new Date(el.pk).toLocaleString()} </h4> */}
         <div className={classes.preview}>
