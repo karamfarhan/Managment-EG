@@ -265,13 +265,15 @@ const StaffForm = ({ setStaffForm }) => {
                     ...empolyeeData,
                     employee_category: e.target.value,
                   })
-                }
-              >
+                }>
                 <option selected hidden>
                   تصنيف الموظف
                 </option>
                 <option value="مهندس">مهندس</option>
                 <option value="سائق">سائق</option>
+                <option value="محاسب">محاسب</option>
+                <option value="مشرف">مشرف</option>
+                <option value="مسؤول">مسؤول</option>
               </select>
             </div>
             {data && data.name && <p className="err-msg"> {data.name} </p>}
@@ -338,8 +340,7 @@ const StaffForm = ({ setStaffForm }) => {
                     ...empolyeeData,
                     is_primary: e.target.value,
                   })
-                }
-              >
+                }>
                 <option selected hidden>
                   موظف في مقر الشركة
                 </option>
@@ -357,8 +358,7 @@ const StaffForm = ({ setStaffForm }) => {
                       ...empolyeeData,
                       location: e.target.value,
                     })
-                  }
-                >
+                  }>
                   <option selected hidden>
                     موقع الشركة
                   </option>
@@ -384,8 +384,7 @@ const StaffForm = ({ setStaffForm }) => {
             <div className={classes.select}>
               <select
                 value={isInsurance}
-                onChange={(e) => setIsInsurance(e.target.value)}
-              >
+                onChange={(e) => setIsInsurance(e.target.value)}>
                 <option selected hidden>
                   التأمين
                 </option>
@@ -446,8 +445,7 @@ const StaffForm = ({ setStaffForm }) => {
               value={note}
               onChange={(e) =>
                 setEmpolyeeData({ ...empolyeeData, note: e.target.value })
-              }
-            ></textarea>
+              }></textarea>
           </div>
         )}
       </div>
@@ -460,8 +458,7 @@ const StaffForm = ({ setStaffForm }) => {
           <button
             onClick={nextStepHandler}
             type="button"
-            disabled={!formIsValid}
-          >
+            disabled={!formIsValid}>
             التالي
           </button>
         )}
