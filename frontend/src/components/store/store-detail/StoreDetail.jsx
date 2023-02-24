@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Fragment } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -52,87 +52,88 @@ const StoreDetail = () => {
   useEffect(() => {
     getTheStore();
   }, [getTheStore]);
-  console.log(data);
   const { employees: store_employee, invoices, projects } = sections;
 
   return (
-    <div className={classes.content} dir="rtl">
-      <nav>
-        <ul>
-          <li
-            onClick={() => setSections({ projects: true })}
-            className={projects === true ? classes.active : ""}
-          >
-            المشروعات
-          </li>
-          <li
-            onClick={() => setSections({ invoices: true })}
-            className={invoices === true ? classes.active : ""}
-          >
-            التحويلات
-          </li>
-          <li
-            onClick={() => setSections({ employees: true })}
-            className={store_employee === true ? classes.active : ""}
-          >
-            العاملين بالموقع
-          </li>
-        </ul>
-      </nav>
+    <Fragment>
+      {isLoading === true && <LoadingSpinner />}
+      {isLoading === false && isLoading !== null && (
+        <div className={classes.content} dir="rtl">
+          <nav>
+            <ul>
+              <li
+                onClick={() => setSections({ projects: true })}
+                className={projects === true ? classes.active : ""}>
+                المشروعات
+              </li>
+              <li
+                onClick={() => setSections({ invoices: true })}
+                className={invoices === true ? classes.active : ""}>
+                التحويلات
+              </li>
+              <li
+                onClick={() => setSections({ employees: true })}
+                className={store_employee === true ? classes.active : ""}>
+                العاملين بالموقع
+              </li>
+            </ul>
+          </nav>
 
-      {/* employees  */}
-      {sections.employees === true && (
-        <div>
-          {" "}
-          <StoreEmployee data={data} />
-        </div>
-      )}
-
-      {sections.projects === true && (
-        <div>
-          {" "}
-          <StoreProjects data={data} />{" "}
-        </div>
-      )}
-      {/* invoices */}
-
-      {invoices === true && (
-        <div>
-          <StoreInvoices data={data} invoices={data.invoices} />{" "}
-        </div>
-      )}
-
-      {/* <div>{sections.invoices === true && <StoreInvoices data={data} />}</div> */}
-
-      {/* {isLoading && <LoadingSpinner />}
-      {!isLoading && Object.keys(data).length !== 0 && (
-        <div dir="rtl">
-          <ExportExcel id={data.id} matter="invoices" />
-
-          <h2>
-            التحويلات الخاصة <span>{data.name}</span>{" "}
-          </h2>
-
-          {data.invoices.length === 0 && <p>لا يوجد تحويلات</p>}
-          {data.invoices.length > 0 && (
+          {/* employees  */}
+          {sections.employees === true && (
             <div>
-              <Invoices store={data} />
+              {" "}
+              <StoreEmployee data={data} />
             </div>
           )}
 
-          <div>
-            <h2>الموظفين بالشركة</h2>
-
+          {sections.projects === true && (
             <div>
-              {employees &&
-                employees.map((el) => {
-                  return <p key={el.id}> {el.name} </p>;
-                })}
+              {" "}
+              <StoreProjects data={data} />{" "}
             </div>
+          )}
+          {/* invoices */}
+
+          {invoices === true && isLoading === false && isLoading !== null && (
+            <div>
+              <StoreInvoices data={data} invoices={data.invoices} />{" "}
+            </div>
+          )}
+
+          {/* <div>{sections.invoices === true && <StoreInvoices data={data} />}</div> */}
+
+          {/* {isLoading && <LoadingSpinner />}
+    {!isLoading && Object.keys(data).length !== 0 && (
+      <div dir="rtl">
+        <ExportExcel id={data.id} matter="invoices" />
+
+        <h2>
+          التحويلات الخاصة <span>{data.name}</span>{" "}
+        </h2>
+
+        {data.invoices.length === 0 && <p>لا يوجد تحويلات</p>}
+        {data.invoices.length > 0 && (
+          <div>
+            <Invoices store={data} />
+          </div>
+        )}
+
+        <div>
+          <h2>الموظفين بالشركة</h2>
+
+          <div>
+            {employees &&
+              employees.map((el) => {
+                return <p key={el.id}> {el.name} </p>;
+              })}
           </div>
         </div>
-      )} */}
-    </div>
+      </div>
+    )} */}
+        </div>
+      )}
+    </Fragment>
   );
 };
 

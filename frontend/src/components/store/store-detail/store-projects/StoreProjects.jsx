@@ -1,9 +1,11 @@
-import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
+
+import jwt_decode from "jwt-decode";
 import { useSelector } from "react-redux";
 import classes from "./StoreProjects.module.css";
 const StoreProjects = ({ data }) => {
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(null);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
@@ -11,6 +13,7 @@ const StoreProjects = ({ data }) => {
   //gallery
   useEffect(() => {
     const fetchImg = async () => {
+      setLoading(true);
       try {
         const res = await fetch(
           `${window.domain}/images/?search=${data.name}`,
@@ -23,8 +26,10 @@ const StoreProjects = ({ data }) => {
         );
         const images = await res.json();
         setImages(images.results);
+        setLoading(false);
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     };
 
@@ -40,40 +45,39 @@ const StoreProjects = ({ data }) => {
       r[a.media_pack.created_at].push(a);
       return r;
     }, Object.create(null));
-  console.log(result);
   return (
     <div className={classes.box}>
       <div className={classes.content}>
         {/* <h4> {new Date(el.pk).toLocaleString()} </h4> */}
         <div className={classes.preview}>
-          {(is_superuser ||
-            permissions.includes("view_image") ||
-            permissions.includes("view_mediapack")) &&
-            images &&
-            Object.entries(result).length === 0 &&
+          {Object.entries(result).length === 0 &&
+            loading === false &&
+            loading !== null &&
             (is_superuser ||
               permissions.includes("view_image") ||
               permissions.includes("view_mediapack")) && (
               <h1>لا يوجد مشاريع حاليا</h1>
             )}
 
-          {Object.entries(result).map(([key, value], i) => {
-            return (
-              <div key={key}>
-                <p> {new Date(key).toDateString()} </p>
+          {loading === false &&
+            loading !== null &&
+            Object.entries(result).map(([key, value], i) => {
+              return (
+                <div key={key}>
+                  <p> {new Date(key).toDateString()} </p>
 
-                <div className={classes.preview_img}>
-                  {value.map((el) => {
-                    return (
-                      <div>
-                        <img src={el.image} alt="projects" />
-                      </div>
-                    );
-                  })}
+                  <div className={classes.preview_img}>
+                    {value.map((el) => {
+                      return (
+                        <div>
+                          <img src={el.image} alt="projects" />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
 
           {/* {count > 10 &&
               (is_superuser ||

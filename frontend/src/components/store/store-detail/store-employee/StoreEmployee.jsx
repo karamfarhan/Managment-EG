@@ -3,11 +3,13 @@ import { useSelector } from "react-redux";
 
 const StoreEmployee = ({ data }) => {
   const [employees, setEmployees] = useState([]);
+  const [isLoading, setLoading] = useState(null);
   //token
   const { token } = useSelector((state) => state.authReducer);
 
   useEffect(() => {
     const fetchEmployees = async () => {
+      setLoading(true);
       try {
         const res = await fetch(
           `${window.domain}/employees/?search=${data.address}`,
@@ -19,11 +21,12 @@ const StoreEmployee = ({ data }) => {
           }
         );
         const results = await res.json();
-        console.log(results);
+        setLoading(false);
 
         setEmployees(results.results);
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     };
 
@@ -32,13 +35,14 @@ const StoreEmployee = ({ data }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-  console.log(employees);
-  console.log(data.address);
+
   return (
     <Fragment>
-      {employees.length === 0 && <h1>لا يوجد عاملين بالموقع</h1>}
+      {employees.length === 0 && isLoading === false && isLoading !== null && (
+        <h1>لا يوجد عاملين بالموقع</h1>
+      )}
 
-      {employees.length > 0 && (
+      {employees.length > 0 && isLoading === false && isLoading !== null && (
         <table>
           <thead>
             <th>الأسم</th>
