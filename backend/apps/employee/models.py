@@ -71,14 +71,21 @@ class Employee(models.Model):
         blank=False,
         verbose_name=_("employee type"),
     )
-    email = models.EmailField(verbose_name="employee email address", max_length=60, null=True, blank=True)
+    email = models.EmailField(
+        verbose_name="employee email address", max_length=60, null=True, blank=True)
     email_verified = models.BooleanField(default=False)
-    number = models.CharField(verbose_name="employee number", max_length=60, null=True, blank=True)
+    number = models.CharField(
+        verbose_name="employee number", max_length=60, null=True, blank=True)
     EMPLOYEE_CATEGORY = (
         ("مهندس", "مهندس"),
         ("سائق", "سائق"),
+        ("محاسب", "محاسب"),
+        ("مشرف", "مشرف"),
+        ("موارد بشرية", "موارد بشرية"),
+        ("مسؤول", "مسؤول"),
     )
-    employee_category = models.CharField(max_length=20, choices=EMPLOYEE_CATEGORY, verbose_name=_("employee category"))
+    employee_category = models.CharField(
+        max_length=20, choices=EMPLOYEE_CATEGORY, verbose_name=_("employee category"))
     created_by = models.ForeignKey(
         "account.Account",
         on_delete=models.SET_NULL,
@@ -169,7 +176,8 @@ class Employee(models.Model):
 
 
 class EmployeeActivity(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="activities")
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name="activities")
     is_holiday = models.BooleanField(
         default=False,
         verbose_name=_("is today is holiday day"),
@@ -184,7 +192,8 @@ class EmployeeActivity(models.Model):
         null=True,
         blank=True,
     )
-    phase_out = models.TimeField(verbose_name=_("employee phase out time"), null=True, blank=True)
+    phase_out = models.TimeField(verbose_name=_(
+        "employee phase out time"), null=True, blank=True)
     address = models.CharField(
         max_length=250,
         null=True,
