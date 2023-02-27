@@ -1,6 +1,5 @@
 import graphene
-
-# import graphql_jwt
+from apps.account import schema as account_schema
 
 
 class TestQuery(graphene.ObjectType):
@@ -9,21 +8,17 @@ class TestQuery(graphene.ObjectType):
 
 class Query(
     TestQuery,
+    account_schema.Query,
     graphene.ObjectType,
 ):
     pass
 
 
-# class Mutation(
-#     # users.schema.Mutation,
-#     # links.schema.Mutation,
-#     # links.schema_relay.RelayMutation,
-#     graphene.ObjectType,
-# ):
+class Mutation(
+    account_schema.Mutation,
+    graphene.ObjectType,
+):
+    pass
 
-#     # token_auth = graphql_jwt.ObtainJSONWebToken.Field()
-#     # verify_token = graphql_jwt.Verify.Field()
-#     # refresh_token = graphql_jwt.Refresh.Field()
-#     pass
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)

@@ -21,6 +21,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 AUTH_USER_MODEL = "account.Account"
 AUTHENTICATION_BACKENDS = (
+    "graphql_jwt.backends.JSONWebTokenBackend",
     "django.contrib.auth.backends.AllowAllUsersModelBackend",
     "apps.account.backends.CaseInsensitiveModelBackend",
 )
@@ -164,7 +165,12 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-GRAPHENE = {"SCHEMA": "core.schema.schema"}
+GRAPHENE = {
+    "SCHEMA": "core.schema.schema",
+    "MIDDLEWARE": [
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
+    ],
+}
 
 
 JAZZMIN_SETTINGS = {
