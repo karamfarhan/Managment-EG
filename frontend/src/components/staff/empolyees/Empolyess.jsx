@@ -128,7 +128,7 @@ const Empolyess = ({
           !isLoading &&
           Object.entries(data).map(([key, value], i) => {
             return (
-              <div key={i}>
+              <div key={i} style={{ padding: "50px 0" }}>
                 <h2>
                   كشف العاملين ({key === "null" ? "المكتب الاداري" : key}){" "}
                 </h2>
