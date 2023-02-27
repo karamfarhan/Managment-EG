@@ -1,2 +1,0 @@
-1 - the drivers can login and create activity for the cars they are related to.
-2 - let the user can upload images for the store he related to.
