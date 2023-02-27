@@ -1,9 +1,6 @@
-from django.db import models
-from django.db.models.signals import post_delete, pre_delete, pre_save
-from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
-
 from apps.employee.models import Employee
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Car(models.Model):
@@ -47,7 +44,6 @@ class Car(models.Model):
     driver = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="cars")
 
     note = models.TextField(
-        default="No description",
         max_length=500,
         null=True,
         blank=True,

@@ -1,11 +1,6 @@
-from django.db import IntegrityError, transaction
-from django.db.models import F
-from django.shortcuts import get_object_or_404
-from rest_framework import serializers
-
-from apps.account.models import Account
-from apps.store.serializers import StoreSelectBarSerializer
 from apps.substance.serializers import AccountSerializer
+from django.db import transaction
+from rest_framework import serializers
 
 from .models import Car, CarActivity, CarActivityRide
 

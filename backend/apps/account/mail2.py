@@ -1,12 +1,9 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives, get_connection
-
-# from django.template import Context
 from django.template.context import Context, make_context
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import get_template
-from django.utils.html import strip_tags
 
 
 def bind_template(self, template):

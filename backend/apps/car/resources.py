@@ -1,10 +1,7 @@
-from itertools import chain
-
 from import_export import resources
 from import_export.fields import Field
-from import_export.widgets import ForeignKeyWidget
 
-from .models import Car, CarActivity, CarActivityRide
+from .models import Car, CarActivity
 
 
 class CarResource(resources.ModelResource):
@@ -17,6 +14,7 @@ class CarResource(resources.ModelResource):
             "car_model",
             "car_type",
             "car_number",
+            "car_counter",
             "driver",
             "last_maintain",
             "maintain_place",

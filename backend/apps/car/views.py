@@ -1,17 +1,11 @@
-from django.db.models import Prefetch
-from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
+from core.exports import ModelViewSetExportBase
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers, status, viewsets
-from rest_framework.decorators import api_view, authentication_classes
+from rest_framework import status, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 
-from core.exports import ModelViewSetExportBase
-
-from .models import Car, CarActivity, CarActivityRide
+from .models import Car, CarActivity
 from .resources import CarActivityResource, CarResource
 
 # from .resources import EmployeeActivityResource, EmployeeResource

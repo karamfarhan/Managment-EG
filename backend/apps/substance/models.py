@@ -1,3 +1,5 @@
+from apps.account.models import Account
+
 # from core.utils import unique_slug_generator
 from django.db import models
 
@@ -5,8 +7,6 @@ from django.db import models
 # from django.db.models.signals import post_delete, pre_delete, pre_save
 # from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-
-from apps.account.models import Account
 
 # from PIL import Image
 # from rest_framework import serializers

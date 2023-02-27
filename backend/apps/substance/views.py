@@ -1,7 +1,9 @@
 import copy
 
+from core.exports import ModelViewSetExportBase
+
 # from django.db.models import Prefetch
-from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
+from django.http import Http404, HttpResponseNotAllowed
 
 # from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
@@ -10,10 +12,8 @@ from rest_framework import status, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
-
-from core.exports import ModelViewSetExportBase
 
 from .models import Category, Instrument, Substance
 from .resources import InstrumentResource, SubstanceResource

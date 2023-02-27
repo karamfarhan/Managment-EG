@@ -1,7 +1,6 @@
-from django.contrib.auth.tokens import default_token_generator
-
 from apps.account.mail import BaseEmailMessage
 from apps.account.utils import encode_uid
+from django.contrib.auth.tokens import default_token_generator
 
 
 class ActivationEmail(BaseEmailMessage):

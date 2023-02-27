@@ -1,3 +1,8 @@
+from apps.account.models import Account
+
+# from PIL import Image as p_image
+from apps.substance.models import Instrument, Substance
+
 # from core.utils import unique_slug_generator
 from django.db import models
 from django.db.models.signals import pre_delete
@@ -6,11 +11,6 @@ from django.dispatch import receiver
 # from apps.substance.models import Substance,Instrument
 # from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
-
-from apps.account.models import Account
-
-# from PIL import Image as p_image
-from apps.substance.models import Instrument, Substance
 
 from .utils import get_store_images_filepath
 
