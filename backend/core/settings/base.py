@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "graphene_django",
     # My apps
     "apps.account",
     "apps.substance",
@@ -62,7 +63,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "core.urls"
-
+AUTH_USER_MODEL = "account.Account"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -163,10 +164,7 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-# CRONJOBS = [
-#     ('* * * * *', 'apps.account.crons.delete_expired_tokens'),
-#     ('* * * * *', 'django.core.management.call_command', ['flushexpiredtokens']),
-# ]
+GRAPHENE = {"SCHEMA": "core.schema.schema"}
 
 
 JAZZMIN_SETTINGS = {
