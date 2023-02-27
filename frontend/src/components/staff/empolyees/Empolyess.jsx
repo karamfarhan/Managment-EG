@@ -27,7 +27,7 @@ const Empolyess = ({
     today_activity: false,
   });
   const dispatch = useDispatch();
-  // const { token } = useSelector((state) => state.authReducer);
+  const { token } = useSelector((state) => state.authReducer);
   const { is_superuser, permissions } = decoded;
 
   //empolyee counts
@@ -45,67 +45,67 @@ const Empolyess = ({
     // //search pagination
     dispatch(empolyeeSearchPagination(obj));
   };
-  // const today = new Date();
-  // const time =
-  //   today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  const today = new Date();
+  const time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-  // const updateEmployee = async (id) => {
-  //   try {
-  //     const res = await fetch(`${window.domain}/employees/${id}`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
+  const updateEmployee = async (id) => {
+    try {
+      const res = await fetch(`${window.domain}/employees/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  //     const data = await res.json();
-  //     return data;
-  //   } catch (err) {}
-  // };
+      const data = await res.json();
+      return data;
+    } catch (err) {}
+  };
 
-  //send phase/in
-  // const sendPhaseIn = async (id) => {
-  //   try {
-  //     const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({
-  //         phase_in: time,
-  //       }),
-  //     });
-  //     if (res.ok) {
-  //       dispatch(getEmpolyees(token));
-  //     }
-  //     await res.json();
-  //   } catch (err) {}
-  // };
+  // send phase/in
+  const sendPhaseIn = async (id) => {
+    try {
+      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phase_in: time,
+        }),
+      });
+      if (res.ok) {
+        dispatch(getEmpolyees(token));
+      }
+      await res.json();
+    } catch (err) {}
+  };
 
-  //send phase out
-  // const sendPhaseOut = async (id, today_activity) => {
-  //   try {
-  //     const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
-  //       method: "PATCH",
-  //       headers: {
-  //         "Content-type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({
-  //         phase_out: time,
-  //         id: today_activity,
-  //       }),
-  //     });
-  //     await res.json();
-  //     if (res.ok) {
-  //       if (res.ok) {
-  //         dispatch(getEmpolyees(token));
-  //       }
-  //       await updateEmployee(id);
-  //     }
-  //   } catch (err) {}
-  // };
+  // send phase out
+  const sendPhaseOut = async (id, today_activity) => {
+    try {
+      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phase_out: time,
+          id: today_activity,
+        }),
+      });
+      await res.json();
+      if (res.ok) {
+        if (res.ok) {
+          dispatch(getEmpolyees(token));
+        }
+        await updateEmployee(id);
+      }
+    } catch (err) {}
+  };
 
   const showPhasesHandler = (id, today_activity) => {
     setEmployeeActivity({ id, today_activity });
@@ -137,6 +137,7 @@ const Empolyess = ({
                     <thead>
                       <th>أسم الموظف</th>
                       <th>المسمي الوظيفي</th>
+                      <th>الحضور </th>
                     </thead>
                     {value.map((e, i) => {
                       return (
@@ -147,7 +148,7 @@ const Empolyess = ({
                             </td>
                             <td> {e.type} </td>
 
-                            {/* {(permissions.includes("add_employeeactivity") ||
+                            {(permissions.includes("add_employeeactivity") ||
                               is_superuser) && (
                               <td>
                                 {e.today_activity !== false && (
@@ -177,19 +178,13 @@ const Empolyess = ({
                                           : "green",
                                     }}
                                     onClick={() =>
-                                      showPhasesHandler(
-                                        e.id,
-                                        e.today_activity.id
-                                      )
+                                      e.today_activity === false
+                                        ? sendPhaseIn(e.id)
+                                        : sendPhaseOut(
+                                            e.id,
+                                            e.today_activity.id
+                                          )
                                     }
-                                    // onClick={() =>
-                                    //   e.today_activity === false
-                                    //     ? sendPhaseIn(e.id)
-                                    //     : sendPhaseOut(
-                                    //         e.id,
-                                    //         e.today_activity.id
-                                    //       )
-                                    // }
                                   >
                                     {(e.today_activity === false ||
                                       e.today_activity.phase_in === null) &&
@@ -202,7 +197,7 @@ const Empolyess = ({
                                   </button>
                                 )}
                               </td>
-                            )} */}
+                            )}
                           </tr>
                         </tbody>
                       );
