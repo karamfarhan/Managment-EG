@@ -9,7 +9,7 @@
 .table_content table thead {
   color: #fff;
   /* background-color: #0b9cff; */
-  background-color: var(--color-4);
+  background-color: var(--color-red);
 }
 
 .table_content table tbody tr:nth-child(even) {

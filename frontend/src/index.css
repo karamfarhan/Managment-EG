@@ -9,11 +9,11 @@
   --main-btn-width: 20%;
   --main-btn-font-size: 19px;
   --input-width: 332px;
-  --color-1: #cac0b6;
-  --color-2: #d1d0ce;
-  --color-3: #79726c;
-  --color-4: #939290;
-  --color-5: #867e76;
+  --color-red: #c1392b;
+  --color-green: #27ae61;
+  --color-yellow: #f59c12;
+  --color-blue: #287eb9;
+  --color-main: rgb(124, 121, 121);
 }
 
 * {

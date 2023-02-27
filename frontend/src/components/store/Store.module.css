@@ -3,7 +3,7 @@
   padding: 10px;
   font-size: var(--main-btn-font-size);
   /* background-color: #e72a16; */
-  background-color: var(--color-5);
+  background-color: var(--color-green);
   color: #fff;
   border-radius: 10px;
   border: none;
@@ -40,7 +40,7 @@
 .table_content table thead {
   font-size: 13px;
   /* background-color: #f13a11; */
-  background-color: var(--color-4);
+  background-color: var(--color-green);
   color: #fff;
 }
 

@@ -3,7 +3,7 @@
   padding: 10px;
   font-size: var(--main-btn-font-size);
   width: var(--main-btn-width);
-  background-color: #1ca345;
+  background-color: var(--color-green);
   color: #fff;
   border-radius: 10px;
   border: none;
