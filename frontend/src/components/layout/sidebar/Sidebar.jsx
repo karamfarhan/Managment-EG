@@ -1,9 +1,6 @@
-import { useState } from "react";
 import jwt_decode from "jwt-decode";
-import { useQuery } from "react-query";
-import { useSelector, useDispatch } from "react-redux";
-import { selectedAddress } from "../../../store/upload-img-slice";
-import { NavLink, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { StaffIcon } from "../../icons/StaffIcon";
 import { StoreIcon } from "../../icons/StoreIcon";
 
@@ -12,53 +9,15 @@ import { FaCarSide } from "react-icons/fa";
 import { GiPaddles } from "react-icons/gi";
 import { AiOutlineHome } from "react-icons/ai";
 import classes from "./Sidebar.module.css";
-import { GalleryIcon } from "../../icons/GalleryIcon";
-import { searchImgs } from "../../../store/upload-img-slice";
 
 const Sidebar = () => {
-  const dispatch = useDispatch();
-  const location = useLocation();
-
-  const [showGalleries] = useState(
-    location.pathname === "/projects" ? true : false
-  );
-  const [activeClass, setActiveClass] = useState(null);
   const token = useSelector((state) => state.authReducer.token);
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
 
-  const selectedStoreHandler = (e, id) => {
-    const obj = {
-      search: e.target.innerText,
-      token,
-    };
-    dispatch(selectedAddress(e.target.innerText));
-    dispatch(searchImgs(obj));
-    setActiveClass(id);
-  };
-  const { data } = useQuery(
-    "get/stores",
-    async () => {
-      if (location.pathname !== "/projects") return;
-      try {
-        const res = await fetch(`${window.domain}/stores/select_list/`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        return await res.json();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    { refetchOnWindowFocus: false }
-  );
-
   return (
-    <aside dir="rtl" className={classes.sidebar}>
+    <aside className={classes.sidebar}>
       <ul>
         <li>
           <NavLink
@@ -67,13 +26,13 @@ const Sidebar = () => {
               return {
                 background: isActive ? "#edeaea" : "inherit",
                 color: isActive ? "#2150d8" : "#fff",
-                borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
               };
-            }}>
+            }}
+          >
             <span>
               <AiOutlineHome />
             </span>
-            <p>الرئيسية</p>
+            <p>Dashboard </p>
           </NavLink>
         </li>
         {(is_superuser === true ||
@@ -86,13 +45,13 @@ const Sidebar = () => {
                 return {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
-                  borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StaffIcon />
               </span>
-              <p>الموظفين</p>
+              <p>Employees</p>
             </NavLink>
           </li>
         )}
@@ -104,13 +63,13 @@ const Sidebar = () => {
                 return {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
-                  borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StoreIcon />
               </span>
-              <p>المخازن</p>
+              <p>Stores</p>
             </NavLink>
           </li>
         )}
@@ -126,13 +85,13 @@ const Sidebar = () => {
                   return {
                     background: isActive ? "#edeaea" : "inherit",
                     color: isActive ? "#2150d8" : "#fff",
-                    borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                   };
-                }}>
+                }}
+              >
                 <span>
                   <GiPaddles />
                 </span>
-                <p>ادارة الموارد</p>
+                <p>Substance management </p>
               </NavLink>
             </li>
           )}
@@ -144,17 +103,17 @@ const Sidebar = () => {
                 return {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
-                  borderRadius: isActive ? "43px 15px 13px 0px" : "inherit",
                 };
-              }}>
+              }}
+            >
               <span>
                 <FaCarSide />
               </span>
-              <p>السيارات</p>
+              <p>Cars</p>
             </NavLink>
           </li>
         )}
-        {(is_superuser === true || allPermissions.includes("media")) && (
+        {/* {(is_superuser === true || allPermissions.includes("media")) && (
           <li>
             <NavLink
               to="/gallery"
@@ -190,7 +149,7 @@ const Sidebar = () => {
               </ul>
             )}
           </li>
-        )}
+        )} */}
       </ul>
     </aside>
   );

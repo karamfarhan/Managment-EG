@@ -78,13 +78,12 @@ export const Staff = () => {
       {/* create staff */}
       {showStaffForm && <StaffForm setStaffForm={setShowStaffForm} />}
 
-      <div dir="rtl">
+      <div>
         {!showStaffForm && location.pathname === "/staff" && (
           <Bar>
             <div className="toolBar">
               {(is_superuser || getStaff) && (
                 <Search
-                  placeholder="أسم الموظف أو الموقع"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   searchData={fetchSearchHandler}
@@ -93,11 +92,12 @@ export const Staff = () => {
               {(permissions.includes("add_employee") || is_superuser) && (
                 <button
                   className={classes.btn}
-                  onClick={() => setShowStaffForm(true)}>
+                  onClick={() => setShowStaffForm(true)}
+                >
                   <span>
                     <AiOutlineUserAdd />{" "}
                   </span>
-                  اضافة موظف
+                  Add employee
                 </button>
               )}
             </div>

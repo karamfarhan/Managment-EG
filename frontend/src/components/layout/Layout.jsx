@@ -35,8 +35,8 @@ export const Layout = ({ children }) => {
         matches={matches}
       />
       <main className={classes.layout}>
-        <section dir="rtl">{children}</section>
-        {/* {showSideBar && <Sidebar />} */}
+        <section>{children}</section>
+        {showSideBar && <Sidebar />}
       </main>
     </Fragment>
   );

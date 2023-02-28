@@ -1,5 +1,6 @@
 .layout section {
-  /* width: calc(100% - var(--side-width)); */
+  width: calc(100% - var(--side-width));
+  margin-left: auto;
   padding: 10px 30px;
 }
 

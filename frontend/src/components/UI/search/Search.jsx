@@ -1,4 +1,5 @@
 import Inputs from "../inputs/Inputs";
+import { AiOutlineSearch } from "react-icons/ai";
 import classes from "./Search.module.css";
 
 const Search = ({ value, onChange, searchData, placeholder }) => {
@@ -15,7 +16,9 @@ const Search = ({ value, onChange, searchData, placeholder }) => {
           value={value}
           onChange={onChange}
         />
-        <button type="submit">بحث</button>
+        <button type="submit">
+          <AiOutlineSearch />
+        </button>
       </form>
     </div>
   );
