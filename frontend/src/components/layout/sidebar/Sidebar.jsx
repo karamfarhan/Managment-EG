@@ -17,7 +17,11 @@ const Sidebar = () => {
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
+<<<<<<< HEAD
   const [t, i18n] = useTranslation();
+=======
+
+>>>>>>> c9f6c2a (charts_part_one)
   return (
     <aside className={classes.sidebar}>
       <ul>
@@ -34,7 +38,11 @@ const Sidebar = () => {
             <span>
               <AiOutlineHome />
             </span>
+<<<<<<< HEAD
             <p>{t("dashboard")} </p>
+=======
+            <p>Dashboard </p>
+>>>>>>> c9f6c2a (charts_part_one)
           </NavLink>
         </li>
         {(is_superuser === true ||
@@ -53,7 +61,11 @@ const Sidebar = () => {
               <span>
                 <StaffIcon />
               </span>
+<<<<<<< HEAD
               <p>{t("employees")}</p>
+=======
+              <p>Employees</p>
+>>>>>>> c9f6c2a (charts_part_one)
             </NavLink>
           </li>
         )}
@@ -71,7 +83,11 @@ const Sidebar = () => {
               <span>
                 <StoreIcon />
               </span>
+<<<<<<< HEAD
               <p>{t("stores")}</p>{" "}
+=======
+              <p>Stores</p>
+>>>>>>> c9f6c2a (charts_part_one)
             </NavLink>
           </li>
         )}
@@ -132,7 +148,11 @@ const Sidebar = () => {
                 <span>
                   <GiPaddles />
                 </span>
+<<<<<<< HEAD
                 <p>{t("substance management")}</p>
+=======
+                <p>Substance management </p>
+>>>>>>> c9f6c2a (charts_part_one)
               </NavLink>
             </li>
           )}
@@ -150,7 +170,11 @@ const Sidebar = () => {
               <span>
                 <FaCarSide />
               </span>
+<<<<<<< HEAD
               <p>{t("cars")}</p>
+=======
+              <p>Cars</p>
+>>>>>>> c9f6c2a (charts_part_one)
             </NavLink>
           </li>
         )}

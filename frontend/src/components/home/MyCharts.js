@@ -28,6 +28,7 @@ export const MyChartOne = () => (
     </VictoryChart>
   </div>
 );
+<<<<<<< HEAD
 const chartTheme = {
   axis: {
     style: {
@@ -37,15 +38,21 @@ const chartTheme = {
     },
   },
 };
+=======
+>>>>>>> c9f6c2a (charts_part_one)
 
 export const MyChartTwo = () => (
   <div style={{ height: "500px", background: "#fff" }}>
     <VictoryChart
+<<<<<<< HEAD
       theme={chartTheme}
       width={300}
       style={{
         grid: { stroke: "#000", strokeWidth: 1 },
       }}
+=======
+      width={300}
+>>>>>>> c9f6c2a (charts_part_one)
       domain={{ x: [0, 8] }}
       animate={{
         duration: 2000,
@@ -54,7 +61,11 @@ export const MyChartTwo = () => (
     >
       <VictoryBar
         data={data2}
+<<<<<<< HEAD
         style={{ data: { fill: "#c43a31", stroke: "white", strokeWidth: 1 } }}
+=======
+        style={{ data: { fill: "#c43a31", stroke: "black", strokeWidth: 1 } }}
+>>>>>>> c9f6c2a (charts_part_one)
       />
     </VictoryChart>
   </div>

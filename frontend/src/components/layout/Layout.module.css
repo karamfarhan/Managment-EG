@@ -1,6 +1,10 @@
 .layout section {
   width: calc(100% - var(--side-width));
+<<<<<<< HEAD
 
+=======
+  margin-left: auto;
+>>>>>>> c9f6c2a (charts_part_one)
   padding: 10px 30px;
 }
 
