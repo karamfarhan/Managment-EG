@@ -121,7 +121,7 @@ const Empolyess = ({
           employeeActivity={employeeActivity}
         />
       )}
-      <div className={classes["table_content"]} dir="rtl">
+      <div className={classes["table_content"]}>
         {!isLoading && <ExportExcel matter="employees" />}
         {isLoading && <LoadingSpinner />}
         {data &&
@@ -135,9 +135,9 @@ const Empolyess = ({
                 <div className={classes.content}>
                   <table>
                     <thead>
-                      <th>أسم الموظف</th>
-                      <th>المسمي الوظيفي</th>
-                      <th>الحضور </th>
+                      <th>Name </th>
+                      <th>Job</th>
+                      <th>Phases </th>
                     </thead>
                     {value.map((e, i) => {
                       return (
@@ -184,8 +184,7 @@ const Empolyess = ({
                                             e.id,
                                             e.today_activity.id
                                           )
-                                    }
-                                  >
+                                    }>
                                     {(e.today_activity === false ||
                                       e.today_activity.phase_in === null) &&
                                       "سجل الحضور"}

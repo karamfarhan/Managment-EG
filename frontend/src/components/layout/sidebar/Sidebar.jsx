@@ -8,6 +8,7 @@ import { StoreIcon } from "../../icons/StoreIcon";
 import { FaCarSide } from "react-icons/fa";
 import { GiPaddles } from "react-icons/gi";
 import { AiOutlineHome } from "react-icons/ai";
+import { TbFileInvoice } from "react-icons/tb";
 import classes from "./Sidebar.module.css";
 
 const Sidebar = () => {
@@ -27,8 +28,7 @@ const Sidebar = () => {
                 background: isActive ? "#edeaea" : "inherit",
                 color: isActive ? "#2150d8" : "#fff",
               };
-            }}
-          >
+            }}>
             <span>
               <AiOutlineHome />
             </span>
@@ -46,8 +46,7 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}
-            >
+              }}>
               <span>
                 <StaffIcon />
               </span>
@@ -64,12 +63,29 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}
-            >
+              }}>
               <span>
                 <StoreIcon />
               </span>
               <p>Stores</p>
+            </NavLink>
+          </li>
+        )}
+
+        {(is_superuser || allPermissions.includes("store")) && (
+          <li>
+            <NavLink
+              to="/invoice"
+              style={({ isActive }) => {
+                return {
+                  background: isActive ? "#edeaea" : "inherit",
+                  color: isActive ? "#2150d8" : "#fff",
+                };
+              }}>
+              <span>
+                <TbFileInvoice />
+              </span>
+              <p>Invoices</p>
             </NavLink>
           </li>
         )}
@@ -86,8 +102,7 @@ const Sidebar = () => {
                     background: isActive ? "#edeaea" : "inherit",
                     color: isActive ? "#2150d8" : "#fff",
                   };
-                }}
-              >
+                }}>
                 <span>
                   <GiPaddles />
                 </span>
@@ -104,8 +119,7 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}
-            >
+              }}>
               <span>
                 <FaCarSide />
               </span>

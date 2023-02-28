@@ -35,7 +35,6 @@ const StoreDetail = () => {
       const res = await fetch(`${window.domain}/stores/${storeId}`, {
         method: "GET",
         headers: {
-          "Content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });

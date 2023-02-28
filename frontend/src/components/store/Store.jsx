@@ -197,7 +197,6 @@ const Store = () => {
         <div className="toolBar">
           {(is_superuser || getAllStores) && (
             <Search
-              placeholder=" المخزن أو التاريخ YYYY-DD-MM"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}
@@ -206,22 +205,19 @@ const Store = () => {
           {(permissions.includes("add_store") || is_superuser) && (
             <button
               className={classes.addInventory}
-              onClick={() => setForms({ showStoreForm: true })}
-            >
+              onClick={() => setForms({ showStoreForm: true })}>
               <span>
                 <AiOutlineFileImage />
               </span>
-              انشاء مخزن جديد
+              New Store
             </button>
           )}
         </div>
       </Bar>
       {isLoading && <LoadingSpinner />}
-      {store_data && !isLoading && store_data.length === 0 && (
-        <p className={classes.msg_p}> لا يوجد مخازن </p>
-      )}
+
       {store_data && store_data.results.length === 0 && !isLoading && (
-        <h1>لا يوجد مخازن</h1>
+        <h1>No stores created yet</h1>
       )}
       {store_data &&
         !isLoading &&
@@ -231,12 +227,12 @@ const Store = () => {
             <table>
               <thead>
                 <tr>
-                  <th>أسم المخزن</th>
-                  <th>عنوان المخزن</th>
+                  <th>store name </th>
+                  <th>store address </th>
                   {/* <th>انشيء عن طريق</th> */}
-                  <th>تاريخ الانشاء</th>
-                  <th>معلومات اضافية</th>
-                  <th>حدث</th>
+                  <th>created at </th>
+                  <th>notes </th>
+                  <th>actions</th>
                 </tr>
               </thead>
 
@@ -261,8 +257,7 @@ const Store = () => {
                               type="button"
                               onClick={() => {
                                 showInvoiceHandler(store.name, store.id);
-                              }}
-                            >
+                              }}>
                               <BiTransfer />
                             </button>
                           )}
@@ -272,8 +267,7 @@ const Store = () => {
                             <button
                               className="add-img"
                               type="button"
-                              onClick={() => uploadImageHandler(store.id)}
-                            >
+                              onClick={() => uploadImageHandler(store.id)}>
                               <AiOutlineFileImage />
                             </button>
                           )}
@@ -282,8 +276,7 @@ const Store = () => {
                             <button
                               className="editBtn"
                               type="button"
-                              onClick={() => editStore(store.id)}
-                            >
+                              onClick={() => editStore(store.id)}>
                               <FiEdit />
                             </button>
                           )}
@@ -293,8 +286,7 @@ const Store = () => {
                             <button
                               className={classes.deleteBtn}
                               type="button"
-                              onClick={() => deleteModelHandler(store.id)}
-                            >
+                              onClick={() => deleteModelHandler(store.id)}>
                               <MdOutlineDeleteForever />
                             </button>
                           )}

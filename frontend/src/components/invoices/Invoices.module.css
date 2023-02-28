@@ -1,0 +1,15 @@
+.content {
+  background-color: #fff;
+}
+.content > div {
+  padding: 10px;
+}
+.content > div select {
+  padding: 10px;
+}
+.content p {
+  text-align: center;
+}
+.content button {
+  background-color: red;
+}
