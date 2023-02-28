@@ -171,7 +171,12 @@ GRAPHENE = {
         "graphql_jwt.middleware.JSONWebTokenMiddleware",
     ],
 }
-
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_EXPIRATION_DELTA": timedelta(minutes=60),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=5),
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+}
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)

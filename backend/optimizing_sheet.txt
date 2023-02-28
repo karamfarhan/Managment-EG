@@ -9,3 +9,23 @@
 
     `attr = getattr(object,"attr", "None")`
     and also using setattr,hasattr and their similares
+
+2 - I HAVE TO OPTIMIZE OUTSTANDING AND BLACKLISTED TOKEN
+
+    right now the rest token mechanism is is bad i have to make sure that the
+    token that are not used anymore is blacklisted and also what about if someone keep login
+    in this case it will always create new refresh token and that will fill up the
+    database so i have also to maybe check if the user have already a valid refresh token
+    and send it back to the suer instead of creating a new one or just delete the old once and send a new one,
+    also i have to make a endpoint so that when the admin de active any user i need to
+    go and check if the user have any outstanding tokens and blacklisted them.
+    or just make it on the User model save method.
+    or maybe i should delete all the refresh tokens the user have when he make logout
+    but in this case i have to check and delete only the expired tokens not the vlaid ones
+    and blacklisted the vlaid ones
+
+    or maybe if used the other token implementation it will be better isntead of using
+    access token and refresh token, i mean usiing slidbs or like this becuase
+    It means that you need to refresh every 5 mins (payload.exp)
+    and even you keep on refreshing token every 5 mins,
+    you will still be logout in 7 days after the first token has been issued (refreshExpiresIn).

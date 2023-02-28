@@ -1,7 +1,7 @@
 import uuid
 
 from apps.employee.models import Employee
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, Group, Permission, PermissionsMixin, User
 from django.db import models
 from PIL import Image
 
