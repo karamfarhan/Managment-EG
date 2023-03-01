@@ -43,7 +43,7 @@ const ExportExcel = ({ matter, id }) => {
 
   return (
     <button className={classes.btn} onClick={refetch}>
-      تصدير EXECL
+      export EXECL
     </button>
   );
 };

@@ -23,7 +23,7 @@ export const Layout = ({ children }) => {
     window.matchMedia("(max-width: 820px)").addEventListener("change", handler);
   }, [matches]);
   //show side bar hanler
-  const sideBarHanler = () => {
+  const sideBarHandler = () => {
     setShowSideBar((prev) => !prev);
   };
 
@@ -31,12 +31,12 @@ export const Layout = ({ children }) => {
     <Fragment>
       <Header
         showSideBar={showSideBar}
-        sideBarHanler={sideBarHanler}
+        sideBarHandler={sideBarHandler}
         matches={matches}
       />
       <main className={classes.layout}>
         <section>{children}</section>
-        {showSideBar && <Sidebar />}
+      {showSideBar &&  <Sidebar />}
       </main>
     </Fragment>
   );

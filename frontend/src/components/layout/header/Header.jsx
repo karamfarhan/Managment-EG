@@ -1,17 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { AiFillCaretDown, AiOutlineLogout } from "react-icons/ai";
+import { MdOutlineDarkMode } from "react-icons/md";
+import { CiLight } from "react-icons/ci";
 import { logout } from "../../../store/auth-slice";
-
+import CloseBar from "../../icons/CloseBar";
+import ToggleBar from "../../icons/ToggleBar";
 import classes from "./Header.module.css";
+import { ThemeContext } from "../../../App";
 
-export const Header = () => {
+export const Header = ({ showSideBar, sideBarHandler }) => {
+  const themeCtx = useContext(ThemeContext);
+  const { toggleTheme, theme } = themeCtx;
   const dispatch = useDispatch();
   const [signoutBtn, setSignoutBtn] = useState(false);
+  const [matches, setMatches] = useState(window.innerWidth);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
-  // <<<<<<< HEAD
+
+  useEffect(() => {
+    const handlerResize = () => setMatches(window.innerWidth);
+    window.addEventListener("resize", handlerResize);
+
+    return () => window.removeEventListener("resize", handlerResize);
+  }, []);
+
   const logoutEnpoint = async () => {
     try {
       const res = await fetch(`${window.domain}/account/logout/`, {
@@ -41,33 +55,20 @@ export const Header = () => {
   const toggleBtn = () => {
     setSignoutBtn((prevState) => !prevState);
   };
-  //logout
-  // async function logoutIntegrate(){
-
-  // }
-
-  // let headerColor = "#7c7979";
-
-  // if (location.pathname === "/staff") {
-  //   headerColor = "#c1392b";
-  // } else if (location.pathname === "/store") {
-  //   headerColor = "#27ae61";
-  // } else if (location.pathname === "/create_subs") {
-  //   headerColor = "#114299";
-  // } else if (location.pathname === "/cars") {
-  //   headerColor = "#27ae61";
-  // } else {
-  // }
 
   return (
     <header className={classes.header}>
-      {/* {matches && (
-        <div className={classes.toggle} onClick={sideBarHanler}>
-          {showSideBar ? <CloseBar /> : <ToggleBar />}
-        </div>
-      )} */}
       <div className={classes["head-content"]}>
-        <h1> mountain for construction </h1>
+        {matches <= 820 && (
+          <div className={classes.toggle} onClick={sideBarHandler}>
+            {showSideBar ? <CloseBar /> : <ToggleBar />}
+          </div>
+        )}
+
+        <h1> mountain</h1>
+        <div onClick={toggleTheme} className={classes.toggleTheme}>
+          {theme === "dark" ? <CiLight /> : <MdOutlineDarkMode />}
+        </div>
         <div className={classes.actions}>
           {signoutBtn && (
             <div className={classes.settings}>

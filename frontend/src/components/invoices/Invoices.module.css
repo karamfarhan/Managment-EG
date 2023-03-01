@@ -1,5 +1,6 @@
 .content {
   background-color: #fff;
+  overflow: auto;
 }
 .content > div {
   padding: 10px;
@@ -12,4 +13,7 @@
 }
 .content button {
   background-color: red;
+}
+.content table tbody td {
+  color: #000 !important;
 }

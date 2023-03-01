@@ -23,6 +23,42 @@
   outline: none;
   list-style: none;
 }
+
+/* start theme */
+
+#dark {
+  background-color: #1b203a;
+  min-height: 100vh;
+}
+#dark section h2 {
+  color: #fff !important;
+}
+#dark #dashbaord > div > div,
+#dark .VictoryContainer {
+  background-color: #272b4a;
+}
+
+#dark #dashbaord > div > div p {
+  color: #fff;
+}
+
+#light {
+  background-color: #dbe0e6 !important;
+  min-height: 100vh;
+}
+#dark header {
+  background-color: #1b203a;
+  color: #fff;
+}
+
+#dark aside {
+  background-color: #252c48;
+}
+#dark svg {
+  color: #fff;
+}
+/*end theme */
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -71,7 +107,8 @@ button:disabled {
 }
 
 /*toolbar*/
-h1 {
+h1,
+h2 {
   text-align: center !important;
 }
 .toolBar {
@@ -144,6 +181,10 @@ table td {
   table td {
     font-size: 12px;
   }
+}
+
+#dark table tbody td {
+  color: #fff;
 }
 
 table tbody {

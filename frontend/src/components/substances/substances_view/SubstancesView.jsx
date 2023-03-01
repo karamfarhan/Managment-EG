@@ -127,18 +127,18 @@ const SubstancesView = ({
             <ExportExcel matter="substances" />
           )}
           {subsData && subsData.results && subsData.results.length === 0 && (
-            <h1> لا يوجد مواد </h1>
+            <h2> No Substances are found</h2>
           )}
           {subsData && subsData.results.length > 0 && isLoading === false && (
             <table>
               <thead>
                 <tr>
-                  <th>أسم الخامة</th>
-                  <th>الكمية</th>
-                  <th>الوصف</th>
-                  <th>متوافر</th>
-                  <th>تاريخ الاضافة</th>
-                  <th>حدث</th>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Description</th>
+                  <th>Available</th>
+                  <th>Created At</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>

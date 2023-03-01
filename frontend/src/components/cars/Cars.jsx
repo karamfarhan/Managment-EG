@@ -74,7 +74,6 @@ const Cars = () => {
         <div className="toolBar">
           {(is_superuser || permissions.includes("view_car")) && (
             <Search
-              placeholder=" أسم السائق أو بيانات السيارة"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}
@@ -86,7 +85,7 @@ const Cars = () => {
               className={classes.createBtn}
               onClick={() => setShowCarForm(true)}
             >
-              <AiFillCar /> اضافة سيارة
+              <AiFillCar /> Add Car
             </button>
           )}
         </div>
@@ -96,7 +95,7 @@ const Cars = () => {
         cars !== undefined &&
         !isLoading &&
         (is_superuser || permissions.includes("view_car")) &&
-        cars.results.length === 0 && <h1>لا يوجد سيارات </h1>}
+        cars.results.length === 0 && <h2>No Cars Found </h2>}
       <div className={classes.grid}>
         {cars &&
           cars !== undefined &&

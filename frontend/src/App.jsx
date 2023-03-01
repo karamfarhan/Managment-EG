@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, createContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Pages from "./pages/Pages";
 import { logout, updateToken } from "./store/auth-slice";
+import "./index.css";
+export const ThemeContext = createContext(null);
 
 function App() {
   window.domain = "http://127.0.0.1:8000/api/v1";
@@ -9,7 +11,13 @@ function App() {
   // window.domain = "https://managementdjango.onrender.com/api/v1";
   const dispatch = useDispatch();
   const { refresh, token } = useSelector((state) => state.authReducer);
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark"
+  );
 
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
   useEffect(() => {
     if (token !== null) {
       dispatch(updateToken(refresh));
@@ -27,7 +35,18 @@ function App() {
     return () => clearInterval(timer);
   }, [dispatch, refresh]);
 
-  return <Pages />;
+  //toggle theme
+  const toggleTheme = () => {
+    setTheme((curr) => (curr === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <div id={theme}>
+        <Pages />
+      </div>
+    </ThemeContext.Provider>
+  );
 }
 
 export default App;

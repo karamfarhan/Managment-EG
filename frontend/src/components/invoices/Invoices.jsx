@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import axios from "axios";
 import styles from "./Invoices.module.css";
 import LoadingSpinner from "../UI/loading/LoadingSpinner";
@@ -52,75 +52,62 @@ const Invoices = () => {
   const storeChangeHandler = (e) => {
     setStoreId(e.target.value);
   };
+  console.log(invoices);
 
   return (
-    <div className={styles.content}>
-      <div>
-        <select onChange={storeChangeHandler} value={storeId}>
-          {stores &&
-            stores.map((el) => (
-              <option value={el.pk} key={el.pk}>
-                {el.address}
-              </option>
-            ))}
-        </select>
-      </div>
+    <Fragment>
+      {invoices && invoices.length === 0 && <h2> No Invoices added </h2>}
 
-      <table>
-        <thead>
-          <tr>
-            <th>Invoice ID</th>
-            <th>Date</th>
-            <th>Created by</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {isLoading && <LoadingSpinner />}
-          {isLoading === false &&
-            invoices &&
-            invoices.map((invoice) => (
-              <tr key={invoice.id}>
-                <td>{invoice.id}</td>
-                <td>{new Date(invoice.created_at).toLocaleDateString()}</td>
-                <td>{invoice.created_by.username}</td>
-                <td>
-                  <button
-                    className={styles.btn}
-                    onClick={() => {
-                      window.location.href = `${window.domain}/invoices/${invoice.pk}`;
-                    }}>
-                    View
-                  </button>
-                </td>
+      <div className={styles.content}>
+        {invoices && invoices.length > 0 && (
+          <div>
+            <select onChange={storeChangeHandler} value={storeId}>
+              {stores &&
+                stores.map((el) => (
+                  <option value={el.pk} key={el.pk}>
+                    {el.address}
+                  </option>
+                ))}
+            </select>
+          </div>
+        )}
+        {invoices && invoices.length > 0 && (
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice ID</th>
+                <th>Date</th>
+                <th>Created by</th>
+                <th>Actions</th>
               </tr>
-            ))}
+            </thead>
 
-          {/* <tr>
-            <td>1</td>
-            <td>2020-01-01</td>
-            <td>100</td>
-            <td>Paid</td>
-            <td>
-              <button>Edit</button>
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>2020-01-01</td>
-            <td>100</td>
-            <td>Paid</td>
-            <td>
-              <button>Edit</button>
-            </td>
-          </tr> */}
-        </tbody>
-      </table>
-      {isLoading === false && invoices && invoices.length === 0 && (
-        <p>No invoices added for this store</p>
-      )}
-    </div>
+            <tbody>
+              {isLoading && <LoadingSpinner />}
+              {isLoading === false &&
+                invoices &&
+                invoices.map((invoice) => (
+                  <tr key={invoice.id}>
+                    <td>{invoice.id}</td>
+                    <td>{new Date(invoice.created_at).toLocaleDateString()}</td>
+                    <td>{invoice.created_by.username}</td>
+                    <td>
+                      <button
+                        className={styles.btn}
+                        onClick={() => {
+                          window.location.href = `${window.domain}/invoices/${invoice.pk}`;
+                        }}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </Fragment>
   );
 };
 

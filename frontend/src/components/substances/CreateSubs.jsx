@@ -103,9 +103,7 @@ const CreateSubs = () => {
       )}
       {/* المخزن الرئيسي*/}
 
-      <div className={classes["main_inventory"]}>
-        <h2>ادارة الموارد / المخزن الرئيسي</h2>
-      </div>
+      <div className={classes["main_inventory"]}></div>
 
       <div className={classes.buttons}>
         <div className={classes.show}>
@@ -117,10 +115,10 @@ const CreateSubs = () => {
                 name="material"
                 onClick={fetchMatters}
               >
-                عرض الموارد
+                View substances
               </button>
               <button type="button" onClick={() => setShowModel(true)}>
-                اضافة موارد
+                Add substance{" "}
               </button>
             </div>
           )}
@@ -133,13 +131,13 @@ const CreateSubs = () => {
                 name="instruments"
                 onClick={fetchInstruments}
               >
-                عرض المعدات
+                View instruments
               </button>
               <button
                 type="button"
                 onClick={() => setShowInstrumentsForm(true)}
               >
-                اضافة معدات
+                Add Instruments
               </button>
             </div>
           )}

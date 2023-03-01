@@ -41,7 +41,7 @@ const Home = () => {
       {showCars && <CreateCar hideModel={() => setShowCars(false)} />}
 
       {!formsVisible && (
-        <div className={classes.home}>
+        <div className={classes.home} id="dashbaord">
           <div className={classes.actions}>
             <div>
               <span>New ACCOUNTS </span>

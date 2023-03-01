@@ -28,11 +28,24 @@ export const MyChartOne = () => (
     </VictoryChart>
   </div>
 );
+const chartTheme = {
+  axis: {
+    style: {
+      tickLabels: {
+        fill: "orange",
+      },
+    },
+  },
+};
 
 export const MyChartTwo = () => (
   <div style={{ height: "500px", background: "#fff" }}>
     <VictoryChart
+      theme={chartTheme}
       width={300}
+      style={{
+        grid: { stroke: "#000", strokeWidth: 1 },
+      }}
       domain={{ x: [0, 8] }}
       animate={{
         duration: 2000,
@@ -41,7 +54,7 @@ export const MyChartTwo = () => (
     >
       <VictoryBar
         data={data2}
-        style={{ data: { fill: "#c43a31", stroke: "black", strokeWidth: 1 } }}
+        style={{ data: { fill: "#c43a31", stroke: "white", strokeWidth: 1 } }}
       />
     </VictoryChart>
   </div>

@@ -23,7 +23,7 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  border: 1px solid #000;
+  border: 1px solid orange;
   overflow: hidden;
 }
 .user img {
@@ -32,18 +32,19 @@
 }
 .toggle {
   width: 30px;
-  position: absolute;
-  right: 28px;
   color: #000;
   z-index: 11;
-  top: 40px;
 }
+
 .head-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   /* width: calc(100% - var(--side-width)); */
+}
+.toggleTheme svg {
+  font-size: 30px;
 }
 .head-content a svg {
   cursor: pointer;

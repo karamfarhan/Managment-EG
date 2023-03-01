@@ -109,7 +109,7 @@ export const Staff = () => {
         {!showStaffForm &&
           empolyees &&
           empolyees.count === 0 &&
-          (is_superuser || getStaff) && <h1>لا يوجد موظفين</h1>}
+          (is_superuser || getStaff) && <h2>No Empolyess</h2>}
         {empolyees &&
           !showStaffForm &&
           empolyees.count > 0 &&

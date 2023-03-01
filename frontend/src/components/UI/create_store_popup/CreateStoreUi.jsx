@@ -66,7 +66,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   return (
     <Fragment>
       <Backdrop hideModel={hideFormHandler} />
-      <div className={classes.formContent} dir="rtl">
+      <div className={classes.formContent} >
         <span onClick={hideFormHandler}>
           <AiOutlineClose />
         </span>
@@ -74,7 +74,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
           <div>
             <Inputs
               type="text"
-              placeholder="أسم المخزن"
+              placeholder="Store Name "
               value={storeData.name}
               onChange={(e) =>
                 setStoreData({ ...storeData, name: e.target.value })
@@ -82,7 +82,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             />
             <Inputs
               type="text"
-              placeholder="أسم الموقع"
+              placeholder="Location"
               value={storeData.address}
               onChange={(e) =>
                 setStoreData({ ...storeData, address: e.target.value })
@@ -90,7 +90,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             />
             <Inputs
               type="text"
-              placeholder=" معلومات اضافية (وصف - ملاحظات- الخ..)"
+              placeholder="Notes"
               value={storeData.description}
               onChange={(e) =>
                 setStoreData({ ...storeData, description: e.target.value })

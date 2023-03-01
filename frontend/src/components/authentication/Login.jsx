@@ -5,7 +5,7 @@ const Login = ({ userInfo, setUserInfo }) => {
     <>
       <Inputs
         type="email"
-        placeholder="البريد الالكتروني"
+        placeholder="Email"
         value={userInfo.email}
         onChange={(e) =>
           setUserInfo({
@@ -16,7 +16,7 @@ const Login = ({ userInfo, setUserInfo }) => {
       />
       <Inputs
         type="password"
-        placeholder="الرقم السري"
+        placeholder="Passowrd"
         value={userInfo.password}
         onChange={(e) =>
           setUserInfo({
