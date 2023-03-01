@@ -29,6 +29,9 @@ export const MyChartOne = () => (
   </div>
 );
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 642d04b (dark theme)
 const chartTheme = {
   axis: {
     style: {
@@ -38,21 +41,30 @@ const chartTheme = {
     },
   },
 };
+<<<<<<< HEAD
 =======
 >>>>>>> c9f6c2a (charts_part_one)
+=======
+>>>>>>> 642d04b (dark theme)
 
 export const MyChartTwo = () => (
   <div style={{ height: "500px", background: "#fff" }}>
     <VictoryChart
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 642d04b (dark theme)
       theme={chartTheme}
       width={300}
       style={{
         grid: { stroke: "#000", strokeWidth: 1 },
       }}
+<<<<<<< HEAD
 =======
       width={300}
 >>>>>>> c9f6c2a (charts_part_one)
+=======
+>>>>>>> 642d04b (dark theme)
       domain={{ x: [0, 8] }}
       animate={{
         duration: 2000,
@@ -62,10 +74,14 @@ export const MyChartTwo = () => (
       <VictoryBar
         data={data2}
 <<<<<<< HEAD
+<<<<<<< HEAD
         style={{ data: { fill: "#c43a31", stroke: "white", strokeWidth: 1 } }}
 =======
         style={{ data: { fill: "#c43a31", stroke: "black", strokeWidth: 1 } }}
 >>>>>>> c9f6c2a (charts_part_one)
+=======
+        style={{ data: { fill: "#c43a31", stroke: "white", strokeWidth: 1 } }}
+>>>>>>> 642d04b (dark theme)
       />
     </VictoryChart>
   </div>

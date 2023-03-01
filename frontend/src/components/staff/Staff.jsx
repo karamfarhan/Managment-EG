@@ -114,7 +114,11 @@ export const Staff = () => {
         {!showStaffForm &&
           empolyees &&
           empolyees.count === 0 &&
+<<<<<<< HEAD
           (is_superuser || getStaff) && <h2>{t("noEmployees")}</h2>}
+=======
+          (is_superuser || getStaff) && <h2>No Empolyess</h2>}
+>>>>>>> 642d04b (dark theme)
         {empolyees &&
           !showStaffForm &&
           empolyees.count > 0 &&

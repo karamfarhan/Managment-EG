@@ -47,12 +47,16 @@ const Home = () => {
 
       {!formsVisible && (
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div className={classes.home} id="dashbaord">
           <div className={classes.actions}>
             <div>
               <span>{t("NEW ACCOUNTS")}</span>
 =======
         <div className={classes.home}>
+=======
+        <div className={classes.home} id="dashbaord">
+>>>>>>> 642d04b (dark theme)
           <div className={classes.actions}>
             <div>
               <span>New ACCOUNTS </span>

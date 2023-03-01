@@ -38,6 +38,7 @@
   background-color: #272b4a;
 }
 
+<<<<<<< HEAD
 #dark section form {
   background-color: #272b4a !important;
 }
@@ -56,12 +57,22 @@
 #dark h3 {
   color: #fff;
 }
+=======
+#dark #dashbaord > div > div p {
+  color: #fff;
+}
+
+>>>>>>> 642d04b (dark theme)
 #light {
   background-color: #dbe0e6 !important;
   min-height: 100vh;
 }
 #dark header {
+<<<<<<< HEAD
   background-color: #1a224a;
+=======
+  background-color: #1b203a;
+>>>>>>> 642d04b (dark theme)
   color: #fff;
 }
 
@@ -71,9 +82,12 @@
 #dark svg {
   color: #fff;
 }
+<<<<<<< HEAD
 #dark a {
   color: #fff;
 }
+=======
+>>>>>>> 642d04b (dark theme)
 /*end theme */
 
 ::-webkit-scrollbar {

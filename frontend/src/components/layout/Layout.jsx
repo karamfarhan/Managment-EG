@@ -54,8 +54,12 @@ export const Layout = ({ children }) => {
 =======
       <main className={classes.layout}>
         <section>{children}</section>
+<<<<<<< HEAD
 >>>>>>> c9f6c2a (charts_part_one)
         {showSideBar && <Sidebar />}
+=======
+      {showSideBar &&  <Sidebar />}
+>>>>>>> 642d04b (dark theme)
       </main>
     </Fragment>
   );

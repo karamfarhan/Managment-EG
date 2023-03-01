@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { AiFillCaretDown, AiOutlineLogout } from "react-icons/ai";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { ImEarth } from "react-icons/im";
@@ -21,17 +22,33 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
   const dispatch = useDispatch();
   const { toggleTheme, theme } = themeCtx;
 =======
+=======
+import { MdOutlineDarkMode } from "react-icons/md";
+import { CiLight } from "react-icons/ci";
+import { logout } from "../../../store/auth-slice";
+import CloseBar from "../../icons/CloseBar";
+import ToggleBar from "../../icons/ToggleBar";
+>>>>>>> 642d04b (dark theme)
 import classes from "./Header.module.css";
+import { ThemeContext } from "../../../App";
 
-export const Header = () => {
+export const Header = ({ showSideBar, sideBarHandler }) => {
+  const themeCtx = useContext(ThemeContext);
+  const { toggleTheme, theme } = themeCtx;
   const dispatch = useDispatch();
 >>>>>>> c9f6c2a (charts_part_one)
   const [signoutBtn, setSignoutBtn] = useState(false);
+<<<<<<< HEAD
   const [lang, setLang] = useState(false);
   const [matches, setMatches] = useState(window.innerWidth);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const [t, i18n] = useTranslation();
+=======
+  const [matches, setMatches] = useState(window.innerWidth);
+  const { token } = useSelector((state) => state.authReducer);
+  const decoded = jwt_decode(token);
+>>>>>>> 642d04b (dark theme)
 
   useEffect(() => {
     const handlerResize = () => setMatches(window.innerWidth);
@@ -69,6 +86,7 @@ export const Header = () => {
   const toggleBtn = () => {
     setSignoutBtn((prevState) => !prevState);
   };
+<<<<<<< HEAD
 
   //change language
   const changeLanguage = (e) => {
@@ -172,16 +190,22 @@ export const Header = () => {
   //   headerColor = "#27ae61";
   // } else {
   // }
+=======
+>>>>>>> 642d04b (dark theme)
 
   return (
     <header className={classes.header}>
-      {/* {matches && (
-        <div className={classes.toggle} onClick={sideBarHanler}>
-          {showSideBar ? <CloseBar /> : <ToggleBar />}
-        </div>
-      )} */}
       <div className={classes["head-content"]}>
-        <h1> mountain for construction </h1>
+        {matches <= 820 && (
+          <div className={classes.toggle} onClick={sideBarHandler}>
+            {showSideBar ? <CloseBar /> : <ToggleBar />}
+          </div>
+        )}
+
+        <h1> mountain</h1>
+        <div onClick={toggleTheme} className={classes.toggleTheme}>
+          {theme === "dark" ? <CiLight /> : <MdOutlineDarkMode />}
+        </div>
         <div className={classes.actions}>
           {signoutBtn && (
             <div className={classes.settings}>

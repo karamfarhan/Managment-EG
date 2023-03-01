@@ -85,8 +85,14 @@ const Cars = () => {
           {(is_superuser || permissions.includes("add_car")) && (
             <button
               className={classes.createBtn}
+<<<<<<< HEAD
               onClick={() => setShowCarForm(true)}>
               <AiFillCar /> {t("addCar")}
+=======
+              onClick={() => setShowCarForm(true)}
+            >
+              <AiFillCar /> Add Car
+>>>>>>> 642d04b (dark theme)
             </button>
           )}
         </div>
@@ -96,7 +102,11 @@ const Cars = () => {
         cars !== undefined &&
         !isLoading &&
         (is_superuser || permissions.includes("view_car")) &&
+<<<<<<< HEAD
         cars.results.length === 0 && <h2> {t("carMsg")} </h2>}
+=======
+        cars.results.length === 0 && <h2>No Cars Found </h2>}
+>>>>>>> 642d04b (dark theme)
       <div className={classes.grid}>
         {cars &&
           cars !== undefined &&

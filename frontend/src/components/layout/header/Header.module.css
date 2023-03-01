@@ -24,11 +24,15 @@
   height: 45px;
   border-radius: 50%;
 <<<<<<< HEAD
+<<<<<<< HEAD
   border: 1px solid orange;
   overflow: hidden;
   background-color: #fff;
 =======
   border: 1px solid #000;
+=======
+  border: 1px solid orange;
+>>>>>>> 642d04b (dark theme)
   overflow: hidden;
 >>>>>>> c9f6c2a (charts_part_one)
 }
@@ -72,6 +76,9 @@
   font-size: 30px;
 =======
 >>>>>>> c9f6c2a (charts_part_one)
+}
+.toggleTheme svg {
+  font-size: 30px;
 }
 .head-content a svg {
   cursor: pointer;
