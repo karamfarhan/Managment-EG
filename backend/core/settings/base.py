@@ -92,7 +92,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
     "ROTATE_REFRESH_TOKENS": False,  # return a new refresh token when make refresh
     "BLACKLIST_AFTER_ROTATION": True,  # put the old refresh token to a black list
@@ -170,6 +170,7 @@ GRAPHENE = {
     "MIDDLEWARE": [
         "graphql_jwt.middleware.JSONWebTokenMiddleware",
     ],
+    "ATOMIC_MUTATIONS": True,
 }
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,

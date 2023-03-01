@@ -64,13 +64,15 @@ def getRouts(request):
 def registerUser(request):
     if request.method == "POST":
         response_data = {}
-        serializer = AccountRegistrationSerializer(data=request.data)
+        serializer = AccountRegistrationSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid():
             user = serializer.save()
-            context = {"user": user}
-            to = [get_user_email(user)]
-            ActivationEmail(request, context).send(to)
+            # TODO: no need to sent email here, it sent in the serializser
+            # context = {"user": user}
+            # to = [get_user_email(user)]
+            # ActivationEmail(request, context).send(to)
+            # TODO: no need to send the account data back, delete them
             response_data["response"] = "successfully registered new user."
             response_data["message"] = "We sent a verfication link to your email to and activate your email"
             response_data["email"] = user.email
@@ -155,10 +157,58 @@ def does_account_exist_view(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ChangePasswordView(UpdateAPIView):
+# class ChangePasswordView(UpdateAPIView):
 
+#     serializer_class = ChangePasswordSerializer
+#     model = Account
+#     queryset = Account.objects.all()
+#     # permission_classes = (IsAuthenticated,)
+
+#     def get_object(self, queryset=None):
+#         obj = self.request.user
+#         return obj
+
+#     def update(self, request, *args, **kwargs):
+#         response_data = {}
+#         self.object = self.get_object()
+#         serializer = self.get_serializer(data=request.data)
+
+#         if serializer.is_valid():
+#             # Check old password
+#             if not self.object.check_password(serializer.data.get("old_password")):
+#                 response_data["response_msg"] = "Wrong password, Enter your current Password correctly"
+#                 response_status = status.HTTP_400_BAD_REQUEST
+#                 return Response(response_data, response_status)
+
+#             # confirm the new passwords match
+#             new_password = serializer.data.get("new_password")
+#             confirm_new_password = serializer.data.get("confirm_new_password")
+#             if new_password != confirm_new_password:
+#                 response_data["response_msg"] = "New passwords must match"
+#                 response_status = status.HTTP_400_BAD_REQUEST
+#                 return Response(response_data, response_status)
+#             if self.object.check_password(new_password):
+#                 response_data["response_msg"] = "You can not put the same previous password"
+#                 response_status = status.HTTP_400_BAD_REQUEST
+#                 return Response(response_data, response_status)
+
+#             # set_password also hashes the password that the user will get
+#             self.object.set_password(serializer.data.get("new_password"))
+#             self.object.save()
+#             context = {"user": self.request.user}
+#             to = [get_user_email(self.request.user)]
+#             PasswordChangedConfirmationEmail(self.request, context).send(to)
+#             response_data["response_msg"] = "successfully changed password"
+#             response_status = status.HTTP_200_OK
+#             return Response(response_data, response_status)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePasswordView(UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     model = Account
+    queryset = Account.objects.all()
     # permission_classes = (IsAuthenticated,)
 
     def get_object(self, queryset=None):
@@ -166,40 +216,12 @@ class ChangePasswordView(UpdateAPIView):
         return obj
 
     def update(self, request, *args, **kwargs):
-        response_data = {}
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        if serializer.is_valid():
-            # Check old password
-            if not self.object.check_password(serializer.data.get("old_password")):
-                response_data["response_msg"] = "Wrong password, Enter your current Password correctly"
-                response_status = status.HTTP_400_BAD_REQUEST
-                return Response(response_data, response_status)
-
-            # confirm the new passwords match
-            new_password = serializer.data.get("new_password")
-            confirm_new_password = serializer.data.get("confirm_new_password")
-            if new_password != confirm_new_password:
-                response_data["response_msg"] = "New passwords must match"
-                response_status = status.HTTP_400_BAD_REQUEST
-                return Response(response_data, response_status)
-            if self.object.check_password(new_password):
-                response_data["response_msg"] = "You can not put the same previous password"
-                response_status = status.HTTP_400_BAD_REQUEST
-                return Response(response_data, response_status)
-
-            # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
-            context = {"user": self.request.user}
-            to = [get_user_email(self.request.user)]
-            PasswordChangedConfirmationEmail(self.request, context).send(to)
-            response_data["response_msg"] = "successfully changed password"
-            response_status = status.HTTP_200_OK
-            return Response(response_data, response_status)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        response_data = {"response_msg": "successfully changed password"}
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 def account_activate(request, uidb64, token):

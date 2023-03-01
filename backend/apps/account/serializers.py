@@ -11,7 +11,8 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.state import token_backend
 
-from .utils import decode_uid
+from .email import ActivationEmail, ConfirmationEmail, PasswordChangedConfirmationEmail, PasswordResetEmail
+from .utils import account_activation_token, decode_uid, get_user_email
 
 
 class LoginTokenObtainSerializer(TokenObtainPairSerializer):
@@ -134,18 +135,20 @@ class AccountRegistrationSerializer(serializers.Serializer):
     password = serializers.CharField(
         required=True, label="Password", style={"input_type": "password"}, validators=[MinLengthValidator(8)]
     )
-    confirm_password = serializers.CharField(
-        required=True,
-        label="Confirm Password",
-        style={"input_type": "password"},
-    )
+    # ! i disabled the confirm password filed, because it cause issues
+    # ! the graphql mutation because the filed is not a part of the accoutn model
+    # confirm_password = serializers.CharField(
+    #     required=True,
+    #     label="Confirm Password",
+    #     style={"input_type": "password"},
+    # )
 
-    def validate_confirm_password(self, value):
-        data = self.get_initial()
-        password = data.get("password")
-        if password != value:
-            raise serializers.ValidationError("Passwords don't match.")
-        return value
+    # def validate_confirm_password(self, value):
+    #     data = self.get_initial()
+    #     password = data.get("password")
+    #     if password != value:
+    #         raise serializers.ValidationError("Passwords don't match.")
+    #     return value
 
     def save(self):
         username = self.validated_data["username"]
@@ -158,6 +161,10 @@ class AccountRegistrationSerializer(serializers.Serializer):
         account.set_password(password)
         account.is_active = False
         account.save()
+        request = self.context["request"]
+        context = {"user": account}
+        to = [email]
+        ActivationEmail(request, context).send(to)
         return account
 
 
@@ -232,8 +239,8 @@ class AccountRedSerializer(serializers.ModelSerializer):
 
 ## AI code
 class AccountWriteSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(validators=[UniqueValidator(queryset=Account.objects.all())], required=True)
-    username = serializers.CharField(validators=[UniqueValidator(queryset=Account.objects.all())], required=True)
+    email = serializers.EmailField(validators=[UniqueValidator(queryset=Account.objects.all())], required=False)
+    username = serializers.CharField(validators=[UniqueValidator(queryset=Account.objects.all())], required=False)
 
     class Meta:
         model = Account
@@ -256,15 +263,52 @@ class AccountWriteSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
         instance.employee = validated_data.get("employee", instance.employee)
-        instance.save(update_fields=["email", "username", "profile_image", "hide_email", "first_name", "last_name"])
+        instance.save(
+            update_fields=["email", "username", "profile_image", "hide_email", "first_name", "last_name", "employee"]
+        )
         return instance
 
 
-class ChangePasswordSerializer(serializers.Serializer):
+# class ChangePasswordSerializer(serializers.Serializer):
 
+#     old_password = serializers.CharField(required=True)
+#     new_password = serializers.CharField(required=True)
+#     confirm_new_password = serializers.CharField(required=True)
+
+
+class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
     confirm_new_password = serializers.CharField(required=True)
+
+    def validate(self, data):
+        user = self.context["request"].user
+        old_password = data.get("old_password")
+        new_password = data.get("new_password")
+        confirm_new_password = data.get("confirm_new_password")
+
+        if not user.check_password(old_password):
+            raise serializers.ValidationError(
+                {"old_password": ["Wrong password, Enter your current Password correctly"]}
+            )
+
+        if new_password != confirm_new_password:
+            raise serializers.ValidationError({"new_password": ["New passwords must match"]})
+
+        if user.check_password(new_password):
+            raise serializers.ValidationError({"new_password": ["You can not put the same previous password"]})
+
+        return data
+
+    def save(self):
+        user = self.context["request"].user
+        user.set_password(self.validated_data["new_password"])
+        user.save()
+        # context = {"user": user}
+        # to = [get_user_email(user)]
+        # PasswordChangedConfirmationEmail(self.context['request'], context).send(to)
+        # ! i returend this becuase of the graphql mutaions need an objects of them
+        return {"old_password": "", "new_password": "", "confirm_new_password": ""}
 
 
 # class ResetPasswordSerializer(serializers.Serializer):

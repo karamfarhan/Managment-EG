@@ -32,7 +32,7 @@ class AccountAdmin(UserAdmin):
     )
 
     fieldsets = (
-        (None, {"fields": ("email", "username")}),
+        (None, {"fields": ("email", "username", "first_name", "last_name")}),
         (
             "Permissions",
             {
@@ -46,7 +46,10 @@ class AccountAdmin(UserAdmin):
                 )
             },
         ),
-        ("Personal", {"fields": ("hide_email", "employee", "updated_at", "date_joined", "last_login")}),
+        (
+            "Personal",
+            {"fields": ("hide_email", "profile_image", "employee", "updated_at", "date_joined", "last_login")},
+        ),
     )
 
     # formfield_overrides = {
@@ -54,7 +57,7 @@ class AccountAdmin(UserAdmin):
     # }
 
     add_fieldsets = (
-        (None, {"fields": ("email", "username", "password1", "password2")}),
+        (None, {"fields": ("email", "username", "password1", "password2", "first_name", "last_name")}),
         (
             "Permissions",
             {
@@ -68,7 +71,7 @@ class AccountAdmin(UserAdmin):
                 )
             },
         ),
-        ("Personal", {"fields": ("hide_email", "employee")}),
+        ("Personal", {"fields": ("hide_email", "profile_image", "employee")}),
     )
 
     form = UpdateAccountForm
@@ -86,6 +89,10 @@ class AccountAdmin(UserAdmin):
             form.base_fields["user_permissions"].disabled = True
             form.base_fields["groups"].disabled = True
             form.base_fields["employee"].disabled = True
+            form.base_fields["profile_image"].disabled = True
+            form.base_fields["first_name"].disabled = True
+            form.base_fields["last_name"].disabled = True
+
         return form
 
     # def add_fields_for_superusers(self, request, fieldsets):
