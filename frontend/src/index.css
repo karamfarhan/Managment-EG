@@ -38,6 +38,16 @@
   background-color: #272b4a;
 }
 
+#dark section form {
+  background-color: #272b4a !important;
+}
+
+#dark section form h3,
+#dark section form label,
+#dark section form input {
+  color: #fff;
+}
+
 #dark #dashbaord > div > div p {
   color: #fff;
 }
@@ -47,7 +57,7 @@
   min-height: 100vh;
 }
 #dark header {
-  background-color: #1b203a;
+  background-color: #1a224a;
   color: #fff;
 }
 
@@ -55,6 +65,9 @@
   background-color: #252c48;
 }
 #dark svg {
+  color: #fff;
+}
+#dark a {
   color: #fff;
 }
 /*end theme */

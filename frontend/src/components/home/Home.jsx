@@ -6,7 +6,9 @@ import CreateStoreUi from "../UI/create_store_popup/CreateStoreUi";
 import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import CreateCar from "../UI/create-car/CreateCar";
 import { MyChartOne, MyChartTwo } from "./MyCharts";
+import { useTranslation } from "react-i18next";
 const Home = () => {
+  const [t, i18n] = useTranslation();
   const [staffForm, setStaffForm] = useState(false);
   const [storeForm, setStoreForm] = useState(false);
   const [subsForm, setSubsForm] = useState(false);
@@ -44,17 +46,17 @@ const Home = () => {
         <div className={classes.home} id="dashbaord">
           <div className={classes.actions}>
             <div>
-              <span>New ACCOUNTS </span>
+              <span>{t("NEW ACCOUNTS")}</span>
               <p>36</p>
             </div>
 
             <div>
-              <span> COMPANY PROJECTS </span>
+              <span> {t("COMPANY PROJECTS")} </span>
               <p>36</p>
             </div>
 
             <div>
-              <span>TOTAL EXPANSES </span>
+              <span>{t("TOTAL EXPNASES")} </span>
               <p>36</p>
             </div>
 

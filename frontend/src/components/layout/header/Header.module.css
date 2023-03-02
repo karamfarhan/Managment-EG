@@ -25,10 +25,12 @@
   border-radius: 50%;
   border: 1px solid orange;
   overflow: hidden;
+  background-color: #fff;
 }
 .user img {
   width: 100%;
   height: 100%;
+  user-select: none;
 }
 .toggle {
   width: 30px;
@@ -42,6 +44,15 @@
   align-items: center;
   width: 100%;
   /* width: calc(100% - var(--side-width)); */
+}
+.features {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+}
+.features select {
+  padding: 5px;
 }
 .toggleTheme svg {
   font-size: 30px;

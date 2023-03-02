@@ -1,11 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Sidebar from "./sidebar/Sidebar";
-
 //classes
 import classes from "./Layout.module.css";
 import { Header } from "./header/Header";
 
 export const Layout = ({ children }) => {
+  const [t, i18n] = useTranslation();
   const [matches, setMatches] = useState(
     window.matchMedia("(max-width: 820px)").matches
   );
@@ -27,6 +28,16 @@ export const Layout = ({ children }) => {
     setShowSideBar((prev) => !prev);
   };
 
+  let sectionPosition = {
+    marginLeft: "auto",
+  };
+
+  if (i18n.language === "ar") {
+    sectionPosition = {
+      marginRight: "auto",
+    };
+  }
+
   return (
     <Fragment>
       <Header
@@ -34,9 +45,12 @@ export const Layout = ({ children }) => {
         sideBarHandler={sideBarHandler}
         matches={matches}
       />
-      <main className={classes.layout}>
-        <section>{children}</section>
-      {showSideBar &&  <Sidebar />}
+      <main
+        className={classes.layout}
+        dir={i18n.language === "en" ? "ltr" : "rtl"}
+      >
+        <section style={sectionPosition}>{children}</section>
+        {showSideBar && <Sidebar />}
       </main>
     </Fragment>
   );

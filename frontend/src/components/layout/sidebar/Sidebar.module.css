@@ -5,7 +5,6 @@
   min-height: 100vh;
   width: var(--side-width);
   position: fixed;
-  left: 0;
   top: 20px;
   bottom: 20px;
   text-align: center;
@@ -24,7 +23,7 @@
 @media (max-width: 820px) {
   .sidebar {
     width: var(--side-width-mob);
-    right: 5px;
+
     animation: sideBar 0.5s;
 
     /* right: 100%; */
@@ -96,7 +95,12 @@
 .sidebar li:nth-child(4) a svg {
   color: #11cdef !important;
 }
-
+.sidebar li:nth-child(5) a svg {
+  color: #4dc22a !important;
+}
+.sidebar li:nth-child(6) a svg {
+  color: #11cdef !important;
+}
 .sidebar li:hover a {
   background: "#fff";
   color: "#2150d8";

@@ -1,25 +1,24 @@
-import Inputs from "../inputs/Inputs";
 import { AiOutlineSearch } from "react-icons/ai";
 import classes from "./Search.module.css";
 
-const Search = ({ value, onChange, searchData, placeholder }) => {
-  const submitHander = (e) => {
-    e.preventDefault();
+const Search = ({ value, onChange, searchData }) => {
+  const submitHander = () => {
+    if (value === "") return;
     searchData();
   };
   return (
-    <div className={classes.search}>
-      <form onSubmit={submitHander}>
-        <Inputs
+    <div className={classes.wrap} dir="ltr">
+      <div className={classes.search}>
+        <input
           type="search"
-          placeholder={placeholder}
+          className={classes.searchTerm}
           value={value}
           onChange={onChange}
         />
-        <button type="submit">
+        <button className={classes.searchButton} onClick={submitHander}>
           <AiOutlineSearch />
         </button>
-      </form>
+      </div>
     </div>
   );
 };

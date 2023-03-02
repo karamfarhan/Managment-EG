@@ -3,12 +3,16 @@ import axios from "axios";
 import styles from "./Invoices.module.css";
 import LoadingSpinner from "../UI/loading/LoadingSpinner";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 const Invoices = () => {
+  const [t, i18n] = useTranslation();
   const [storeId, setStoreId] = useState("");
   const [stores, setStores] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
+  const { token } = useSelector((state) => state.authReducer);
   //get stores list
   useEffect(() => {
     const fetchStores = async () => {
@@ -17,9 +21,7 @@ const Invoices = () => {
           `${window.domain}/stores/select_list/`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem(
-                "token-management"
-              )}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -33,11 +35,12 @@ const Invoices = () => {
   //get invoices
   useEffect(() => {
     const fetchInvoices = async () => {
+      if (storeId === null || storeId === undefined || storeId === "") return;
       setIsLoading(true);
       try {
         const response = await axios.get(`${window.domain}/stores/${storeId}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token-management")}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setIsLoading(false);
@@ -52,11 +55,12 @@ const Invoices = () => {
   const storeChangeHandler = (e) => {
     setStoreId(e.target.value);
   };
-  console.log(invoices);
 
   return (
     <Fragment>
-      {invoices && invoices.length === 0 && <h2> No Invoices added </h2>}
+      {((invoices && invoices.length === 0) || invoices === undefined) && (
+        <h2> {t("invoiceMsg")} </h2>
+      )}
 
       <div className={styles.content}>
         {invoices && invoices.length > 0 && (

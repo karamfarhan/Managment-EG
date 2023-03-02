@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import App from "./App";
 import "./index.css";
 import store from "./store";
-
+import "./i18n";
 import "./components/i18next";
 
 const queryClient = new QueryClient();

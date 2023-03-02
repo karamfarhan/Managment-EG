@@ -12,6 +12,7 @@ import LoadingSpinner from "../../UI/loading/LoadingSpinner";
 //classes
 import classes from "./Empolyess.module.css";
 import Phases from "../../UI/phases/Phases";
+import { useTranslation } from "react-i18next";
 
 const Empolyess = ({
   data,
@@ -21,6 +22,7 @@ const Empolyess = ({
   fetchSearchHandler,
   decoded,
 }) => {
+  const [t, i18n] = useTranslation();
   const [showPhases, setShowPhases] = useState(false);
   const [employeeActivity, setEmployeeActivity] = useState({
     id: "",
@@ -130,14 +132,15 @@ const Empolyess = ({
             return (
               <div key={i}>
                 <h2>
-                  كشف العاملين ({key === "null" ? "المكتب الاداري" : key}){" "}
+                  {t("employeeDetection")} (
+                  {key === "null" ? "المكتب الاداري" : key}){" "}
                 </h2>
                 <div className={classes.content}>
                   <table>
                     <thead>
-                      <th>Name </th>
-                      <th>Job</th>
-                      <th>Phases </th>
+                      <th>{t("employeeName")}</th>
+                      <th> {t("type")} </th>
+                      <th> {t("phases")} </th>
                     </thead>
                     {value.map((e, i) => {
                       return (
@@ -184,15 +187,16 @@ const Empolyess = ({
                                             e.id,
                                             e.today_activity.id
                                           )
-                                    }>
+                                    }
+                                  >
                                     {(e.today_activity === false ||
                                       e.today_activity.phase_in === null) &&
-                                      "سجل الحضور"}
+                                      t("phaseIn")}
 
                                     {e.today_activity &&
                                       e.today_activity.phase_in !== "" &&
                                       e.today_activity.phase_out === null &&
-                                      "سجل الانصراف"}
+                                      t("phaseOut")}
                                   </button>
                                 )}
                               </td>

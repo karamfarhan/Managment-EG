@@ -9,6 +9,7 @@ import CloseBar from "../../icons/CloseBar";
 import ToggleBar from "../../icons/ToggleBar";
 import classes from "./Header.module.css";
 import { ThemeContext } from "../../../App";
+import { useTranslation } from "react-i18next";
 
 export const Header = ({ showSideBar, sideBarHandler }) => {
   const themeCtx = useContext(ThemeContext);
@@ -16,8 +17,10 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
   const dispatch = useDispatch();
   const [signoutBtn, setSignoutBtn] = useState(false);
   const [matches, setMatches] = useState(window.innerWidth);
+  const [lang, setLang] = useState(localStorage.getItem("language") || "ar");
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
+  const [t, i18n] = useTranslation();
 
   useEffect(() => {
     const handlerResize = () => setMatches(window.innerWidth);
@@ -56,8 +59,19 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
     setSignoutBtn((prevState) => !prevState);
   };
 
+  //change language
+  const changeLanguage = (e) => {
+    // i18n.changeLanguage(e.target.value);
+    i18n.changeLanguage(e.target.value);
+    localStorage.setItem("language", e.target.value);
+    setLang(e.target.value);
+  };
+
   return (
-    <header className={classes.header}>
+    <header
+      className={classes.header}
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+    >
       <div className={classes["head-content"]}>
         {matches <= 820 && (
           <div className={classes.toggle} onClick={sideBarHandler}>
@@ -65,9 +79,18 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
           </div>
         )}
 
-        <h1> mountain</h1>
-        <div onClick={toggleTheme} className={classes.toggleTheme}>
-          {theme === "dark" ? <CiLight /> : <MdOutlineDarkMode />}
+        <h1> {t("mountain")} </h1>
+        <div className={classes.features}>
+          <div onClick={toggleTheme} className={classes.toggleTheme}>
+            {theme === "dark" ? <CiLight /> : <MdOutlineDarkMode />}
+          </div>
+
+          <div>
+            <select onChange={changeLanguage} value={lang}>
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+            </select>
+          </div>
         </div>
         <div className={classes.actions}>
           {signoutBtn && (

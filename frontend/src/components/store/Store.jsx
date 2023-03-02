@@ -15,6 +15,7 @@ import {
   storeSearch,
   storeSearchPagination,
 } from "../../store/create-store-slice";
+import { useTranslation } from "react-i18next";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
 import EditStore from "../UI/edit_store/EditStore";
 import Search from "../UI/search/Search";
@@ -24,6 +25,7 @@ import classes from "./Store.module.css";
 import SelectImg from "../UI/select_img/SelectImg";
 
 const Store = () => {
+  const [t, i18n] = useTranslation();
   const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [forms, setForms] = useState({
@@ -205,11 +207,12 @@ const Store = () => {
           {(permissions.includes("add_store") || is_superuser) && (
             <button
               className={classes.addInventory}
-              onClick={() => setForms({ showStoreForm: true })}>
+              onClick={() => setForms({ showStoreForm: true })}
+            >
               <span>
                 <AiOutlineFileImage />
               </span>
-              New Store
+              {t("addStore")}
             </button>
           )}
         </div>
@@ -217,7 +220,7 @@ const Store = () => {
       {isLoading && <LoadingSpinner />}
 
       {store_data && store_data.results.length === 0 && !isLoading && (
-        <h1>No stores created yet</h1>
+        <h2>No stores created yet</h2>
       )}
       {store_data &&
         !isLoading &&
@@ -227,12 +230,12 @@ const Store = () => {
             <table>
               <thead>
                 <tr>
-                  <th>store name </th>
-                  <th>store address </th>
+                  <th>{t("storeName")}</th>
+                  <th>{t("storeAddress")}</th>
                   {/* <th>انشيء عن طريق</th> */}
-                  <th>created at </th>
-                  <th>notes </th>
-                  <th>actions</th>
+                  <th> {t("createdAt")} </th>
+                  <th>{t("note")} </th>
+                  <th>{t("actions")}</th>
                 </tr>
               </thead>
 
@@ -257,7 +260,8 @@ const Store = () => {
                               type="button"
                               onClick={() => {
                                 showInvoiceHandler(store.name, store.id);
-                              }}>
+                              }}
+                            >
                               <BiTransfer />
                             </button>
                           )}
@@ -267,7 +271,8 @@ const Store = () => {
                             <button
                               className="add-img"
                               type="button"
-                              onClick={() => uploadImageHandler(store.id)}>
+                              onClick={() => uploadImageHandler(store.id)}
+                            >
                               <AiOutlineFileImage />
                             </button>
                           )}
@@ -276,7 +281,8 @@ const Store = () => {
                             <button
                               className="editBtn"
                               type="button"
-                              onClick={() => editStore(store.id)}>
+                              onClick={() => editStore(store.id)}
+                            >
                               <FiEdit />
                             </button>
                           )}
@@ -286,7 +292,8 @@ const Store = () => {
                             <button
                               className={classes.deleteBtn}
                               type="button"
-                              onClick={() => deleteModelHandler(store.id)}>
+                              onClick={() => deleteModelHandler(store.id)}
+                            >
                               <MdOutlineDeleteForever />
                             </button>
                           )}

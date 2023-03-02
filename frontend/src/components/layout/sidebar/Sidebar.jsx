@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { StaffIcon } from "../../icons/StaffIcon";
 import { StoreIcon } from "../../icons/StoreIcon";
-
+import { useTranslation } from "react-i18next";
 //icon
 import { FaCarSide } from "react-icons/fa";
 import { GiPaddles } from "react-icons/gi";
@@ -16,7 +16,7 @@ const Sidebar = () => {
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
-
+  const [t, i18n] = useTranslation();
   return (
     <aside className={classes.sidebar}>
       <ul>
@@ -28,11 +28,12 @@ const Sidebar = () => {
                 background: isActive ? "#edeaea" : "inherit",
                 color: isActive ? "#2150d8" : "#fff",
               };
-            }}>
+            }}
+          >
             <span>
               <AiOutlineHome />
             </span>
-            <p>Dashboard </p>
+            <p>{t("dashboard")} </p>
           </NavLink>
         </li>
         {(is_superuser === true ||
@@ -46,11 +47,12 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StaffIcon />
               </span>
-              <p>Employees</p>
+              <p>{t("employees")}</p>
             </NavLink>
           </li>
         )}
@@ -63,11 +65,12 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}>
+              }}
+            >
               <span>
                 <StoreIcon />
               </span>
-              <p>Stores</p>
+              <p>{t("stores")}</p>{" "}
             </NavLink>
           </li>
         )}
@@ -81,11 +84,12 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}>
+              }}
+            >
               <span>
                 <TbFileInvoice />
               </span>
-              <p>Invoices</p>
+              <p>{t("invoices")}</p>
             </NavLink>
           </li>
         )}
@@ -102,11 +106,12 @@ const Sidebar = () => {
                     background: isActive ? "#edeaea" : "inherit",
                     color: isActive ? "#2150d8" : "#fff",
                   };
-                }}>
+                }}
+              >
                 <span>
                   <GiPaddles />
                 </span>
-                <p>Substance management </p>
+                <p>{t("substance management")}</p>
               </NavLink>
             </li>
           )}
@@ -119,11 +124,12 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}>
+              }}
+            >
               <span>
                 <FaCarSide />
               </span>
-              <p>Cars</p>
+              <p>{t("cars")}</p>
             </NavLink>
           </li>
         )}
