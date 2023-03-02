@@ -32,18 +32,18 @@ class Category(models.Model):
 
 class Substance(models.Model):
     UNIT_TYPE = (
-        ("كيلوجرام", "كيلوجرام"),
-        ("لتر", "لتر"),
-        ("طن", "طن"),
-        ("متر طولي", "متر طولي"),
-        ("متر مربع", "متر مربع"),
-        ("متر مكعب", "متر مكعب"),
-        ("دهان", "دهان"),
-        ("شكارة 20", "شكارة 20"),
-        ("شكارة 25", "شكارة 25"),
-        ("شكارة 50", "شكارة 50"),
-        ("شكارة معجون", "شكارة معجون"),
-        ("قطعة", "قطعة"),
+        ("KG", "kilogram"),
+        ("L", "letter"),
+        ("T", "ton"),
+        ("M", "meter"),
+        ("M_2", "square meter"),
+        ("M_3", "cubic meter"),
+        ("DAHAN", "dahan"),
+        ("SH_20", "shakara 20"),
+        ("SH_25", "shakara 25"),
+        ("SH_50", "shakara 50"),
+        ("SH_M", "shakara paste"),
+        ("PIECE", "piece"),
     )
     created_by = models.ForeignKey(
         Account,
@@ -87,7 +87,29 @@ class Substance(models.Model):
         default=1,
         verbose_name=_("units available in stock"),
     )
-    unit_type = models.CharField(max_length=20, choices=UNIT_TYPE, verbose_name=_("Unit Type"))
+    unit_type = models.CharField(
+        max_length=20,
+        choices=UNIT_TYPE,
+        verbose_name=_("Unit Type"),
+        help_text=(
+            """
+            Valid choices:
+
+            KG = "kilogram"
+            L = "letter"
+            T = "ton"
+            M = "meter"
+            M_2 = "square meter"
+            M_3 = "cubic meter"
+            DAHAN = "dahan"
+            SH_20 = "shakara 20"
+            SH_25 = "shakara 25"
+            SH_50 = "shakara 50"
+            SH_M = "shakara paste"
+            PIECE = "piece"
+        """
+        ),
+    )
 
     class Meta:
         verbose_name = "Substance"

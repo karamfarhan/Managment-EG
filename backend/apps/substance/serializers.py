@@ -32,6 +32,7 @@ class SubstanceSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Category.objects.all(), allow_null=True, required=False
     )
+    # category = serializers.ListField(write_only=True)
     created_by = AccountSerializer(read_only=True)
 
     class Meta:

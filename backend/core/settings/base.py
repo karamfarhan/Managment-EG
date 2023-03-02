@@ -21,9 +21,9 @@ SECRET_KEY = env("SECRET_KEY")
 
 AUTH_USER_MODEL = "account.Account"
 AUTHENTICATION_BACKENDS = (
-    "graphql_jwt.backends.JSONWebTokenBackend",
     "django.contrib.auth.backends.AllowAllUsersModelBackend",
     "apps.account.backends.CaseInsensitiveModelBackend",
+    "graphql_jwt.backends.JSONWebTokenBackend",
 )
 
 
@@ -174,7 +174,7 @@ GRAPHENE = {
 }
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
-    "JWT_EXPIRATION_DELTA": timedelta(minutes=60),
+    "JWT_EXPIRATION_DELTA": timedelta(days=1),
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=5),
     "JWT_AUTH_HEADER_PREFIX": "Bearer",
 }

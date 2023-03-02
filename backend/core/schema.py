@@ -1,14 +1,11 @@
 import graphene
 from apps.account import schema as account_schema
-
-
-class TestQuery(graphene.ObjectType):
-    hello = graphene.String(default_value="Hi!")
+from apps.substance import schema as substance_schema
 
 
 class Query(
-    TestQuery,
     account_schema.Query,
+    substance_schema.Query,
     graphene.ObjectType,
 ):
     pass
@@ -16,6 +13,7 @@ class Query(
 
 class Mutation(
     account_schema.Mutation,
+    substance_schema.Mutation,
     graphene.ObjectType,
 ):
     pass

@@ -6,6 +6,7 @@ import graphql_jwt
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.http import Http404
+from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_django.types import ErrorType
