@@ -4,6 +4,7 @@ import jwt_decode from "jwt-decode";
 import { AiFillCaretDown, AiOutlineLogout } from "react-icons/ai";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
+import { ImEarth } from "react-icons/im";
 import { logout } from "../../../store/auth-slice";
 import CloseBar from "../../icons/CloseBar";
 import ToggleBar from "../../icons/ToggleBar";
@@ -13,11 +14,11 @@ import { useTranslation } from "react-i18next";
 
 export const Header = ({ showSideBar, sideBarHandler }) => {
   const themeCtx = useContext(ThemeContext);
-  const { toggleTheme, theme } = themeCtx;
   const dispatch = useDispatch();
+  const { toggleTheme, theme } = themeCtx;
   const [signoutBtn, setSignoutBtn] = useState(false);
+  const [lang, setLang] = useState(false);
   const [matches, setMatches] = useState(window.innerWidth);
-  const [lang, setLang] = useState(localStorage.getItem("language") || "ar");
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const [t, i18n] = useTranslation();
@@ -61,17 +62,22 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
 
   //change language
   const changeLanguage = (e) => {
+    let selectedLanguage = e.target.innerText;
+    if (selectedLanguage === "English") {
+      selectedLanguage = "en";
+    } else if (selectedLanguage === "العربية") {
+      selectedLanguage = "ar";
+    } else {
+    }
     // i18n.changeLanguage(e.target.value);
-    i18n.changeLanguage(e.target.value);
-    localStorage.setItem("language", e.target.value);
-    setLang(e.target.value);
+    i18n.changeLanguage(selectedLanguage);
+    localStorage.setItem("language", selectedLanguage);
   };
 
   return (
     <header
       className={classes.header}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
-    >
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className={classes["head-content"]}>
         {matches <= 820 && (
           <div className={classes.toggle} onClick={sideBarHandler}>
@@ -85,11 +91,21 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
             {theme === "dark" ? <CiLight /> : <MdOutlineDarkMode />}
           </div>
 
-          <div>
-            <select onChange={changeLanguage} value={lang}>
-              <option value="en">English</option>
-              <option value="ar">العربية</option>
-            </select>
+          <div
+            className={classes.lang}
+            onClick={() => setLang((prevState) => !prevState)}>
+            <div>
+              <ImEarth />
+            </div>
+            {lang && (
+              <ul>
+                {["English", "العربية"].map((el, i) => (
+                  <li onClick={changeLanguage} key={i}>
+                    {el}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
         <div className={classes.actions}>

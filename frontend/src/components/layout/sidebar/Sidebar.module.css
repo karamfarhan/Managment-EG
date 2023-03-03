@@ -23,8 +23,7 @@
 @media (max-width: 820px) {
   .sidebar {
     width: var(--side-width-mob);
-
-    animation: sideBar 0.5s;
+    transition: 0.5s;
 
     /* right: 100%; */
   }

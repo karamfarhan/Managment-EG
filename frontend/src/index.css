@@ -204,7 +204,11 @@ table tbody {
   font-size: 12px;
 }
 table tbody tr:nth-child(even) {
-  background-color: #ddd;
+  background-color: #d1d1d1;
+}
+#dark table tbody tr:nth-child(even) td,
+#dark table tbody tr:nth-child(even) td a {
+  color: #000;
 }
 table tbody tr td,
 table thead th {

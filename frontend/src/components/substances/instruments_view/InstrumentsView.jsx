@@ -91,11 +91,17 @@ const InstrumentsView = ({
       )}
       <div>
         {instrumentsData && instrumentsData.results.length > 0 && (
-          <Search
-            value={searchVal}
-            onChange={(e) => setSearchVal(e.target.value)}
-            searchData={searchDispatch}
-          />
+          <div
+            style={{
+              width: " 50%",
+              margin: "20px auto",
+            }}>
+            <Search
+              onChange={(e) => setSearchVal(e.target.value)}
+              value={searchVal}
+              searchData={searchDispatch}
+            />
+          </div>
         )}
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
@@ -148,8 +154,7 @@ const InstrumentsView = ({
                                   insruments.in_action === false
                                     ? "#000"
                                     : "red",
-                              }}
-                            >
+                              }}>
                               {insruments.in_action === false
                                 ? "متواجدة"
                                 : "خارج المخزن"}
@@ -169,8 +174,7 @@ const InstrumentsView = ({
                                   className="deleteBtn"
                                   onClick={() =>
                                     deleteModelHandler(insruments.id)
-                                  }
-                                >
+                                  }>
                                   <MdOutlineDeleteForever />
                                 </button>
                               )}
@@ -180,8 +184,7 @@ const InstrumentsView = ({
                                   className="editBtn"
                                   onClick={() =>
                                     editInstrumentsForm(insruments.id)
-                                  }
-                                >
+                                  }>
                                   <FiEdit />
                                 </button>
                               )}
