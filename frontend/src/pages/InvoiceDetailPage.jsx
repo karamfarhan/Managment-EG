@@ -1,7 +1,7 @@
-import InvoiceDetail from '../components/store/store-detail/invoices/invoice-detail/InvoiceDetail'
+import InvoiceDetail from "../components/invoices/invoice-detail/InvoiceDetail";
 
 const InvoiceDetailPage = () => {
-  return <InvoiceDetail />
-}
+  return <InvoiceDetail />;
+};
 
-export default InvoiceDetailPage
+export default InvoiceDetailPage;

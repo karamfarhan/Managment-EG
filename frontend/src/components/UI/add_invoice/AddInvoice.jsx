@@ -109,6 +109,9 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
             }),
           }
         );
+        if (res.ok) {
+          hideModel();
+        }
         const data2 = await res.json();
 
         return data2;
@@ -123,7 +126,6 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     createInvoice();
-    hideModel();
   };
 
   return (

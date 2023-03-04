@@ -45,6 +45,11 @@
   width: 100%;
   /* width: calc(100% - var(--side-width)); */
 }
+.head-content > div:first-of-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .features {
   display: flex;
   align-items: center;
@@ -113,7 +118,6 @@
   cursor: pointer;
   background: url("../../../../public/images/1093687.webp");
   background-size: cover;
-  right: 10px;
   top: 110%;
   height: 100%;
   width: 320px;

@@ -51,7 +51,11 @@
 #dark #dashbaord > div > div p {
   color: #fff;
 }
-
+#dark h2,
+#dark p:not(li p),
+#dark h3 {
+  color: #fff;
+}
 #light {
   background-color: #dbe0e6 !important;
   min-height: 100vh;
