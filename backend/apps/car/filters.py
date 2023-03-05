@@ -9,19 +9,23 @@ class CarFilter(django_filters.FilterSet):
         fields = {
             "car_model": ["iexact", "icontains", "istartswith"],
             "car_type": ["iexact", "icontains", "istartswith"],
+            "car_number": ["iexact", "icontains", "istartswith"],
             "driver__name": ["iexact", "icontains", "istartswith"],
             "maintain_place": ["iexact", "icontains", "istartswith"],
-            # "car_counter": ["exact", "gte", "lte"],
-            # "unit_type": ["exact", "icontains", "istartswith"],
+            "last_maintain": ["exact", "year_gt", "year_lt"],
         }
 
     order_by = django_filters.OrderingFilter(
-        # tuple-mapping retains order
-        fields=(("name", "name"), ("created_at", "created_at"), ("last_maintain", "last_maintain")),
-        # labels do not need to retain order
+        fields=(
+            ("car_model", "car_model"),
+            ("car_type", "car_type"),
+            ("created_at", "created_at"),
+            ("last_maintain", "last_maintain"),
+        ),
         field_labels={
-            "name": "Substance name",
-            "created_at": "Substance created Date",
+            "car_model": "Car's model name",
+            "car_type": "Car's type name",
+            "created_at": "Car created Date",
             "last_maintain": "Last maintain date",
         },
     )
@@ -31,24 +35,20 @@ class CarActivityFilter(django_filters.FilterSet):
     class Meta:
         model = CarActivity
         fields = {
-            # "car__car_model": ["iexact", "icontains", "istartswith"],
-            # "car_type": ["iexact", "icontains", "istartswith"],
             "driver": ["iexact", "icontains", "istartswith"],
-            # "maintain_place": ["iexact", "icontains", "istartswith"],
             "distance": ["exact", "gte", "lte"],
-            "activity_date": ["exact", "gte", "lte"],
-            # "unit_type": ["exact", "icontains", "istartswith"],
+            "activity_date": ["exact", "year_gt", "year_lt"],
         }
 
     order_by = django_filters.OrderingFilter(
-        # tuple-mapping retains order
         fields=(
             ("activity_date", "activity_date"),
             ("distance", "distance"),
+            ("driver", "driver"),
         ),
-        # labels do not need to retain order
         field_labels={
             "activity_date": "activity occur date",
             "distance": "activity distance",
+            "driver": "activity driver name",
         },
     )

@@ -8,10 +8,23 @@ class EmployeeFilter(django_filters.FilterSet):
         model = Employee
         fields = {
             "name": ["iexact", "icontains", "istartswith"],
-            # "category": ["exact"],
-            # "category__name": ["exact"],
-            # "units": ["exact", "gte", "lte"],
-            # "unit_type": ["exact", "icontains", "istartswith"],
+            "type": ["iexact", "icontains", "istartswith"],
+            "email": ["iexact", "icontains", "istartswith"],
+            "email_verified": [
+                "iexact",
+            ],
+            "number": ["iexact", "icontains", "istartswith"],
+            "employee_category": ["iexact", "icontains", "istartswith"],
+            "insurance__ins_code": ["iexact", "icontains", "istartswith"],
+            "insurance__ins_type": ["iexact", "icontains", "istartswith"],
+            "insurance__ins_company": ["iexact", "icontains", "istartswith"],
+            "store__name": ["iexact", "icontains", "istartswith"],
+            "is_primary": [
+                "iexact",
+            ],
+            "years_of_experiance": ["exact", "gte", "lte"],
+            "days_off": ["exact", "gte", "lte"],
+            "signin_date": ["exact", "year__gt", "year__le"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -19,6 +32,11 @@ class EmployeeFilter(django_filters.FilterSet):
         fields=(
             ("name", "name"),
             ("created_at", "created_at"),
+            ("employee_category", "employee_category"),
+            ("years_of_experiance", "years_of_experiance"),
+            ("days_off", "days_off"),
+            ("signin_date", "signin_date"),
+            ("store__name", "store__name"),
         ),
         # labels do not need to retain order
         field_labels={
@@ -28,11 +46,28 @@ class EmployeeFilter(django_filters.FilterSet):
     )
 
 
-class ActivityFilter(django_filters.FilterSet):
+class EmployeeActivityFilter(django_filters.FilterSet):
     class Meta:
         model = EmployeeActivity
         fields = {
-            "date": ["iexact", "icontains", "gte", "lte"],
+            "date": [
+                "exact",
+                "contains",
+                "year_gt",
+                "year_lt",
+            ],
+            "phase_in": [
+                "exact",
+                "contains",
+                "gte",
+                "lte",
+            ],
+            "phase_out": [
+                "exact",
+                "contains",
+                "gte",
+                "lte",
+            ],
         }
 
     order_by = django_filters.OrderingFilter(

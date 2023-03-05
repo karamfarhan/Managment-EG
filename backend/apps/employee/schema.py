@@ -6,7 +6,7 @@ from graphene_django.forms.mutation import DjangoFormMutation, DjangoModelFormMu
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphql_jwt.decorators import login_required, permission_required
 
-from .filters import ActivityFilter, EmployeeFilter
+from .filters import EmployeeActivityFilter, EmployeeFilter
 from .models import Employee, EmployeeActivity, Insurance
 from .serializers import EmployeeSerializer
 
@@ -17,7 +17,7 @@ class EmployeeActivityNode(DjangoObjectType):
     class Meta:
         model = EmployeeActivity
         name = "EmployeeActivity"
-        filterset_class = ActivityFilter
+        filterset_class = EmployeeActivityFilter
         interfaces = (relay.Node,)
 
     @classmethod

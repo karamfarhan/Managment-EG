@@ -9,24 +9,34 @@ class StoreFilter(django_filters.FilterSet):
         fields = {
             "name": ["iexact", "icontains", "istartswith"],
             "address": ["iexact", "icontains", "istartswith"],
-            "active_status": ["iexact", "icontains", "istartswith"],
+            "active_status": [
+                "exact",
+            ],
+            "created_at": ["exact", "year__gt", "year__le"],
             # "maintain_place": ["iexact", "icontains", "istartswith"],
             # "car_counter": ["exact", "gte", "lte"],
             # "unit_type": ["exact", "icontains", "istartswith"],
         }
+
+    order_by = django_filters.OrderingFilter(
+        fields=(
+            ("created_at", "created_at"),
+            ("name", "name"),
+        ),
+        field_labels={
+            "created_at": "invoice date",
+        },
+    )
 
 
 class InvoiceFilter(django_filters.FilterSet):
     class Meta:
         model = Invoice
         fields = {
-            # "car__car_model": ["iexact", "icontains", "istartswith"],
+            "note": ["iexact", "icontains", "istartswith"],
             # "substance_items__name": ["iexact", "icontains", "istartswith"],
             # "instrument_items__name": ["iexact", "icontains", "istartswith"],
-            # "maintain_place": ["iexact", "icontains", "istartswith"],
-            # "distance": ["exact", "gte", "lte"],
-            "created_at": ["exact", "gte", "lte"],
-            # "unit_type": ["exact", "icontains", "istartswith"],
+            "created_at": ["exact", "year__gt", "year__lt"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -43,13 +53,8 @@ class ImageFilter(django_filters.FilterSet):
     class Meta:
         model = Image
         fields = {
-            # "car__car_model": ["iexact", "icontains", "istartswith"],
-            "media_pack__store__address": ["iexact", "icontains", "istartswith"],
-            # "instrument_items__name": ["iexact", "icontains", "istartswith"],
-            # "maintain_place": ["iexact", "icontains", "istartswith"],
-            # "distance": ["exact", "gte", "lte"],
-            "media_pack__created_at": ["exact", "gte", "lte"],
-            # "unit_type": ["exact", "icontains", "istartswith"],
+            # "media_pack__store__address": ["iexact", "icontains", "istartswith"],
+            "media_pack__created_at": ["exact", "year__gt", "year__lt"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -57,6 +62,6 @@ class ImageFilter(django_filters.FilterSet):
         fields=(("media_pack__created_at", "media_pack__created_at"),),
         # labels do not need to retain order
         field_labels={
-            "media_pack__created_at": "image date",
+            "media_pack__created_at": "image creation date",
         },
     )

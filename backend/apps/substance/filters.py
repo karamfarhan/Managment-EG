@@ -8,10 +8,13 @@ class SubstanceFilter(django_filters.FilterSet):
         model = Substance
         fields = {
             "name": ["iexact", "icontains", "istartswith"],
-            "category": ["exact"],
-            "category__name": ["exact"],
+            "category__name": ["iexact", "icontains", "istartswith"],
+            "is_available": [
+                "exact",
+            ],
+            "created_at": ["exact", "year__gt", "year__lt"],
             "units": ["exact", "gte", "lte"],
-            "unit_type": ["exact", "icontains", "istartswith"],
+            "unit_type": ["iexact", "icontains", "istartswith"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -35,10 +38,18 @@ class InstrumentFilter(django_filters.FilterSet):
         model = Instrument
         fields = {
             "name": ["iexact", "icontains", "istartswith"],
-            "category": ["exact"],
-            "category__name": ["exact"],
-            "last_maintain": ["exact", "gte", "lte"],
-            "maintain_place": ["exact", "icontains", "istartswith"],
+            "category__name": [
+                "exact",
+            ],
+            "in_action": [
+                "exact",
+            ],
+            "is_working": [
+                "exact",
+            ],
+            "created_at": ["exact", "year__gt", "year__lt"],
+            "last_maintain": ["exact", "year__gt", "year__lt"],
+            "maintain_place": ["iexact", "icontains", "istartswith"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -47,11 +58,13 @@ class InstrumentFilter(django_filters.FilterSet):
             ("name", "name"),
             ("created_at", "created_at"),
             ("last_maintain", "last_maintain"),
+            ("maintain_place", "maintain_place"),
         ),
         # labels do not need to retain order
         field_labels={
             "name": "Substance name",
             "created_at": "Substance created Date",
             "last_maintain": "last maintain Date",
+            "maintain_place": "maintain place",
         },
     )
