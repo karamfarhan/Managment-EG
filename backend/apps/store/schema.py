@@ -35,6 +35,7 @@ class InvoiceNode(DjangoObjectType):
         name = "Invoice"
         filterset_class = InvoiceFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("store",)
 
     @classmethod
     @login_required
@@ -52,6 +53,7 @@ class InvoiceInstrumentItemNode(DjangoObjectType):
         name = "InvoiceInstrumentItem"
         # filterset_class = InvoiceFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("invoice",)
 
     @classmethod
     @login_required
@@ -69,6 +71,7 @@ class InvoiceSubstanceItemNode(DjangoObjectType):
         name = "InvoiceSubstanceItem"
         # filterset_class = InvoiceFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("invoice",)
 
     @classmethod
     @login_required
@@ -86,6 +89,7 @@ class ImageNode(DjangoObjectType):
         name = "Image"
         filterset_class = ImageFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("media_pack",)
 
     @classmethod
     @login_required
@@ -103,6 +107,7 @@ class MediaPackNode(DjangoObjectType):
         name = "MediaPack"
         # filterset_class = ImageFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("store",)
 
     @classmethod
     @login_required

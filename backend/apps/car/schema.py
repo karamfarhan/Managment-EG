@@ -35,6 +35,7 @@ class CarActivityNode(DjangoObjectType):
         name = "CarActivity"
         filterset_class = CarActivityFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("car",)
 
     @classmethod
     @login_required
@@ -52,6 +53,7 @@ class CarActivityRideNode(DjangoObjectType):
         name = "CarActivityRide"
         # filterset_class = EmployeeFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("activity",)
 
     @classmethod
     @login_required

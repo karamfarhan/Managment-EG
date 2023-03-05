@@ -36,6 +36,7 @@ class InsuranceNode(DjangoObjectType):
         name = "Insurance"
         # filterset_class = EmployeeFilter
         interfaces = (relay.Node,)
+        exclude_fields = ("employee",)
 
     @classmethod
     @login_required
