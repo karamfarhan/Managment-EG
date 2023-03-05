@@ -65,23 +65,25 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "created_at",
             "created_by",
         ]
-        read_only_fields = ["id", "created_by", "created_at", "store_address", "today_activity"]
+        read_only_fields = ["id", "created_by", "created_at", "store_address", "today_activity", "email_verified"]
         # extra_kwargs = {
         #     'store_address': {'method': 'get_store_address'},
         #     'today_activity': {'method': 'get_today_activity'}
         # }
 
     def create(self, validated_data):
+        request = self.context["request"]
         insurance_data = validated_data.pop("insurance", None)
         employee = Employee(**validated_data)
-        self.handle_insurance(employee, insurance_data, validated_data["created_by"])
+        self.handle_insurance(employee, insurance_data, request.user)
         # TODO i already mde .save() in the handle_insurance method, should be removed, or removed from here, can't be 2 at same time
         employee.save()
         return employee
 
     def update(self, instance, validated_data):
+        request = self.context["request"]
         insurance_data = validated_data.pop("insurance", None)
-        self.handle_insurance(instance, insurance_data, validated_data["created_by"])
+        self.handle_insurance(instance, insurance_data, request.user)
         return super().update(instance, validated_data)
 
     def get_store_address(self, employee):

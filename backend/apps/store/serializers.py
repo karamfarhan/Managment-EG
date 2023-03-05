@@ -40,7 +40,7 @@ class StoreSerializer(serializers.ModelSerializer):
             "active_status",
             "start_at",
             "created_at",
-            "invoices",
+            # "invoices",
         ]
         read_only_fields = ["id", "created_by", "creatd_at", "invoices"]
 

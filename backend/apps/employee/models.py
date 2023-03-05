@@ -12,6 +12,7 @@ from .untils import (
 )
 
 
+# from apps.store.models import Store
 class Insurance(models.Model):
     ins_code = models.CharField(
         max_length=250,
@@ -59,6 +60,16 @@ class Insurance(models.Model):
 
 
 class Employee(models.Model):
+    class EmployeeCategory(models.TextChoices):
+        ENGINNER = "EN", _("Enginner")
+        DRIVER = "DR", _("Driver")
+        ACOUNTER = "AC", _("Acounter")
+        SUPERVISOR = "SP", _("Supervisor")
+        HUMAN_RESOURCE = "HR", _("Human Resource")
+        MANAGER = "MG", _("Manager")
+        EMPLOYEE = "EM", _("Employee")
+        __empty__ = _("(Unknown)")
+
     name = models.CharField(
         max_length=250,
         null=False,
@@ -71,21 +82,15 @@ class Employee(models.Model):
         blank=False,
         verbose_name=_("employee type"),
     )
-    email = models.EmailField(
-        verbose_name="employee email address", max_length=60, null=True, blank=True)
+    email = models.EmailField(verbose_name="employee email address", max_length=60, null=True, blank=True)
     email_verified = models.BooleanField(default=False)
-    number = models.CharField(
-        verbose_name="employee number", max_length=60, null=True, blank=True)
-    EMPLOYEE_CATEGORY = (
-        ("مهندس", "مهندس"),
-        ("سائق", "سائق"),
-        ("محاسب", "محاسب"),
-        ("مشرف", "مشرف"),
-        ("موارد بشرية", "موارد بشرية"),
-        ("مسؤول", "مسؤول"),
-    )
+    number = models.CharField(verbose_name="employee number", max_length=60, null=True, blank=True)
     employee_category = models.CharField(
-        max_length=20, choices=EMPLOYEE_CATEGORY, verbose_name=_("employee category"))
+        max_length=25,
+        choices=EmployeeCategory.choices,
+        default=EmployeeCategory.__empty__,
+        verbose_name=_("employee category"),
+    )
     created_by = models.ForeignKey(
         "account.Account",
         on_delete=models.SET_NULL,
@@ -176,8 +181,7 @@ class Employee(models.Model):
 
 
 class EmployeeActivity(models.Model):
-    employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name="activities")
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="activities")
     is_holiday = models.BooleanField(
         default=False,
         verbose_name=_("is today is holiday day"),
@@ -192,8 +196,7 @@ class EmployeeActivity(models.Model):
         null=True,
         blank=True,
     )
-    phase_out = models.TimeField(verbose_name=_(
-        "employee phase out time"), null=True, blank=True)
+    phase_out = models.TimeField(verbose_name=_("employee phase out time"), null=True, blank=True)
     address = models.CharField(
         max_length=250,
         null=True,

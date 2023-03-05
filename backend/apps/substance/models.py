@@ -31,20 +31,22 @@ class Category(models.Model):
 
 
 class Substance(models.Model):
-    UNIT_TYPE = (
-        ("KG", "kilogram"),
-        ("L", "letter"),
-        ("T", "ton"),
-        ("M", "meter"),
-        ("M_2", "square meter"),
-        ("M_3", "cubic meter"),
-        ("DAHAN", "dahan"),
-        ("SH_20", "shakara 20"),
-        ("SH_25", "shakara 25"),
-        ("SH_50", "shakara 50"),
-        ("SH_M", "shakara paste"),
-        ("PIECE", "piece"),
-    )
+    class UnitType(models.TextChoices):
+        KILOGRAM = "KG", _("Kilogram")
+        LETTER = "L", _("Letter")
+        TON = "T", _("Ton")
+        METER = "M", _("Meter")
+        SQUARE_METER = "M_2", _("Square meter")
+        CUBIC_METER = "M_3", _("Cubic meter")
+        DAHAN = "DAHAN", _("Dahan")
+        SHAKARA_20 = "SH_20", _("Shakara 20")
+        SHAKARA_25 = "SH_25", _("Shakara 25")
+        SHAKARA_50 = "SH_50", _("Shakara 50")
+        SHAKARA_PASTE = "SH_M", _("Shakara paste")
+        PIECE = "PIECE", _("Piece")
+
+        __empty__ = _("(Unknown)")
+
     created_by = models.ForeignKey(
         Account,
         on_delete=models.SET_NULL,
@@ -88,27 +90,9 @@ class Substance(models.Model):
         verbose_name=_("units available in stock"),
     )
     unit_type = models.CharField(
-        max_length=20,
-        choices=UNIT_TYPE,
-        verbose_name=_("Unit Type"),
-        help_text=(
-            """
-            Valid choices:
-
-            KG = "kilogram"
-            L = "letter"
-            T = "ton"
-            M = "meter"
-            M_2 = "square meter"
-            M_3 = "cubic meter"
-            DAHAN = "dahan"
-            SH_20 = "shakara 20"
-            SH_25 = "shakara 25"
-            SH_50 = "shakara 50"
-            SH_M = "shakara paste"
-            PIECE = "piece"
-        """
-        ),
+        max_length=25,
+        choices=UnitType.choices,
+        default=UnitType.KILOGRAM,
     )
 
     class Meta:

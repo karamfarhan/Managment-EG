@@ -38,18 +38,17 @@ class EmployeeViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         print(f"Employee-{self.request.method}-REQUEST_DATA = ", request.data)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(created_by=request.user)
+        serializer = self.get_serializer(data=request.data, context={"request": request})
+        serializer.is_valid()
+        serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
         print(f"Employee-{self.request.method}-REQUEST_DATA = ", request.data)
-        # partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(instance, data=request.data, context={"request": request}, partial=True)
+        serializer.is_valid()
         serializer.save(created_by=request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
