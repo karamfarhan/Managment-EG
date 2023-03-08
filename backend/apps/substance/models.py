@@ -32,17 +32,17 @@ class Category(models.Model):
 
 class Substance(models.Model):
     class UnitType(models.TextChoices):
-        KILOGRAM = "KG", _("Kilogram")
-        LETTER = "L", _("Letter")
-        TON = "T", _("Ton")
-        METER = "M", _("Meter")
-        SQUARE_METER = "M_2", _("Square meter")
-        CUBIC_METER = "M_3", _("Cubic meter")
+        KILOGRAM = "KILOGRAM", _("Kilogram")
+        LETTER = "LETTER", _("Letter")
+        TON = "TON", _("Ton")
+        METER = "METER", _("Meter")
+        SQUARE_METER = "SQUARE_METER", _("Square meter")
+        CUBIC_METER = "CUBIC_METER", _("Cubic meter")
         DAHAN = "DAHAN", _("Dahan")
-        SHAKARA_20 = "SH_20", _("Shakara 20")
-        SHAKARA_25 = "SH_25", _("Shakara 25")
-        SHAKARA_50 = "SH_50", _("Shakara 50")
-        SHAKARA_PASTE = "SH_M", _("Shakara paste")
+        SHAKARA_20 = "SHAKARA_20", _("Shakara 20")
+        SHAKARA_25 = "SHAKARA_25", _("Shakara 25")
+        SHAKARA_50 = "SHAKARA_50", _("Shakara 50")
+        SHAKARA_PASTE = "SHAKARA_PASTE", _("Shakara paste")
         PIECE = "PIECE", _("Piece")
 
         __empty__ = _("(Unknown)")

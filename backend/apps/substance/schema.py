@@ -9,7 +9,7 @@ from graphql_jwt.decorators import login_required, permission_required
 
 from .filters import InstrumentFilter, SubstanceFilter
 from .models import Category, Instrument, Substance
-from .serializers import CategorySerializer, SubstanceSerializer
+from .serializers import CategorySerializer, InstrumentSerializer, SubstanceSerializer
 
 
 class CategoryNode(DjangoObjectType):
@@ -80,22 +80,41 @@ class SubstanceNode(DjangoObjectType):
 # *: it will work but, i have to set it write_only=True in order to work,in result it will not return the categories when query for the substance since it's write_only
 # *: and also it will not give a good error message when i send wrong category pk
 
-# mutaion with serializerMutaion
-# class SubstanceMutation(SerializerMutation):
-#     class Meta:
-#         serializer_class = SubstanceSerializer
-#         model_operations = ["create", "update"]
-#         lookup_field = "id"
-#         convert_choices_to_enum = True
 
-# mutaion with DjangoModelFormMutation
-class SubstanceMutation(DjangoModelFormMutation):
-    substance = graphene.Field(SubstanceNode)
+class SubstanceUnitTypeEnum(graphene.Enum):
+    class Meta:
+        enum = Substance.UnitType
+
+
+# mutaion with serializerMutaion
+class SubstanceMutation(SerializerMutation):
+    unit_type = graphene.Field(SubstanceUnitTypeEnum)
+    category = graphene.List(graphene.ID)
 
     class Meta:
-        return_field_name = "substance"
-        form_class = SubstanceForm
-        model = Substance
+        serializer_class = SubstanceSerializer
+        model_operations = ["create", "update"]
+        lookup_field = "id"
+        convert_choices_to_enum = False
+        # ? we have to exlcude the override filds so that our custome fileds can work
+        exclude_fields = (
+            "unit_type",
+            "category",
+        )
+
+    class Input:
+        unit_type = SubstanceUnitTypeEnum()
+        category = graphene.List(graphene.ID)
+
+
+# mutaion with DjangoModelFormMutation
+# class SubstanceMutation(DjangoModelFormMutation):
+#     substance = graphene.Field(SubstanceNode)
+
+#     class Meta:
+#         return_field_name = "substance"
+#         form_class = SubstanceForm
+#         model = Substance
 
 
 class InstrumentNode(DjangoObjectType):
@@ -114,8 +133,24 @@ class InstrumentNode(DjangoObjectType):
         return queryset
 
 
+# mutaion with serializerMutaion
+class InstrumentMutation(SerializerMutation):
+    category = graphene.List(graphene.ID)
+
+    class Meta:
+        serializer_class = InstrumentSerializer
+        model_operations = ["create", "update"]
+        lookup_field = "id"
+        # ? we have to exlcude the override filds so that our custome fileds can work
+        exclude_fields = ("category",)
+
+    class Input:
+        category = graphene.List(graphene.ID)
+
+
 class Mutation(graphene.ObjectType):
     write_substance = SubstanceMutation.Field()
+    write_Instrument = InstrumentMutation.Field()
     write_category = CategoryMutation.Field()
 
 
