@@ -6,6 +6,7 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoFormMutation, DjangoModelFormMutation
 from graphene_django.rest_framework.mutation import SerializerMutation
+from graphene_file_upload.scalars import Upload
 from graphql_jwt.decorators import login_required, permission_required
 
 from .filters import EmployeeActivityFilter, EmployeeFilter
@@ -78,7 +79,10 @@ class EmployeeCategoryEnum(graphene.Enum):
 
 # mutaion with serializerMutaion
 class EmployeeMutation(SerializerMutation):
-    # store = graphene.Field(StoreNode)
+    identity_image = graphene.String()
+    certificate_image = graphene.String()
+    experience_image = graphene.String()
+    criminal_record_image = graphene.String()
     employee_category = graphene.Field(EmployeeCategoryEnum)
 
     class Meta:
@@ -86,10 +90,20 @@ class EmployeeMutation(SerializerMutation):
         model_operations = ["create", "update"]
         lookup_field = "id"
         convert_choices_to_enum = False
-        exclude_fields = ("employee_category",)
+        exclude_fields = (
+            "employee_category",
+            "identity_image",
+            "certificate_image",
+            "criminal_record_image",
+            "experience_image",
+        )
 
     class Input:
         employee_category = EmployeeCategoryEnum()
+        identity_image = Upload()
+        certificate_image = Upload()
+        criminal_record_image = Upload()
+        experience_image = Upload()
 
 
 class EmployeeActivityMutation(SerializerMutation):
