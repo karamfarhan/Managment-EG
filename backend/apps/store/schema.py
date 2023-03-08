@@ -8,6 +8,7 @@ from graphql_jwt.decorators import login_required, permission_required
 
 from .filters import ImageFilter, InvoiceFilter, StoreFilter
 from .models import Image, Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, MediaPack, Store
+from .serializers import InvoiceSerializer, StoreSerializer
 
 
 class StoreNode(DjangoObjectType):
@@ -117,8 +118,27 @@ class MediaPackNode(DjangoObjectType):
         return queryset
 
 
+class StoreMutation(SerializerMutation):
+    class Meta:
+        serializer_class = StoreSerializer
+        model_operations = ["create", "update"]
+        lookup_field = "id"
+        # exclude_fields = ("invoices",)
+
+
+class InvoiceMutation(SerializerMutation):
+    class Meta:
+        serializer_class = InvoiceSerializer
+        model_operations = [
+            "create",
+        ]
+        lookup_field = "id"
+        # exclude_fields = ("invoices",)
+
+
 class Mutation(graphene.ObjectType):
-    pass
+    write_store = StoreMutation.Field()
+    write_invoice = InvoiceMutation.Field()
 
 
 class Query(graphene.ObjectType):

@@ -1,5 +1,6 @@
 from apps.substance.serializers import AccountSerializer
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from .models import Image, Invoice, InvoiceInstrumentItem, InvoiceSubstanceItem, MediaPack, Store
@@ -26,7 +27,8 @@ class StoreSelectBarSerializer(serializers.ModelSerializer):
 
 
 class StoreSerializer(serializers.ModelSerializer):
-    created_by = serializers.SerializerMethodField("get_username")
+    created_by = AccountSerializer(read_only=True)
+    # created_by = serializers.SerializerMethodField("get_username")
     invoices = serializers.SerializerMethodField("get_invoices")
 
     class Meta:
@@ -40,7 +42,7 @@ class StoreSerializer(serializers.ModelSerializer):
             "active_status",
             "start_at",
             "created_at",
-            # "invoices",
+            "invoices",
         ]
         read_only_fields = ["id", "created_by", "creatd_at", "invoices"]
 
@@ -102,6 +104,7 @@ class InvoiceInstrumentItemSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     created_by = AccountSerializer(read_only=True)
+    # store = serializers.PrimaryKeyRelatedField(queryset=Store.objects.all(), allow_null=False, required=True)
     store_address = serializers.SerializerMethodField("get_store_address")
     substance_items = InvoiceSubstanceItemSerializer(many=True, read_only=True)
     instrument_items = InvoiceInstrumentItemSerializer(many=True, read_only=True)
@@ -111,6 +114,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "note",
+            # "store",
             "store_address",
             "substance_items",
             "instrument_items",
@@ -119,6 +123,13 @@ class InvoiceSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "created_by", "created_at", "store_address", "substance_items", "instrument_items"]
 
+    # def validate(self, data):
+    #     store_id = data.get("id")
+    #     print(store_id)
+    #     store = Store.objects.get(id=store_id)
+    #     if store is None:
+    #         raise serializers.ValidationError({"store":["there is not store with this id"]})
+    #     return data
     def get_store_address(self, invoice):
         return invoice.store.address
 
@@ -128,10 +139,11 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create_invoice(self, validated_data):
+        request = self.context["request"]
         substances = validated_data.pop("substances")
         instruments = validated_data.pop("instruments")
 
-        invoice = Invoice.objects.create(**validated_data)
+        invoice = Invoice.objects.create(created_by=request.user, **validated_data)
 
         # ! serializer way
         for substance in substances:
