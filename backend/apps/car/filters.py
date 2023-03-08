@@ -12,7 +12,7 @@ class CarFilter(django_filters.FilterSet):
             "car_number": ["iexact", "icontains", "istartswith"],
             "driver__name": ["iexact", "icontains", "istartswith"],
             "maintain_place": ["iexact", "icontains", "istartswith"],
-            "last_maintain": ["exact", "year_gt", "year_lt"],
+            "last_maintain": ["exact", "gte", "lte"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -37,7 +37,7 @@ class CarActivityFilter(django_filters.FilterSet):
         fields = {
             "driver": ["iexact", "icontains", "istartswith"],
             "distance": ["exact", "gte", "lte"],
-            "activity_date": ["exact", "year_gt", "year_lt"],
+            "activity_date": ["exact", "gte", "lte"],
         }
 
     order_by = django_filters.OrderingFilter(

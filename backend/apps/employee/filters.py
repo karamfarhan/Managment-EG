@@ -24,7 +24,7 @@ class EmployeeFilter(django_filters.FilterSet):
             ],
             "years_of_experiance": ["exact", "gte", "lte"],
             "days_off": ["exact", "gte", "lte"],
-            "signin_date": ["exact", "year__gt", "year__le"],
+            "signin_date": ["exact", "gte", "lte"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -53,8 +53,8 @@ class EmployeeActivityFilter(django_filters.FilterSet):
             "date": [
                 "exact",
                 "contains",
-                "year_gt",
-                "year_lt",
+                "gte",
+                "lte",
             ],
             "phase_in": [
                 "exact",

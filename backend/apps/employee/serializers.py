@@ -115,7 +115,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class EmployeeActivitySerializer(serializers.ModelSerializer):
-    employee = serializers.SerializerMethodField("get_employee_id")
+    # employee = serializers.SerializerMethodField("get_employee_id")
 
     class Meta:
         model = EmployeeActivity
@@ -127,16 +127,24 @@ class EmployeeActivitySerializer(serializers.ModelSerializer):
             "phase_out",
             "is_holiday",
         ]
-        read_only_fields = ["id", "date", "employee"]
+        read_only_fields = [
+            "id",
+            "date",
+        ]
 
     def create(self, validated_data):
+        # TODO: i have to overwrite the unique together error message between date and employee
+        # if Employee.objects.get(employee=validated_data["employee"]):
+        #     raise serializers.ValidationError({"employee": ["This employee is already submitted phase_in for the Activity today"]})
         if not validated_data.get("is_holiday", False) and not validated_data.get("phase_in", False):
-            raise serializers.ValidationError({"phase_in": "if the holiday is false you should provide phase_in time"})
+            raise serializers.ValidationError(
+                {"phase_in": ["if the holiday is false you should provide phase_in time"]}
+            )
         try:
             return EmployeeActivity.objects.create(**validated_data)
         except IntegrityError:
             raise serializers.ValidationError(
-                {"error": "Employee activity for today were already created, can't create again"}
+                {"error": ["Employee activity for today were already created, can't create again"]}
             )
 
     # ! the problem with validate is it will run on the .create and .update methods
@@ -154,8 +162,8 @@ class EmployeeActivitySerializer(serializers.ModelSerializer):
             instance.save(update_fields=["phase_out", "is_holiday"])
             return instance
         raise serializers.ValidationError(
-            {"phase_out": "Can't update the phase out after it has been set ,(is_holiday filed has been updated)"}
+            {"phase_out": ["Can't update the phase out after it has been set ,(is_holiday filed has been updated)"]}
         )
 
-    def get_employee_id(self, instance):
-        return instance.employee.id
+    # def get_employee_id(self, instance):
+    #     return instance.employee.id

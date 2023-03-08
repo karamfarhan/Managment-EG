@@ -1,3 +1,4 @@
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
@@ -16,21 +17,21 @@ from .untils import (
 class Insurance(models.Model):
     ins_code = models.CharField(
         max_length=250,
-        null=False,
+        null=True,
         unique=True,
-        blank=False,
+        blank=True,
         verbose_name=_("Insurance code"),
     )
     ins_type = models.CharField(
         max_length=250,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         verbose_name=_("Insurance type"),
     )
     ins_company = models.CharField(
         max_length=250,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         verbose_name=_("Insurance issued company"),
     )
     created_by = models.ForeignKey(
@@ -61,13 +62,13 @@ class Insurance(models.Model):
 
 class Employee(models.Model):
     class EmployeeCategory(models.TextChoices):
-        ENGINNER = "EN", _("Enginner")
-        DRIVER = "DR", _("Driver")
-        ACOUNTER = "AC", _("Acounter")
-        SUPERVISOR = "SP", _("Supervisor")
-        HUMAN_RESOURCE = "HR", _("Human Resource")
-        MANAGER = "MG", _("Manager")
-        EMPLOYEE = "EM", _("Employee")
+        ENGINNER = "ENGINNER", _("Enginner")
+        DRIVER = "DRIVER", _("Driver")
+        ACOUNTER = "ACOUNTER", _("Acounter")
+        SUPERVISOR = "SUPERVISOR", _("Supervisor")
+        HUMAN_RESOURCE = "HUMAN_RESOURCE", _("Human Resource")
+        MANAGER = "MANAGER", _("Manager")
+        EMPLOYEE = "EMPLOYEE", _("Employee")
         __empty__ = _("(Unknown)")
 
     name = models.CharField(

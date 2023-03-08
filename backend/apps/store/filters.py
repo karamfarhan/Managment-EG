@@ -12,7 +12,7 @@ class StoreFilter(django_filters.FilterSet):
             "active_status": [
                 "exact",
             ],
-            "created_at": ["exact", "year__gt", "year__le"],
+            "created_at": ["exact", "gte", "lte"],
             # "maintain_place": ["iexact", "icontains", "istartswith"],
             # "car_counter": ["exact", "gte", "lte"],
             # "unit_type": ["exact", "icontains", "istartswith"],
@@ -36,7 +36,7 @@ class InvoiceFilter(django_filters.FilterSet):
             "note": ["iexact", "icontains", "istartswith"],
             # "substance_items__name": ["iexact", "icontains", "istartswith"],
             # "instrument_items__name": ["iexact", "icontains", "istartswith"],
-            "created_at": ["exact", "year__gt", "year__lt"],
+            "created_at": ["exact", "gte", "lte"],
         }
 
     order_by = django_filters.OrderingFilter(
@@ -54,7 +54,7 @@ class ImageFilter(django_filters.FilterSet):
         model = Image
         fields = {
             # "media_pack__store__address": ["iexact", "icontains", "istartswith"],
-            "media_pack__created_at": ["exact", "year__gt", "year__lt"],
+            "media_pack__created_at": ["exact", "gte", "lte"],
         }
 
     order_by = django_filters.OrderingFilter(
