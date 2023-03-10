@@ -6,8 +6,8 @@ import "./index.css";
 export const ThemeContext = createContext(null);
 
 function App() {
-  window.domain = "http://127.0.0.1:8000/api/v1";
-  // window.domain = "https://managment-eg-production.up.railway.app/api/v1";
+//  window.domain = "http://127.0.0.1:8000/api/v1";
+   window.domain = "https://managment-eg-production.up.railway.app/api/v1";
   // window.domain = "https://managementdjango.onrender.com/api/v1";
   const dispatch = useDispatch();
   const { refresh, token } = useSelector((state) => state.authReducer);
