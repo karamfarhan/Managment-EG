@@ -6,7 +6,11 @@ import { Provider } from "react-redux";
 import App from "./App";
 import "./index.css";
 import store from "./store";
+<<<<<<< HEAD
 import "./i18n";
+=======
+
+>>>>>>> c9f6c2a (charts_part_one)
 import "./components/i18next";
 
 const queryClient = new QueryClient();

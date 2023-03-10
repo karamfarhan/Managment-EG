@@ -100,9 +100,7 @@ const Invoices = () => {
                       <Link
                         className={styles.btn}
                         to={`/store/${storeId}/${invoice.id}`}
-                      >
-                        View
-                      </Link>
+                        View></Link>
                     </td>
                   </tr>
                 ))}
