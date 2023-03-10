@@ -48,8 +48,7 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}
-            >
+              }}>
               <span>
                 <StaffIcon />
               </span>
@@ -66,8 +65,7 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}
-            >
+              }}>
               <span>
                 <StoreIcon />
               </span>
@@ -85,8 +83,7 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}
-            >
+              }}>
               <span>
                 <TbFileInvoice />
               </span>
@@ -95,7 +92,7 @@ const Sidebar = () => {
           </li>
         )}
 
-        {(is_superuser || allPermissions.includes("store")) && (
+        {/* {(is_superuser || allPermissions.includes("store")) && (
           <li>
             <NavLink
               to="/purchases"
@@ -112,7 +109,7 @@ const Sidebar = () => {
               <p>{t("purchases")}</p>
             </NavLink>
           </li>
-        )}
+        )} */}
 
         {(is_superuser ||
           allPermissions.includes("substance") ||
@@ -127,8 +124,7 @@ const Sidebar = () => {
                     background: isActive ? "#edeaea" : "inherit",
                     color: isActive ? "#2150d8" : "#fff",
                   };
-                }}
-              >
+                }}>
                 <span>
                   <GiPaddles />
                 </span>
@@ -145,8 +141,7 @@ const Sidebar = () => {
                   background: isActive ? "#edeaea" : "inherit",
                   color: isActive ? "#2150d8" : "#fff",
                 };
-              }}
-            >
+              }}>
               <span>
                 <FaCarSide />
               </span>

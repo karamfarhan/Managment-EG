@@ -2,13 +2,11 @@ import { useState, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { AiFillCaretDown, AiOutlineLogout } from "react-icons/ai";
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { ImEarth } from "react-icons/im";
-=======
->>>>>>> c9f6c2a (charts_part_one)
+
 import { logout } from "../../../store/auth-slice";
 import CloseBar from "../../icons/CloseBar";
 import ToggleBar from "../../icons/ToggleBar";
@@ -16,39 +14,16 @@ import classes from "./Header.module.css";
 import { ThemeContext } from "../../../App";
 import { useTranslation } from "react-i18next";
 
-<<<<<<< HEAD
-export const Header = ({ showSideBar, sideBarHandler }) => {
-  const themeCtx = useContext(ThemeContext);
-  const dispatch = useDispatch();
-  const { toggleTheme, theme } = themeCtx;
-=======
-=======
-import { MdOutlineDarkMode } from "react-icons/md";
-import { CiLight } from "react-icons/ci";
-import { logout } from "../../../store/auth-slice";
-import CloseBar from "../../icons/CloseBar";
-import ToggleBar from "../../icons/ToggleBar";
->>>>>>> 642d04b (dark theme)
-import classes from "./Header.module.css";
-import { ThemeContext } from "../../../App";
-
 export const Header = ({ showSideBar, sideBarHandler }) => {
   const themeCtx = useContext(ThemeContext);
   const { toggleTheme, theme } = themeCtx;
   const dispatch = useDispatch();
->>>>>>> c9f6c2a (charts_part_one)
   const [signoutBtn, setSignoutBtn] = useState(false);
-<<<<<<< HEAD
   const [lang, setLang] = useState(false);
   const [matches, setMatches] = useState(window.innerWidth);
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
   const [t, i18n] = useTranslation();
-=======
-  const [matches, setMatches] = useState(window.innerWidth);
-  const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
->>>>>>> 642d04b (dark theme)
 
   useEffect(() => {
     const handlerResize = () => setMatches(window.innerWidth);
@@ -86,7 +61,6 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
   const toggleBtn = () => {
     setSignoutBtn((prevState) => !prevState);
   };
-<<<<<<< HEAD
 
   //change language
   const changeLanguage = (e) => {
@@ -102,7 +76,6 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
     localStorage.setItem("language", selectedLanguage);
   };
 
-<<<<<<< HEAD
   let positionX = {};
   if (i18n.language === "ar") {
     positionX = {
@@ -116,8 +89,7 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
   return (
     <header
       className={classes.header}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
-    >
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className={classes["head-content"]}>
         <div>
           {matches <= 820 && (
@@ -135,8 +107,7 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
 
           <div
             className={classes.lang}
-            onClick={() => setLang((prevState) => !prevState)}
-          >
+            onClick={() => setLang((prevState) => !prevState)}>
             <div>
               <ImEarth />
             </div>
@@ -177,62 +148,6 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
             </span>
           </div>
         </div>
-=======
-  // let headerColor = "#7c7979";
-
-  // if (location.pathname === "/staff") {
-  //   headerColor = "#c1392b";
-  // } else if (location.pathname === "/store") {
-  //   headerColor = "#27ae61";
-  // } else if (location.pathname === "/create_subs") {
-  //   headerColor = "#114299";
-  // } else if (location.pathname === "/cars") {
-  //   headerColor = "#27ae61";
-  // } else {
-  // }
-=======
->>>>>>> 642d04b (dark theme)
-
-  return (
-    <header className={classes.header}>
-      <div className={classes["head-content"]}>
-        {matches <= 820 && (
-          <div className={classes.toggle} onClick={sideBarHandler}>
-            {showSideBar ? <CloseBar /> : <ToggleBar />}
-          </div>
-        )}
-
-        <h1> mountain</h1>
-        <div onClick={toggleTheme} className={classes.toggleTheme}>
-          {theme === "dark" ? <CiLight /> : <MdOutlineDarkMode />}
-        </div>
-        <div className={classes.actions}>
-          {signoutBtn && (
-            <div className={classes.settings}>
-              <div>
-                <img src="../../../../images/logo/logo.png" alt="user" />{" "}
-              </div>
-              <div>
-                <p>{decoded.username} </p>
-              </div>
-              <button className={classes.logoutBtn} onClick={logoutHandler}>
-                sign out
-                <AiOutlineLogout />
-              </button>
-            </div>
-          )}
-
-          <div className={classes.user} onClick={toggleBtn}>
-            <div>
-              <img src="../../../../images/logo/logo.png" alt="user" />
-            </div>
-
-            <span>
-              <AiFillCaretDown />
-            </span>
-          </div>
-        </div>
->>>>>>> c9f6c2a (charts_part_one)
       </div>
     </header>
   );
