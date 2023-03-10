@@ -25,8 +25,6 @@ const InvoiceDetail = () => {
     } catch (err) {}
   });
 
-  console.log(invoice);
-
   return (
     <>
       <div dir="rtl" className={classes["invoice-container"]}>

@@ -63,7 +63,7 @@ const Invoices = () => {
       )}
 
       <div className={styles.content}>
-        {invoices && invoices.length > 0 && (
+        {stores && stores.length > 0 && (
           <div>
             <select onChange={storeChangeHandler} value={storeId}>
               {stores &&
@@ -100,8 +100,7 @@ const Invoices = () => {
                         className={styles.btn}
                         onClick={() => {
                           window.location.href = `${window.domain}/invoices/${invoice.pk}`;
-                        }}
-                      >
+                        }}>
                         View
                       </button>
                     </td>
