@@ -25,14 +25,9 @@
   background: #00b4cc;
   text-align: center;
   color: #fff;
-<<<<<<< HEAD
   border-radius: 0 5px 5px 0;
   cursor: pointer;
   font-size: 20px;
-=======
-  font-size: 25px;
-  background-color: #f13a11;
->>>>>>> c9f6c2a (charts_part_one)
 }
 
 /*Resize the wrap to see the search bar change!*/

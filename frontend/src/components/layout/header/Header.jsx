@@ -2,11 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { AiFillCaretDown, AiOutlineLogout } from "react-icons/ai";
-
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { ImEarth } from "react-icons/im";
-
 import { logout } from "../../../store/auth-slice";
 import CloseBar from "../../icons/CloseBar";
 import ToggleBar from "../../icons/ToggleBar";
@@ -16,8 +14,8 @@ import { useTranslation } from "react-i18next";
 
 export const Header = ({ showSideBar, sideBarHandler }) => {
   const themeCtx = useContext(ThemeContext);
-  const { toggleTheme, theme } = themeCtx;
   const dispatch = useDispatch();
+  const { toggleTheme, theme } = themeCtx;
   const [signoutBtn, setSignoutBtn] = useState(false);
   const [lang, setLang] = useState(false);
   const [matches, setMatches] = useState(window.innerWidth);

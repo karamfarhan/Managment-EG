@@ -114,19 +114,11 @@ const CreateSubs = () => {
                 id="material"
                 type="button"
                 name="material"
-                onClick={fetchMatters}
-              >
-<<<<<<< HEAD
+                onClick={fetchMatters}>
                 {t("viewSubs")}
               </button>
               <button type="button" onClick={() => setShowModel(true)}>
                 {t("addSubstance")}
-=======
-                View substances
-              </button>
-              <button type="button" onClick={() => setShowModel(true)}>
-                Add substance{" "}
->>>>>>> 642d04b (dark theme)
               </button>
             </div>
           )}
@@ -137,23 +129,13 @@ const CreateSubs = () => {
                 id="instruments"
                 type="button"
                 name="instruments"
-                onClick={fetchInstruments}
-              >
-<<<<<<< HEAD
+                onClick={fetchInstruments}>
                 {t("viewInst")}
-=======
-                View instruments
->>>>>>> 642d04b (dark theme)
               </button>
               <button
                 type="button"
-                onClick={() => setShowInstrumentsForm(true)}
-              >
-<<<<<<< HEAD
+                onClick={() => setShowInstrumentsForm(true)}>
                 {t("addInstruments")}
-=======
-                Add Instruments
->>>>>>> 642d04b (dark theme)
               </button>
             </div>
           )}

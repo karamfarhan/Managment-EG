@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useState, Fragment, useEffect } from "react";
-=======
-import { useState, Fragment } from "react";
->>>>>>> 642d04b (dark theme)
 import axios from "axios";
 import styles from "./Invoices.module.css";
 import LoadingSpinner from "../UI/loading/LoadingSpinner";
@@ -64,19 +60,12 @@ const Invoices = () => {
 
   return (
     <Fragment>
-<<<<<<< HEAD
       {((invoices && invoices.length === 0) || invoices === undefined) && (
         <h2> {t("invoiceMsg")} </h2>
       )}
 
       <div className={styles.content}>
         {stores && stores.length > 0 && (
-=======
-      {invoices && invoices.length === 0 && <h2> No Invoices added </h2>}
-
-      <div className={styles.content}>
-        {invoices && invoices.length > 0 && (
->>>>>>> 642d04b (dark theme)
           <div>
             <select onChange={storeChangeHandler} value={storeId}>
               {stores &&
@@ -109,21 +98,10 @@ const Invoices = () => {
                     <td>{new Date(invoice.created_at).toLocaleDateString()}</td>
                     <td>{invoice.created_by.username}</td>
                     <td>
-<<<<<<< HEAD
                       <Link
                         className={styles.btn}
                         to={`/store/${storeId}/${invoice.id}`}
                         View></Link>
-=======
-                      <button
-                        className={styles.btn}
-                        onClick={() => {
-                          window.location.href = `${window.domain}/invoices/${invoice.pk}`;
-                        }}
-                      >
-                        View
-                      </button>
->>>>>>> 642d04b (dark theme)
                     </td>
                   </tr>
                 ))}

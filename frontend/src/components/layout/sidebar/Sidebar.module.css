@@ -5,10 +5,6 @@
   min-height: 100vh;
   width: var(--side-width);
   position: fixed;
-<<<<<<< HEAD
-=======
-  left: 0;
->>>>>>> c9f6c2a (charts_part_one)
   top: 20px;
   bottom: 20px;
   text-align: center;

@@ -45,21 +45,13 @@ export const Layout = ({ children }) => {
         sideBarHandler={sideBarHandler}
         matches={matches}
       />
-<<<<<<< HEAD
       <main
         className={classes.layout}
-        dir={i18n.language === "en" ? "ltr" : "rtl"}
-      >
+        dir={i18n.language === "en" ? "ltr" : "rtl"}>
         <section style={sectionPosition}>{children}</section>
-=======
-      <main className={classes.layout}>
-        <section>{children}</section>
-<<<<<<< HEAD
->>>>>>> c9f6c2a (charts_part_one)
         {showSideBar && <Sidebar />}
-=======
-      {showSideBar &&  <Sidebar />}
->>>>>>> 642d04b (dark theme)
+
+        {showSideBar && <Sidebar />}
       </main>
     </Fragment>
   );
