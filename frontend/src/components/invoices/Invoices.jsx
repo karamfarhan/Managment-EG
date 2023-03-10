@@ -1,10 +1,11 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import axios from "axios";
 import styles from "./Invoices.module.css";
 import LoadingSpinner from "../UI/loading/LoadingSpinner";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import ExportExcel from "../UI/export/ExportExcel";
 const Invoices = () => {
   const [t, i18n] = useTranslation();
   const [storeId, setStoreId] = useState("");
@@ -96,13 +97,10 @@ const Invoices = () => {
                     <td>{new Date(invoice.created_at).toLocaleDateString()}</td>
                     <td>{invoice.created_by.username}</td>
                     <td>
-                      <button
+                      <Link
                         className={styles.btn}
-                        onClick={() => {
-                          window.location.href = `${window.domain}/invoices/${invoice.pk}`;
-                        }}>
-                        View
-                      </button>
+                        to={`/store/${storeId}/${invoice.id}`}
+                        View></Link>
                     </td>
                   </tr>
                 ))}

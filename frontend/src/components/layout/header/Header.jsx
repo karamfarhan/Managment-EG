@@ -74,18 +74,31 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
     localStorage.setItem("language", selectedLanguage);
   };
 
+  let positionX = {};
+  if (i18n.language === "ar") {
+    positionX = {
+      left: "10px",
+    };
+  } else {
+    positionX = {
+      right: "10px",
+    };
+  }
   return (
     <header
       className={classes.header}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+    >
       <div className={classes["head-content"]}>
-        {matches <= 820 && (
-          <div className={classes.toggle} onClick={sideBarHandler}>
-            {showSideBar ? <CloseBar /> : <ToggleBar />}
-          </div>
-        )}
+        <div>
+          {matches <= 820 && (
+            <div className={classes.toggle} onClick={sideBarHandler}>
+              {showSideBar ? <CloseBar /> : <ToggleBar />}
+            </div>
+          )}
 
-        <h1> {t("mountain")} </h1>
+          <h1> {t("mountain")} </h1>
+        </div>
         <div className={classes.features}>
           <div onClick={toggleTheme} className={classes.toggleTheme}>
             {theme === "dark" ? <CiLight /> : <MdOutlineDarkMode />}
@@ -93,7 +106,8 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
 
           <div
             className={classes.lang}
-            onClick={() => setLang((prevState) => !prevState)}>
+            onClick={() => setLang((prevState) => !prevState)}
+          >
             <div>
               <ImEarth />
             </div>
@@ -110,7 +124,7 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
         </div>
         <div className={classes.actions}>
           {signoutBtn && (
-            <div className={classes.settings}>
+            <div className={classes.settings} style={positionX}>
               <div>
                 <img src="../../../../images/logo/logo.png" alt="user" />{" "}
               </div>

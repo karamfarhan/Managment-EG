@@ -95,7 +95,8 @@ const InstrumentsView = ({
             style={{
               width: " 50%",
               margin: "20px auto",
-            }}>
+            }}
+          >
             <Search
               onChange={(e) => setSearchVal(e.target.value)}
               value={searchVal}
@@ -152,9 +153,10 @@ const InstrumentsView = ({
                               style={{
                                 color:
                                   insruments.in_action === false
-                                    ? "#000"
+                                    ? "green"
                                     : "red",
-                              }}>
+                              }}
+                            >
                               {insruments.in_action === false
                                 ? "متواجدة"
                                 : "خارج المخزن"}
@@ -174,7 +176,8 @@ const InstrumentsView = ({
                                   className="deleteBtn"
                                   onClick={() =>
                                     deleteModelHandler(insruments.id)
-                                  }>
+                                  }
+                                >
                                   <MdOutlineDeleteForever />
                                 </button>
                               )}
@@ -184,7 +187,8 @@ const InstrumentsView = ({
                                   className="editBtn"
                                   onClick={() =>
                                     editInstrumentsForm(insruments.id)
-                                  }>
+                                  }
+                                >
                                   <FiEdit />
                                 </button>
                               )}

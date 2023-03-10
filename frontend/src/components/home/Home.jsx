@@ -56,7 +56,7 @@ const Home = () => {
             </div>
 
             <div>
-              <span>{t("TOTAL EXPNASES")} </span>
+              <span>{t("TOTAL EMPLOYEES")} </span>
               <p>36</p>
             </div>
 

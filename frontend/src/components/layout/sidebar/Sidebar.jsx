@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 //icon
 import { FaCarSide } from "react-icons/fa";
 import { GiPaddles } from "react-icons/gi";
+import { BiPurchaseTag } from "react-icons/bi";
 import { AiOutlineHome } from "react-icons/ai";
 import { TbFileInvoice } from "react-icons/tb";
 import classes from "./Sidebar.module.css";
@@ -93,6 +94,26 @@ const Sidebar = () => {
             </NavLink>
           </li>
         )}
+
+        {(is_superuser || allPermissions.includes("store")) && (
+          <li>
+            <NavLink
+              to="/purchases"
+              style={({ isActive }) => {
+                return {
+                  background: isActive ? "#edeaea" : "inherit",
+                  color: isActive ? "#2150d8" : "#fff",
+                };
+              }}
+            >
+              <span>
+                <BiPurchaseTag />
+              </span>
+              <p>{t("purchases")}</p>
+            </NavLink>
+          </li>
+        )}
+
         {(is_superuser ||
           allPermissions.includes("substance") ||
           allPermissions.includes("instrument")) &&

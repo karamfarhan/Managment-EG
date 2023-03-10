@@ -15,6 +15,7 @@ import EmpolyeeData from "./EmpolyeeData";
 import CarDetailPage from "./CarDetailPage";
 import HomePage from "./HomePage";
 import InvoicesPage from "./InvoicesPage";
+import PurchasesPage from "./PurchasesPage";
 const Pages = () => {
   const { isAuth } = useSelector((state) => state.authReducer);
   return (
@@ -49,6 +50,8 @@ const Pages = () => {
           path="/store/:storeId/:invoiceId"
           element={<InvoiceDetailPage />}
         />
+        <Route path="/purchases" element={<PurchasesPage />} />
+
         <Route path="/invoice" element={<InvoicesPage />} />
 
         <Route path="/create_subs/*" element={<CreateSubstancePage />} />

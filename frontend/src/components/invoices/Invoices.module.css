@@ -11,8 +11,20 @@
 .content p {
   text-align: center;
 }
-.content button {
-  background-color: red;
+.content a {
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  padding: 0.8em 1.4em;
+  min-width: 5em;
+  background: #fe5f55;
+  border: none;
+  color: white;
+  transition: 0.2s;
+}
+
+.content a:hover {
+  background: #fe2f22;
 }
 .content table tbody td {
   color: #000 !important;
