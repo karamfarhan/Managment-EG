@@ -11,8 +11,13 @@ import { useSelector } from "react-redux";
 import CreateStoreUi from "../UI/create_store_popup/CreateStoreUi";
 import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import CreateCar from "../UI/create-car/CreateCar";
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
 
+=======
+import { MyChartOne, MyChartTwo } from "./MyCharts";
+import { useTranslation } from "react-i18next";
+>>>>>>> 73569f1 (side bar modifying)
 const Home = () => {
   const [staffForm, setStaffForm] = useState(false);
   const [storeForm, setStoreForm] = useState(false);
@@ -52,6 +57,7 @@ const Home = () => {
       {showCars && <CreateCar hideModel={() => setShowCars(false)} />}
 
       {!formsVisible && (
+<<<<<<< HEAD
         <div className={classes.home}>
           <h1>الرئيسية</h1>
 
@@ -103,6 +109,34 @@ const Home = () => {
                 </span>
               </Link>
             )}
+=======
+        <div className={classes.home} id="dashbaord">
+          <div className={classes.actions}>
+            <div>
+              <span>{t("NEW ACCOUNTS")}</span>
+              <p>36</p>
+            </div>
+
+            <div>
+              <span> {t("COMPANY PROJECTS")} </span>
+              <p>36</p>
+            </div>
+
+            <div>
+              <span>{t("TOTAL EMPLOYEES")} </span>
+              <p>36</p>
+            </div>
+
+            {/* <div>
+              <span>سيارات الشركة</span>
+              <p>36</p>
+            </div> */}
+          </div>
+
+          <div style={{ display: "flex", marginTop: "20px", flexWrap: "wrap" }}>
+            <MyChartOne />
+            <MyChartTwo />
+>>>>>>> 73569f1 (side bar modifying)
           </div>
         </div>
       )}

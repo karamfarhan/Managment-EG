@@ -30,8 +30,11 @@ export const MyChartOne = () => (
 );
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 642d04b (dark theme)
+=======
+>>>>>>> 73569f1 (side bar modifying)
 const chartTheme = {
   axis: {
     style: {
@@ -42,29 +45,38 @@ const chartTheme = {
   },
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c9f6c2a (charts_part_one)
 =======
 >>>>>>> 642d04b (dark theme)
+=======
+>>>>>>> 73569f1 (side bar modifying)
 
 export const MyChartTwo = () => (
   <div style={{ height: "500px", background: "#fff" }}>
     <VictoryChart
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 642d04b (dark theme)
+=======
+>>>>>>> 73569f1 (side bar modifying)
       theme={chartTheme}
       width={300}
       style={{
         grid: { stroke: "#000", strokeWidth: 1 },
       }}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       width={300}
 >>>>>>> c9f6c2a (charts_part_one)
 =======
 >>>>>>> 642d04b (dark theme)
+=======
+>>>>>>> 73569f1 (side bar modifying)
       domain={{ x: [0, 8] }}
       animate={{
         duration: 2000,
@@ -75,6 +87,7 @@ export const MyChartTwo = () => (
         data={data2}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         style={{ data: { fill: "#c43a31", stroke: "white", strokeWidth: 1 } }}
 =======
         style={{ data: { fill: "#c43a31", stroke: "black", strokeWidth: 1 } }}
@@ -82,6 +95,9 @@ export const MyChartTwo = () => (
 =======
         style={{ data: { fill: "#c43a31", stroke: "white", strokeWidth: 1 } }}
 >>>>>>> 642d04b (dark theme)
+=======
+        style={{ data: { fill: "#c43a31", stroke: "white", strokeWidth: 1 } }}
+>>>>>>> 73569f1 (side bar modifying)
       />
     </VictoryChart>
   </div>

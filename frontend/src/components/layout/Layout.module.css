@@ -5,6 +5,6 @@
 
 @media (max-width: 820px) {
   .layout section {
-    width: 100%;
+    width: calc(100% - var(--side-width-mob));
   }
 }

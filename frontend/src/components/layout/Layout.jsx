@@ -16,16 +16,18 @@ export const Layout = ({ children }) => {
     const handler = (e) => {
       setMatches(e.matches);
     };
-    if (matches === false) {
-      setShowSideBar(true);
-    } else {
-      setShowSideBar(false);
-    }
+    // if (matches === false) {
+    //   setShowSideBar(true);
+    // } else {
+    //   setShowSideBar(false);
+    // }
     window.matchMedia("(max-width: 820px)").addEventListener("change", handler);
   }, [matches]);
+
   //show side bar hanler
   const sideBarHandler = () => {
     setShowSideBar((prev) => !prev);
+
   };
 
   let sectionPosition = {
@@ -37,7 +39,7 @@ export const Layout = ({ children }) => {
       marginRight: "auto",
     };
   }
-
+  console.log(matches)
   return (
     <Fragment>
       <Header
@@ -47,10 +49,17 @@ export const Layout = ({ children }) => {
       />
       <main
         className={classes.layout}
+<<<<<<< HEAD
         dir={i18n.language === "en" ? "ltr" : "rtl"}>
         <section style={sectionPosition}>{children}</section>
         {showSideBar && <Sidebar />}
 
+=======
+        dir={i18n.language === "en" ? "ltr" : "rtl"}
+
+      >
+        <section style={{ ...sectionPosition, width: showSideBar === false ? "100%" : null }} >{children}</section>
+>>>>>>> 73569f1 (side bar modifying)
         {showSideBar && <Sidebar />}
       </main>
     </Fragment>

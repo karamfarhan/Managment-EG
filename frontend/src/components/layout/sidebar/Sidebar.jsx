@@ -18,8 +18,15 @@ const Sidebar = () => {
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
   const [t, i18n] = useTranslation();
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 73569f1 (side bar modifying)
   return (
-    <aside className={classes.sidebar}>
+    <aside className={classes.sidebar} >
       <ul>
         {/* <li>
           <NavLink
