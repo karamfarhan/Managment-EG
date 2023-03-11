@@ -98,11 +98,7 @@ export const Staff = () => {
                   <span>
                     <AiOutlineUserAdd />{" "}
                   </span>
-<<<<<<< HEAD
                   {t("addEmployee")}
-=======
-                  Add employee
->>>>>>> c9f6c2a (charts_part_one)
                 </button>
               )}
             </div>

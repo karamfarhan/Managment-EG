@@ -23,22 +23,14 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
-<<<<<<< HEAD
   border: 1px solid orange;
   overflow: hidden;
   background-color: #fff;
-=======
-  border: 1px solid #000;
-  overflow: hidden;
->>>>>>> c9f6c2a (charts_part_one)
 }
 .user img {
   width: 100%;
   height: 100%;
-<<<<<<< HEAD
   user-select: none;
-=======
->>>>>>> c9f6c2a (charts_part_one)
 }
 .toggle {
   width: 30px;
@@ -52,7 +44,6 @@
   align-items: center;
   width: 100%;
   /* width: calc(100% - var(--side-width)); */
-<<<<<<< HEAD
 }
 .head-content > div:first-of-type {
   display: flex;
@@ -70,8 +61,6 @@
 }
 .toggleTheme svg {
   font-size: 30px;
-=======
->>>>>>> c9f6c2a (charts_part_one)
 }
 .head-content a svg {
   cursor: pointer;
@@ -82,7 +71,6 @@
   font-family: "Roboto", sans-serif;
   font-size: 18px;
   text-transform: uppercase;
-<<<<<<< HEAD
 }
 .lang {
   position: relative;
@@ -98,8 +86,6 @@
 }
 .lang ul li:hover {
   background-color: #eee;
-=======
->>>>>>> c9f6c2a (charts_part_one)
 }
 @media (max-width: 820px) {
   .header h1 {
@@ -132,10 +118,6 @@
   cursor: pointer;
   background: url("../../../../public/images/1093687.webp");
   background-size: cover;
-<<<<<<< HEAD
-=======
-  right: 10px;
->>>>>>> c9f6c2a (charts_part_one)
   top: 110%;
   height: 100%;
   width: 320px;
