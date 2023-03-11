@@ -27,7 +27,6 @@ export const Layout = ({ children }) => {
   //show side bar hanler
   const sideBarHandler = () => {
     setShowSideBar((prev) => !prev);
-
   };
 
   let sectionPosition = {
@@ -39,7 +38,6 @@ export const Layout = ({ children }) => {
       marginRight: "auto",
     };
   }
-  console.log(matches)
   return (
     <Fragment>
       <Header
@@ -49,17 +47,16 @@ export const Layout = ({ children }) => {
       />
       <main
         className={classes.layout}
-<<<<<<< HEAD
-        dir={i18n.language === "en" ? "ltr" : "rtl"}>
-        <section style={sectionPosition}>{children}</section>
-        {showSideBar && <Sidebar />}
-
-=======
         dir={i18n.language === "en" ? "ltr" : "rtl"}
-
       >
-        <section style={{ ...sectionPosition, width: showSideBar === false ? "100%" : null }} >{children}</section>
->>>>>>> 73569f1 (side bar modifying)
+        <section
+          style={{
+            ...sectionPosition,
+            width: showSideBar === false ? "100%" : null,
+          }}
+        >
+          {children}
+        </section>
         {showSideBar && <Sidebar />}
       </main>
     </Fragment>

@@ -1,12 +1,8 @@
 {
   "hosting": {
     "public": "build",
-    "site" : "mountain-system",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "site": "mountain-system",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",

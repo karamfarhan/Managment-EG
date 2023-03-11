@@ -22,20 +22,20 @@ const Pages = () => {
     <Routes>
       <Route
         path="/login"
-        element={isAuth === true ? <Navigate to="/main" /> : <AuthPage />}
+        element={isAuth === true ? <Navigate to="/staff" /> : <AuthPage />}
       />
 
       <Route
         path="/"
         element={
-          isAuth === true ? <Navigate to="/main" /> : <Navigate to="/login" />
+          isAuth === true ? <Navigate to="/staff" /> : <Navigate to="/login" />
         }
       />
       <Route element={<ProtectedRoutes />}>
-        <Route
+        {/* <Route
           path="/main"
           element={isAuth === true ? <HomePage /> : <AuthPage />}
-        />
+        /> */}
         <Route
           path="/staff/*"
           element={isAuth === true ? <StaffPage /> : <AuthPage />}
@@ -57,7 +57,7 @@ const Pages = () => {
         <Route path="/create_subs/*" element={<CreateSubstancePage />} />
         {/* <Route path="/projects" element={<GalleryPage />} /> */}
         <Route path="/cars/*" element={<CarsPage />} />
-        <Route path="/cars/:driverId/:carId" element={<CarDetailPage />} />
+        <Route path="/cars/:driverId/:cnarId" element={<CarDetailPage />} />
       </Route>
     </Routes>
   );

@@ -23,7 +23,6 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
-<<<<<<< HEAD
 
   border: 1px solid orange;
   overflow: hidden;
@@ -31,11 +30,6 @@
   border: 1px solid #000;
   border: 1px solid orange;
   overflow: hidden;
-=======
-  border: 1px solid orange;
-  overflow: hidden;
-  background-color: #fff;
->>>>>>> 73569f1 (side bar modifying)
 }
 .user img {
   width: 100%;
@@ -71,12 +65,9 @@
 }
 .toggleTheme svg {
   font-size: 30px;
-<<<<<<< HEAD
 }
 .toggleTheme svg {
   font-size: 30px;
-=======
->>>>>>> 73569f1 (side bar modifying)
 }
 .head-content a svg {
   cursor: pointer;
@@ -134,10 +125,6 @@
   cursor: pointer;
   background: url("../../../../public/images/1093687.webp");
   background-size: cover;
-<<<<<<< HEAD
-
-=======
->>>>>>> 73569f1 (side bar modifying)
   top: 110%;
   height: 100%;
   width: 320px;
