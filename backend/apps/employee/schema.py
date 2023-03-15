@@ -79,6 +79,13 @@ class EmployeeCategoryEnum(graphene.Enum):
 
 # mutaion with serializerMutaion
 class EmployeeMutation(SerializerMutation):
+    class Input:
+        employee_category = EmployeeCategoryEnum()
+        identity_image = Upload()
+        certificate_image = Upload()
+        criminal_record_image = Upload()
+        experience_image = Upload()
+
     identity_image = graphene.String()
     certificate_image = graphene.String()
     experience_image = graphene.String()
@@ -98,12 +105,12 @@ class EmployeeMutation(SerializerMutation):
             "experience_image",
         )
 
-    class Input:
-        employee_category = EmployeeCategoryEnum()
-        identity_image = Upload()
-        certificate_image = Upload()
-        criminal_record_image = Upload()
-        experience_image = Upload()
+    # TODO: i need to make a custome resolver for each image filed so that i send the full url
+    # def resolve_identity_image(self, info):
+    #     """Resolve product image absolute path"""
+    #     if self.image:
+    #         self.image = info.context.build_absolute_uri(self.image.url)
+    #     return self.image
 
 
 class EmployeeActivityMutation(SerializerMutation):

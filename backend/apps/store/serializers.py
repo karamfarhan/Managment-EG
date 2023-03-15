@@ -183,8 +183,9 @@ class MediaPackSerializer(serializers.ModelSerializer):
         read_only_fields = ["created_by", "creatd_at", "store_name"]
 
     def create(self, validated_data):
+        request = self.context["request"]
         images = validated_data.pop("images")
-        media_pack = MediaPack.objects.create(**validated_data)
+        media_pack = MediaPack.objects.create(created_by=request.user, **validated_data)
         for img in images:
             Image.objects.create(media_pack=media_pack, image=img)
         return media_pack
