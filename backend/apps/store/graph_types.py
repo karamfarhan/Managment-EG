@@ -18,7 +18,7 @@ class StoreNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("store.view_store")
+    @permission_required("store.view_store")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -35,7 +35,7 @@ class InvoiceNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("store.view_store")
+    @permission_required("store.view_invoice")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -52,7 +52,11 @@ class InvoiceInstrumentItemNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("store.view_store")
+    # ! i puted the "view_invoice" on the InvoiceinstrumentItem permissions because,if you have the invoice
+    # ! permission you will also have the permission for the items.
+    # ? but you can change it and give it the permission (store.view_invoiceinstrumentitem) and it will not show the instruemtns
+    # ? items unless the user have the permission for them also, on top of having the "view_invoice" permission
+    @permission_required("store.view_invoice")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -69,7 +73,7 @@ class InvoiceSubstanceItemNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("store.view_store")
+    @permission_required("store.view_invoice")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -92,7 +96,7 @@ class ImageNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("store.view_store")
+    @permission_required("store.view_mediapack")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -109,6 +113,6 @@ class MediaPackNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("store.view_store")
+    @permission_required("store.view_mediapack")
     def get_queryset(cls, queryset, info):
         return queryset

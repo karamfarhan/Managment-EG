@@ -56,6 +56,6 @@ class InstrumentNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("substance.view_substance")
+    @permission_required("substance.view_instrument")
     def get_queryset(cls, queryset, info):
         return queryset

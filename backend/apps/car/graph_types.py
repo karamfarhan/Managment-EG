@@ -18,7 +18,7 @@ class CarNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("car.view_car")
+    @permission_required("car.view_car")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -35,7 +35,7 @@ class CarActivityNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("car.view_car_car_activity")
+    @permission_required("car.view_caractivity")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -52,6 +52,6 @@ class CarActivityRideNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("car.view_car")
+    @permission_required("car.view_caractivity")
     def get_queryset(cls, queryset, info):
         return queryset

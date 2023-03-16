@@ -7,6 +7,22 @@ from .filters import EmployeeActivityFilter, EmployeeFilter
 from .models import Employee, EmployeeActivity, Insurance
 
 
+class EmployeeNode(DjangoObjectType):
+    pk = graphene.ID(source="pk")
+
+    class Meta:
+        model = Employee
+        name = "Employee"
+        filterset_class = EmployeeFilter
+        interfaces = (relay.Node,)
+
+    @classmethod
+    @login_required
+    @permission_required("employee.view_employee")
+    def get_queryset(cls, queryset, info):
+        return queryset
+
+
 class EmployeeActivityNode(DjangoObjectType):
     pk = graphene.ID(source="pk")
 
@@ -19,7 +35,7 @@ class EmployeeActivityNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("employee.view_employeeactivity")
+    @permission_required("employee.view_employeeactivity")
     def get_queryset(cls, queryset, info):
         return queryset
 
@@ -36,22 +52,6 @@ class InsuranceNode(DjangoObjectType):
 
     @classmethod
     @login_required
-    # @permission_required("employee.view_insurance")
-    def get_queryset(cls, queryset, info):
-        return queryset
-
-
-class EmployeeNode(DjangoObjectType):
-    pk = graphene.ID(source="pk")
-
-    class Meta:
-        model = Employee
-        name = "Employee"
-        filterset_class = EmployeeFilter
-        interfaces = (relay.Node,)
-
-    @classmethod
-    @login_required
-    # @permission_required("employee.view_employee")
+    @permission_required("employee.view_insurance")
     def get_queryset(cls, queryset, info):
         return queryset
