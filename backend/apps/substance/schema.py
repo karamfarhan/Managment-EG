@@ -19,7 +19,7 @@ class CategoryMutation(SerializerMutation):
         lookup_field = "name"
 
 
-# TODO: make substance mutaion to accept setting category relationships
+# ! make substance mutaion to accept setting category relationships
 # *: there is a problem with Substance mutaion, it set the category relationship
 # *: as a string while it should be a categoryNode or list of id, types, and i dont' know how to change it to what i need
 # *: one way is to change the set the category filed on the serializer to serializers.ListField
@@ -35,7 +35,7 @@ class SubstanceUnitTypeEnum(graphene.Enum):
 # mutaion with serializerMutaion
 class SubstanceMutation(SerializerMutation):
     unit_type = graphene.Field(SubstanceUnitTypeEnum)
-    category = graphene.List(graphene.ID)
+    category = graphene.List(CategoryNode)
 
     class Meta:
         serializer_class = SubstanceSerializer
@@ -65,7 +65,10 @@ class SubstanceMutation(SerializerMutation):
 
 # mutaion with serializerMutaion
 class InstrumentMutation(SerializerMutation):
-    category = graphene.List(graphene.ID)
+    class Input:
+        category = graphene.List(graphene.ID)
+
+    category = graphene.List(CategoryNode)
 
     class Meta:
         serializer_class = InstrumentSerializer
@@ -73,9 +76,6 @@ class InstrumentMutation(SerializerMutation):
         lookup_field = "id"
         # ? we have to exlcude the override filds so that our custome fileds can work
         exclude_fields = ("category",)
-
-    class Input:
-        category = graphene.List(graphene.ID)
 
 
 class Mutation(graphene.ObjectType):

@@ -35,6 +35,7 @@ class AccountType(DjangoObjectType):
             "employee",
         ]
 
+    # ! here you retrieve custom fileds to the user, by declaring it's type,and creating it's resolver, pretty much like serializers
     def resolve_groups(self, info):
         return self.groups.all()
 
@@ -45,3 +46,8 @@ class AccountType(DjangoObjectType):
         user_permissions = [p.codename for p in self.user_permissions.all()]
         group_permissions = [p.codename for group in self.groups.all() for p in group.permissions.all()]
         return list(set(user_permissions).union(set(group_permissions)))
+
+    def resolve_profile_image(self, info):
+        if self.profile_image:
+            self.profile_image = info.context.build_absolute_uri(self.profile_image.url)
+        return self.profile_image

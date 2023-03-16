@@ -16,6 +16,26 @@ class EmployeeNode(DjangoObjectType):
         filterset_class = EmployeeFilter
         interfaces = (relay.Node,)
 
+    def resolve_identity_image(self, info):
+        if self.identity_image:
+            self.identity_image = info.context.build_absolute_uri(self.identity_image.url)
+        return self.identity_image
+
+    def resolve_certificate_image(self, info):
+        if self.certificate_image:
+            self.certificate_image = info.context.build_absolute_uri(self.certificate_image.url)
+        return self.certificate_image
+
+    def resolve_experience_image(self, info):
+        if self.experience_image:
+            self.experience_image = info.context.build_absolute_uri(self.experience_image.url)
+        return self.experience_image
+
+    def resolve_criminal_record_image(self, info):
+        if self.criminal_record_image:
+            self.criminal_record_image = info.context.build_absolute_uri(self.criminal_record_image.url)
+        return self.criminal_record_image
+
     @classmethod
     @login_required
     @permission_required("employee.view_employee")

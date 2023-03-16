@@ -29,6 +29,9 @@ class EmployeeMutation(SerializerMutation):
         criminal_record_image = Upload()
         experience_image = Upload()
 
+    # TODO: i have to think of way to send the full url of the image to the user,
+    # i can do an resolver down, but i alredy did that to the EmployeeNode,maybe i can reuse it by setting the default resolver
+    # like this :     identity_image = graphene.Field(graphene.String,resolver=someresolver())
     identity_image = graphene.String()
     certificate_image = graphene.String()
     experience_image = graphene.String()
@@ -72,3 +75,6 @@ class Query(graphene.ObjectType):
     employee = relay.Node.Field(EmployeeNode)
     employees = DjangoFilterConnectionField(EmployeeNode)
     selectbar_employees = DjangoFilterConnectionField(EmployeeSelectBarNode)
+
+
+# TODO: there is some mutation does not need to return the object after creating it like Account, so i need to check this
