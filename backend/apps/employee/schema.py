@@ -1,74 +1,20 @@
 import graphene
-from apps.store.schema import StoreNode
 from graphene import relay
-from graphene.relay.mutation import ClientIDMutation
-from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from graphene_django.forms.mutation import DjangoFormMutation, DjangoModelFormMutation
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
-from graphql_jwt.decorators import login_required, permission_required
 
-from .filters import EmployeeActivityFilter, EmployeeFilter
+from .graph_types import EmployeeActivityNode, EmployeeNode, InsuranceNode
 from .models import Employee, EmployeeActivity, Insurance
 from .serializers import EmployeeActivitySerializer, EmployeeSerializer
-
-
-class EmployeeActivityNode(DjangoObjectType):
-    pk = graphene.ID(source="pk")
-
-    class Meta:
-        model = EmployeeActivity
-        name = "EmployeeActivity"
-        filterset_class = EmployeeActivityFilter
-        interfaces = (relay.Node,)
-        exclude_fields = ("employee",)
-
-    @classmethod
-    @login_required
-    # @permission_required("employee.view_employeeactivity")
-    def get_queryset(cls, queryset, info):
-        return queryset
-
-
-class InsuranceNode(DjangoObjectType):
-    pk = graphene.ID(source="pk")
-
-    class Meta:
-        model = Insurance
-        name = "Insurance"
-        # filterset_class = EmployeeFilter
-        interfaces = (relay.Node,)
-        exclude_fields = ("employee",)
-
-    @classmethod
-    @login_required
-    # @permission_required("employee.view_insurance")
-    def get_queryset(cls, queryset, info):
-        return queryset
-
-
-class EmployeeNode(DjangoObjectType):
-    pk = graphene.ID(source="pk")
-
-    class Meta:
-        model = Employee
-        name = "Employee"
-        filterset_class = EmployeeFilter
-        interfaces = (relay.Node,)
-
-    @classmethod
-    @login_required
-    # @permission_required("employee.view_employee")
-    def get_queryset(cls, queryset, info):
-        return queryset
-
 
 # ! in the Employee Mutaion, i disabled the employee_category from the original serializer
 # ! and create my own Enum that inherit from the model choices and set in as input, also return it
 # ! the reason i did that because there is problem with the default enum converter in the SerializerMutation
 
 # TODO: i have to snend a clear validation messages when the insurance id is the same
+
+
 class EmployeeCategoryEnum(graphene.Enum):
     class Meta:
         enum = Employee.EmployeeCategory
