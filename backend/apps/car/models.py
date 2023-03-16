@@ -91,6 +91,7 @@ class CarActivity(models.Model):
         blank=True,
         verbose_name=_("Car activity note"),
     )
+    # TODO: activity_date should be required
     activity_date = models.DateField(
         verbose_name=_("activity date"),
         help_text=_("format: Y-m-d H:M:S"),

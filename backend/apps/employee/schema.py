@@ -28,7 +28,6 @@ class EmployeeActivityNode(DjangoObjectType):
     @login_required
     # @permission_required("employee.view_employeeactivity")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 
@@ -46,7 +45,6 @@ class InsuranceNode(DjangoObjectType):
     @login_required
     # @permission_required("employee.view_insurance")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 
@@ -63,7 +61,6 @@ class EmployeeNode(DjangoObjectType):
     @login_required
     # @permission_required("employee.view_employee")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 

@@ -69,7 +69,6 @@ class SubstanceNode(DjangoObjectType):
     @login_required
     @permission_required("substance.view_substance")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 

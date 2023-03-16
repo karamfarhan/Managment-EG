@@ -28,7 +28,6 @@ class StoreNode(DjangoObjectType):
     @login_required
     # @permission_required("store.view_store")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 
@@ -46,7 +45,6 @@ class InvoiceNode(DjangoObjectType):
     @login_required
     # @permission_required("store.view_store")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 
@@ -64,7 +62,6 @@ class InvoiceInstrumentItemNode(DjangoObjectType):
     @login_required
     # @permission_required("store.view_store")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 
@@ -82,7 +79,6 @@ class InvoiceSubstanceItemNode(DjangoObjectType):
     @login_required
     # @permission_required("store.view_store")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 
@@ -106,7 +102,6 @@ class ImageNode(DjangoObjectType):
     @login_required
     # @permission_required("store.view_store")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 
@@ -124,7 +119,6 @@ class MediaPackNode(DjangoObjectType):
     @login_required
     # @permission_required("store.view_store")
     def get_queryset(cls, queryset, info):
-        # TODO: here i can send only the data that belongs to the user
         return queryset
 
 

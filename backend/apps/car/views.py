@@ -28,9 +28,9 @@ class CarViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         print(f"Car-{self.request.method}-REQUEST_DATA = ", request.data)
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
-        serializer.save(created_by=request.user)
+        serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -54,8 +54,8 @@ class CarActivityViewSet(ModelViewSetExportBase, viewsets.ModelViewSet):
         print(f"Car Activity-{self.request.method}-REQUEST_DATA = ", request.data)
         car_id = self.kwargs.get("id")
         car = get_object_or_404(Car, id=car_id)
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
-        serializer.save(created_by=request.user, car=car)
+        serializer.save(car=car)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

@@ -1,7 +1,10 @@
 from apps.substance.serializers import AccountSerializer
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from ..employee.models import Employee
+from ..employee.serializers import EmployeeSerializer
 from .models import Car, CarActivity, CarActivityRide
 
 
@@ -27,15 +30,28 @@ class CarSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "created_by", "created_at", "driver_name"]
 
+    # ! the problem here
     def get_driver_name(self, car):
-        return car.driver.name
+        if car.driver:
+            return car.driver.name
+        return None
 
-    # TODO make sure that he can't update the driver to null, should alwaays be a valid driver
+    # def validate(self,data):
+    #     try:
+    #         driver_obj = get_object_or_404(Employee,id=data.get('driver'))
+    #     except Employee.DoesNotExist:
+    #         raise serializers.ValidationError({"driver": [f"there is no driver with this id ({data.get('driver')})"]})
+    #     return driver_obj
+    # TODO make sure that he can't update the driver to null, should alwaays be a valid driver(questionable, maybe we don't need the condition)
     def create(self, validated_data):
-        driver = validated_data.get("driver", False)
-        if not driver:
-            raise serializers.ValidationError({"driver": "this field is required"})
+        request = self.context.get("request")
+        validated_data.get("driver")
+        # ? make sure if you need this condition on the REST api,
+        # if not driver:
+        #     raise serializers.ValidationError({"driver": ["no driver with this id"]})
 
+        validated_data["created_by"] = request.user
+        # return Car.objects.create(**validated_data)
         return super().create(validated_data)
 
 
@@ -77,6 +93,8 @@ class CarActivitySerializer(serializers.ModelSerializer):
     # TODO creating the activity, i can make it to be a char filed,
     @transaction.atomic
     def create_car_activity(self, validated_data):
+        request = self.context.get("request")
+        validated_data["created_by"] = request.user
         rides = validated_data.pop("rides", [])
         car_activity = CarActivity.objects.create(**validated_data)
         if rides:
