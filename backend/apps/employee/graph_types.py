@@ -55,3 +55,15 @@ class InsuranceNode(DjangoObjectType):
     @permission_required("employee.view_insurance")
     def get_queryset(cls, queryset, info):
         return queryset
+
+
+class EmployeeSelectBarNode(DjangoObjectType):
+    pk = graphene.ID(source="pk")
+
+    class Meta:
+        model = Employee
+        filter_fields = {
+            "name": ["iexact", "icontains", "istartswith"],
+        }
+        only_fields = ("name", "pk")
+        interfaces = (relay.Node,)

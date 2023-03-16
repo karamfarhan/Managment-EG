@@ -4,7 +4,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
 
-from .graph_types import EmployeeActivityNode, EmployeeNode, InsuranceNode
+from .graph_types import EmployeeNode, EmployeeSelectBarNode
 from .models import Employee, EmployeeActivity, Insurance
 from .serializers import EmployeeActivitySerializer, EmployeeSerializer
 
@@ -71,3 +71,4 @@ class Mutation(graphene.ObjectType):
 class Query(graphene.ObjectType):
     employee = relay.Node.Field(EmployeeNode)
     employees = DjangoFilterConnectionField(EmployeeNode)
+    selectbar_employees = DjangoFilterConnectionField(EmployeeSelectBarNode)

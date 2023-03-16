@@ -5,7 +5,7 @@ from graphene_django.forms.mutation import DjangoFormMutation, DjangoModelFormMu
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphql_jwt.decorators import login_required, permission_required
 
-from .graph_types import CategoryNode, InstrumentNode, SubstanceNode
+from .graph_types import CategoryNode, InstrumentNode, InstrumentSelectBarNode, SubstanceNode, SubstanceSelectBarNode
 from .models import Substance
 from .serializers import CategorySerializer, InstrumentSerializer, SubstanceSerializer
 
@@ -90,3 +90,5 @@ class Query(graphene.ObjectType):
     instrument = relay.Node.Field(InstrumentNode)
     instruments = DjangoFilterConnectionField(InstrumentNode)
     categories = DjangoFilterConnectionField(CategoryNode)
+    selectbar_substances = DjangoFilterConnectionField(SubstanceSelectBarNode)
+    selectbar_instruments = DjangoFilterConnectionField(InstrumentSelectBarNode)

@@ -116,3 +116,15 @@ class MediaPackNode(DjangoObjectType):
     @permission_required("store.view_mediapack")
     def get_queryset(cls, queryset, info):
         return queryset
+
+
+class StoreSelectBarNode(DjangoObjectType):
+    pk = graphene.ID(source="pk")
+
+    class Meta:
+        model = Store
+        filter_fields = {
+            "address": ["iexact", "icontains", "istartswith"],
+        }
+        only_fields = ("address", "pk")
+        interfaces = (relay.Node,)

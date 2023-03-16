@@ -7,7 +7,7 @@ from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_django.types import ErrorType
 from graphene_file_upload.scalars import Upload
 
-from .graph_types import InvoiceNode, MediaPackNode, StoreNode
+from .graph_types import InvoiceNode, MediaPackNode, StoreNode, StoreSelectBarNode
 from .models import Image, Invoice, MediaPack, Store
 from .serializers import StoreSerializer
 
@@ -118,3 +118,4 @@ class Mutation(graphene.ObjectType):
 class Query(graphene.ObjectType):
     store = relay.Node.Field(StoreNode)
     stores = DjangoFilterConnectionField(StoreNode)
+    selectbar_stores = DjangoFilterConnectionField(StoreSelectBarNode)

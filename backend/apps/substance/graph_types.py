@@ -59,3 +59,27 @@ class InstrumentNode(DjangoObjectType):
     @permission_required("substance.view_instrument")
     def get_queryset(cls, queryset, info):
         return queryset
+
+
+class SubstanceSelectBarNode(DjangoObjectType):
+    pk = graphene.ID(source="pk")
+
+    class Meta:
+        model = Substance
+        filter_fields = {
+            "name": ["iexact", "icontains", "istartswith"],
+        }
+        only_fields = ("name", "pk")
+        interfaces = (relay.Node,)
+
+
+class InstrumentSelectBarNode(DjangoObjectType):
+    pk = graphene.ID(source="pk")
+
+    class Meta:
+        model = Instrument
+        filter_fields = {
+            "name": ["iexact", "icontains", "istartswith"],
+        }
+        only_fields = ("name", "pk")
+        interfaces = (relay.Node,)
