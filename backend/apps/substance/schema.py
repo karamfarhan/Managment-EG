@@ -53,17 +53,6 @@ class SubstanceMutation(SerializerMutation):
         category = graphene.List(graphene.ID)
 
 
-# mutaion with DjangoModelFormMutation
-# class SubstanceMutation(DjangoModelFormMutation):
-#     substance = graphene.Field(SubstanceNode)
-
-#     class Meta:
-#         return_field_name = "substance"
-#         form_class = SubstanceForm
-#         model = Substance
-
-
-# mutaion with serializerMutaion
 class InstrumentMutation(SerializerMutation):
     class Input:
         category = graphene.List(graphene.ID)

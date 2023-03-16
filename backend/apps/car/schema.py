@@ -142,7 +142,7 @@ class Mutation(graphene.ObjectType):
     write_activity_car = CarActivityMutation.Field()
 
 
-# TODO: i have to knwo what is the best when using relay, to but the permmisson on the type itself, (by overwriteing the get_querey method)
+# TODO: i have to know what is the best when using relay, to but the permmisson on the type itself, (by overwriteing the get_querey method)
 # or i have to overwrite the default relay resolver for the quereys and put an permmision on it
 
 

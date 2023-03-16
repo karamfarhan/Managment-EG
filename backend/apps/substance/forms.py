@@ -14,3 +14,15 @@ class SubstanceForm(forms.ModelForm):
             "units",
             "unit_type",
         ]
+
+
+# ! we can use this mutaion class with the form
+
+# mutaion with DjangoModelFormMutation
+# class SubstanceMutation(DjangoModelFormMutation):
+#     substance = graphene.Field(SubstanceNode)
+
+#     class Meta:
+#         return_field_name = "substance"
+#         form_class = SubstanceForm
+#         model = Substance
