@@ -1,9 +1,9 @@
 import datetime
 
-from apps.substance.serializers import AccountSerializer
 from django.db import IntegrityError
 from rest_framework import serializers
 
+from ..substance.serializers import AccountSerializer
 from .models import Employee, EmployeeActivity, Insurance
 
 
