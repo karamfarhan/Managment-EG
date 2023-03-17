@@ -1,13 +1,13 @@
 .addInventory {
   position: relative;
-  padding: 10px;
+  padding: 5px;
   font-size: var(--main-btn-font-size);
   /* background-color: #e72a16; */
   background-color: var(--color-green);
   color: #fff;
   border-radius: 10px;
   border: none;
-  width: var(--main-btn-width);
+  /* width: var(--main-btn-width); */
 }
 @media (max-width: 800px) {
   .addInventory {

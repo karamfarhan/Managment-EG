@@ -42,19 +42,18 @@ const AuthForm = () => {
     <main>
       <div className={`${classes.main} ${unAuthUser}`}>
         <div className={classes["form_container"]}>
-          <form dir="rtl" onSubmit={submitHandler}>
+          <form onSubmit={submitHandler}>
             <Login userInfo={userInfo} setUserInfo={setUserInfo} />
             <div className={classes["action_submit"]}>
               {(!isLoading || isLoading === null) && (
                 <button
                   disabled={!form}
                   type="submit"
-                  className={classes.submitBtn}
-                >
-                  تسجيل الدخول
+                  className={classes.submitBtn}>
+                  sign in
                 </button>
               )}
-              {isLoading && <p> انتظر..... </p>}
+              {isLoading && <p> loading..... </p>}
               {httpErr !== null && httpErr !== "" && !isLoading && (
                 <p className="err-msg"> {httpErr} </p>
               )}

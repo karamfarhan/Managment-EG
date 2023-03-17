@@ -1,10 +1,10 @@
 .layout section {
-  /* width: calc(100% - var(--side-width)); */
+  width: calc(100% - var(--side-width));
   padding: 10px 30px;
 }
 
 @media (max-width: 820px) {
   .layout section {
-    width: 100%;
+    width: calc(100% - var(--side-width-mob));
   }
 }

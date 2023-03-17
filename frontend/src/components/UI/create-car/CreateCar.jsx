@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaCarSide } from "react-icons/fa";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,11 +9,10 @@ import jwt_decode from "jwt-decode";
 import Inputs from "../inputs/Inputs";
 
 import { logout } from "../../../store/auth-slice";
-import classes from "./CreateCar.module.css";
 import { getCars } from "../../../store/cars-slice";
+import classes from "./CreateCar.module.css";
 
 const CreateCar = ({ hideModel }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
@@ -119,7 +117,7 @@ const CreateCar = ({ hideModel }) => {
 
     sendCarData();
   };
-  console.log(car_counter);
+
   return (
     <Backdrop hideModel={hideModel}>
       <div className={classes.createCar}>

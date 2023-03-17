@@ -123,8 +123,9 @@ const CreateSubsModel = ({
           <AiOutlineCloseCircle />{" "}
         </span>
 
-        <h2> {showInstrumentsForm ? "اضافة اله - جهاز" : "اضافة مادة"} </h2>
         <form onSubmit={submitHandler}>
+          <h2> {showInstrumentsForm ? "اضافة اله - جهاز" : "اضافة مادة"} </h2>
+
           <Inputs
             type="text"
             placeholder={showInstrumentsForm ? "أسم الاله" : "أسم المادة"}

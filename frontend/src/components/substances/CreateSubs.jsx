@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import SubstancesView from "./substances_view/SubstancesView";
 
 import { getSubs } from "../../store/create-substance";
@@ -10,6 +11,7 @@ import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import classes from "./CreateSubs.module.css";
 
 const CreateSubs = () => {
+  const [t, i18n] = useTranslation();
   //for add matters
   const [showModel, setShowModel] = useState(false);
   //for add instruments
@@ -27,8 +29,7 @@ const CreateSubs = () => {
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
-  console.log(showMatters);
-  console.log(showInstrumentsPage);
+
   //fetch matters
   useEffect(() => {
     if (
@@ -103,9 +104,7 @@ const CreateSubs = () => {
       )}
       {/* المخزن الرئيسي*/}
 
-      <div className={classes["main_inventory"]}>
-        <h2>ادارة الموارد / المخزن الرئيسي</h2>
-      </div>
+      <div className={classes["main_inventory"]}></div>
 
       <div className={classes.buttons}>
         <div className={classes.show}>
@@ -117,10 +116,10 @@ const CreateSubs = () => {
                 name="material"
                 onClick={fetchMatters}
               >
-                عرض الموارد
+                {t("viewSubs")}
               </button>
               <button type="button" onClick={() => setShowModel(true)}>
-                اضافة موارد
+                {t("addSubstance")}
               </button>
             </div>
           )}
@@ -133,13 +132,13 @@ const CreateSubs = () => {
                 name="instruments"
                 onClick={fetchInstruments}
               >
-                عرض المعدات
+                {t("viewInst")}
               </button>
               <button
                 type="button"
                 onClick={() => setShowInstrumentsForm(true)}
               >
-                اضافة معدات
+                {t("addInstruments")}
               </button>
             </div>
           )}

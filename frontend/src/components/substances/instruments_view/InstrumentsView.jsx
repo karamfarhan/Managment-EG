@@ -91,17 +91,24 @@ const InstrumentsView = ({
       )}
       <div>
         {instrumentsData && instrumentsData.results.length > 0 && (
-          <Search
-            value={searchVal}
-            onChange={(e) => setSearchVal(e.target.value)}
-            searchData={searchDispatch}
-          />
+          <div
+            style={{
+              width: " 50%",
+              margin: "20px auto",
+            }}
+          >
+            <Search
+              onChange={(e) => setSearchVal(e.target.value)}
+              value={searchVal}
+              searchData={searchDispatch}
+            />
+          </div>
         )}
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
           {instrumentsData &&
             instrumentsData.results.length === 0 &&
-            !isLoading && <h1> لا يوجد أجهزة </h1>}
+            !isLoading && <h2> لا يوجد أجهزة </h2>}
 
           <Routes>
             <Route
@@ -123,14 +130,14 @@ const InstrumentsView = ({
                 <table>
                   <thead>
                     <tr>
-                      <th>أسم الاله</th>
-                      <th>أخر صيانة</th>
-                      <th>مكان صيانة</th>
-                      <th>متوافرة في المخزن</th>
-                      <th>الحالة</th>
-                      <th>تاريخ الاضافة</th>
-                      <th>معلومات اضافية</th>
-                      <th>حدث</th>
+                      <th>Name </th>
+                      <th>Last Maintainance</th>
+                      <th>Maintainance Place </th>
+                      <th>Available</th>
+                      <th>Status</th>
+                      <th>Created At </th>
+                      <th>Notes </th>
+                      <th>Actons</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -146,7 +153,7 @@ const InstrumentsView = ({
                               style={{
                                 color:
                                   insruments.in_action === false
-                                    ? "#000"
+                                    ? "green"
                                     : "red",
                               }}
                             >

@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,500;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,900;1,100;1,400;1,500;1,700;1,900&display=swap");
 :root {
   --side-width: 200px;
-  --side-width-mob: 120px;
-  --header-height: 150px;
+  --side-width-mob: 80px;
+  --header-height: 65px;
   --bar-shadow: 0 8px 26px -4px hsla(0, 0%, 8%, 0.15),
     0 8px 9px -5px hsla(0, 0%, 8%, 0.06);
   --main-btn-width: 20%;
@@ -23,6 +23,59 @@
   outline: none;
   list-style: none;
 }
+
+/* start theme */
+
+#dark {
+  background-color: #1b203a;
+  min-height: 100vh;
+}
+#dark section h2 {
+  color: #fff !important;
+}
+#dark #dashbaord > div > div,
+#dark .VictoryContainer {
+  background-color: #272b4a;
+}
+
+#dark section form {
+  background-color: #272b4a !important;
+}
+
+#dark section form h3,
+#dark section form label,
+#dark section form input {
+  color: #fff;
+}
+
+#dark #dashbaord > div > div p {
+  color: #fff;
+}
+#dark h2,
+#dark p:not(li p),
+#dark h3 {
+  color: #fff;
+}
+#light {
+  background-color: #dbe0e6 !important;
+  min-height: 100vh;
+}
+#dark header {
+  background-color: #1a224a;
+  color: #fff;
+}
+
+#dark aside {
+  background-color: #252c48;
+}
+#dark svg {
+  color: #fff;
+}
+#dark a {
+  color: #fff;
+}
+/*end theme */
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -41,7 +94,7 @@ body {
   /* background-image: url(../public/images/logo/logo.png);
   background-repeat: no-repeat;
   background-position: center ; */
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Roboto", sans-serif;
 }
 button {
   cursor: pointer;
@@ -71,7 +124,8 @@ button:disabled {
 }
 
 /*toolbar*/
-h1 {
+h1,
+h2 {
   text-align: center !important;
 }
 .toolBar {
@@ -132,14 +186,12 @@ table tbody button {
 table {
   width: 100%;
   text-align: center;
-  border-spacing: 1px;
 }
 table th,
 table td {
   padding: 0.75rem;
   min-width: 120px;
   font-size: 20px;
-  border: 1px solid;
 }
 @media (max-width: 767px) {
   table th,
@@ -147,15 +199,25 @@ table td {
     font-size: 12px;
   }
 }
-table thead {
-  font-size: 13px;
-  /* background-color: #0b9cff; */
+
+#dark table tbody td {
+  color: #fff;
 }
 
 table tbody {
   font-size: 12px;
 }
-
+table tbody tr:nth-child(even) {
+  background-color: #d1d1d1;
+}
+#dark table tbody tr:nth-child(even) td,
+#dark table tbody tr:nth-child(even) td a {
+  color: #000;
+}
+table tbody tr td,
+table thead th {
+  font-size: 15px;
+}
 table tbody button {
   border: none;
   padding: 5px 10px;

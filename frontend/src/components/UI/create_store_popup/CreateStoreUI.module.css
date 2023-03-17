@@ -19,7 +19,7 @@
 }
 .formContent form > div:first-of-type {
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 10px;
 }

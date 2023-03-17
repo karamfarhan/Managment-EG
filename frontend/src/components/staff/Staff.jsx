@@ -1,5 +1,6 @@
 import { useState, useEffect, Fragment } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import jwt_decode from "jwt-decode";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,7 @@ export const Staff = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { token } = useSelector((state) => state.authReducer);
-
+  const [t, i18n] = useTranslation();
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const empolyeePremission = [
@@ -78,13 +79,12 @@ export const Staff = () => {
       {/* create staff */}
       {showStaffForm && <StaffForm setStaffForm={setShowStaffForm} />}
 
-      <div dir="rtl">
+      <div>
         {!showStaffForm && location.pathname === "/staff" && (
           <Bar>
             <div className="toolBar">
               {(is_superuser || getStaff) && (
                 <Search
-                  placeholder="أسم الموظف أو الموقع"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   searchData={fetchSearchHandler}
@@ -93,11 +93,12 @@ export const Staff = () => {
               {(permissions.includes("add_employee") || is_superuser) && (
                 <button
                   className={classes.btn}
-                  onClick={() => setShowStaffForm(true)}>
+                  onClick={() => setShowStaffForm(true)}
+                >
                   <span>
                     <AiOutlineUserAdd />{" "}
                   </span>
-                  اضافة موظف
+                  {t("addEmployee")}
                 </button>
               )}
             </div>
@@ -109,7 +110,7 @@ export const Staff = () => {
         {!showStaffForm &&
           empolyees &&
           empolyees.count === 0 &&
-          (is_superuser || getStaff) && <h1>لا يوجد موظفين</h1>}
+          (is_superuser || getStaff) && <h2>{t("noEmployees")}</h2>}
         {empolyees &&
           !showStaffForm &&
           empolyees.count > 0 &&

@@ -24,8 +24,7 @@
   }
 }
 .form form {
-  width: 70%;
-  margin: 0 auto;
+  padding: 30px;
 }
 .form form input {
   width: 100%;

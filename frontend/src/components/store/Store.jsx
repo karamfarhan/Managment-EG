@@ -15,6 +15,7 @@ import {
   storeSearch,
   storeSearchPagination,
 } from "../../store/create-store-slice";
+import { useTranslation } from "react-i18next";
 import DeleteConfirmation from "../UI/delete_confirmation/DeleteConfirmation";
 import EditStore from "../UI/edit_store/EditStore";
 import Search from "../UI/search/Search";
@@ -24,6 +25,7 @@ import classes from "./Store.module.css";
 import SelectImg from "../UI/select_img/SelectImg";
 
 const Store = () => {
+  const [t, i18n] = useTranslation();
   const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [forms, setForms] = useState({
@@ -197,7 +199,6 @@ const Store = () => {
         <div className="toolBar">
           {(is_superuser || getAllStores) && (
             <Search
-              placeholder=" المخزن أو التاريخ YYYY-DD-MM"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}
@@ -211,17 +212,15 @@ const Store = () => {
               <span>
                 <AiOutlineFileImage />
               </span>
-              انشاء مخزن جديد
+              {t("addStore")}
             </button>
           )}
         </div>
       </Bar>
       {isLoading && <LoadingSpinner />}
-      {store_data && !isLoading && store_data.length === 0 && (
-        <p className={classes.msg_p}> لا يوجد مخازن </p>
-      )}
+
       {store_data && store_data.results.length === 0 && !isLoading && (
-        <h1>لا يوجد مخازن</h1>
+        <h2>No stores created yet</h2>
       )}
       {store_data &&
         !isLoading &&
@@ -231,12 +230,12 @@ const Store = () => {
             <table>
               <thead>
                 <tr>
-                  <th>أسم المخزن</th>
-                  <th>عنوان المخزن</th>
+                  <th>{t("storeName")}</th>
+                  <th>{t("storeAddress")}</th>
                   {/* <th>انشيء عن طريق</th> */}
-                  <th>تاريخ الانشاء</th>
-                  <th>معلومات اضافية</th>
-                  <th>حدث</th>
+                  <th> {t("createdAt")} </th>
+                  <th>{t("note")} </th>
+                  <th>{t("actions")}</th>
                 </tr>
               </thead>
 

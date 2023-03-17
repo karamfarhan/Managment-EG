@@ -37,8 +37,7 @@ const Phases = ({ employeeActivity, hideModel, setCurrentPage }) => {
         dispatch(getEmpolyees(token));
         hideModel();
       }
-      const data = await res.json();
-      console.log(data);
+      return await res.json();
     } catch (err) {}
   };
 

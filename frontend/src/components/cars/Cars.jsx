@@ -15,11 +15,13 @@ import CarList from "./car-list/CarList";
 import { AiFillCar } from "react-icons/ai";
 import classes from "./Cars.module.css";
 import CreateCar from "../UI/create-car/CreateCar";
+import { useTranslation } from "react-i18next";
 
 const Cars = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
   const decoded = jwt_decode(token);
+  const [t, i18n] = useTranslation();
   const { is_superuser, permissions } = decoded;
   //current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,7 +76,6 @@ const Cars = () => {
         <div className="toolBar">
           {(is_superuser || permissions.includes("view_car")) && (
             <Search
-              placeholder=" أسم السائق أو بيانات السيارة"
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}
@@ -84,9 +85,8 @@ const Cars = () => {
           {(is_superuser || permissions.includes("add_car")) && (
             <button
               className={classes.createBtn}
-              onClick={() => setShowCarForm(true)}
-            >
-              <AiFillCar /> اضافة سيارة
+              onClick={() => setShowCarForm(true)}>
+              <AiFillCar /> {t("addCar")}
             </button>
           )}
         </div>
@@ -96,7 +96,7 @@ const Cars = () => {
         cars !== undefined &&
         !isLoading &&
         (is_superuser || permissions.includes("view_car")) &&
-        cars.results.length === 0 && <h1>لا يوجد سيارات </h1>}
+        cars.results.length === 0 && <h2> {t("carMsg")} </h2>}
       <div className={classes.grid}>
         {cars &&
           cars !== undefined &&

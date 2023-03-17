@@ -4,11 +4,13 @@ import { useQuery } from "react-query";
 
 //style
 import classes from "./InvoiceDetail.module.css";
+import ExportExcel from "../../UI/export/ExportExcel";
 
 const InvoiceDetail = () => {
   const { token } = useSelector((state) => state.authReducer);
 
   const param = useParams();
+  console.log(param);
   //invoice id
   const { invoiceId } = param;
   //fetch invoices
@@ -25,18 +27,17 @@ const InvoiceDetail = () => {
     } catch (err) {}
   });
 
-  console.log(invoice);
-
   return (
     <>
       <div dir="rtl" className={classes["invoice-container"]}>
         <div>
-          <h2>بيانات التحويل</h2>
+          <h2>بيانات الصرف</h2>
           <p>
             تاريخ التحويل :
             {new Date(invoice && invoice.created_at).toLocaleString()}
           </p>
           <h3> الملاحظات المهمة : {invoice && invoice.note} </h3>
+          <ExportExcel id={param.storeId} matter="invoices" />
         </div>
         <table>
           <thead>
@@ -64,7 +65,7 @@ const InvoiceDetail = () => {
 
         <table>
           <thead>
-            <th> الالات الي المخزن </th>
+            <th> الالات المحولة الي المخزن </th>
             <th>الوصف </th>
           </thead>
           <tbody>

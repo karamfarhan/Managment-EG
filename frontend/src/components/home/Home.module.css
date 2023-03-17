@@ -12,44 +12,45 @@
   gap: 10px;
   margin-top: 20px;
 }
-.actions a {
+.actions div {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px 0px;
+  padding: 15px 10px;
+  background-color: #fff;
   font-weight: bold;
   color: #fff;
   border: none;
   text-decoration: none;
   box-shadow: -1px 4px 26px -8px rgba(0, 0, 0, 0.74);
-  -webkit-box-shadow: -1px 4px 26px -8px rgba(0, 0, 0, 0.74);
-  -moz-box-shadow: -1px 4px 26px -8px rgba(0, 0, 0, 0.74);
+  -webkit-box-shadow: -1px 4px 26px -23px rgba(0, 0, 0, 0.74);
+  -moz-box-shadow: -1px 4px 26px -23px rgba(0, 0, 0, 0.74);
   transition: ease-in-out 0.1s;
 }
-
-.actions a span:last-of-type {
+.actions div p {
+  color: #000;
   font-size: 30px;
-  text-align: center;
-  width: 30px;
 }
-.actions a span {
-  text-align: center;
+
+.actions div span {
+  color: #7c7979;
+  display: inline-block;
+  height: 30px;
 }
-.actions a:hover {
+/* .actions div:hover {
   transform: scale(1.1);
+} */
+.actions div:first-of-type {
+  border-bottom: 2px solid #355aab;
 }
-.actions a:first-of-type {
-  background-color: #c1392b;
+.actions div:nth-child(2) {
+  border-bottom: 2px solid #27ae61;
 }
-.actions a:nth-child(2) {
-  background-color: #27ae61;
+.actions div:nth-child(3) {
+  border-bottom: 2px solid #f59c12;
 }
-.actions a:nth-child(3) {
-  background-color: #f59c12;
+.actions div:nth-child(4) {
+  border-bottom: 2px solid #287eb9;
 }
-.actions a:nth-child(4) {
-  background-color: #287eb9;
-}
-.actions a:nth-child(5) {
-  background-color: #5e72e4;
+.actions div:nth-child(5) {
+  border-bottom: 2px solid #5e72e4;
 }

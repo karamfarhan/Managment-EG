@@ -115,11 +115,17 @@ const SubstancesView = ({
 
       <div>
         {subsData && subsData.results.length > 0 && isLoading === false && (
-          <Search
-            onChange={searchHandler}
-            value={searchVal}
-            searchData={searchDispatch}
-          />
+          <div
+            style={{
+              width: " 50%",
+              margin: "20px auto",
+            }}>
+            <Search
+              onChange={searchHandler}
+              value={searchVal}
+              searchData={searchDispatch}
+            />
+          </div>
         )}
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
@@ -127,18 +133,18 @@ const SubstancesView = ({
             <ExportExcel matter="substances" />
           )}
           {subsData && subsData.results && subsData.results.length === 0 && (
-            <h1> لا يوجد مواد </h1>
+            <h2> No Substances are found</h2>
           )}
           {subsData && subsData.results.length > 0 && isLoading === false && (
             <table>
               <thead>
                 <tr>
-                  <th>أسم الخامة</th>
-                  <th>الكمية</th>
-                  <th>الوصف</th>
-                  <th>متوافر</th>
-                  <th>تاريخ الاضافة</th>
-                  <th>حدث</th>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Description</th>
+                  <th>Available</th>
+                  <th>Created At</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,8 +171,7 @@ const SubstancesView = ({
                             permissions.includes("delete_substance")) && (
                             <button
                               className="deleteBtn"
-                              onClick={() => deleteModelHandler(subs.id)}
-                            >
+                              onClick={() => deleteModelHandler(subs.id)}>
                               <MdOutlineDeleteForever />
                             </button>
                           )}
@@ -174,8 +179,7 @@ const SubstancesView = ({
                             permissions.includes("change_substance")) && (
                             <button
                               className="editBtn"
-                              onClick={() => editForm(subs.id)}
-                            >
+                              onClick={() => editForm(subs.id)}>
                               <FiEdit />
                             </button>
                           )}

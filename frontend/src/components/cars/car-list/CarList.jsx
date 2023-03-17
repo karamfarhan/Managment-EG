@@ -8,7 +8,9 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import EditCar from "../edit-car/EditCar";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./CarList.module.css";
+import { useTranslation } from "react-i18next";
 const CarList = ({ car_number, driver_name, driver, id }) => {
+  const [t, i18n] = useTranslation();
   const [isDelete, setIsDelete] = useState(false);
   const [carId, setCarId] = useState("");
   const [showEditForm, setShowEditForm] = useState(false);
@@ -72,10 +74,11 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
         <header>
           <div onClick={detailPageHandler}>
             <p>
-              سائق السيارة <span>{driver_name}</span>{" "}
+              {t("carDriver")} <span>{driver_name}</span>{" "}
             </p>
             <p>
-              رقم سيارة<span>{car_number}</span>{" "}
+              {" "}
+              {t("carNum")} <span>{car_number}</span>
             </p>
           </div>
           <div className={classes.actions}>
