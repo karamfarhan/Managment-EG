@@ -42,7 +42,9 @@ class CarSerializer(serializers.ModelSerializer):
     #     except Employee.DoesNotExist:
     #         raise serializers.ValidationError({"driver": [f"there is no driver with this id ({data.get('driver')})"]})
     #     return driver_obj
-    # TODO make sure that he can't update the driver to null, should alwaays be a valid driver(questionable, maybe we don't need the condition)
+    # TODO make sure that he can't update the driver to null, should alwaays be a valid driver
+    #  (questionable, maybe we don't need the condition)
+
     def create(self, validated_data):
         request = self.context.get("request")
         validated_data.get("driver")
