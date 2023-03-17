@@ -28,11 +28,11 @@ class CarMutation(SerializerMutation):
         exclude_fields = ("driver",)
 
     """
-    the reason why i am overwriting the driver resolver becuase i am using serializermutaion
-    and if you goes to the Car mutaion it's actually returning the (id) of the driver
-    not the driver objects, because i didn't alter the seriazlier driver filed to be objects i
+    the reason why i am overwriting the driver resolver because i am using serializer mutation
+    and if you goes to the Car mutation it's actually returning the (id) of the driver
+    not the driver objects, because i didn't alter the serializer driver filed to be objects i
     left it to be pk related, that's why, if i delete the new resolver it will show me error
-    says that it the driver resolver recived a pk, but it should recive an (EmployeeNode) boject,why is that?
+    says that it the driver resolver received a pk, but it should receive an (EmployeeNode) object,why is that?
     because if see under the input class i specified that the driver filed should returned as EmployeeNode object
     """
 
