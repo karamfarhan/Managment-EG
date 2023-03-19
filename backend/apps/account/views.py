@@ -68,11 +68,11 @@ def registerUser(request):
 
         if serializer.is_valid():
             user = serializer.save()
-            # TODO: no need to sent email here, it sent in the serializser
+            # ! no need to sent email here, it sent in the serializer
             # context = {"user": user}
             # to = [get_user_email(user)]
             # ActivationEmail(request, context).send(to)
-            # TODO: no need to send the account data back, delete them
+            # TODO:  no need to send the account data back, delete them
             response_data["response"] = "successfully registered new user."
             response_data["message"] = "We sent a verfication link to your email to and activate your email"
             response_data["email"] = user.email

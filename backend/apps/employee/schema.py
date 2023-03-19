@@ -8,11 +8,11 @@ from .graph_types import EmployeeNode, EmployeeSelectBarNode
 from .models import Employee, EmployeeActivity, Insurance
 from .serializers import EmployeeActivitySerializer, EmployeeSerializer
 
-# ! in the Employee Mutaion, i disabled the employee_category from the original serializer
+# ! in the Employee Mutation, i disabled the employee_category from the original serializer
 # ! and create my own Enum that inherit from the model choices and set in as input, also return it
 # ! the reason i did that because there is problem with the default enum converter in the SerializerMutation
 
-# TODO: i have to snend a clear validation messages when the insurance id is the same
+# TODO: i have to send a clear validation messages when the insurance id is the same
 
 
 class EmployeeCategoryEnum(graphene.Enum):
@@ -20,7 +20,7 @@ class EmployeeCategoryEnum(graphene.Enum):
         enum = Employee.EmployeeCategory
 
 
-# mutaion with serializerMutaion
+# mutation with serializerMutation
 class EmployeeMutation(SerializerMutation):
     class Input:
         employee_category = EmployeeCategoryEnum()
@@ -30,8 +30,9 @@ class EmployeeMutation(SerializerMutation):
         experience_image = Upload()
 
     # TODO: i have to think of way to send the full url of the image to the user,
-    # i can do an resolver down, but i alredy did that to the EmployeeNode,maybe i can reuse it by setting the default resolver
-    # like this :     identity_image = graphene.Field(graphene.String,resolver=someresolver())
+    # i can do an resolver down, but i already did that to the EmployeeNode,
+    # maybe i can reuse it by setting the default resolver
+    # like this :     identity_image = graphene.Field(graphene.String,resolver=some_resolver())
     identity_image = graphene.String()
     certificate_image = graphene.String()
     experience_image = graphene.String()
@@ -51,7 +52,7 @@ class EmployeeMutation(SerializerMutation):
             "experience_image",
         )
 
-    # TODO: i need to make a custome resolver for each image filed so that i send the full url
+    # TODO: i need to make a custom resolver for each image filed so that i send the full url
     # def resolve_identity_image(self, info):
     #     """Resolve product image absolute path"""
     #     if self.image:

@@ -1,40 +1,51 @@
 import graphene
 import graphql_jwt
 
+# from .utils import get_user_email
+# from graphql_jwt.utils import get_user_by_payload, get_payload
+from django.contrib.auth import get_user_model
+
+# import graphql
 # from graphql_jwt.refresh_token.shortcuts import get_refresh_token
 # from graphql_jwt.shortcuts import get_user_by_token,get_user_by_payload
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, Permission
+# from django.contrib.auth import get_user_model, authenticate
+# from django.contrib.auth.models import Group, Permission
 from django.http import Http404
-from graphene import relay
-from graphene_django import DjangoObjectType
+
+# from graphene import relay
+# from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
-from graphene_django.types import ErrorType
-from graphql_jwt import JSONWebTokenMutation, Refresh
+from graphql_jwt import exceptions
+
+# from graphene_django.types import ErrorType
+# from graphql_jwt import JSONWebTokenMutation, Refresh
 from graphql_jwt.decorators import login_required, permission_required
 
-from .email import ActivationEmail, ConfirmationEmail, PasswordChangedConfirmationEmail, PasswordResetEmail
+# from .email import ActivationEmail, ConfirmationEmail, PasswordChangedConfirmationEmail, PasswordResetEmail
 from .graph_types import AccountType
 from .models import Account
 from .serializers import AccountRegistrationSerializer, AccountWriteSerializer, ChangePasswordSerializer
-from .utils import get_user_email
 
 
-class ObtainJSONWebToken(JSONWebTokenMutation):
+class ObtainJSONWebToken(graphql_jwt.relay.JSONWebTokenMutation):
     user = graphene.Field(AccountType)
 
     @classmethod
     def resolve(cls, root, info, **kwargs):
-        return cls(user=info.context.user)
+        user = info.context.user
+        if not user.is_active:
+            raise exceptions.JSONWebTokenError("The Account Is not Active, We sent an Activation Link to your Email.")
+        return cls(user=user)
 
 
-# TODO: i have to figure out how to send the user with in the refresh token
-# class CustomeRefresh(Refresh):
+# TODO: I have to figure out how to write a custom refresh class mutation so that i can return the user too
+# class CustomRefresh(graphql_jwt.relay.Refresh):
 #     user = graphene.Field(AccountType)
-
+#
 #     @classmethod
 #     def resolve(cls, root, info, **kwargs):
-#         return cls(user=info.context.user)
+#         user = info.context.user
+#         return cls(user=user)
 
 
 class CreateAccountMutation(SerializerMutation):
@@ -61,13 +72,40 @@ class UpdateAccountMutation(SerializerMutation):
         raise Http404
 
 
-# ! change password with serializerMutaion
+# ! change password with serializerMutation
 class ChangePasswordMutation(SerializerMutation):
     class Meta:
         serializer_class = ChangePasswordSerializer
         model_operations = [
             "update",
         ]
+
+
+class Mutation(graphene.ObjectType):
+    create_account = CreateAccountMutation.Field()
+    update_account = UpdateAccountMutation.Field()
+    change_password = ChangePasswordMutation.Field()
+    token_auth = ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.relay.Verify.Field()
+    refresh_token = graphql_jwt.relay.Refresh.Field()
+
+
+class Query(graphene.ObjectType):
+    me = graphene.Field(AccountType)
+    user_by_username = graphene.Field(AccountType, username=graphene.String(required=True))
+
+    @login_required
+    @permission_required(["account.view_account"])
+    def resolve_me(self, info, **kwargs):
+        user = info.context.user
+        return user
+
+    @login_required
+    @permission_required(["account.view_account"])
+    def resolve_user_by_username(self, info, username, **kwargs):
+        if not username:
+            raise Exception("Can't be empty, provide username to search")
+        return get_user_model().objects.get(username=username)
 
 
 # ! change password with Pure code
@@ -140,30 +178,3 @@ class ChangePasswordMutation(SerializerMutation):
 #         PasswordChangedConfirmationEmail(request, context).send(to)
 #         success = True
 #         return cls(success=success)
-
-
-class Mutation(graphene.ObjectType):
-    create_account = CreateAccountMutation.Field()
-    update_account = UpdateAccountMutation.Field()
-    change_password = ChangePasswordMutation.Field()
-    token_auth = ObtainJSONWebToken.Field()
-    verify_token = graphql_jwt.Verify.Field()
-    refresh_token = graphql_jwt.Refresh.Field()
-
-
-class Query(graphene.ObjectType):
-    me = graphene.Field(AccountType)
-    user_by_username = graphene.Field(AccountType, username=graphene.String(required=True))
-
-    @login_required
-    @permission_required(["account.view_account"])
-    def resolve_me(self, info, **kwargs):
-        user = info.context.user
-        return user
-
-    @login_required
-    @permission_required(["account.view_account"])
-    def resolve_user_by_username(self, info, username, **kwargs):
-        if not username:
-            raise Exception("Can't be empty, provide username to search")
-        return get_user_model().objects.get(username=username)

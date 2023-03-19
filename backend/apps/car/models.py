@@ -18,8 +18,8 @@ class Car(models.Model):
     )
     car_number = models.CharField(
         max_length=250,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         verbose_name=_("car number"),
     )
     car_counter = models.CharField(

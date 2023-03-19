@@ -12,14 +12,12 @@ from .models import Car, CarActivity
 from .serializers import CarActivityRideSerializer, CarSerializer
 
 
-# TODO: when i send a wrong id as a driver id to create car, it fail to create a car
-# but it should raise an error
 class CarMutation(SerializerMutation):
     class Input:
         driver = graphene.ID(required=False)
 
     driver = graphene.Field(EmployeeNode)
-    driver_name_from_mutaion = graphene.String()
+    driver_name_from_mutation = graphene.String()
 
     class Meta:
         serializer_class = CarSerializer
@@ -46,14 +44,14 @@ class CarMutation(SerializerMutation):
             self.driver = None
         return self.driver
 
-    # ? here is example on how to send new custome data fileds to the client after creating the object,
-    # ? (it will be read only, like the custome fileds in serizlizers)
-    def resolve_driver_name_from_mutaion(self, info, **kwargs):
+    # ? here is example on how to send new custom data filed to the client after creating the object,
+    # ?, (it will be read only, like the custom filed in serializers)
+    def resolve_driver_name_from_mutation(self, info, **kwargs):
         if self.driver:
-            self.driver_name_from_mutaion = self.driver.name
+            self.driver_name_from_mutation = self.driver.name
         else:
-            self.driver_name_from_mutaion = None
-        return self.driver_name_from_mutaion
+            self.driver_name_from_mutation = None
+        return self.driver_name_from_mutation
 
 
 class CarRidesInput(graphene.InputObjectType):
@@ -61,24 +59,24 @@ class CarRidesInput(graphene.InputObjectType):
     place_to = graphene.String(required=True)
 
 
-# TODO: should fix this problem in custome mutaion class, it should be like SerializerMutaion
+# TODO: should fix this problem in custom mutation class, it should be like SerializerMutation
 """
-the problem is when i create a custome mutaion class, it's not like when i use
-SerializerMutaion from graphene,
-graphene will return the fileds of the objects, so i can access them after the creation
-but in custome class i have to return the objects itself, and then access it's filed from the object
+the problem is when i create a custom mutation class, it's not like when i use
+SerializerMutation from graphene,
+graphene will return the fields of the objects, so i can access them after the creation
+but in custom class i have to return the objects itself, and then access it's filed from the object
 
-in SerializerMutaion will be like this:
+in SerializerMutation will be like this:
 
-mutaion...
+mutation...
     ...
     ...
     filed_1
     filed_2
 
-but in custome class:
+but in custom class:
 
-mutaion...
+mutation...
     ...
     ...
     obj_returned_name{
@@ -128,8 +126,8 @@ class CarActivityMutation(relay.ClientIDMutation):
         if rides:
             for ride in rides:
                 serializer = CarActivityRideSerializer(data=ride)
-                # ! maybe the if statment on .is_valid() is not required
-                # ! i can make it like the ModelViewSet (look at it)
+                # ! maybe the if statement on .is_valid() is not required
+                # ! I can make it like the ModelViewSet (look at it)
                 if serializer.is_valid(raise_exception=True):
                     ride_obj = serializer.save(activity=car_activity)
                     ride_obj.save()
@@ -142,8 +140,9 @@ class Mutation(graphene.ObjectType):
     write_activity_car = CarActivityMutation.Field()
 
 
-# TODO: i have to know what is the best when using relay, to but the permmisson on the type itself, (by overwriteing the get_querey method)
-# or i have to overwrite the default relay resolver for the quereys and put an permmision on it
+# TODO: i have to know what is the best when using relay, to but the permission on the type itself,
+#  (by overwriting the get_query method)
+# or i have to overwrite the default relay resolver for the query and put an permission on it
 
 
 class Query(graphene.ObjectType):

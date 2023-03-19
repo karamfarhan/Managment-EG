@@ -24,6 +24,15 @@ class InsuranceSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "created_by", "created_at"]
 
+    # ! this validate method may be not required, because we did make raise_exception=True,in .save()
+    def validate(self, validated_data):
+        ins_code = validated_data["ins_code"]
+        if Insurance.objects.filter(ins_code=ins_code).exists():
+            raise serializers.ValidationError(
+                {"ins_code": [f"insurance with this ins_code ({ins_code}) already exists"]}
+            )
+        return validated_data
+
 
 class EmployeeSelectBarSerializer(serializers.ModelSerializer):
     class Meta:
