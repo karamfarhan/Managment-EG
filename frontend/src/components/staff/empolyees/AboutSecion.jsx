@@ -5,14 +5,21 @@ const AboutSecion = ({ empolyee }) => {
         تاريخ التوظيف : <span> {empolyee.signin_date} </span>{" "}
       </p>
       <p>
-        سنوات الخبرة : <span> {empolyee.years_of_experiance}</span>
+        التأمين :{" "}
+        <span>
+          {" "}
+          {empolyee.insurance === true ? "مؤمن عليه" : "ليس مؤمن عليه"}{" "}
+        </span>{" "}
+      </p>
+      <p>
+        سنوات الخبرة : <span> {empolyee.experience}</span>
       </p>
       <p>
         مقر العمل :
         <span>
-          {empolyee.store_address === null
+          {empolyee.location.store_address === null
             ? "مقر الشركة"
-            : empolyee.store_address}{" "}
+            : empolyee.location.store_address}{" "}
         </span>
       </p>
 

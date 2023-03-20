@@ -17,7 +17,7 @@ export const Staff = () => {
   const { token } = useSelector((state) => state.authReducer);
   const [t, i18n] = useTranslation();
   const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
+  //const { is_superuser, permissions } = decoded;
   const empolyeePremission = [
     "change_employee",
     "delete_employee",
@@ -26,7 +26,7 @@ export const Staff = () => {
     "delete_employeeactivity",
     "view_employee",
   ];
-  const getStaff = permissions.some((el) => empolyeePremission.includes(el));
+  //const getStaff = permissions.some((el) => empolyeePremission.includes(el));
 
   const [showStaffForm, setShowStaffForm] = useState(false);
 
@@ -42,38 +42,39 @@ export const Staff = () => {
   //fetch search data
   //get stores
   useEffect(() => {
-    if (
-      currentPage === 1 &&
-      searchValue.trim() === "" &&
-      (getStaff || is_superuser) &&
-      isAuth === true
-    ) {
+    if (currentPage === 1 && searchValue.trim() === "" && isAuth === true) {
+      console.log(token);
       dispatch(getEmpolyees(token));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, currentPage, searchValue, getStaff, is_superuser, isAuth]);
+  }, [dispatch, currentPage, searchValue, isAuth]);
 
   function fetchSearchHandler() {
     setCurrentPage(1);
-    const obj = {
-      token,
-      search: searchValue,
-    };
+    // const obj = {
+    //   token,
+    //   search: searchValue,
+    // };
     // if true allow search empolyee
-    if (getStaff || is_superuser === true) {
-      dispatch(empolyeeSearch(obj));
-    }
+    // if (getStaff || is_superuser === true) {
+    //   dispatch(empolyeeSearch(obj));
+    // }
   }
 
   let result =
     empolyees &&
     empolyees.results &&
-    empolyees.results.reduce(function (r, a) {
-      r[a.store_address] = r[a.store_address] || [];
-      r[a.store_address].push(a);
+    empolyees.results.employees.reduce(function (r, a) {
+      r[a.location && a.location.store_address && a.location.store_address] =
+        r[a.location && a.location.store_address && a.location.store_address] ||
+        [];
+      r[
+        a.location && a.location.store_address && a.location.store_address
+      ].push(a);
       return r;
     }, Object.create(null));
 
+  console.log(result);
   return (
     <Fragment>
       {/* create staff */}
@@ -83,38 +84,35 @@ export const Staff = () => {
         {!showStaffForm && location.pathname === "/staff" && (
           <Bar>
             <div className="toolBar">
-              {(is_superuser || getStaff) && (
-                <Search
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  searchData={fetchSearchHandler}
-                />
-              )}
-              {(permissions.includes("add_employee") || is_superuser) && (
-                <button
-                  className={classes.btn}
-                  onClick={() => setShowStaffForm(true)}>
-                  <span>
-                    <AiOutlineUserAdd />{" "}
-                  </span>
-                  {t("addEmployee")}
-                </button>
-              )}
+              <Search
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                searchData={fetchSearchHandler}
+              />
+
+              <button
+                className={classes.btn}
+                onClick={() => setShowStaffForm(true)}
+              >
+                <span>
+                  <AiOutlineUserAdd />{" "}
+                </span>
+                {t("addEmployee")}
+              </button>
             </div>
           </Bar>
         )}
         <Routes>
           <Route path={`/edit/:empId`} element={<EditEmpolyee />} />
         </Routes>
-        {!showStaffForm &&
-          empolyees &&
-          empolyees.count === 0 &&
-          (is_superuser || getStaff) && <h2>{t("noEmployees")}</h2>}
+        {!showStaffForm && empolyees && empolyees.count === 0 && (
+          <h2>{t("noEmployees")}</h2>
+        )}
         {empolyees &&
+          empolyees.results &&
           !showStaffForm &&
           empolyees.count > 0 &&
-          location.pathname === "/staff" &&
-          (is_superuser || getStaff) && (
+          location.pathname === "/staff" && (
             <Empolyess
               decoded={decoded}
               data={result}

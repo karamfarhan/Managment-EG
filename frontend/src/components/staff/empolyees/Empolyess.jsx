@@ -38,6 +38,8 @@ const Empolyess = ({
   );
   const empolyeeCount = empolyeeData && empolyeeData.count;
 
+  console.log(empolyeeCount);
+
   //paginationFun
   const paginationFun = (obj) => {
     dispatch(empolyeePagination(obj));
@@ -47,73 +49,73 @@ const Empolyess = ({
     // //search pagination
     dispatch(empolyeeSearchPagination(obj));
   };
-  const today = new Date();
-  const time =
-    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  //const today = new Date();
+  // const time =
+  //   today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-  const updateEmployee = async (id) => {
-    try {
-      const res = await fetch(`${window.domain}/employees/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  // const updateEmployee = async (id) => {
+  //   try {
+  //     const res = await fetch(`${window.domain}/employees/${id}`, {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      const data = await res.json();
-      return data;
-    } catch (err) {}
-  };
+  //     const data = await res.json();
+  //     return data;
+  //   } catch (err) {}
+  // };
 
   // send phase/in
-  const sendPhaseIn = async (id) => {
-    try {
-      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          phase_in: time,
-        }),
-      });
-      if (res.ok) {
-        dispatch(getEmpolyees(token));
-      }
-      await res.json();
-    } catch (err) {}
-  };
+  // const sendPhaseIn = async (id) => {
+  //   try {
+  //     const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         phase_in: time,
+  //       }),
+  //     });
+  //     if (res.ok) {
+  //       dispatch(getEmpolyees(token));
+  //     }
+  //     await res.json();
+  //   } catch (err) {}
+  // };
 
   // send phase out
-  const sendPhaseOut = async (id, today_activity) => {
-    try {
-      const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
-        method: "PATCH",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          phase_out: time,
-          id: today_activity,
-        }),
-      });
-      await res.json();
-      if (res.ok) {
-        if (res.ok) {
-          dispatch(getEmpolyees(token));
-        }
-        await updateEmployee(id);
-      }
-    } catch (err) {}
-  };
+  // const sendPhaseOut = async (id, today_activity) => {
+  //   try {
+  //     const res = await fetch(`${window.domain}/employees/${id}/activity/`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         phase_out: time,
+  //         id: today_activity,
+  //       }),
+  //     });
+  //     await res.json();
+  //     if (res.ok) {
+  //       if (res.ok) {
+  //         dispatch(getEmpolyees(token));
+  //       }
+  //       await updateEmployee(id);
+  //     }
+  //   } catch (err) {}
+  // };
 
-  const showPhasesHandler = (id, today_activity) => {
-    setEmployeeActivity({ id, today_activity });
-    setShowPhases(true);
-  };
-
+  // const showPhasesHandler = (id, today_activity) => {
+  //   setEmployeeActivity({ id, today_activity });
+  //   setShowPhases(true);
+  // };
+  console.log(data);
   return (
     <Fragment>
       {showPhases && (
@@ -140,17 +142,17 @@ const Empolyess = ({
                     <thead>
                       <th>{t("employeeName")}</th>
                       <th> {t("type")} </th>
-                      <th> {t("phases")} </th>
+                      {/* <th> {t("phases")} </th> */}
                     </thead>
                     {value.map((e, i) => {
                       return (
                         <tbody key={i}>
                           <tr>
                             <td>
-                              <Link to={`/staff/${e.id}`}>{e.name}</Link>
+                              <Link to={`/staff/${e._id}`}>{e.name}</Link>
                             </td>
-                            <td> {e.type} </td>
-{/* 
+                            <td> {e.job} </td>
+                            {/* 
                             {(permissions.includes("add_employeeactivity") ||
                               is_superuser) && (
                               <td>

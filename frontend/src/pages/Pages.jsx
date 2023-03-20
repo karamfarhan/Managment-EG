@@ -18,6 +18,8 @@ import InvoicesPage from "./InvoicesPage";
 import PurchasesPage from "./PurchasesPage";
 const Pages = () => {
   const { isAuth } = useSelector((state) => state.authReducer);
+  console.log(isAuth);
+
   return (
     <Routes>
       <Route

@@ -25,7 +25,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   border-bottom: 1px solid #ddd;
-  padding: 0 0 30px 0;
+  padding: 10px 20px 30px 20px;
 }
 .actions button:last-of-type {
   background-color: rgb(206, 44, 44);
@@ -94,6 +94,7 @@
 }
 .about p {
   font-size: 25px;
+  color: #000 !important;
 }
 .insurance {
   text-align: center;

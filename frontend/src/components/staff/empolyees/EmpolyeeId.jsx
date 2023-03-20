@@ -34,21 +34,24 @@ const EmpolyeeId = () => {
 
   const params = useParams();
   const { empolyeeId } = params;
-
+  console.log(params);
   const { data: empolyee } = useQuery(
     "get/empolyee",
     async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${window.domain}/employees/${empolyeeId}`, {
+        const res = await fetch(`${window.domain}employees/${empolyeeId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setIsLoading(false);
-        return await res.json();
-      } catch (err) {}
+        const data = await res.json();
+        return data.results.employee;
+      } catch (err) {
+        console.log(err);
+      }
     },
     { refetchOnWindowFocus: false }
   );
@@ -63,7 +66,7 @@ const EmpolyeeId = () => {
     setImgModel(false);
   }; //delete staff
   const deleteHandler = async (id) => {
-    const res = await fetch(`${window.domain}/employees/${id}`, {
+    const res = await fetch(`${window.domain}employees/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -112,23 +115,17 @@ const EmpolyeeId = () => {
                 {/* name  */}
                 <div>
                   <h3> {empolyee.name} </h3>
-                  <span> {empolyee.type} </span>
+                  <span> {empolyee.job} </span>
                 </div>
               </div>
               <div className={classes.actions}>
-                {(is_superuser || permissions.includes("change_employee")) && (
-                  <button
-                    type="button"
-                    onClick={() => editHanlder(empolyee.id)}
-                  >
-                    تحديث البيانات
-                  </button>
-                )}
-                {(is_superuser || permissions.includes("delete_employee")) && (
-                  <button onClick={() => deleteModelHandler(empolyee.id)}>
-                    حذف
-                  </button>
-                )}
+                <button type="button" onClick={() => editHanlder(empolyee.id)}>
+                  تحديث البيانات
+                </button>
+
+                <button onClick={() => deleteModelHandler(empolyee._id)}>
+                  حذف
+                </button>
               </div>
             </header>
             {/* body */}
@@ -141,13 +138,13 @@ const EmpolyeeId = () => {
                       <AiOutlinePhone />
                     </span>
 
-                    <a href={`tel:${empolyee.number}`}>{empolyee.number}</a>
+                    {/* <a href={`tel:${empolyee.number}`}>{empolyee.number}</a> */}
                   </li>
                   <li>
                     <span>
                       <MdOutlineMarkEmailUnread />{" "}
                     </span>
-                    <a href={`mailto: ${empolyee.email}`}>{empolyee.email}</a>
+                    {/* <a href={`mailto: ${empolyee.email}`}>{empolyee.email}</a> */}
                   </li>
                 </ul>
               </div>

@@ -5,14 +5,16 @@ export const getEmpolyees = createAsyncThunk(
   "get/empolyees",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch(`${window.domain}/employees/`, {
+      const res = await fetch(`${window.domain}employees/`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
           Authorization: `Bearer ${arg}`,
         },
       });
-      return await res.json();
+      const data = await res.json();
+      console.log(data);
+      return data;
     } catch (err) {
       console.log(err);
     }
@@ -24,7 +26,7 @@ export const empolyeePagination = createAsyncThunk(
   "empolyee/pagination",
   async (arg) => {
     try {
-      const res = await fetch(`${window.domain}/employees/?page=${arg.page}`, {
+      const res = await fetch(`${window.domain}employees?page=${arg.page}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg.token}`,
