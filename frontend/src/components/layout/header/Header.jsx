@@ -87,8 +87,7 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
   return (
     <header
       className={classes.header}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
-    >
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className={classes["head-content"]}>
         <div>
           {matches <= 820 && (
@@ -106,8 +105,7 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
 
           <div
             className={classes.lang}
-            onClick={() => setLang((prevState) => !prevState)}
-          >
+            onClick={() => setLang((prevState) => !prevState)}>
             <div>
               <ImEarth />
             </div>

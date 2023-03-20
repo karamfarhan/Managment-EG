@@ -150,7 +150,7 @@ const Empolyess = ({
                               <Link to={`/staff/${e.id}`}>{e.name}</Link>
                             </td>
                             <td> {e.type} </td>
-
+{/* 
                             {(permissions.includes("add_employeeactivity") ||
                               is_superuser) && (
                               <td>
@@ -200,7 +200,7 @@ const Empolyess = ({
                                   </button>
                                 )}
                               </td>
-                            )}
+                            )} */}
                           </tr>
                         </tbody>
                       );

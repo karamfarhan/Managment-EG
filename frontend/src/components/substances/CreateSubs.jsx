@@ -114,8 +114,7 @@ const CreateSubs = () => {
                 id="material"
                 type="button"
                 name="material"
-                onClick={fetchMatters}
-              >
+                onClick={fetchMatters}>
                 {t("viewSubs")}
               </button>
               <button type="button" onClick={() => setShowModel(true)}>
@@ -130,14 +129,12 @@ const CreateSubs = () => {
                 id="instruments"
                 type="button"
                 name="instruments"
-                onClick={fetchInstruments}
-              >
+                onClick={fetchInstruments}>
                 {t("viewInst")}
               </button>
               <button
                 type="button"
-                onClick={() => setShowInstrumentsForm(true)}
-              >
+                onClick={() => setShowInstrumentsForm(true)}>
                 {t("addInstruments")}
               </button>
             </div>

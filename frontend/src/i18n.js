@@ -18,7 +18,7 @@ i18n
 
   .init({
     resources,
-    lng: localStorage.getItem("language") || "en",
+    lng: localStorage.getItem("language") || "ar",
 
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default

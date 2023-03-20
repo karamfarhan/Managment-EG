@@ -18,14 +18,17 @@ const Sidebar = () => {
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
   const [t, i18n] = useTranslation();
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> 833ee3ff6f1ddbdce15c11278bfd16e0624378c0
   return (
     <aside className={classes.sidebar} >
       <ul>
-        <li>
+        {/* <li>
           <NavLink
             to="/main"
             style={({ isActive }) => {
@@ -40,7 +43,7 @@ const Sidebar = () => {
             </span>
             <p>{t("dashboard")} </p>
           </NavLink>
-        </li>
+        </li> */}
         {(is_superuser === true ||
           allPermissions.includes("employee") ||
           allPermissions.includes("insurance")) && (
@@ -99,7 +102,7 @@ const Sidebar = () => {
           </li>
         )}
 
-        {(is_superuser || allPermissions.includes("store")) && (
+        {/* {(is_superuser || allPermissions.includes("store")) && (
           <li>
             <NavLink
               to="/purchases"
@@ -116,7 +119,7 @@ const Sidebar = () => {
               <p>{t("purchases")}</p>
             </NavLink>
           </li>
-        )}
+        )} */}
 
         {(is_superuser ||
           allPermissions.includes("substance") ||

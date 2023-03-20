@@ -93,8 +93,7 @@ export const Staff = () => {
               {(permissions.includes("add_employee") || is_superuser) && (
                 <button
                   className={classes.btn}
-                  onClick={() => setShowStaffForm(true)}
-                >
+                  onClick={() => setShowStaffForm(true)}>
                   <span>
                     <AiOutlineUserAdd />{" "}
                   </span>

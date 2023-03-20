@@ -56,6 +56,7 @@ const Invoices = () => {
   const storeChangeHandler = (e) => {
     setStoreId(e.target.value);
   };
+  console.log(invoices);
 
   return (
     <Fragment>
