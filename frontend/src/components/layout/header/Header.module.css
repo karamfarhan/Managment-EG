@@ -23,19 +23,9 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
-<<<<<<< HEAD
   border: 1px solid orange;
   overflow: hidden;
   background-color: #fff;
-=======
-
-  border: 1px solid orange;
-  overflow: hidden;
-  background-color: #fff;
-  border: 1px solid #000;
-  border: 1px solid orange;
-  overflow: hidden;
->>>>>>> 833ee3ff6f1ddbdce15c11278bfd16e0624378c0
 }
 .user img {
   width: 100%;
@@ -71,12 +61,6 @@
 }
 .toggleTheme svg {
   font-size: 30px;
-<<<<<<< HEAD
-=======
-}
-.toggleTheme svg {
-  font-size: 30px;
->>>>>>> 833ee3ff6f1ddbdce15c11278bfd16e0624378c0
 }
 .head-content a svg {
   cursor: pointer;

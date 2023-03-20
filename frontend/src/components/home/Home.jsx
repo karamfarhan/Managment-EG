@@ -11,13 +11,8 @@ import { useSelector } from "react-redux";
 import CreateStoreUi from "../UI/create_store_popup/CreateStoreUi";
 import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import CreateCar from "../UI/create-car/CreateCar";
-<<<<<<< HEAD
 import { MyChartOne, MyChartTwo } from "./MyCharts";
 import { useTranslation } from "react-i18next";
-=======
-import { Link } from "react-router-dom";
-
->>>>>>> 833ee3ff6f1ddbdce15c11278bfd16e0624378c0
 const Home = () => {
   const [staffForm, setStaffForm] = useState(false);
   const [storeForm, setStoreForm] = useState(false);
@@ -28,6 +23,7 @@ const Home = () => {
   const decoded = jwt_decode(token);
   const { is_superuser, permissions } = decoded;
   const allPermissions = permissions.join(" ");
+  const [t, i18n] = useTranslation();
 
   let formsVisible = staffForm;
 
@@ -57,7 +53,6 @@ const Home = () => {
       {showCars && <CreateCar hideModel={() => setShowCars(false)} />}
 
       {!formsVisible && (
-<<<<<<< HEAD
         <div className={classes.home} id="dashbaord">
           <div className={classes.actions}>
             <div>
@@ -84,59 +79,6 @@ const Home = () => {
           <div style={{ display: "flex", marginTop: "20px", flexWrap: "wrap" }}>
             <MyChartOne />
             <MyChartTwo />
-=======
-        <div className={classes.home}>
-          <h1>الرئيسية</h1>
-
-          <div className={classes.actions}>
-            {(is_superuser === true ||
-              allPermissions.includes("employee") ||
-              allPermissions.includes("insurance")) && (
-              <Link to="/staff">
-                <span>العاملين بالشركة</span>
-                <span>
-                  <AiOutlineUserAdd />
-                </span>
-              </Link>
-            )}
-            {(is_superuser || allPermissions.includes("store")) && (
-              <Link to="/store">
-                <span>مشاريع و مخازن الشركة </span>
-                <span>
-                  <FaStoreAlt />
-                </span>
-              </Link>
-            )}
-
-            {(is_superuser ||
-              allPermissions.includes("substance") ||
-              allPermissions.includes("instrument")) &&
-              (!allPermissions.includes("invoice") ||
-                !allPermissions.includes("store")) && (
-                <Link to="/create_subs">
-                  <span>المخزن الرئيسي</span>
-                  <span>
-                    <VscPaintcan />
-                  </span>
-                </Link>
-              )}
-            {/* {(is_superuser === true || allPermissions.includes("media")) && (
-              <Link to="/projects">
-                <span>مشاريع الشركة</span>
-                <span>
-                  <GalleryIcon />
-                </span>
-              </Link>
-            )} */}
-            {(is_superuser === true || allPermissions.includes("car")) && (
-              <Link to="/cars">
-                <span>سيارات الشركة</span>
-                <span>
-                  <FaCarSide />
-                </span>
-              </Link>
-            )}
->>>>>>> 833ee3ff6f1ddbdce15c11278bfd16e0624378c0
           </div>
         </div>
       )}

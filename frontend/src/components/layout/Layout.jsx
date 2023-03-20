@@ -39,10 +39,6 @@ export const Layout = ({ children }) => {
       marginRight: "auto",
     };
   }
-<<<<<<< HEAD
-  console.log(matches)
-=======
->>>>>>> 833ee3ff6f1ddbdce15c11278bfd16e0624378c0
   return (
     <Fragment>
       <Header
@@ -55,18 +51,7 @@ export const Layout = ({ children }) => {
         dir={i18n.language === "en" ? "ltr" : "rtl"}
 
       >
-<<<<<<< HEAD
         <section style={{ ...sectionPosition, width: showSideBar === false ? "100%" : null }} >{children}</section>
-=======
-        <section
-          style={{
-            ...sectionPosition,
-            width: showSideBar === false ? "100%" : null,
-          }}
-        >
-          {children}
-        </section>
->>>>>>> 833ee3ff6f1ddbdce15c11278bfd16e0624378c0
         {showSideBar && <Sidebar />}
       </main>
     </Fragment>
