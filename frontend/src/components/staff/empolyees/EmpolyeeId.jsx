@@ -119,7 +119,7 @@ const EmpolyeeId = () => {
                 </div>
               </div>
               <div className={classes.actions}>
-                <button type="button" onClick={() => editHanlder(empolyee.id)}>
+                <button type="button" onClick={() => editHanlder(empolyee._id)}>
                   تحديث البيانات
                 </button>
 
@@ -152,32 +152,28 @@ const EmpolyeeId = () => {
               {/* activities */}
 
               <div className={classes.activities}>
-                <ul>
+                {/* <ul>
                   <li
                     className={sections === "general" ? classes.active : ""}
-                    onClick={() => setSections("general")}
-                  >
+                    onClick={() => setSections("general")}>
                     معلومات عامة
                   </li>
-                  <li
+                <li
                     className={sections === "insurance" ? classes.active : ""}
-                    onClick={() => setSections("insurance")}
-                  >
+                    onClick={() => setSections("insurance")}>
                     التأمينات
                   </li>
                   <li
                     className={sections === "papers" ? classes.active : ""}
-                    onClick={() => setSections("papers")}
-                  >
+                    onClick={() => setSections("papers")}>
                     الأوراق
                   </li>
                   <li
                     className={sections === "absence" ? classes.active : ""}
-                    onClick={() => setSections("absence")}
-                  >
+                    onClick={() => setSections("absence")}>
                     الحضور/الانصراف
-                  </li>
-                </ul>
+                  </li> 
+                </ul> */}
                 <div>
                   {/* about */}
                   {sections === "general" && (

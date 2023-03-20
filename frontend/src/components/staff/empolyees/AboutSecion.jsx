@@ -2,7 +2,8 @@ const AboutSecion = ({ empolyee }) => {
   return (
     <>
       <p>
-        تاريخ التوظيف : <span> {empolyee.signin_date} </span>{" "}
+        تاريخ التوظيف :{" "}
+        <span> {new Date(empolyee.dateOfWork).toLocaleDateString()} </span>{" "}
       </p>
       <p>
         التأمين :{" "}
@@ -17,9 +18,9 @@ const AboutSecion = ({ empolyee }) => {
       <p>
         مقر العمل :
         <span>
-          {empolyee.location.store_address === null
+          {empolyee.location === null
             ? "مقر الشركة"
-            : empolyee.location.store_address}{" "}
+            : empolyee.location.store_address}
         </span>
       </p>
 
