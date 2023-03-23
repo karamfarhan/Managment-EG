@@ -4,7 +4,7 @@ export const getStores = createAsyncThunk(
   "createStore/data",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch(`${window.domain}/stores/`, {
+      const res = await fetch(`${window.domain}stores/`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -15,6 +15,7 @@ export const getStores = createAsyncThunk(
       //   return ThunkAPI.dispatch(logout());
       // }
       const data = await res.json();
+      console.log(data);
       return data;
     } catch (err) {
       console.log(err);
@@ -25,24 +26,25 @@ export const createStore = createAsyncThunk(
   "createStore/data",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch(`${window.domain}/stores/`, {
+      const res = await fetch(`${window.domain}stores/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
           Authorization: `Bearer ${arg.token}`,
         },
         body: JSON.stringify({
-          name: arg.name,
-          address: arg.address,
-          description: arg.description,
+          store_name: arg.name,
+          store_address: arg.address,
+          // description: arg.description,
         }),
       });
       if (!res.ok) {
         throw new Error(res.statusText || "حدث خطأ");
       }
-      if (arg.authenticated === true) {
-        ThunkAPI.dispatch(getStores(arg.token));
-      }
+      ThunkAPI.dispatch(getStores(arg.token));
+      // if (arg.authenticated === true) {
+      //   ThunkAPI.dispatch(getStores(arg.token));
+      // }
     } catch (err) {
       console.log(err);
     }
@@ -120,6 +122,7 @@ const storeSlice = createSlice({
     [getStores.fulfilled]: (state, action) => {
       state.store_data = action.payload;
       state.isLoading = false;
+      console.log(action.payload);
     },
     [getStores.rejected]: (state, action) => {
       state.isLoading = false;

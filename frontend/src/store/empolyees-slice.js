@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { logout } from "./auth-slice";
 
 //GET
 export const getEmpolyees = createAsyncThunk(
@@ -13,7 +14,9 @@ export const getEmpolyees = createAsyncThunk(
         },
       });
       const data = await res.json();
-      console.log(data);
+      if (res.status === 401) {
+        return ThunkAPI.dispatch(logout());
+      }
       return data;
     } catch (err) {
       console.log(err);

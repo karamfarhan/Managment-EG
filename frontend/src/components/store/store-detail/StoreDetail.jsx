@@ -32,7 +32,7 @@ const StoreDetail = () => {
     try {
       setIsLoading(true);
 
-      const res = await fetch(`${window.domain}/stores/${storeId}`, {
+      const res = await fetch(`${window.domain}stores/${storeId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -41,6 +41,7 @@ const StoreDetail = () => {
       setIsLoading(false);
 
       const data = await res.json();
+      console.log(data);
       setData(data);
     } catch (err) {
       console.log(err);
@@ -60,11 +61,11 @@ const StoreDetail = () => {
         <div className={classes.content} dir="rtl">
           <nav>
             <ul>
-              <li
+              {/* <li
                 onClick={() => setSections({ projects: true })}
                 className={projects === true ? classes.active : ""}>
                 المشروعات
-              </li>
+              </li> */}
               <li
                 onClick={() => setSections({ invoices: true })}
                 className={invoices === true ? classes.active : ""}>
@@ -85,13 +86,13 @@ const StoreDetail = () => {
               <StoreEmployee data={data} />
             </div>
           )}
-
+          {/* 
           {sections.projects === true && (
             <div>
               {" "}
               <StoreProjects data={data} />{" "}
             </div>
-          )}
+          )} */}
           {/* invoices */}
 
           {invoices === true && isLoading === false && isLoading !== null && (

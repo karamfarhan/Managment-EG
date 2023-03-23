@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 
 import Inputs from "../inputs/Inputs";
 import { AiOutlineClose } from "react-icons/ai";
@@ -18,8 +18,8 @@ export const InventoryCreator = ({ hideFormHandler }) => {
     description: "",
   });
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
+  // const decoded = jwt_decode(token);
+  // const { is_superuser, permissions } = decoded;
 
   // const getSoresPremission = ["change_store", "view_store", "delete_store"];
 
@@ -32,17 +32,17 @@ export const InventoryCreator = ({ hideFormHandler }) => {
     formIsValid = true;
   }
   //authenticated function
-  function auth() {
-    if (
-      is_superuser ||
-      permissions.includes("view_store") ||
-      permissions.includes("delete_store")
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // function auth() {
+  //   if (
+  //     is_superuser ||
+  //     permissions.includes("view_store") ||
+  //     permissions.includes("delete_store")
+  //   ) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   //submit handler
   const submitHandler = (e) => {
@@ -53,20 +53,21 @@ export const InventoryCreator = ({ hideFormHandler }) => {
       token: token,
       name,
       address,
-      description,
-      authenticated: auth(),
+      // description,
+      // authenticated: auth(),
     };
     dispatch(createStore(storeObj));
     hideFormHandler();
-    if (auth()) {
-      navigate("/store");
-    }
+    navigate("/store");
+    // if (auth()) {
+    //   navigate("/store");
+    // }
   };
 
   return (
     <Fragment>
       <Backdrop hideModel={hideFormHandler} />
-      <div className={classes.formContent} >
+      <div className={classes.formContent}>
         <span onClick={hideFormHandler}>
           <AiOutlineClose />
         </span>

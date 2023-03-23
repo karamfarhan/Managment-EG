@@ -266,7 +266,7 @@ const StaffForm = ({ setStaffForm }) => {
                   location: e.target.value === "" ? null : e.target.value,
                 })
               }>
-              <option value="">موقع الشركة</option>
+              <option value={null}>موقع الشركة</option>
 
               {stores &&
                 stores.map((location) => {

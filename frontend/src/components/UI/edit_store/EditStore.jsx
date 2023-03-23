@@ -23,7 +23,7 @@ const EditStore = ({ id, hideFormHandler, showForm }) => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${window.domain}/stores/${id}/`, {
+        const res = await fetch(`${window.domain}stores/${id}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -47,7 +47,7 @@ const EditStore = ({ id, hideFormHandler, showForm }) => {
   //edit store
   const editStore = async () => {
     try {
-      const res = await fetch(`${window.domain}/stores/${id}/`, {
+      const res = await fetch(`${window.domain}stores/${id}/`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",

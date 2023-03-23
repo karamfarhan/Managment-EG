@@ -46,14 +46,13 @@ const Store = () => {
   //create invoice
   const [storeName, setStoreName] = useState("");
   const [storeId, setStoreId] = useState("");
+  // const decoded = jwt_decode(token);
+  // const { is_superuser, permissions } = decoded;
 
-  const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
-
-  const getSoresPremission = ["change_store", "view_store", "delete_store"];
-  const getAllStores = permissions.some((el) =>
-    getSoresPremission.includes(el)
-  );
+  // const getSoresPremission = ["change_store", "view_store", "delete_store"];
+  // const getAllStores = permissions.some((el) =>
+  //   getSoresPremission.includes(el)
+  // );
 
   //paginationFun
   const paginationFun = useCallback(
@@ -72,36 +71,32 @@ const Store = () => {
   //get stores
   useEffect(() => {
     //first render
-    if (
-      currentPage === 1 &&
-      searchValue.trim() === "" &&
-      (is_superuser || getAllStores)
-    ) {
+    if (currentPage === 1 && searchValue.trim() === "") {
       dispatch(getStores(token));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, currentPage, searchValue, is_superuser, getAllStores]);
+  }, [dispatch, currentPage, searchValue]);
 
   //RESET CURRENT PAGE
 
   //delete handler
   const deleteHandler = async (id) => {
-    if (is_superuser === false || !permissions.includes("delete_store"))
-      try {
-        const res = await fetch(`${window.domain}/stores/${id}/`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setForms({ isDelete: false });
-        dispatch(getStores(token));
+    // if (is_superuser === false || !permissions.includes("delete_store"))
+    try {
+      const res = await fetch(`${window.domain}stores/${id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setForms({ isDelete: false });
+      dispatch(getStores(token));
 
-        const data = await res.json();
-        return data;
-      } catch (err) {
-        console.log(err.message);
-      }
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   //show delete mode
@@ -197,35 +192,31 @@ const Store = () => {
       )}
       <Bar>
         <div className="toolBar">
-          {(is_superuser || getAllStores) && (
-            <Search
-              onChange={searchHandler}
-              value={searchValue}
-              searchData={fetchSearchHandler}
-            />
-          )}
-          {(permissions.includes("add_store") || is_superuser) && (
-            <button
-              className={classes.addInventory}
-              onClick={() => setForms({ showStoreForm: true })}
-            >
-              <span>
-                <AiOutlineFileImage />
-              </span>
-              {t("addStore")}
-            </button>
-          )}
+          <Search
+            onChange={searchHandler}
+            value={searchValue}
+            searchData={fetchSearchHandler}
+          />
+
+          <button
+            className={classes.addInventory}
+            onClick={() => setForms({ showStoreForm: true })}>
+            <span>
+              <AiOutlineFileImage />
+            </span>
+            {t("addStore")}
+          </button>
         </div>
       </Bar>
       {isLoading && <LoadingSpinner />}
 
-      {store_data && store_data.results.length === 0 && !isLoading && (
+      {store_data && store_data.data.stores.length === 0 && !isLoading && (
         <h2>No stores created yet</h2>
       )}
       {store_data &&
         !isLoading &&
-        store_data.results &&
-        store_data.results.length > 0 && (
+        store_data.data.stores &&
+        store_data.data.stores.length > 0 && (
           <div className={classes["table_content"]}>
             <table>
               <thead>
@@ -241,62 +232,49 @@ const Store = () => {
 
               <tbody>
                 {store_data &&
-                  store_data.results &&
-                  store_data.results.map((store) => {
+                  store_data.data.stores &&
+                  store_data.data.stores.map((store) => {
                     return (
-                      <tr key={store.id}>
+                      <tr key={store._id}>
                         <td>
-                          <Link to={`/store/${store.id}`}>{store.name}</Link>
+                          <Link to={`/store/${store._id}`}>
+                            {store.store_name}
+                          </Link>
                         </td>
-                        <td> {store.address} </td>
+                        <td> {store.store_address} </td>
                         {/* <td> {store.created_by} </td> */}
                         <td>{new Date(store.created_at).toDateString()} </td>
                         <td> {store.description} </td>
                         <td>
-                          {(is_superuser ||
-                            permissions.includes("add_invoice")) && (
-                            <button
-                              className={classes.editBtn}
-                              type="button"
-                              onClick={() => {
-                                showInvoiceHandler(store.name, store.id);
-                              }}
-                            >
-                              <BiTransfer />
-                            </button>
-                          )}
-                          {(permissions.includes("add_image") ||
-                            permissions.includes("add_mediapack") ||
-                            is_superuser) && (
-                            <button
-                              className="add-img"
-                              type="button"
-                              onClick={() => uploadImageHandler(store.id)}
-                            >
-                              <AiOutlineFileImage />
-                            </button>
-                          )}
-                          {(is_superuser ||
-                            permissions.includes("change_store")) && (
-                            <button
-                              className="editBtn"
-                              type="button"
-                              onClick={() => editStore(store.id)}
-                            >
-                              <FiEdit />
-                            </button>
-                          )}
+                          {/* <button
+                            className={classes.editBtn}
+                            type="button"
+                            onClick={() => {
+                              showInvoiceHandler(store.store_name, store._id);
+                            }}>
+                            <BiTransfer />
+                          </button> */}
 
-                          {(is_superuser ||
-                            permissions.includes("delete_store")) && (
-                            <button
-                              className={classes.deleteBtn}
-                              type="button"
-                              onClick={() => deleteModelHandler(store.id)}
-                            >
-                              <MdOutlineDeleteForever />
-                            </button>
-                          )}
+                          {/* <button
+                            className="add-img"
+                            type="button"
+                            onClick={() => uploadImageHandler(store.id)}>
+                            <AiOutlineFileImage />
+                          </button> */}
+
+                          <button
+                            className="editBtn"
+                            type="button"
+                            onClick={() => editStore(store._id)}>
+                            <FiEdit />
+                          </button>
+
+                          <button
+                            className={classes.deleteBtn}
+                            type="button"
+                            onClick={() => deleteModelHandler(store._id)}>
+                            <MdOutlineDeleteForever />
+                          </button>
                         </td>
                       </tr>
                     );
