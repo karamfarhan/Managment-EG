@@ -1,5 +1,4 @@
 import { useState, useEffect, Fragment } from "react";
-import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import {
   carsPaginations,
@@ -20,9 +19,9 @@ import { useTranslation } from "react-i18next";
 const Cars = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
   const [t, i18n] = useTranslation();
-  const { is_superuser, permissions } = decoded;
+//const decoded = jwt_decode(token);
+  // const { is_superuser, permissions } = decoded;
   //current page
   const [currentPage, setCurrentPage] = useState(1);
   //search
@@ -33,8 +32,8 @@ const Cars = () => {
   useEffect(() => {
     if (
       currentPage === 1 &&
-      searchValue.trim() === "" &&
-      (is_superuser || permissions.includes("view_car"))
+      searchValue.trim() === "" 
+    
     ) {
       dispatch(getCars(token));
     }
@@ -74,34 +73,32 @@ const Cars = () => {
       {showCarForm && <CreateCar hideModel={() => setShowCarForm(false)} />}
       <Bar>
         <div className="toolBar">
-          {(is_superuser || permissions.includes("view_car")) && (
             <Search
               onChange={searchHandler}
               value={searchValue}
               searchData={fetchSearchHandler}
             />
-          )}
+       
 
-          {(is_superuser || permissions.includes("add_car")) && (
             <button
               className={classes.createBtn}
               onClick={() => setShowCarForm(true)}>
               <AiFillCar /> {t("addCar")}
             </button>
-          )}
+        
         </div>
       </Bar>
       {isLoading && <LoadingSpinner />}
       {cars &&
         cars !== undefined &&
         !isLoading &&
-        (is_superuser || permissions.includes("view_car")) &&
+    
         cars.results.length === 0 && <h2> {t("carMsg")} </h2>}
       <div className={classes.grid}>
         {cars &&
           cars !== undefined &&
           !isLoading &&
-          (is_superuser || permissions.includes("view_car")) &&
+
           cars.results.map((el) => {
             return (
               <CarList
@@ -111,7 +108,7 @@ const Cars = () => {
                 car_model={el.car_model}
                 car_type={el.car_type}
                 car_number={el.car_number}
-                driver_name={el.driver_name}
+                driver_name={el.driver}
                 last_maintain={el.last_maintain}
                 maintain_place={el.maintain_place}
                 note={el.note}

@@ -41,6 +41,7 @@ const AuthForm = () => {
   return (
     <main>
       <div className={`${classes.main} ${unAuthUser}`}>
+        
         <div className={classes["form_container"]}>
           <form onSubmit={submitHandler}>
             <Login userInfo={userInfo} setUserInfo={setUserInfo} />

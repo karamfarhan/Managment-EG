@@ -52,7 +52,8 @@ export const Header = ({ showSideBar, sideBarHandler }) => {
   //logout handler
   const logoutHandler = () => {
     //
-    logoutEnpoint();
+   // logoutEnpoint();
+   dispatch(logout());
   };
 
   // signout btn

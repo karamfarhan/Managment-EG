@@ -5,7 +5,7 @@ export const getCars = createAsyncThunk(
   "get/carts",
   async (arg, { dispatch }) => {
     try {
-      const res = await fetch(`${window.domain}/cars/`, {
+      const res = await fetch(`${window.domain}cars/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg}`,
@@ -24,7 +24,7 @@ export const carsPaginations = createAsyncThunk(
   "get/carsPagination",
   async (arg) => {
     try {
-      const res = await fetch(`${window.domain}/cars/?page=${arg.page}`, {
+      const res = await fetch(`${window.domain}cars?page=${arg.page}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg.token}`,
@@ -42,7 +42,7 @@ export const carsPaginations = createAsyncThunk(
 // CARS SEARCH
 export const carsSearch = createAsyncThunk("car/search", async (arg) => {
   try {
-    const res = await fetch(`${window.domain}/cars/?search=${arg.search}`, {
+    const res = await fetch(`${window.domain}cars/?search=${arg.search}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${arg.token}`,

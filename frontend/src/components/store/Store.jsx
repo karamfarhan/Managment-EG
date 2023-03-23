@@ -211,7 +211,7 @@ const Store = () => {
       {isLoading && <LoadingSpinner />}
 
       {store_data && store_data.data.stores.length === 0 && !isLoading && (
-        <h2>No stores created yet</h2>
+        <h2> {t("noStores")} </h2>
       )}
       {store_data &&
         !isLoading &&

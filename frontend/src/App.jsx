@@ -7,8 +7,8 @@ import { getEmpolyees } from "./store/empolyees-slice";
 export const ThemeContext = createContext(null);
 
 function App() {
-  // window.domain = "http://127.0.0.1:9000/api/v1/";
-  window.domain = "https://management-sys.up.railway.app/api/v1/";
+   window.domain = "http://127.0.0.1:8080/api/v1/";
+ // window.domain = "https://management-sys.up.railway.app/api/v1/";
   // window.domain = "https://managment-eg-production.up.railway.app/api/v1";
   // window.domain = "https://managementdjango.onrender.com/api/v1";
   const dispatch = useDispatch();

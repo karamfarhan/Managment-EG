@@ -20,9 +20,9 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
     navigate(`/cars/${driver}/${id}`);
   };
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
+  // const decoded = jwt_decode(token);
 
-  const { is_superuser, permissions } = decoded;
+  // const { is_superuser, permissions } = decoded;
 
   //delete handler
   const deleteHandler = async (id) => {
@@ -74,7 +74,7 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
         <header>
           <div onClick={detailPageHandler}>
             <p>
-              {t("carDriver")} <span>{driver_name}</span>{" "}
+              {t("carDriver")} <span>{driver_name === null ? "لا يوجد سائق"  : driver_name.name }</span>{" "}
             </p>
             <p>
               {" "}
@@ -82,22 +82,21 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
             </p>
           </div>
           <div className={classes.actions}>
-            {(is_superuser || permissions.includes("delete_car")) && (
+       
               <button
                 className="deleteIcon"
                 onClick={() => deleteModelHandler(id)}
               >
                 <MdOutlineDeleteForever />
               </button>
-            )}
-            {(is_superuser || permissions.includes("change_car")) && (
+           
               <button
                 className="editIcon"
                 onClick={() => navigateEditHandler(id)}
               >
                 <FiEdit />
               </button>
-            )}
+           
           </div>
         </header>
       </div>

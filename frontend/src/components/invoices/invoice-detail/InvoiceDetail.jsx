@@ -16,17 +16,18 @@ const InvoiceDetail = () => {
   //fetch invoices
   const { data: invoice } = useQuery("fetch/invoice", async () => {
     try {
-      const res = await fetch(`${window.domain}/invoices/${invoiceId}/`, {
+      const res = await fetch(`${window.domain}invoices/${invoiceId}/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      return await res.json();
+      const data = await res.json()
+      return data.invoice
     } catch (err) {}
   });
-
+  console.log(invoice)
   return (
     <>
       <div dir="rtl" className={classes["invoice-container"]}>
@@ -48,12 +49,14 @@ const InvoiceDetail = () => {
           <tbody>
             {invoice &&
               invoice &&
-              invoice.substance_items &&
-              invoice.substance_items.map((subs, i) => {
+              invoice.substance
+              &&
+              invoice.substance
+              .map((subs, i) => {
                 return (
                   <tr key={i}>
-                    <td> {subs.name} </td>
-                    <td> {subs.mass} </td>
+                    <td> {subs.substanceId.name} </td>
+                    <td> {subs.quantity} </td>
                     <td> {subs.description} </td>
                   </tr>
                 );

@@ -126,7 +126,7 @@ const StaffForm = ({ setStaffForm }) => {
 
     sendEmpolyeeData();
   };
-
+console.log(stores)
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <h3> برجاء ادخال بيانات الموظف </h3>
@@ -272,7 +272,7 @@ const StaffForm = ({ setStaffForm }) => {
                 stores.map((location) => {
                   return (
                     <option key={location._id} value={location._id}>
-                      {location.store_address}
+                      {location.store_name}
                     </option>
                   );
                 })}

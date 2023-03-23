@@ -15,9 +15,9 @@ import classes from "./CreateCar.module.css";
 const CreateCar = ({ hideModel }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
+  // const decoded = jwt_decode(token);
 
-  const { is_superuser, permissions } = decoded;
+  // const { is_superuser, permissions } = decoded;
 
   //hide model
 
@@ -29,7 +29,7 @@ const CreateCar = ({ hideModel }) => {
     last_maintain: "",
     maintain_place: "",
     note: "",
-    car_counter: "",
+    counter: "",
   });
   const {
     car_model,
@@ -39,7 +39,7 @@ const CreateCar = ({ hideModel }) => {
     last_maintain,
     maintain_place,
     note,
-    car_counter,
+    counter,
   } = carData;
 
   let formIsValid = false;
@@ -55,11 +55,11 @@ const CreateCar = ({ hideModel }) => {
   }
 
   //empolyees
-  const { data: employeesName } = useQuery(
+  const { data: drivers } = useQuery(
     "fetch/empolyees",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/employees/select_list/`, {
+        const res = await fetch(`${window.domain}employees/select-driver`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,20 +68,24 @@ const CreateCar = ({ hideModel }) => {
         if (res.status === 401) {
           return dispatch(logout());
         }
-        return await res.json();
+        const data =  await res.json();
+      
+       const driverNames = data.results.employees
+
+       return driverNames
       } catch (err) {
         console.log(err);
       }
     },
     { refetchOnWindowFocus: false }
   );
-
+console.log(drivers)
   //create car
   const { refetch: sendCarData } = useQuery(
     "send/car",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/cars/`, {
+        const res = await fetch(`${window.domain}cars/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,15 +94,8 @@ const CreateCar = ({ hideModel }) => {
           body: JSON.stringify(carData),
         });
         if (res.ok) {
-          if (
-            is_superuser ||
-            permissions.includes("view_car") ||
-            permissions.includes("update_car") ||
-            permissions.includes("delete_car")
-          ) {
-            hideModel();
+          hideModel();
             dispatch(getCars(token));
-          }
         }
         if (res.status === 401) {
           return dispatch(logout());
@@ -138,10 +135,10 @@ const CreateCar = ({ hideModel }) => {
               required
             >
               <option hidden> السائق </option>
-              {employeesName &&
-                employeesName.map((el) => {
+              {drivers &&
+                drivers.map((el) => {
                   return (
-                    <option value={el.pk} key={el.pk}>
+                    <option value={el._id} key={el._id}>
                       {el.name}
                     </option>
                   );
@@ -196,9 +193,9 @@ const CreateCar = ({ hideModel }) => {
           <Inputs
             placeholder="عداد السيارة"
             id="counter"
-            value={car_counter}
+            value={counter}
             onChange={(e) =>
-              setCarData({ ...carData, car_counter: e.target.value })
+              setCarData({ ...carData, counter: e.target.value })
             }
           />
           <textarea

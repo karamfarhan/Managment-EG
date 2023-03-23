@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 //icon
 import { FaCarSide } from "react-icons/fa";
 import { GiPaddles } from "react-icons/gi";
-
+import {BiPurchaseTag} from "react-icons/bi"
 import { TbFileInvoice } from "react-icons/tb";
 import classes from "./Sidebar.module.css";
 
@@ -80,7 +80,7 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
-        {/* {(is_superuser || allPermissions.includes("store")) && (
+
           <li>
             <NavLink
               to="/purchases"
@@ -97,8 +97,7 @@ const Sidebar = () => {
               <p>{t("purchases")}</p>
             </NavLink>
           </li>
-        )} */}
-
+    
         <li>
           <NavLink
             to="/create_subs"

@@ -19,15 +19,16 @@ const Invoices = () => {
     const fetchStores = async () => {
       try {
         const response = await axios.get(
-          `${window.domain}/stores/select_list/`,
+          `${window.domain}stores/select-store/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setStoreId(response.data[0].pk);
-        setStores(response.data);
+        console.log(response.data.data.stores[0]._id)
+        setStoreId(response.data.data.stores[0]._id);
+       setStores(response.data.data.stores);
         return await response.data;
       } catch (err) {}
     };
@@ -36,17 +37,18 @@ const Invoices = () => {
   //get invoices
   useEffect(() => {
     const fetchInvoices = async () => {
-      if (storeId === null || storeId === undefined || storeId === "") return;
+
       setIsLoading(true);
       try {
-        const response = await axios.get(`${window.domain}/stores/${storeId}`, {
+        const response = await axios.get(`${window.domain}stores/${storeId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setIsLoading(false);
-        const data = await response.data.invoices;
-        setInvoices(data);
+        const data = await response.data;
+        console.log(data.data.store.invoice)
+        setInvoices(data.data.store.invoice);
       } catch (err) {}
     };
     fetchInvoices();
@@ -56,11 +58,12 @@ const Invoices = () => {
   const storeChangeHandler = (e) => {
     setStoreId(e.target.value);
   };
-  console.log(invoices);
+
+  console.log(invoices)
 
   return (
     <Fragment>
-      {((invoices && invoices.length === 0) || invoices === undefined) && (
+      {(invoices === null) && (
         <h2> {t("invoiceMsg")} </h2>
       )}
 
@@ -70,14 +73,14 @@ const Invoices = () => {
             <select onChange={storeChangeHandler} value={storeId}>
               {stores &&
                 stores.map((el) => (
-                  <option value={el.pk} key={el.pk}>
-                    {el.address}
+                  <option value={el._id} key={el._id}>
+                    {el.store_name}
                   </option>
                 ))}
             </select>
           </div>
         )}
-        {invoices && invoices.length > 0 && (
+        {invoices  && (
           <table>
             <thead>
               <tr>
@@ -93,15 +96,17 @@ const Invoices = () => {
               {isLoading === false &&
                 invoices &&
                 invoices.map((invoice) => (
-                  <tr key={invoice.id}>
-                    <td>{invoice.id}</td>
+                  <tr key={invoice._id}>
+                    <td>{invoice._id.substring(0, 7)}</td>
                     <td>{new Date(invoice.created_at).toLocaleDateString()}</td>
-                    <td>{invoice.created_by.username}</td>
+                    <td>{invoice.created_by.name}</td>
                     <td>
                       <Link
                         className={styles.btn}
-                        to={`/store/${storeId}/${invoice.id}`}
-                        View></Link>
+                        to={`/store/${storeId}/${invoice._id}`}
+                        View>
+                          {t('actions')}
+                        </Link>
                     </td>
                   </tr>
                 ))}

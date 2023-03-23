@@ -11,6 +11,7 @@
   "stores": "stores",
   "storeName": "store name ",
   "storeAddress": "store address",
+  "noStores" : "No stores created yet",
   "createdAt": "created at",
   "note": "note",
   "actions": "actions",
