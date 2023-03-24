@@ -15,7 +15,7 @@
   color: #0062cc;
 }
 .content {
-  background-color: #fff;
+  background-color: #0f1832;
   width: 80%;
   overflow: auto;
   position: absolute;
@@ -27,8 +27,10 @@
   height: 70%;
   text-align: center;
 }
+
 .content > div:first-of-type p {
   text-align: start;
+  color:#fff !important;
 }
 .content p span {
   width: 100%;

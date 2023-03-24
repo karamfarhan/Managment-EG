@@ -4,7 +4,6 @@ import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "../backdrop/Backdrop";
 
-import jwt_decode from "jwt-decode";
 
 import Inputs from "../inputs/Inputs";
 
@@ -79,7 +78,6 @@ const CreateCar = ({ hideModel }) => {
     },
     { refetchOnWindowFocus: false }
   );
-console.log(drivers)
   //create car
   const { refetch: sendCarData } = useQuery(
     "send/car",

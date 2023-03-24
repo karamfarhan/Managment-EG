@@ -59,7 +59,7 @@ const Pages = () => {
         <Route path="/create_subs/*" element={<CreateSubstancePage />} />
         {/* <Route path="/projects" element={<GalleryPage />} /> */}
         <Route path="/cars/*" element={<CarsPage />} />
-        <Route path="/cars/:driverId/:cnarId" element={<CarDetailPage />} />
+        <Route path="/cars/:carId" element={<CarDetailPage />} />
       </Route>
     </Routes>
   );

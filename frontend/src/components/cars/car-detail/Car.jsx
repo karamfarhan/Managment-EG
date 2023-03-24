@@ -3,7 +3,7 @@ const Car = ({ car }) => {
   return (
     <div>
       <p>
-        أسم السائق: <span> {car.driver_name} </span>{" "}
+        أسم السائق: <span> {car.driver.name} </span>{" "}
       </p>
       <p>
         رقم السيارة: <span> {car.car_number} </span>{" "}
@@ -15,10 +15,10 @@ const Car = ({ car }) => {
         طراز السيارة: <span> {car.car_model} </span>{" "}
       </p>
       <p>
-        عداد السيارة: <span> {car.car_counter} </span>{" "}
+        عداد السيارة: <span> {car.counter} </span>{" "}
       </p>
       <p>
-        أخر صيانة: <span> {car.last_maintain} </span>{" "}
+        أخر صيانة: <span> {new Date(car.last_maintain).toLocaleDateString()} </span>{" "}
       </p>
       <p>
         مكان الصيانة:

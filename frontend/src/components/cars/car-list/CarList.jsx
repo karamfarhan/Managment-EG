@@ -1,7 +1,6 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 import { getCars } from "../../../store/cars-slice";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDeleteForever } from "react-icons/md";
@@ -17,7 +16,7 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const detailPageHandler = () => {
-    navigate(`/cars/${driver}/${id}`);
+    navigate(`/cars/${id}`);
   };
   const { token } = useSelector((state) => state.authReducer);
   // const decoded = jwt_decode(token);
@@ -27,7 +26,7 @@ const CarList = ({ car_number, driver_name, driver, id }) => {
   //delete handler
   const deleteHandler = async (id) => {
     try {
-      const res = await fetch(`${window.domain}/cars/${id}/`, {
+      const res = await fetch(`${window.domain}cars/${id}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

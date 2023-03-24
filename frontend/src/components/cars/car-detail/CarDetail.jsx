@@ -18,37 +18,20 @@ const CarDetail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
-  const carActivity = permissions.join(" ").includes("activity");
+   // const decoded = jwt_decode(token);
+  // const { is_superuser, permissions } = decoded;
+  //const carActivity = permissions.join(" ").includes("activity");
   const dispatch = useDispatch();
   const params = useParams();
 
   const { carId, driverId } = params;
 
-  const { data, refetch } = useQuery(
-    "car/activity",
-    async () => {
-      try {
-        const res = await fetch(`${window.domain}/cars/${carId}/activity/`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        return await res.json();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    { refetchOnWindowFocus: false }
-  );
   const { data: car } = useQuery(
     "car/detail",
     async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${window.domain}/cars/${carId}/`, {
+        const res = await fetch(`${window.domain}cars/${carId}/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -70,14 +53,10 @@ const CarDetail = () => {
     { refetchOnWindowFocus: false }
   );
 
-  useEffect(() => {
-    if (showForm === false && currentPage === 1) {
-      refetch();
-    }
-  }, [currentPage, refetch, showForm]);
+
 
   //count
-  const count = data && data.count;
+  const count = 10;
   const closeFormHandler = () => {
     setShowForm(false);
   };
@@ -99,11 +78,11 @@ const CarDetail = () => {
       <div className={classes.box} dir="rtl">
         {isLoading && <LoadingSpinner />}
         <div className={classes.content}>
-          {(is_superuser || permissions.includes("add_caractivity")) && (
+        
             <button onClick={() => setShowForm(true)}>
               اضافة أخر تحركات للسيارة
             </button>
-          )}
+    
           <header>
             <nav>
               <ul>
@@ -113,28 +92,28 @@ const CarDetail = () => {
                 >
                   بيانات السيارة{" "}
                 </li>
-                {(is_superuser || carActivity) && (
+              
                   <li
                     className={sections === "carActivity" ? classes.active : ""}
                     onClick={() => setSections("carActivity")}
                   >
                     تحركات السائق{" "}
                   </li>
-                )}
+             
               </ul>
             </nav>
           </header>
 
           {/* body  */}
           <div className={classes.body}>
-            {sections === "cars" && <Car car={car} />}
+            {sections === "cars" && <Car car={car.data.car} />}
             {sections === "carActivity" &&
-              data &&
-              data.results.length === 0 &&
+              car &&
+              car.data.car.carActivity.length === 0 &&
               !isLoading && (
                 <p style={{ textAlign: "center" }}> لا يوجد سجلات للسائق </p>
               )}
-            {sections === "carActivity" && data && data.results.length > 0 && (
+            {sections === "carActivity" && car && car.data.car.carActivity.length > 0 && (
               <div className={classes["table_content"]}>
                 <table className={classes.activities}>
                   <thead>
@@ -147,11 +126,11 @@ const CarDetail = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data &&
+                    {car.data &&
                       isLoading &&
-                      data.results.length > 0 &&
+                      car.data.car.carActivity.length > 0 &&
                       currentPage === 1 &&
-                      data.results.map((el) => {
+                      car.data.car.carActivity.results.map((el) => {
                         return <CarDetailList key={el.id} data={el} />;
                       })}
 

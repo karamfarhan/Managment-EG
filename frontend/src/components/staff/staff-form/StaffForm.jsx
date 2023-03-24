@@ -65,8 +65,8 @@ const StaffForm = ({ setStaffForm }) => {
   if (
     steps === 1 &&
     name.trim() !== "" &&
-    email.trim() !== "" &&
-    email.includes("@") !== false &&
+ 
+   
     insurance !== "" &&
     job.trim() !== "" &&
     category.trim() !== ""
