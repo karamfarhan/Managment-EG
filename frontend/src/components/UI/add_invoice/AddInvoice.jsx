@@ -10,12 +10,12 @@ import { useSelector } from "react-redux";
 
 const AddInvoice = ({ hideModel, storeName, storeId }) => {
   const [inputFields, setInputFields] = useState([
-    { substance: "", mass: 1, description: "" },
+    { substance: "", quantity: 1, notes: "" },
   ]);
 
   //instruments
   const [instrumentInputFields, setInstrumentInputFields] = useState([
-    { instrument: "", description: "" },
+    { instrument: "", notes: "" },
   ]);
   //note
   const [note, setNote] = useState("");
@@ -34,7 +34,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     "fetch/substances",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/substances/select_list/`, {
+        const res = await fetch(`${window.domain}substances/select_list/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -54,7 +54,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     "fetch/instruments_name",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/instruments/select_list/`, {
+        const res = await fetch(`${window.domain}instruments/select_list/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,14 +74,14 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
-      { substance: "", mass: "", description: "" },
+      { substance: "", quantity: "", notes: "" },
     ]);
   };
   //add items instruments
   const instrumentsFiled = () => {
     setInstrumentInputFields([
       ...instrumentInputFields,
-      { instrument: "", description: "" },
+      { instrument: "", notes: "" },
     ]);
   };
 
@@ -94,21 +94,18 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     "create/invoice",
     async () => {
       try {
-        const res = await fetch(
-          `${window.domain}/stores/${storeId}/invoices/`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-              note: note,
-              substances: inputFields,
-              instruments: instrumentInputFields,
-            }),
-          }
-        );
+        const res = await fetch(`${window.domain}stores/${storeId}/invoices/`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            note: note,
+            substances: inputFields,
+            instruments: instrumentInputFields,
+          }),
+        });
         if (res.ok) {
           hideModel();
         }
@@ -138,7 +135,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
 
         <span className={classes.subtancesText}>الموارد</span>
 
-        <div className={classes["items_container"]}>
+        {/* <div className={classes["items_container"]}>
           {inputFields.map((inputField, index) => {
             return (
               <Items
@@ -151,7 +148,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
               />
             );
           })}
-        </div>
+        </div> */}
         {invoice && invoice.mass && <p className="err-msg"> {invoice.mass} </p>}
         <button type="button" onClick={handleAddFields}>
           <BsPlusLg /> اضافة المزيد
@@ -161,7 +158,7 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
           <span className={classes.subtancesText}>الاجهزة</span>
         </div>
 
-        <div className={classes["items_container"]}>
+        {/* <div className={classes["items_container"]}>
           {instrumentInputFields.map((inputField, index) => {
             return (
               <InstrumentsItems
@@ -174,19 +171,17 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
               />
             );
           })}
-        </div>
+        </div> */}
         <button
           style={{ backgroundColor: "rgb(233, 30, 99)" }}
           type="button"
-          onClick={instrumentsFiled}
-        >
+          onClick={instrumentsFiled}>
           <BsPlusLg /> اضافة المزيد
         </button>
         <div className={classes.note} dir="rtl">
           <textarea
             placeholder="ملاحظة عامة"
-            onChange={(e) => setNote(e.target.value)}
-          ></textarea>
+            onChange={(e) => setNote(e.target.value)}></textarea>
         </div>
         <button disabled={!formIsValid} type="submit">
           {" "}

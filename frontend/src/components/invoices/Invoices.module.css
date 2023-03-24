@@ -1,3 +1,14 @@
+.createInvoice {
+  position: relative;
+  padding: 10px;
+  font-size: var(--main-btn-font-size);
+  /* width: var(--main-btn-width); */
+  background-color: var(--color-green);
+  color: #fff;
+  border-radius: 10px;
+  border: none;
+  max-width: 100%;
+}
 .content {
   background-color: #fff;
   overflow: auto;
