@@ -1,3 +1,26 @@
+.printBtn {
+  background-color: #777;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 6px;
+}
+.printBtn span svg {
+  color: #000;
+}
+.detail {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background-color: #fff;
+  padding: 10px;
+}
+@media print {
+  .printBtn {
+    display: none;
+  }
+}
 .invoice-container {
   text-align: center;
   padding: 60px 30px;
@@ -41,4 +64,14 @@
 
 .invoice-container table tbody tr:nth-child(even) {
   background-color: #ddd;
+}
+.signature {
+  display: none;
+}
+@media print {
+  .signature {
+    display: flex;
+    justify-content: space-around;
+    color: #000;
+  }
 }

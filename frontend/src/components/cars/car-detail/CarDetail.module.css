@@ -30,7 +30,7 @@
 
 .content > div:first-of-type p {
   text-align: start;
-  color:#fff !important;
+  color: #fff !important;
 }
 .content p span {
   width: 100%;
@@ -117,6 +117,7 @@
 }
 .table_content table tbody td {
   background-color: #fff;
+  color: #000 !important;
 }
 .table_content table thead {
   font-size: 13px;

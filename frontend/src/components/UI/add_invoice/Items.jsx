@@ -32,7 +32,8 @@ const Items = ({
             value={inputField.substance}
             id="substance"
             required
-            onChange={(event) => handleChangeInput(event, index)}>
+            onChange={(event) => handleChangeInput(event, index)}
+          >
             <option hidden selected value="">
               {" "}
               أختار مادة{" "}
@@ -40,9 +41,9 @@ const Items = ({
             {selectBox &&
               selectBox.map((select) => {
                 return (
-                  <option key={select.pk} value={select.pk}>
+                  <option key={select._id} value={select._id}>
                     {" "}
-                    {select.name}{" "}
+                    {select.name} {select.quantity}
                   </option>
                 );
               })}
@@ -58,10 +59,10 @@ const Items = ({
         <li>
           <Inputs
             type="number"
-            id="mass"
+            id="quantity"
             placeholder="الكمية"
             required
-            value={inputField.mass}
+            value={inputField.quantity}
             min="1"
             onChange={(event) => handleChangeInput(event, index)}
           />
@@ -69,9 +70,9 @@ const Items = ({
         <li>
           <Inputs
             type="text"
-            id="description"
+            id="notes"
             placeholder="ملاحظة"
-            value={inputField.description}
+            value={inputField.notes}
             onChange={(event) => handleChangeInput(event, index)}
           />
         </li>

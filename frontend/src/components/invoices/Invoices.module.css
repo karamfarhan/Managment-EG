@@ -1,7 +1,7 @@
 .createInvoice {
   position: relative;
   padding: 10px;
-  font-size: var(--main-btn-font-size);
+  font-size: 14px;
   /* width: var(--main-btn-width); */
   background-color: var(--color-green);
   color: #fff;
@@ -15,6 +15,10 @@
 }
 .content > div {
   padding: 10px;
+}
+.content > div:first-of-type {
+  display: flex;
+  justify-content: space-between;
 }
 .content > div select {
   padding: 10px;

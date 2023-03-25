@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import SubstancesView from "./substances_view/SubstancesView";
@@ -9,6 +8,7 @@ import InstrumentsView from "./instruments_view/InstrumentsView";
 import { getInstruments } from "../../store/create-instruments";
 import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import classes from "./CreateSubs.module.css";
+import CategoryForm from "../UI/add_category/CategoryForm";
 
 const CreateSubs = () => {
   const [t, i18n] = useTranslation();
@@ -26,8 +26,8 @@ const CreateSubs = () => {
   const [searchVal, setSearchVal] = useState("");
 
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
+  // const decoded = jwt_decode(token);
+  // const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
 
   //fetch matters
@@ -93,6 +93,7 @@ const CreateSubs = () => {
   };
   return (
     <Fragment>
+      <CategoryForm />
       {(showModel || showInstrumentsForm) && (
         <CreateSubsModel
           hideSubstancesHandler={hideSubstancesHandler}
@@ -108,58 +109,51 @@ const CreateSubs = () => {
 
       <div className={classes.buttons}>
         <div className={classes.show}>
-          {(permissions.includes("view_substance") || is_superuser) && (
-            <div>
-              <button
-                id="material"
-                type="button"
-                name="material"
-                onClick={fetchMatters}>
-                {t("viewSubs")}
-              </button>
-              <button type="button" onClick={() => setShowModel(true)}>
-                {t("addSubstance")}
-              </button>
-            </div>
-          )}
-
-          {(permissions.includes("view_instrument") || is_superuser) && (
-            <div>
-              <button
-                id="instruments"
-                type="button"
-                name="instruments"
-                onClick={fetchInstruments}>
-                {t("viewInst")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowInstrumentsForm(true)}>
-                {t("addInstruments")}
-              </button>
-            </div>
-          )}
+          <div>
+            <button
+              id="material"
+              type="button"
+              name="material"
+              onClick={fetchMatters}
+            >
+              {t("viewSubs")}
+            </button>
+            <button type="button" onClick={() => setShowModel(true)}>
+              {t("addSubstance")}
+            </button>
+          </div>
+          <div>
+            <button
+              id="instruments"
+              type="button"
+              name="instruments"
+              onClick={fetchInstruments}
+            >
+              {t("viewInst")}
+            </button>
+            <button type="button" onClick={() => setShowInstrumentsForm(true)}>
+              {t("addInstruments")}
+            </button>
+          </div>
         </div>
       </div>
 
-      {showMatters &&
-        (permissions.includes("view_substance") || is_superuser) && (
-          <SubstancesView
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            setSearchVal={setSearchVal}
-            searchVal={searchVal}
-          />
-        )}
-      {showInstrumentsPage &&
-        (permissions.includes("view_instrument") || is_superuser) && (
-          <InstrumentsView
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            setSearchVal={setSearchVal}
-            searchVal={searchVal}
-          />
-        )}
+      {showMatters && (
+        <SubstancesView
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          setSearchVal={setSearchVal}
+          searchVal={searchVal}
+        />
+      )}
+      {showInstrumentsPage && (
+        <InstrumentsView
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          setSearchVal={setSearchVal}
+          searchVal={searchVal}
+        />
+      )}
     </Fragment>
   );
 };

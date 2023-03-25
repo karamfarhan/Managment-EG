@@ -6,9 +6,11 @@ import InstrumentsItems from "./InstrumentsItems";
 import { BsPlusLg } from "react-icons/bs";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import classes from "./AddInvoice.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getStores } from "../../../store/create-store-slice";
 
-const AddInvoice = ({ hideModel, storeName, storeId }) => {
+const AddInvoice = ({ hideModel, fetchInvoices, storeId }) => {
+  const dispatch = useDispatch();
   const [inputFields, setInputFields] = useState([
     { substance: "", quantity: 1, notes: "" },
   ]);
@@ -19,6 +21,8 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   ]);
   //note
   const [note, setNote] = useState("");
+
+  //err message
 
   //token
   const { token } = useSelector((state) => state.authReducer);
@@ -34,35 +38,36 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
     "fetch/substances",
     async () => {
       try {
-        const res = await fetch(`${window.domain}substances/select_list/`, {
+        const res = await fetch(`${window.domain}substance/select_list/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        return await res.json();
-        //console.log(data);
+        const data = await res.json();
+        return data;
       } catch (err) {
         console.log(err);
       }
     },
     { refetchOnWindowFocus: false }
   );
+  console.log(substances_name);
   //fetch all machine name
   const { data: instruments_name } = useQuery(
     "fetch/instruments_name",
     async () => {
       try {
-        const res = await fetch(`${window.domain}instruments/select_list/`, {
+        const res = await fetch(`${window.domain}instrument/select_list/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        return await res.json();
-        //console.log(data);
+        const data = await res.json();
+        return data;
       } catch (err) {
         console.log(err);
       }
@@ -86,27 +91,36 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
   };
 
   //create invoice
-  const {
-    data: invoice,
-
-    refetch: createInvoice,
-  } = useQuery(
+  const { data: invoice, refetch: createInvoice } = useQuery(
     "create/invoice",
     async () => {
+      //body object
+      const invoiceObj = {
+        substance: inputFields,
+        instrument: instrumentInputFields,
+        notes: note,
+      };
+
+      instrumentInputFields.forEach((el) => {
+        if (el.instrument === "") {
+          delete invoiceObj.instrument;
+        }
+        if (el.substance === "") {
+          delete invoiceObj.substance;
+        }
+      });
+
       try {
-        const res = await fetch(`${window.domain}stores/${storeId}/invoices/`, {
+        const res = await fetch(`${window.domain}stores/${storeId}/invoice/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-type": "application/json",
           },
-          body: JSON.stringify({
-            note: note,
-            substances: inputFields,
-            instruments: instrumentInputFields,
-          }),
+          body: JSON.stringify(invoiceObj),
         });
         if (res.ok) {
+          fetchInvoices();
           hideModel();
         }
         const data2 = await res.json();
@@ -131,24 +145,25 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
         <span className={classes.close} onClick={hideModel}>
           <AiOutlineCloseCircle />
         </span>
-        <h3> برجاء ادخال جميع الموارد أو الاجهزة المحولة الي {storeName} </h3>
 
         <span className={classes.subtancesText}>الموارد</span>
+        <div className={classes["items_container"]}>
+          {substances_name &&
+            substances_name.data &&
+            inputFields.map((inputField, index) => {
+              return (
+                <Items
+                  key={index}
+                  index={index}
+                  inputField={inputField}
+                  inputFields={inputFields}
+                  setInputFields={setInputFields}
+                  selectBox={substances_name.data.substances}
+                />
+              );
+            })}
+        </div>
 
-        {/* <div className={classes["items_container"]}>
-          {inputFields.map((inputField, index) => {
-            return (
-              <Items
-                key={index}
-                index={index}
-                inputField={inputField}
-                inputFields={inputFields}
-                setInputFields={setInputFields}
-                selectBox={substances_name}
-              />
-            );
-          })}
-        </div> */}
         {invoice && invoice.mass && <p className="err-msg"> {invoice.mass} </p>}
         <button type="button" onClick={handleAddFields}>
           <BsPlusLg /> اضافة المزيد
@@ -158,30 +173,33 @@ const AddInvoice = ({ hideModel, storeName, storeId }) => {
           <span className={classes.subtancesText}>الاجهزة</span>
         </div>
 
-        {/* <div className={classes["items_container"]}>
-          {instrumentInputFields.map((inputField, index) => {
-            return (
-              <InstrumentsItems
-                key={index}
-                index={index}
-                inputField={inputField}
-                inputFields={instrumentInputFields}
-                setInputFields={setInstrumentInputFields}
-                selectBox={instruments_name}
-              />
-            );
-          })}
-        </div> */}
+        <div className={classes["items_container"]}>
+          {instruments_name &&
+            instrumentInputFields.map((inputField, index) => {
+              return (
+                <InstrumentsItems
+                  key={index}
+                  index={index}
+                  inputField={inputField}
+                  inputFields={instrumentInputFields}
+                  setInputFields={setInstrumentInputFields}
+                  selectBox={instruments_name.data.instruments}
+                />
+              );
+            })}
+        </div>
         <button
           style={{ backgroundColor: "rgb(233, 30, 99)" }}
           type="button"
-          onClick={instrumentsFiled}>
+          onClick={instrumentsFiled}
+        >
           <BsPlusLg /> اضافة المزيد
         </button>
         <div className={classes.note} dir="rtl">
           <textarea
             placeholder="ملاحظة عامة"
-            onChange={(e) => setNote(e.target.value)}></textarea>
+            onChange={(e) => setNote(e.target.value)}
+          ></textarea>
         </div>
         <button disabled={!formIsValid} type="submit">
           {" "}

@@ -32,7 +32,8 @@ const Items = ({
             value={inputField.instrument}
             id="instrument"
             required
-            onChange={(event) => handleChangeInput(event, index)}>
+            onChange={(event) => handleChangeInput(event, index)}
+          >
             <option hidden selected value="">
               {" "}
               أختار ماكينة{" "}
@@ -41,7 +42,7 @@ const Items = ({
             {selectBox &&
               selectBox.map((select) => {
                 return (
-                  <option key={select.pk} value={select.pk}>
+                  <option key={select._id} value={select._id}>
                     {" "}
                     {select.name}{" "}
                   </option>
@@ -52,8 +53,8 @@ const Items = ({
         <li>
           <Inputs
             type="text"
-            id="description"
-            value={inputField.description}
+            id="notes"
+            value={inputField.notes}
             placeholder="ملاحظة"
             onChange={(event) => handleChangeInput(event, index)}
           />

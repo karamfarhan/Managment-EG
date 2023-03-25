@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import jwt_decode from "jwt-decode";
+
 import Paginate from "../../UI/pagination/Paginate";
 import classes from "./CarDetail.module.css";
 import CarActivity from "../../UI/car-activity/CarActivity";
@@ -18,7 +18,7 @@ const CarDetail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
-   // const decoded = jwt_decode(token);
+  // const decoded = jwt_decode(token);
   // const { is_superuser, permissions } = decoded;
   //const carActivity = permissions.join(" ").includes("activity");
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const CarDetail = () => {
 
   const { carId, driverId } = params;
 
-  const { data: car } = useQuery(
+  const { data: car, refetch } = useQuery(
     "car/detail",
     async () => {
       setIsLoading(true);
@@ -53,8 +53,6 @@ const CarDetail = () => {
     { refetchOnWindowFocus: false }
   );
 
-
-
   //count
   const count = 10;
   const closeFormHandler = () => {
@@ -64,7 +62,11 @@ const CarDetail = () => {
   const paginationFun = (obj) => {
     dispatch(getCarPagination(obj));
   };
-  const { data: carAct } = useSelector((state) => state.carActivityRed);
+  useEffect(() => {
+    if (showForm === false && currentPage === 1) {
+      refetch();
+    }
+  }, [currentPage, refetch, showForm]);
   if (!car) return;
   return (
     <Fragment>
@@ -78,11 +80,10 @@ const CarDetail = () => {
       <div className={classes.box} dir="rtl">
         {isLoading && <LoadingSpinner />}
         <div className={classes.content}>
-        
-            <button onClick={() => setShowForm(true)}>
-              اضافة أخر تحركات للسيارة
-            </button>
-    
+          <button onClick={() => setShowForm(true)}>
+            اضافة أخر تحركات للسيارة
+          </button>
+
           <header>
             <nav>
               <ul>
@@ -92,66 +93,72 @@ const CarDetail = () => {
                 >
                   بيانات السيارة{" "}
                 </li>
-              
-                  <li
-                    className={sections === "carActivity" ? classes.active : ""}
-                    onClick={() => setSections("carActivity")}
-                  >
-                    تحركات السائق{" "}
-                  </li>
-             
+
+                <li
+                  className={sections === "carActivity" ? classes.active : ""}
+                  onClick={() => setSections("carActivity")}
+                >
+                  تحركات السائق{" "}
+                </li>
               </ul>
             </nav>
           </header>
 
           {/* body  */}
           <div className={classes.body}>
-            {sections === "cars" && <Car car={car.data.car} />}
+            {sections === "cars" && <Car car={car.car} />}
             {sections === "carActivity" &&
               car &&
-              car.data.car.carActivity.length === 0 &&
+              car.car &&
+              car.car.carActivity.length === 0 &&
               !isLoading && (
                 <p style={{ textAlign: "center" }}> لا يوجد سجلات للسائق </p>
               )}
-            {sections === "carActivity" && car && car.data.car.carActivity.length > 0 && (
-              <div className={classes["table_content"]}>
-                <table className={classes.activities}>
-                  <thead>
-                    <tr>
-                      <th>أسم السائق</th>
-                      <th>تاريخ التحرك</th>
-                      <th>المسافة المقطوعة</th>
-                      <th>خط السير</th>
-                      <th>ملاحظات</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {car.data &&
-                      isLoading &&
-                      car.data.car.carActivity.length > 0 &&
-                      currentPage === 1 &&
-                      car.data.car.carActivity.results.map((el) => {
-                        return <CarDetailList key={el.id} data={el} />;
-                      })}
+            {sections === "carActivity" &&
+              car &&
+              car.car &&
+              car.car.carActivity.length > 0 && (
+                <div className={classes["table_content"]}>
+                  <table className={classes.activities}>
+                    <thead>
+                      <tr>
+                        {/* <th>أسم السائق</th> */}
+                        <th>تاريخ التحرك</th>
+                        <th>المسافة المقطوعة</th>
+                        <th>خط السير</th>
+                        <th>ملاحظات</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {/* {car &&
+                        isLoading &&
+                        car.car &&
+                        car.car.carActivity &&
+                        car.car.carActivity.length > 0 &&
+                        currentPage === 1 &&
+                        car.car.carActivity.map((el) => {
+                          return <CarDetailList key={el._id} data={el} />;
+                        })} */}
 
-                    {carAct &&
-                      carAct.count > 10 &&
-                      carAct.results.map((el) => {
-                        return <CarDetailList key={el.id} data={el} />;
-                      })}
-                  </tbody>
-                </table>
-                {count > 10 && (
-                  <Paginate
-                    count={count}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    paginationFun={paginationFun}
-                    id={carId}
-                  />
-                )}
-              </div>
-            )}
+                      {car &&
+                        car.car &&
+                        car.car.carActivity &&
+                        car.car.carActivity.map((el) => {
+                          return <CarDetailList key={el._id} data={el} />;
+                        })}
+                    </tbody>
+                  </table>
+                  {count > 10 && (
+                    <Paginate
+                      count={count}
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                      paginationFun={paginationFun}
+                      id={carId}
+                    />
+                  )}
+                </div>
+              )}
           </div>
         </div>
       </div>

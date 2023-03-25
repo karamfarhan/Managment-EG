@@ -11,7 +11,7 @@ const Invoices = () => {
   const [t, i18n] = useTranslation();
   const [storeId, setStoreId] = useState("");
   const [stores, setStores] = useState([]);
-
+  const [invoiceForm, setInvoiceForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const { token } = useSelector((state) => state.authReducer);
@@ -36,21 +36,20 @@ const Invoices = () => {
     fetchStores();
   }, []);
   //get invoices
+  const fetchInvoices = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${window.domain}stores/${storeId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setIsLoading(false);
+      const data = await response.data;
+      setInvoices(data.data.store.invoice);
+    } catch (err) {}
+  };
   useEffect(() => {
-    const fetchInvoices = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(`${window.domain}stores/${storeId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setIsLoading(false);
-        const data = await response.data;
-        console.log(data.data.store.invoice);
-        setInvoices(data.data.store.invoice);
-      } catch (err) {}
-    };
     fetchInvoices();
   }, [storeId]);
 
@@ -61,27 +60,37 @@ const Invoices = () => {
 
   return (
     <Fragment>
-      {<AddInvoice />}
+      {invoiceForm && (
+        <AddInvoice
+          fetchInvoices={fetchInvoices}
+          storeId={storeId}
+          hideModel={() => setInvoiceForm(false)}
+        />
+      )}
       {invoices === null && <h2> {t("invoiceMsg")} </h2>}
       <div>
-        <Bar>
-          <button className={styles.createInvoice}>
-            طلب تحويل من المخزن الرئيسي
-          </button>
-        </Bar>
         <div className={styles.content}>
-          {stores && stores.length > 0 && (
-            <div>
-              <select onChange={storeChangeHandler} value={storeId}>
-                {stores &&
-                  stores.map((el) => (
-                    <option value={el._id} key={el._id}>
-                      {el.store_name}
-                    </option>
-                  ))}
-              </select>
-            </div>
-          )}
+          <div>
+            {" "}
+            {stores && stores.length > 0 && (
+              <div>
+                <select onChange={storeChangeHandler} value={storeId}>
+                  {stores &&
+                    stores.map((el) => (
+                      <option value={el._id} key={el._id}>
+                        {el.store_name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
+            <button
+              className={styles.createInvoice}
+              onClick={() => setInvoiceForm(true)}
+            >
+              طلب تحويل من المخزن الرئيسي
+            </button>
+          </div>
           {invoices && (
             <table>
               <thead>
@@ -108,7 +117,7 @@ const Invoices = () => {
                         <Link
                           className={styles.btn}
                           to={`/store/${storeId}/${invoice._id}`}
-                          View>
+                        >
                           {t("actions")}
                         </Link>
                       </td>

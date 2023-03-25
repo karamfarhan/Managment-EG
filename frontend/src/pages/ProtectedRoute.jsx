@@ -7,7 +7,7 @@ const ProtectedRoutes = () => {
   return (
     <Fragment>
       {isAuth === true && <Outlet />}
-      {isAuth === false && <Navigate to="/login" />}
+      {(isAuth === false || isAuth === null) && <Navigate to="/login" />}
       {/* {isAuth === null && <Navigate to="/login" />} */}
     </Fragment>
   );

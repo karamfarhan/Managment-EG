@@ -5,17 +5,18 @@ import Items from "./Items";
 import { BsPlusLg } from "react-icons/bs";
 import classes from "./CarActivity.module.css";
 import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getCars } from "../../../store/cars-slice";
 
 const CarActivity = ({ hideModel, id, driver }) => {
   const { token } = useSelector((state) => state.authReducer);
-
+  const dispatch = useDispatch();
   const [carData, setCarData] = useState({
     activity_date: "",
     distance: "",
-    description: "",
+    notes: "",
   });
-  const { activity_date, distance, description } = carData;
+  const { activity_date, distance, description, notes } = carData;
   const [inputFields, setInputFields] = useState([
     { place_from: "", place_to: "" },
   ]);
@@ -29,7 +30,7 @@ const CarActivity = ({ hideModel, id, driver }) => {
     "send/activity",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/cars/${id}/activity/`, {
+        const res = await fetch(`${window.domain}cars/${id}/car-activity/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,14 +40,16 @@ const CarActivity = ({ hideModel, id, driver }) => {
             activity_date,
             distance,
             description,
-            rides: inputFields,
+            destination: inputFields,
+            notes,
           }),
         });
         if (res.ok) {
+          //  dispatch(getCars(token));
           hideModel();
         }
         const data = await res.json();
-        console.log(data);
+
         return await res.json();
       } catch (err) {}
     },
@@ -102,7 +105,8 @@ const CarActivity = ({ hideModel, id, driver }) => {
             value={description}
             onChange={(e) =>
               setCarData({ ...carData, description: e.target.value })
-            }></textarea>
+            }
+          ></textarea>
           <button type="submit">تأكيد</button>
         </form>
       </div>
