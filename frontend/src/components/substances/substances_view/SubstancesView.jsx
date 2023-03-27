@@ -23,6 +23,7 @@ const SubstancesView = ({
   setCurrentPage,
   searchVal,
   setSearchVal,
+  substanceData,
 }) => {
   const { data: subsData, isLoading } = useSelector(
     (state) => state.subsReducer
@@ -119,7 +120,8 @@ const SubstancesView = ({
             style={{
               width: " 50%",
               margin: "20px auto",
-            }}>
+            }}
+          >
             <Search
               onChange={searchHandler}
               value={searchVal}
@@ -135,15 +137,14 @@ const SubstancesView = ({
           {subsData && subsData.results && subsData.results.length === 0 && (
             <h2> No Substances are found</h2>
           )}
-          {subsData && subsData.results.length > 0 && isLoading === false && (
+          {substanceData && substanceData.length > 0 && isLoading === false && (
             <table>
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Quantity</th>
-                  <th>Description</th>
-                  <th>Available</th>
-                  <th>Created At</th>
+                  <th>Notes</th>
+
                   <th>Action</th>
                 </tr>
               </thead>
@@ -156,33 +157,30 @@ const SubstancesView = ({
                       <tr key={subs.id}>
                         <td>{subs.name}</td>
                         <td>
-                          {subs.units} {subs.unit_type}
+                          {subs.quantity} {subs.unit_type}
                         </td>
-                        <td>{subs.description}</td>
+                        <td>{subs.note}</td>
 
-                        <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td>
-
+                        {/* <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td> */}
+                        {/* 
                         <td>
                           {new Date(subs.created_at).toLocaleDateString()}
-                        </td>
+                        </td> */}
 
                         <td>
-                          {(is_superuser ||
-                            permissions.includes("delete_substance")) && (
-                            <button
-                              className="deleteBtn"
-                              onClick={() => deleteModelHandler(subs.id)}>
-                              <MdOutlineDeleteForever />
-                            </button>
-                          )}
-                          {(is_superuser ||
-                            permissions.includes("change_substance")) && (
-                            <button
-                              className="editBtn"
-                              onClick={() => editForm(subs.id)}>
-                              <FiEdit />
-                            </button>
-                          )}
+                          <button
+                            className="deleteBtn"
+                            onClick={() => deleteModelHandler(subs.id)}
+                          >
+                            <MdOutlineDeleteForever />
+                          </button>
+
+                          <button
+                            className="editBtn"
+                            onClick={() => editForm(subs.id)}
+                          >
+                            <FiEdit />
+                          </button>
                         </td>
                       </tr>
                     );

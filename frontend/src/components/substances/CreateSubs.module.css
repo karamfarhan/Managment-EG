@@ -14,7 +14,13 @@
   border: none;
   border-radius: 10px;
 }
-
+.create-category {
+  display: block;
+  margin: 30px auto;
+  width: 240px;
+  padding: 5px;
+  font-weight: bold;
+}
 .actions {
   display: flex;
   justify-content: center;

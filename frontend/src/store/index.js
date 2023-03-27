@@ -9,6 +9,7 @@ import createSubSlice from "./create-substance";
 import empolyeeSlice from "./empolyees-slice";
 import notificationSlice from "./notification-slice";
 import images_slice from "./upload-img-slice";
+import categorySlice from "./category-slice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     storeSlice: storeSlice.reducer,
     imageReducer: images_slice.reducer,
     notificationRed: notificationSlice.reducer,
+    categoryReducer: categorySlice.reducer,
     subsReducer: createSubSlice.reducer,
     instrumentsReducer: instrumentsSlice.reducer,
     invoiceReducer: invoiceSlice.reducer,

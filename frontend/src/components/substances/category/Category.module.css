@@ -1,0 +1,8 @@
+.tab {
+  background-color: antiquewhite;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 15px;
+  margin-top: 5px;
+  cursor: pointer;
+}

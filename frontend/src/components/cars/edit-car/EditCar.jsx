@@ -25,21 +25,21 @@ const EditCar = ({ hideModel, id }) => {
   //car id
   let formIsValid = false;
 
-  if (
-    carData.car_model.trim() !== "" &&
-    carData.car_type.trim() !== "" &&
-    carData.car_number.trim() !== "" &&
-    carData.driver !== "" &&
-    carData.last_maintain !== "" &&
-    carData.maintain_place.trim() !== ""
-  ) {
-    formIsValid = true;
-  }
+  // if (
+  //   carData.car_model.trim() !== "" &&
+  //   carData.car_type.trim() !== "" &&
+  //   carData.car_number.trim() !== "" &&
+  //   carData.driver !== "" &&
+  //   carData.last_maintain !== "" &&
+  //   carData.maintain_place.trim() !== ""
+  // ) {
+  //   formIsValid = true;
+  // }
 
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await fetch(`${window.domain}/cars/${id}/`, {
+        const res = await fetch(`${window.domain}cars/${id}/`, {
           method: "Get",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const EditCar = ({ hideModel, id }) => {
     driver,
     last_maintain,
     maintain_place,
-    car_counter,
+    counter,
     note,
   } = carData;
 
@@ -85,7 +85,7 @@ const EditCar = ({ hideModel, id }) => {
     "edit/car",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/cars/${id}/`, {
+        const res = await fetch(`${window.domain}cars/${id}/`, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -117,14 +117,16 @@ const EditCar = ({ hideModel, id }) => {
     "fetch/empolyees",
     async () => {
       try {
-        const res = await fetch(`${window.domain}/employees/select_list/`, {
+        const res = await fetch(`${window.domain}employees/select-driver/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        return await res.json();
+        const drivers = await res.json();
+        console.log(drivers);
+        return drivers;
       } catch (err) {
         console.log(err);
       }
@@ -152,9 +154,10 @@ const EditCar = ({ hideModel, id }) => {
             >
               <option hidden> السائق </option>
               {employeesName &&
-                employeesName.map((el) => {
+                employeesName.results &&
+                employeesName.results.employees.map((el) => {
                   return (
-                    <option value={el.pk} key={el.pk}>
+                    <option value={el._id} key={el._id}>
                       {el.name}
                     </option>
                   );
@@ -210,9 +213,9 @@ const EditCar = ({ hideModel, id }) => {
             placeholder="عداد السيارة"
             id="car_counter "
             type="text"
-            value={car_counter}
+            value={counter}
             onChange={(e) =>
-              setCarData({ ...carData, car_counter: e.target.value })
+              setCarData({ ...carData, counter: e.target.value })
             }
           />
           <textarea
@@ -221,10 +224,7 @@ const EditCar = ({ hideModel, id }) => {
             onChange={(e) => setCarData({ ...carData, note: e.target.value })}
           ></textarea>
 
-          <button disabled={!formIsValid} type="submit">
-            {" "}
-            تعديل{" "}
-          </button>
+          <button type="submit"> تعديل </button>
           <button onClick={() => hideModel()}> الغاء </button>
         </form>
       </div>

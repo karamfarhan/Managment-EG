@@ -9,15 +9,20 @@ import { getInstruments } from "../../store/create-instruments";
 import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
 import classes from "./CreateSubs.module.css";
 import CategoryForm from "../UI/add_category/CategoryForm";
+import { getCategories } from "../../store/category-slice";
+import Category from "./category/Category";
 
 const CreateSubs = () => {
   const [t, i18n] = useTranslation();
+  //create category
+  const [createCategory, setCreateCategory] = useState(false);
   //for add matters
   const [showModel, setShowModel] = useState(false);
   //for add instruments
   const [showInstrumentsForm, setShowInstrumentsForm] = useState(false);
   //show matters
   const [showMatters, setShowMatters] = useState(false);
+  const [substanceData, setSubstanceData] = useState([]);
   //show instruments
   const [showInstrumentsPage, setShowInstrumentsPage] = useState(false);
   //current page
@@ -26,9 +31,14 @@ const CreateSubs = () => {
   const [searchVal, setSearchVal] = useState("");
 
   const { token } = useSelector((state) => state.authReducer);
+  const { category } = useSelector((state) => state.categoryReducer);
   // const decoded = jwt_decode(token);
   // const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories(token));
+  }, []);
 
   //fetch matters
   useEffect(() => {
@@ -91,9 +101,13 @@ const CreateSubs = () => {
     setShowModel(false);
     setShowInstrumentsForm(false);
   };
+  console.log(substanceData);
+
   return (
     <Fragment>
-      <CategoryForm />
+      {createCategory && (
+        <CategoryForm hideModel={() => setCreateCategory(false)} />
+      )}
       {(showModel || showInstrumentsForm) && (
         <CreateSubsModel
           hideSubstancesHandler={hideSubstancesHandler}
@@ -106,6 +120,13 @@ const CreateSubs = () => {
       {/* المخزن الرئيسي*/}
 
       <div className={classes["main_inventory"]}></div>
+      <button
+        className={classes["create-category"]}
+        onClick={() => setCreateCategory(true)}
+      >
+        {" "}
+        {t("create_category")}
+      </button>
 
       <div className={classes.buttons}>
         <div className={classes.show}>
@@ -137,6 +158,20 @@ const CreateSubs = () => {
           </div>
         </div>
       </div>
+      {category &&
+        category.data &&
+        category.data.categories.map((category) => (
+          <>
+            <Category
+              key={category._id}
+              id={category._id}
+              categoryName={category.category_name}
+              categoryCode={category.category_code}
+              setSubstanceData={setSubstanceData}
+              substanceData={substanceData}
+            />
+          </>
+        ))}
 
       {showMatters && (
         <SubstancesView
@@ -144,6 +179,7 @@ const CreateSubs = () => {
           setCurrentPage={setCurrentPage}
           setSearchVal={setSearchVal}
           searchVal={searchVal}
+          substanceData={substanceData}
         />
       )}
       {showInstrumentsPage && (

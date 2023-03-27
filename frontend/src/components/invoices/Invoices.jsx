@@ -28,7 +28,7 @@ const Invoices = () => {
           }
         );
 
-        setStoreId(response.data.data.stores[0]._id);
+        setStoreId("all");
         setStores(response.data.data.stores);
         return await response.data;
       } catch (err) {}
@@ -38,6 +38,7 @@ const Invoices = () => {
   //get invoices
   const fetchInvoices = async () => {
     setIsLoading(true);
+    if (storeId === "all") return;
     try {
       const response = await axios.get(`${window.domain}stores/${storeId}`, {
         headers: {
@@ -53,11 +54,32 @@ const Invoices = () => {
     fetchInvoices();
   }, [storeId]);
 
+  //fetch all invoices
+  const fetchAllInvoices = async () => {
+    setIsLoading(true);
+    if (storeId !== "all") return;
+    try {
+      const response = await axios.get(`${window.domain}invoices/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setIsLoading(false);
+      const data = await response.data;
+      console.log(data);
+      setInvoices(data.data.invoices);
+    } catch (err) {}
+  };
+  useEffect(() => {
+    fetchAllInvoices();
+  }, [storeId]);
+
   //on change
   const storeChangeHandler = (e) => {
     setStoreId(e.target.value);
   };
 
+  console.log(invoices);
   return (
     <Fragment>
       {invoiceForm && (
@@ -71,10 +93,13 @@ const Invoices = () => {
       <div>
         <div className={styles.content}>
           <div>
-            {" "}
             {stores && stores.length > 0 && (
               <div>
                 <select onChange={storeChangeHandler} value={storeId}>
+                  <option value="all" selected>
+                    الكل
+                  </option>
+
                   {stores &&
                     stores.map((el) => (
                       <option value={el._id} key={el._id}>
@@ -88,7 +113,7 @@ const Invoices = () => {
               className={styles.createInvoice}
               onClick={() => setInvoiceForm(true)}
             >
-              طلب تحويل من المخزن الرئيسي
+              طلب تحويل
             </button>
           </div>
           {invoices && (
