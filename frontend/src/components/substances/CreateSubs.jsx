@@ -11,6 +11,7 @@ import classes from "./CreateSubs.module.css";
 import CategoryForm from "../UI/add_category/CategoryForm";
 import { getCategories } from "../../store/category-slice";
 import Category from "./category/Category";
+import axios from "axios";
 
 const CreateSubs = () => {
   const [t, i18n] = useTranslation();
@@ -29,7 +30,25 @@ const CreateSubs = () => {
   const [currentPage, setCurrentPage] = useState(1);
   //search value
   const [searchVal, setSearchVal] = useState("");
-
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(-1);
+  const handleClick = async (index, id) => {
+    setActiveIndex(index);
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${window.domain}category/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = response.data.data.category.substances.substances;
+      setSubstanceData(data);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
   const { token } = useSelector((state) => state.authReducer);
   const { category } = useSelector((state) => state.categoryReducer);
   // const decoded = jwt_decode(token);
@@ -101,7 +120,6 @@ const CreateSubs = () => {
     setShowModel(false);
     setShowInstrumentsForm(false);
   };
-  console.log(substanceData);
 
   return (
     <Fragment>
@@ -131,14 +149,6 @@ const CreateSubs = () => {
       <div className={classes.buttons}>
         <div className={classes.show}>
           <div>
-            <button
-              id="material"
-              type="button"
-              name="material"
-              onClick={fetchMatters}
-            >
-              {t("viewSubs")}
-            </button>
             <button type="button" onClick={() => setShowModel(true)}>
               {t("addSubstance")}
             </button>
@@ -160,15 +170,19 @@ const CreateSubs = () => {
       </div>
       {category &&
         category.data &&
-        category.data.categories.map((category) => (
+        category.data.categories.map((category, i) => (
           <>
             <Category
               key={category._id}
               id={category._id}
+              index={i}
+              activeIndex={activeIndex}
               categoryName={category.category_name}
               categoryCode={category.category_code}
+              isLoading={isLoading}
               setSubstanceData={setSubstanceData}
               substanceData={substanceData}
+              fetchSubstances={handleClick}
             />
           </>
         ))}

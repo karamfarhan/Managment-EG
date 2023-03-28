@@ -2,38 +2,37 @@ import axios from "axios";
 import styles from "./Category.module.css";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import SubstancesView from "../substances_view/SubstancesView";
 
-const Category = ({ categoryName, categoryCode, id }) => {
-  const [substanceData, setSubstanceData] = useState([]);
-  const [activeCategory, setActiveCategory] = useState(null);
-  const { token } = useSelector((state) => state.authReducer);
-
-  const fetchSubstances = async (id) => {
-    try {
-      const response = await axios.get(`${window.domain}category/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = response.data.data.categories.substances.substances;
-      setSubstanceData(data);
-      setActiveCategory(id);
-    } catch (err) {}
-    console.log(substanceData);
-  };
-
+const Category = ({
+  categoryName,
+  categoryCode,
+  id,
+  activeIndex,
+  substanceData,
+  fetchSubstances,
+  index,
+  isLoading,
+}) => {
   return (
     <div>
       <ul>
-        <li className={styles.tab} onClick={() => fetchSubstances(id)}>
-          <span> {categoryCode}# </span> <span>{categoryName}</span>
+        <li
+          id={id}
+          className={`${styles.tab}`}
+          onClick={() => fetchSubstances(index, id)}
+        >
+          <span>
+            {categoryCode}# {categoryName}
+          </span>
         </li>
-        {activeCategory === id &&
-          substanceData.map((substance) => (
-            <li key={substance._id} className={styles.substance}>
-              {substance.name}
-            </li>
-          ))}
+
+        {index === activeIndex && isLoading === false && (
+          <SubstancesView
+            substances={substanceData}
+            categoryCode={categoryCode}
+          />
+        )}
       </ul>
     </div>
   );

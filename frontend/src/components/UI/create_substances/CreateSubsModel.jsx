@@ -1,13 +1,14 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import axios from "axios";
 import Backdrop from "../backdrop/Backdrop";
 import Inputs from "../inputs/Inputs";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import classes from "./CreateSubsModel.module.css";
 import { createSubs } from "../../../store/create-substance";
 import { createInstruments } from "../../../store/create-instruments";
+import { useQuery } from "react-query";
 const CreateSubsModel = ({
   hideSubstancesHandler,
   showMattersForm,
@@ -15,30 +16,31 @@ const CreateSubsModel = ({
 }) => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
+  // const decoded = jwt_decode(token);
+  // const { is_superuser, permissions } = decoded;
   const [substancesData, setSubstancesData] = useState({
     name: "",
     categorty: "",
     quantity: 1,
-    description: "",
+    note: "",
     last_maintain: "",
     maintain_place: "",
+    code: "",
   });
 
-  const [selectType] = useState([
-    "كيلوجرام",
-    "لتر",
-    "طن",
-    "متر طولي",
-    "متر مربع",
-    "متر مكعب",
-    "دهان",
-    "شكارة 20",
-    "شكارة 25",
-    "شكارة 50",
-    "شكارة معجون",
-    "قطعة",
+  const [unit_type] = useState([
+    "KG",
+    "L",
+    "TON",
+    "M",
+    "M²",
+    "м³",
+    "Paint",
+    "Shakara 20",
+    "Shakara 25",
+    "Shakara 50",
+    "Shakara paste",
+    "piece",
   ]);
   const [selectBox, setSelectBox] = useState("");
 
@@ -64,22 +66,35 @@ const CreateSubsModel = ({
     }
   }
 
-  //authenticated function
-  function subsauth() {
-    if (is_superuser || permissions.includes("view_substance")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  //authenticated function
-  function instauth() {
-    if (is_superuser || permissions.includes("view_instrument")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  const { data: categories } = useQuery("category/data", async () => {
+    const resposne = await axios.get(`${window.domain}category/select_list`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await resposne.data.data.categories;
+    console.log(data);
+
+    return data;
+  });
+
+  // //authenticated function
+  // function subsauth() {
+  //   if (is_superuser || permissions.includes("view_substance")) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  // //authenticated function
+  // function instauth() {
+  //   if (is_superuser || permissions.includes("view_instrument")) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   //submit handler
   const submitHandler = (e) => {
@@ -94,7 +109,6 @@ const CreateSubsModel = ({
         quantity,
         description,
         token: token,
-        authenticated: subsauth(),
       };
 
       dispatch(createSubs(obj));
@@ -105,13 +119,12 @@ const CreateSubsModel = ({
         token: token,
         last_maintain,
         maintain_place,
-        authenticated: instauth(),
       };
       dispatch(createInstruments(obj));
     }
-    if (is_superuser || subsauth() || instauth()) {
-      navigate("/create_subs");
-    }
+
+    navigate("/create_subs");
+
     hideSubstancesHandler();
   };
 
@@ -135,7 +148,27 @@ const CreateSubsModel = ({
               setSubstancesData({ ...substancesData, name: e.target.value })
             }
           />
-
+          {showMattersForm && (
+            <div className={classes.selectType}>
+              <select
+                defaultValue={selectBox}
+                onChange={(e) => setSelectBox(e.target.value)}
+                required
+              >
+                <option hidden selected>
+                  التصنيف
+                </option>
+                {categories &&
+                  categories.map((value, i) => {
+                    return (
+                      <option value={value._id} key={value._id}>
+                        {value.category_name}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+          )}
           {showInstrumentsForm && (
             <div style={{ textAlign: "start" }}>
               <label>برجاء ادخال معاد اخر صيانة</label>
@@ -153,6 +186,7 @@ const CreateSubsModel = ({
               />
             </div>
           )}
+
           {showInstrumentsForm && (
             <Inputs
               type="text"
@@ -177,7 +211,7 @@ const CreateSubsModel = ({
                 <option hidden selected>
                   وحدة القياس
                 </option>
-                {selectType.map((value, i) => {
+                {unit_type.map((value, i) => {
                   return (
                     <option value={value} key={i}>
                       {value}

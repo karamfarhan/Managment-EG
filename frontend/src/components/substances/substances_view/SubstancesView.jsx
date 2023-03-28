@@ -1,16 +1,12 @@
 import { Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 import {
   deleteSubs,
   searchSubstances,
   subsSearchPagination,
 } from "../../../store/create-substance";
 import EditFormSubs from "../edit-form-substance/EditFormSubs";
-import { MdOutlineDeleteForever } from "react-icons/md";
-import { FiEdit } from "react-icons/fi";
-
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./SubstancesView.module.css";
 import Paginate from "../../UI/pagination/Paginate";
@@ -18,12 +14,16 @@ import Search from "../../UI/search/Search";
 import { subsPagination } from "../../../store/create-substance";
 import ExportExcel from "../../UI/export/ExportExcel";
 import LoadingSpinner from "../../UI/loading/LoadingSpinner";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 const SubstancesView = ({
   currentPage,
   setCurrentPage,
   searchVal,
   setSearchVal,
   substanceData,
+  substances,
+  categoryCode,
 }) => {
   const { data: subsData, isLoading } = useSelector(
     (state) => state.subsReducer
@@ -35,8 +35,8 @@ const SubstancesView = ({
 
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
+  // const decoded = jwt_decode(token);
+  // const { is_superuser, permissions } = decoded;
   const navigate = useNavigate();
 
   //pagination
@@ -89,6 +89,7 @@ const SubstancesView = ({
   const searchPagination = (obj) => {
     dispatch(subsSearchPagination(obj));
   };
+  console.log(categoryCode);
   return (
     <Fragment>
       {/*edit form*/}
@@ -137,57 +138,60 @@ const SubstancesView = ({
           {subsData && subsData.results && subsData.results.length === 0 && (
             <h2> No Substances are found</h2>
           )}
-          {substanceData && substanceData.length > 0 && isLoading === false && (
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Notes</th>
 
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {subsData &&
-                  subsData.results &&
-                  isLoading === false &&
-                  subsData.results.map((subs) => {
-                    return (
-                      <tr key={subs.id}>
-                        <td>{subs.name}</td>
-                        <td>
-                          {subs.quantity} {subs.unit_type}
-                        </td>
-                        <td>{subs.note}</td>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Notes</th>
 
-                        {/* <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td> */}
-                        {/* 
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {substances &&
+                isLoading === false &&
+                substances.map((substance, i) => (
+                  <tr key={substance._id}>
+                    <td>
+                      <span style={{ fontWeight: "bold", color: "red" }}>
+                        {" "}
+                        {categoryCode}{" "}
+                      </span>{" "}
+                      {substance.number} -- {substance.name}
+                    </td>
+                    <td>
+                      {substance.quantity} {substance.unit_type}
+                    </td>
+                    <td>{substance.note}</td>
+
+                    {/* <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td> */}
+                    {/* 
                         <td>
                           {new Date(subs.created_at).toLocaleDateString()}
                         </td> */}
 
-                        <td>
-                          <button
-                            className="deleteBtn"
-                            onClick={() => deleteModelHandler(subs.id)}
-                          >
-                            <MdOutlineDeleteForever />
-                          </button>
+                    <td>
+                      <button
+                        className="deleteBtn"
+                        onClick={() => deleteModelHandler(substance._id)}
+                      >
+                        <MdOutlineDeleteForever />
+                      </button>
 
-                          <button
-                            className="editBtn"
-                            onClick={() => editForm(subs.id)}
-                          >
-                            <FiEdit />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          )}
+                      <button
+                        className="editBtn"
+                        onClick={() => editForm(substance._id)}
+                      >
+                        <FiEdit />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+
           {subsCount > 10 && (
             <Paginate
               currentPage={currentPage}
