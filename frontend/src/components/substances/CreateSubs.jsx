@@ -59,13 +59,12 @@ const CreateSubs = () => {
     dispatch(getCategories(token));
   }, []);
 
-  //fetch matters
+  // //fetch matters
   useEffect(() => {
     if (
       showMatters === true &&
       showModel === false &&
       showInstrumentsPage === false &&
-      currentPage === 1 &&
       searchVal === ""
     ) {
       dispatch(getSubs(token));

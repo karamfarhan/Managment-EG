@@ -8,80 +8,82 @@ import classes from "./EditFormSubs.module.css";
 const EditFormSubs = ({ subsEl, setCurrentPage }) => {
   const params = useParams();
   const dispatch = useDispatch();
-  const elId = parseInt(params.edit);
+  const elId = params.edit;
   const { token } = useSelector((state) => state.authReducer);
+  const navigate = useNavigate();
 
   const selectedSubs =
-    subsEl && subsEl.results && subsEl.results.find((el) => el.id === elId);
-  if (selectedSubs === null) {
-    backHandler();
-  }
+    subsEl &&
+    subsEl.data &&
+    subsEl.data.substances.find((el) => el._id === elId);
+
+  console.log(selectedSubs);
+  // if (selectedSubs === null) {
+  //   backHandler();
+  // }
   //state
   const [subsData, setSubsData] = useState({
     name: selectedSubs.name,
-    quantity: selectedSubs.units,
-    description: selectedSubs.description,
+    quantity: selectedSubs.quantity,
+    note: selectedSubs.note,
     unit_type: selectedSubs.unit_type,
   });
 
-  const [selectType, setSelectType] = useState(selectedSubs.unit_type);
-  const [unitTypes, setUnitTypes] = useState([
-    "كيلوجرام",
-    "لتر",
-    "طن",
-    "متر طولي",
-    "متر مربع",
-    "متر مكعب",
-    "دهان",
-    "شكارة 20",
-    "شكارة 25",
-    "شكارة 50",
-    "شكارة معجون",
-    "قطعة",
+  // const [selectType, setSelectType] = useState(selectedSubs.unit_type);
+  const [unit_type] = useState([
+    "KG",
+    "L",
+    "TON",
+    "M",
+    "M²",
+    "м³",
+    "Paint",
+    "Shakara 20",
+    "Shakara 25",
+    "Shakara 50",
+    "Shakara paste",
+    "piece",
   ]);
   let nameVar = selectedSubs.email,
     descriptionVar = selectedSubs.description,
     quantityVar = selectedSubs.units,
     typeVar = selectedSubs.unit_type;
 
-  //validation form
+  // //validation form
   let formIsValid = false;
 
   if (
     (subsData.name.trim() !== "" &&
       (subsData.name !== selectedSubs.name ||
-        subsData.description !== selectedSubs.description ||
-        selectType !== subsData.unit_type)) ||
+        subsData.description !== selectedSubs.description)) ||
     quantityVar !== subsData.quantity
   ) {
     formIsValid = true;
   }
 
-  //navigate
-  const navigate = useNavigate();
-  //edit
+  // //navigate
+  // //edit
   const editSubs = async () => {
     const obj = {
       name: subsData.name,
-      description: subsData.description,
-      unit_type: selectType,
-      units: subsData.quantity,
+      note: subsData.note,
+      quantity: subsData.quantity,
     };
-    if (obj.name === nameVar) {
-      delete obj.name;
-    }
-    if (obj.description === descriptionVar) {
-      delete obj.description;
-    }
-    if (obj.quantity === quantityVar) {
-      delete obj.quantity;
-    }
-    if (obj.unit_type === typeVar) {
-      delete obj.unit_type;
-    }
+    // if (obj.name === nameVar) {
+    //   delete obj.name;
+    // }
+    // if (obj.description === descriptionVar) {
+    //   delete obj.description;
+    // }
+    // if (obj.quantity === quantityVar) {
+    //   delete obj.quantity;
+    // }
+    // if (obj.unit_type === typeVar) {
+    //   delete obj.unit_type;
+    // }
     console.log(obj);
     try {
-      const res = await fetch(`${window.domain}/substances/${elId}/`, {
+      const res = await fetch(`${window.domain}substance/${elId}/`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
@@ -96,14 +98,14 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
       console.log(err);
     }
   };
-  const currentPage = parseInt(sessionStorage.getItem("current-page"));
+  // const currentPage = parseInt(sessionStorage.getItem("current-page"));
 
-  //submit Handler
+  // //submit Handler
   const submitHandler = (e) => {
     e.preventDefault();
     if (formIsValid === false) return;
     editSubs();
-    setCurrentPage(1);
+    // setCurrentPage(1);
     navigate("/create_subs");
   };
   function backHandler() {
@@ -132,34 +134,15 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
               setSubsData({ ...subsData, quantity: e.target.value })
             }
           />
-          <div className={classes.selectType}>
-            <select
-              value={selectType}
-              onChange={(e) => setSelectType(e.target.value)}
-            >
-              {unitTypes.map((option, i) => {
-                return (
-                  <option key={i} value={option}>
-                    {" "}
-                    {option}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+
           <Inputs
             type="text"
             name="sub-description"
             placeholder="معلومات اضافية"
-            value={subsData.description}
-            onChange={(e) =>
-              setSubsData({ ...subsData, description: e.target.value })
-            }
+            value={subsData.note}
+            onChange={(e) => setSubsData({ ...subsData, note: e.target.value })}
           />
-          <button disabled={!formIsValid} type="submit">
-            {" "}
-            تعديل{" "}
-          </button>
+          <button type="submit"> تعديل </button>
           <button type="button" onClick={() => navigate("/create_subs")}>
             {" "}
             الغاء{" "}

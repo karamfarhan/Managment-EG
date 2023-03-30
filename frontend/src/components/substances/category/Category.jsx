@@ -1,7 +1,5 @@
-import axios from "axios";
 import styles from "./Category.module.css";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+
 import SubstancesView from "../substances_view/SubstancesView";
 
 const Category = ({

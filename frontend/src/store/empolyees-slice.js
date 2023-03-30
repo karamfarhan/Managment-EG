@@ -92,7 +92,7 @@ const empolyeeSlice = createSlice({
   name: "empolyee",
   initialState: {
     data: null,
-    isLoading: false,
+    isLoading: true,
   },
   reducers: {},
   extraReducers: {

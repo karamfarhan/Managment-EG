@@ -34,10 +34,10 @@ const Pages = () => {
         }
       />
       <Route element={<ProtectedRoutes />}>
-        {/* <Route
+        <Route
           path="/main"
           element={isAuth === true ? <HomePage /> : <AuthPage />}
-        /> */}
+        />
         <Route
           path="/staff/*"
           element={isAuth === true ? <StaffPage /> : <AuthPage />}

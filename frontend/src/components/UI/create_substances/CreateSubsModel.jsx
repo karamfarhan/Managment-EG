@@ -20,12 +20,12 @@ const CreateSubsModel = ({
   // const { is_superuser, permissions } = decoded;
   const [substancesData, setSubstancesData] = useState({
     name: "",
-    categorty: "",
+    category: "",
     quantity: 1,
     note: "",
     last_maintain: "",
     maintain_place: "",
-    code: "",
+    unitType: "",
   });
 
   const [unit_type] = useState([
@@ -45,14 +45,21 @@ const CreateSubsModel = ({
   const [selectBox, setSelectBox] = useState("");
 
   const dispatch = useDispatch();
-  const { name, quantity, description, last_maintain, maintain_place } =
-    substancesData;
+  const {
+    name,
+    quantity,
+    note,
+    last_maintain,
+    maintain_place,
+    unitType,
+    category,
+  } = substancesData;
 
   //form validation
   let formIsValid = false;
 
   if (showMattersForm) {
-    if (name.trim() !== "" && selectBox.trim() !== "") {
+    if (name.trim() !== "") {
       formIsValid = true;
     }
   }
@@ -105,17 +112,18 @@ const CreateSubsModel = ({
     if (showMattersForm === true) {
       const obj = {
         name,
-        unitType: selectBox,
+        unitType,
         quantity,
-        description,
+        note,
         token: token,
+        category,
       };
 
       dispatch(createSubs(obj));
     } else if (showInstrumentsForm === true) {
       const obj = {
         name,
-        description,
+        note,
         token: token,
         last_maintain,
         maintain_place,
@@ -127,7 +135,6 @@ const CreateSubsModel = ({
 
     hideSubstancesHandler();
   };
-
   return (
     <Fragment>
       <Backdrop hideModel={hideSubstancesHandler} />
@@ -151,8 +158,13 @@ const CreateSubsModel = ({
           {showMattersForm && (
             <div className={classes.selectType}>
               <select
-                defaultValue={selectBox}
-                onChange={(e) => setSelectBox(e.target.value)}
+                value={category}
+                onChange={(e) =>
+                  setSubstancesData({
+                    ...substancesData,
+                    category: e.target.value,
+                  })
+                }
                 required
               >
                 <option hidden selected>
@@ -204,8 +216,13 @@ const CreateSubsModel = ({
           {showMattersForm && (
             <div className={classes.selectType}>
               <select
-                defaultValue={selectBox}
-                onChange={(e) => setSelectBox(e.target.value)}
+                value={unitType}
+                onChange={(e) =>
+                  setSubstancesData({
+                    ...substancesData,
+                    unitType: e.target.value,
+                  })
+                }
                 required
               >
                 <option hidden selected>
@@ -240,11 +257,11 @@ const CreateSubsModel = ({
           <Inputs
             type="text"
             placeholder="الوصف"
-            value={description}
+            value={note}
             onChange={(e) =>
               setSubstancesData({
                 ...substancesData,
-                description: e.target.value,
+                note: e.target.value,
               })
             }
           />

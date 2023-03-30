@@ -21,13 +21,13 @@ const SubstancesView = ({
   setCurrentPage,
   searchVal,
   setSearchVal,
-  substanceData,
   substances,
   categoryCode,
 }) => {
   const { data: subsData, isLoading } = useSelector(
     (state) => state.subsReducer
   );
+  console.log(subsData);
   const [isDelete, setIsDelete] = useState(false);
   const [substanceId, setSubstanceId] = useState("");
 
@@ -116,7 +116,7 @@ const SubstancesView = ({
       )}
 
       <div>
-        {subsData && subsData.results.length > 0 && isLoading === false && (
+        {/* {subsData && subsData.results.length > 0 && isLoading === false && (
           <div
             style={{
               width: " 50%",
@@ -129,15 +129,15 @@ const SubstancesView = ({
               searchData={searchDispatch}
             />
           </div>
-        )}
+        )} */}
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
-          {subsData && !isLoading && subsData.results.length > 0 && (
+          {/* {subsData && !isLoading && subsData.results.length > 0 && (
             <ExportExcel matter="substances" />
           )}
           {subsData && subsData.results && subsData.results.length === 0 && (
             <h2> No Substances are found</h2>
-          )}
+          )} */}
 
           <table>
             <thead>
