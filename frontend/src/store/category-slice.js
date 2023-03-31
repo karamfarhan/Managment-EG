@@ -25,7 +25,6 @@ const categorySlice = createSlice({
     [getCategories.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.category = action.payload;
-      console.log(action.payload);
     },
     [getCategories.rejected]: (state) => {
       state.isLoading = false;

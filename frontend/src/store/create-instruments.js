@@ -5,7 +5,7 @@ export const createInstruments = createAsyncThunk(
   "create/instruments",
   async (arg, ThunkAPI) => {
     try {
-      const res = await fetch(`${window.domain}/instruments/`, {
+      const res = await fetch(`${window.domain}instrument/`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -34,7 +34,7 @@ export const getInstruments = createAsyncThunk(
   "get/instruments",
   async (arg) => {
     try {
-      const res = await fetch(`${window.domain}/instruments/`, {
+      const res = await fetch(`${window.domain}instrument/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${arg}`,
@@ -153,6 +153,7 @@ const instrumentsSlice = createSlice({
     },
     [getInstruments.fulfilled]: (state, action) => {
       state.data = action.payload;
+      state.isLoading = false;
     },
     [getInstruments.rejected]: (state) => {
       state.isLoading = false;

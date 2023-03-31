@@ -2,6 +2,15 @@
   overflow: auto;
   max-height: 450px;
 }
+.table_content ul {
+  background-color: #fff;
+}
+.table_content ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+}
 
 .table_content table thead {
   background-color: #114299;
@@ -10,6 +19,7 @@
 
 .table_content table tbody {
   font-size: 12px;
+  background-color: #908484;
 }
 
 .table_content table tbody tr:nth-child(even) {

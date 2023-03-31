@@ -65,8 +65,6 @@ const StaffForm = ({ setStaffForm }) => {
   if (
     steps === 1 &&
     name.trim() !== "" &&
- 
-   
     insurance !== "" &&
     job.trim() !== "" &&
     category.trim() !== ""
@@ -126,7 +124,7 @@ const StaffForm = ({ setStaffForm }) => {
 
     sendEmpolyeeData();
   };
-console.log(stores)
+  console.log(stores);
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <h3> برجاء ادخال بيانات الموظف </h3>

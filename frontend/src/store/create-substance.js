@@ -40,7 +40,9 @@ export const getSubs = createAsyncThunk("get/subs", async (arg) => {
       },
     });
 
-    return await res.json();
+    const results = await res.json();
+    console.log(results);
+    return results;
   } catch (err) {
     console.log(err);
   }
@@ -130,7 +132,7 @@ export const subsSearchPagination = createAsyncThunk(
 const createSubSlice = createSlice({
   name: "substances",
   initialState: {
-    data: null,
+    data: [],
     isLoading: false,
   },
 
@@ -141,6 +143,7 @@ const createSubSlice = createSlice({
     [getSubs.fulfilled]: (state, action) => {
       state.data = action.payload;
       state.isLoading = false;
+      console.log(action.payload);
     },
     [getSubs.rejected]: (state, action) => {
       state.isLoading = false;

@@ -1,13 +1,11 @@
 import { useState, Fragment } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getSubs } from "../../../store/create-substance";
+import { useSelector } from "react-redux";
 import Backdrop from "../../UI/backdrop/Backdrop";
 import Inputs from "../../UI/inputs/Inputs";
 import classes from "./EditFormSubs.module.css";
-const EditFormSubs = ({ subsEl, setCurrentPage }) => {
+const EditFormSubs = ({ subsEl }) => {
   const params = useParams();
-  const dispatch = useDispatch();
   const elId = params.edit;
   const { token } = useSelector((state) => state.authReducer);
   const navigate = useNavigate();
@@ -17,16 +15,14 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
     subsEl.data &&
     subsEl.data.substances.find((el) => el._id === elId);
 
-  console.log(selectedSubs);
-  // if (selectedSubs === null) {
-  //   backHandler();
-  // }
   //state
   const [subsData, setSubsData] = useState({
-    name: selectedSubs.name,
-    quantity: selectedSubs.quantity,
-    note: selectedSubs.note,
-    unit_type: selectedSubs.unit_type,
+    name: selectedSubs && selectedSubs.name ? selectedSubs.name : "",
+    quantity:
+      selectedSubs && selectedSubs.quantity ? selectedSubs.quantity : "",
+    note: selectedSubs && selectedSubs.note ? selectedSubs.note : "",
+    unit_type:
+      selectedSubs && selectedSubs.unit_type ? selectedSubs.unit_type : "",
   });
 
   // const [selectType, setSelectType] = useState(selectedSubs.unit_type);
@@ -44,10 +40,10 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
     "Shakara paste",
     "piece",
   ]);
-  let nameVar = selectedSubs.email,
-    descriptionVar = selectedSubs.description,
-    quantityVar = selectedSubs.units,
-    typeVar = selectedSubs.unit_type;
+  let nameVar = selectedSubs && selectedSubs.email,
+    descriptionVar = selectedSubs && selectedSubs.description,
+    quantityVar = selectedSubs && selectedSubs.units,
+    typeVar = selectedSubs && selectedSubs.unit_type;
 
   // //validation form
   let formIsValid = false;
@@ -91,8 +87,6 @@ const EditFormSubs = ({ subsEl, setCurrentPage }) => {
         },
         body: JSON.stringify(obj),
       });
-      dispatch(getSubs(token));
-      //setCurrentPage(2);
       return await res.json();
     } catch (err) {
       console.log(err);

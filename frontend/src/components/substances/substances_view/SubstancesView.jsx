@@ -10,12 +10,11 @@ import EditFormSubs from "../edit-form-substance/EditFormSubs";
 import DeleteConfirmation from "../../UI/delete_confirmation/DeleteConfirmation";
 import classes from "./SubstancesView.module.css";
 import Paginate from "../../UI/pagination/Paginate";
-import Search from "../../UI/search/Search";
 import { subsPagination } from "../../../store/create-substance";
-import ExportExcel from "../../UI/export/ExportExcel";
 import LoadingSpinner from "../../UI/loading/LoadingSpinner";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 const SubstancesView = ({
   currentPage,
   setCurrentPage,
@@ -23,14 +22,14 @@ const SubstancesView = ({
   setSearchVal,
   substances,
   categoryCode,
+  fetchSubstance,
 }) => {
   const { data: subsData, isLoading } = useSelector(
     (state) => state.subsReducer
   );
-  console.log(subsData);
   const [isDelete, setIsDelete] = useState(false);
   const [substanceId, setSubstanceId] = useState("");
-
+  const [t, i18] = useTranslation();
   //search value
 
   const dispatch = useDispatch();
@@ -40,7 +39,8 @@ const SubstancesView = ({
   const navigate = useNavigate();
 
   //pagination
-  const subsCount = subsData && subsData.count;
+  const subsCount = 12;
+  console.log(subsData);
   //delete handler
   const deleteHandler = (id) => {
     const obj = {
@@ -89,7 +89,8 @@ const SubstancesView = ({
   const searchPagination = (obj) => {
     dispatch(subsSearchPagination(obj));
   };
-  console.log(categoryCode);
+  console.log(subsData);
+  console.log(2);
   return (
     <Fragment>
       {/*edit form*/}
@@ -102,6 +103,7 @@ const SubstancesView = ({
               subsEl={subsData}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
+              fetchSubstance={fetchSubstance}
             />
           }
         />
@@ -116,35 +118,14 @@ const SubstancesView = ({
       )}
 
       <div>
-        {/* {subsData && subsData.results.length > 0 && isLoading === false && (
-          <div
-            style={{
-              width: " 50%",
-              margin: "20px auto",
-            }}
-          >
-            <Search
-              onChange={searchHandler}
-              value={searchVal}
-              searchData={searchDispatch}
-            />
-          </div>
-        )} */}
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
-          {/* {subsData && !isLoading && subsData.results.length > 0 && (
-            <ExportExcel matter="substances" />
-          )}
-          {subsData && subsData.results && subsData.results.length === 0 && (
-            <h2> No Substances are found</h2>
-          )} */}
-
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Notes</th>
+                <th> {t("name")} </th>
+                <th>{t("quantity")}</th>
+                <th>{t("notes")}</th>
 
                 <th>Action</th>
               </tr>
@@ -166,24 +147,16 @@ const SubstancesView = ({
                     </td>
                     <td>{substance.note}</td>
 
-                    {/* <td>{subs.is_available ? "متوافر" : "غير متوافر"}</td> */}
-                    {/* 
-                        <td>
-                          {new Date(subs.created_at).toLocaleDateString()}
-                        </td> */}
-
                     <td>
                       <button
                         className="deleteBtn"
-                        onClick={() => deleteModelHandler(substance._id)}
-                      >
+                        onClick={() => deleteModelHandler(substance._id)}>
                         <MdOutlineDeleteForever />
                       </button>
 
                       <button
                         className="editBtn"
-                        onClick={() => editForm(substance._id)}
-                      >
+                        onClick={() => editForm(substance._id)}>
                         <FiEdit />
                       </button>
                     </td>

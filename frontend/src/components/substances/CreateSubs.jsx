@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import SubstancesView from "./substances_view/SubstancesView";
 
-import { getSubs } from "../../store/create-substance";
 import InstrumentsView from "./instruments_view/InstrumentsView";
 import { getInstruments } from "../../store/create-instruments";
 import CreateSubsModel from "../UI/create_substances/CreateSubsModel";
@@ -32,7 +31,11 @@ const CreateSubs = () => {
   const [searchVal, setSearchVal] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(-1);
+
+  const [showAccordion, setShowAccordion] = useState(false);
   const handleClick = async (index, id) => {
+    setShowAccordion((curState) => !curState);
+    if (showAccordion === true) return;
     setActiveIndex(index);
     setIsLoading(true);
     try {
@@ -56,30 +59,10 @@ const CreateSubs = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCategories(token));
-  }, []);
-
-  // //fetch matters
-  useEffect(() => {
-    if (
-      showMatters === true &&
-      showModel === false &&
-      showInstrumentsPage === false &&
-      searchVal === ""
-    ) {
-      dispatch(getSubs(token));
+    if (showMatters) {
+      dispatch(getCategories(token));
     }
-    //fetch instruments
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    currentPage,
-    dispatch,
-    showMatters,
-    searchVal,
-    showInstrumentsPage,
-    showModel,
-  ]);
+  }, [showMatters]);
 
   useEffect(() => {
     if (
@@ -139,8 +122,7 @@ const CreateSubs = () => {
       <div className={classes["main_inventory"]}></div>
       <button
         className={classes["create-category"]}
-        onClick={() => setCreateCategory(true)}
-      >
+        onClick={() => setCreateCategory(true)}>
         {" "}
         {t("create_category")}
       </button>
@@ -151,16 +133,23 @@ const CreateSubs = () => {
             <button type="button" onClick={() => setShowModel(true)}>
               {t("addSubstance")}
             </button>
+            <button
+              id="substances"
+              type="button"
+              name="substances"
+              onClick={fetchMatters}>
+              {t("viewSubs")}
+            </button>
           </div>
           <div>
             <button
               id="instruments"
               type="button"
               name="instruments"
-              onClick={fetchInstruments}
-            >
+              onClick={fetchInstruments}>
               {t("viewInst")}
             </button>
+
             <button type="button" onClick={() => setShowInstrumentsForm(true)}>
               {t("addInstruments")}
             </button>
@@ -168,33 +157,25 @@ const CreateSubs = () => {
         </div>
       </div>
       {category &&
+        showMatters === true &&
         category.data &&
         category.data.categories.map((category, i) => (
-          <>
-            <Category
-              key={category._id}
-              id={category._id}
-              index={i}
-              activeIndex={activeIndex}
-              categoryName={category.category_name}
-              categoryCode={category.category_code}
-              isLoading={isLoading}
-              setSubstanceData={setSubstanceData}
-              substanceData={substanceData}
-              fetchSubstances={handleClick}
-            />
-          </>
+          <Category
+            key={category._id}
+            id={category._id}
+            index={i}
+            activeIndex={activeIndex}
+            categoryName={category.category_name}
+            categoryCode={category.category_code}
+            isLoading={isLoading}
+            setSubstanceData={setSubstanceData}
+            substanceData={substanceData}
+            fetchSubstances={handleClick}
+            showAccordion={showAccordion}
+            showMatters={showMatters}
+          />
         ))}
 
-      {showMatters && (
-        <SubstancesView
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          setSearchVal={setSearchVal}
-          searchVal={searchVal}
-          substanceData={substanceData}
-        />
-      )}
       {showInstrumentsPage && (
         <InstrumentsView
           currentPage={currentPage}

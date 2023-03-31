@@ -25,8 +25,6 @@ const InstrumentsView = ({
 }) => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.authReducer);
-  const decoded = jwt_decode(token);
-  const { is_superuser, permissions } = decoded;
   const dispatch = useDispatch();
   const [isDelete, setIsDelete] = useState(false);
   const [instrumentId, setInstrumentId] = useState("");
@@ -34,6 +32,8 @@ const InstrumentsView = ({
   const { data: instrumentsData, isLoading } = useSelector(
     (state) => state.instrumentsReducer
   );
+
+  console.log(instrumentsData);
   //pagination
   const instrumentsCount = instrumentsData && instrumentsData.count;
 
@@ -90,13 +90,12 @@ const InstrumentsView = ({
         />
       )}
       <div>
-        {instrumentsData && instrumentsData.results.length > 0 && (
+        {instrumentsData && instrumentsData.data.instruments > 0 && (
           <div
             style={{
               width: " 50%",
               margin: "20px auto",
-            }}
-          >
+            }}>
             <Search
               onChange={(e) => setSearchVal(e.target.value)}
               value={searchVal}
@@ -107,7 +106,7 @@ const InstrumentsView = ({
         {isLoading && <LoadingSpinner />}
         <div className={classes["table_content"]}>
           {instrumentsData &&
-            instrumentsData.results.length === 0 &&
+            instrumentsData.data.instruments === 0 &&
             !isLoading && <h2> لا يوجد أجهزة </h2>}
 
           <Routes>
@@ -123,7 +122,7 @@ const InstrumentsView = ({
           </Routes>
 
           {instrumentsData &&
-            instrumentsData.results.length > 0 &&
+            instrumentsData.data.instruments.length > 0 &&
             !isLoading && (
               <div className={classes["table-content"]}>
                 <ExportExcel matter="instruments" />
@@ -133,65 +132,64 @@ const InstrumentsView = ({
                       <th>Name </th>
                       <th>Last Maintainance</th>
                       <th>Maintainance Place </th>
-                      <th>Available</th>
-                      <th>Status</th>
-                      <th>Created At </th>
+                      {/* <th>Available</th> */}
+                      {/* <th>Status</th> */}
+                      {/* <th>Created At </th> */}
                       <th>Notes </th>
                       <th>Actons</th>
                     </tr>
                   </thead>
                   <tbody>
                     {instrumentsData &&
-                      instrumentsData.results &&
-                      instrumentsData.results.map((insruments) => {
+                      instrumentsData.data &&
+                      instrumentsData.data.instruments.map((insruments) => {
                         return (
-                          <tr key={insruments.id}>
+                          <tr key={insruments._id}>
                             <td>{insruments.name}</td>
-                            <td>{insruments.last_maintain}</td>
-                            <td>{insruments.maintain_place}</td>
-                            <td
+                            <td>
+                              {insruments.last_maintainace
+                                ? new Date(
+                                    insruments.last_maintainace
+                                  ).toLocaleDateString()
+                                : ""}
+                            </td>
+                            <td>{insruments.place_of_maintainer}</td>
+                            <td>{insruments.notes}</td>
+                            {/* <td
                               style={{
                                 color:
                                   insruments.in_action === false
                                     ? "green"
                                     : "red",
-                              }}
-                            >
+                              }}>
                               {insruments.in_action === false
                                 ? "متواجدة"
                                 : "خارج المخزن"}
-                            </td>
+                            </td> */}
 
-                            <td>{insruments.is_working ? "تعمل" : "معطلة"}</td>
-                            <td>
+                            {/* <td>{insruments.is_working ? "تعمل" : "معطلة"}</td> */}
+                            {/* <td>
                               {new Date(
                                 insruments.created_at
                               ).toLocaleDateString()}
-                            </td>
-                            <td>{insruments.description}</td>
+                            </td> */}
+                            {/* <td>{insruments.description}</td> */}
                             <td>
-                              {(is_superuser ||
-                                permissions.includes("delete_instrument")) && (
-                                <button
-                                  className="deleteBtn"
-                                  onClick={() =>
-                                    deleteModelHandler(insruments.id)
-                                  }
-                                >
-                                  <MdOutlineDeleteForever />
-                                </button>
-                              )}
-                              {(is_superuser ||
-                                permissions.includes("change_instrument")) && (
-                                <button
-                                  className="editBtn"
-                                  onClick={() =>
-                                    editInstrumentsForm(insruments.id)
-                                  }
-                                >
-                                  <FiEdit />
-                                </button>
-                              )}
+                              <button
+                                className="deleteBtn"
+                                onClick={() =>
+                                  deleteModelHandler(insruments.id)
+                                }>
+                                <MdOutlineDeleteForever />
+                              </button>
+
+                              <button
+                                className="editBtn"
+                                onClick={() =>
+                                  editInstrumentsForm(insruments.id)
+                                }>
+                                <FiEdit />
+                              </button>
                             </td>
                           </tr>
                         );
