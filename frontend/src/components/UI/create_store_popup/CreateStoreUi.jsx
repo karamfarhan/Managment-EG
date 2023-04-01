@@ -15,7 +15,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   const [storeData, setStoreData] = useState({
     name: "",
     address: "",
-    description: "",
+    notes: "",
   });
   const { token } = useSelector((state) => state.authReducer);
   // const decoded = jwt_decode(token);
@@ -24,7 +24,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
   // const getSoresPremission = ["change_store", "view_store", "delete_store"];
 
   const dispatch = useDispatch();
-  const { name, address, description } = storeData;
+  const { name, address, notes } = storeData;
   //form validation
   let formIsValid = false;
 
@@ -53,6 +53,7 @@ export const InventoryCreator = ({ hideFormHandler }) => {
       token: token,
       name,
       address,
+      notes,
       // description,
       // authenticated: auth(),
     };
@@ -92,9 +93,9 @@ export const InventoryCreator = ({ hideFormHandler }) => {
             <Inputs
               type="text"
               placeholder="Notes"
-              value={storeData.description}
+              value={storeData.notes}
               onChange={(e) =>
-                setStoreData({ ...storeData, description: e.target.value })
+                setStoreData({ ...storeData, notes: e.target.value })
               }
             />
           </div>

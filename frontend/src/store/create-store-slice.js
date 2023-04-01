@@ -35,7 +35,7 @@ export const createStore = createAsyncThunk(
         body: JSON.stringify({
           store_name: arg.name,
           store_address: arg.address,
-          // description: arg.description,
+          notes: arg.notes,
         }),
       });
       if (!res.ok) {

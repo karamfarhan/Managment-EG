@@ -66,11 +66,11 @@ const StoreDetail = () => {
                 className={projects === true ? classes.active : ""}>
                 المشروعات
               </li> */}
-              <li
+              {/* <li
                 onClick={() => setSections({ invoices: true })}
                 className={invoices === true ? classes.active : ""}>
                 التحويلات
-              </li>
+              </li> */}
               <li
                 onClick={() => setSections({ employees: true })}
                 className={store_employee === true ? classes.active : ""}>
@@ -83,7 +83,7 @@ const StoreDetail = () => {
           {sections.employees === true && (
             <div>
               {" "}
-              <StoreEmployee data={data} />
+              <StoreEmployee data={data} storeId={storeId} />
             </div>
           )}
           {/* 
@@ -94,12 +94,6 @@ const StoreDetail = () => {
             </div>
           )} */}
           {/* invoices */}
-
-          {invoices === true && isLoading === false && isLoading !== null && (
-            <div>
-              <StoreInvoices data={data} invoices={data.invoices} />{" "}
-            </div>
-          )}
 
           {/* <div>{sections.invoices === true && <StoreInvoices data={data} />}</div> */}
 

@@ -28,7 +28,7 @@ const Invoices = () => {
           }
         );
 
-        setStoreId("all");
+        // setStoreId("all");
         setStores(response.data.data.stores);
         return await response.data;
       } catch (err) {}
@@ -57,7 +57,8 @@ const Invoices = () => {
   //fetch all invoices
   const fetchAllInvoices = async () => {
     setIsLoading(true);
-    if (storeId !== "all") return;
+
+    if (storeId !== "" && storeId !== "all") return;
     try {
       const response = await axios.get(`${window.domain}invoices/`, {
         headers: {
@@ -78,8 +79,7 @@ const Invoices = () => {
   const storeChangeHandler = (e) => {
     setStoreId(e.target.value);
   };
-
-  console.log(invoices);
+  console.log(storeId);
   return (
     <Fragment>
       {invoiceForm && (
@@ -95,7 +95,7 @@ const Invoices = () => {
           <div>
             {stores && stores.length > 0 && (
               <div>
-                <select onChange={storeChangeHandler} value={storeId}>
+                <select onChange={storeChangeHandler} defaultValue={storeId}>
                   <option value="all" selected>
                     الكل
                   </option>
@@ -109,12 +109,13 @@ const Invoices = () => {
                 </select>
               </div>
             )}
-            <button
-              className={styles.createInvoice}
-              onClick={() => setInvoiceForm(true)}
-            >
-              طلب تحويل
-            </button>
+            {storeId !== "all" && storeId !== "" && (
+              <button
+                className={styles.createInvoice}
+                onClick={() => setInvoiceForm(true)}>
+                طلب تحويل
+              </button>
+            )}
           </div>
           {invoices && (
             <table>
@@ -141,8 +142,7 @@ const Invoices = () => {
                       <td>
                         <Link
                           className={styles.btn}
-                          to={`/store/${storeId}/${invoice._id}`}
-                        >
+                          to={`/store/${storeId}/${invoice._id}`}>
                           {t("actions")}
                         </Link>
                       </td>

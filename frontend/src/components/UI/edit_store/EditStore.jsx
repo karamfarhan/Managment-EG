@@ -9,14 +9,13 @@ const EditStore = ({ id, hideFormHandler, showForm }) => {
   const [storeData, setStoreData] = useState({
     name: "",
     address: "",
-    description: "",
+    notes: "",
   });
   const { token } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   //store data
   //form validation
   let formIsValid = false;
-  console.log(showForm);
   if (storeData.address.trim() !== "" && storeData.name.trim() !== "") {
     formIsValid = true;
   }
@@ -32,11 +31,11 @@ const EditStore = ({ id, hideFormHandler, showForm }) => {
           throw new Error(res.statusText);
         }
         const data = await res.json();
-
+        console.log(data);
         setStoreData({
-          name: data.name,
-          address: data.address,
-          description: data.description,
+          name: data.data.store.store_name,
+          address: data.data.store.store_address,
+          notes: data.data.store.notes,
         });
       } catch (err) {
         console.error(err);
@@ -54,9 +53,9 @@ const EditStore = ({ id, hideFormHandler, showForm }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name: storeData.name,
-          address: storeData.address,
-          description: storeData.description,
+          store_name: storeData.name,
+          store_address: storeData.address,
+          notes: storeData.notes,
         }),
       });
       if (!res.ok) {
@@ -102,9 +101,9 @@ const EditStore = ({ id, hideFormHandler, showForm }) => {
             <Inputs
               type="text"
               placeholder=" معلومات اضافية (وصف - ملاحظات- الخ..)"
-              value={storeData.description}
+              value={storeData.notes}
               onChange={(e) =>
-                setStoreData({ ...storeData, description: e.target.value })
+                setStoreData({ ...storeData, notes: e.target.value })
               }
             />
           </div>

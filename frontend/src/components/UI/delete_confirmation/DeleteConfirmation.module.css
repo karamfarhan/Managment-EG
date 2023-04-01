@@ -12,6 +12,9 @@
   z-index: 111;
 }
 
+.confirmation p {
+  color: #000 !important;
+}
 .actions {
   display: flex;
   justify-content: center;

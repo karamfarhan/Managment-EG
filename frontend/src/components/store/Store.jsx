@@ -224,8 +224,8 @@ const Store = () => {
                   <th>{t("storeName")}</th>
                   <th>{t("storeAddress")}</th>
                   {/* <th>انشيء عن طريق</th> */}
-                  <th> {t("createdAt")} </th>
-                  <th>{t("note")} </th>
+                  {/* <th> {t("createdAt")} </th> */}
+                  <th>{t("notes")} </th>
                   <th>{t("actions")}</th>
                 </tr>
               </thead>
@@ -243,8 +243,8 @@ const Store = () => {
                         </td>
                         <td> {store.store_address} </td>
                         {/* <td> {store.created_by} </td> */}
-                        <td>{new Date(store.created_at).toDateString()} </td>
-                        <td> {store.description} </td>
+                        {/* <td>{new Date(store.created_at).toDateString()} </td> */}
+                        <td> {store.notes} </td>
                         <td>
                           {/* <button
                             className={classes.editBtn}

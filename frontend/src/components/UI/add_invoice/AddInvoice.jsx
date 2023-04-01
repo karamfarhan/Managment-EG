@@ -119,6 +119,8 @@ const AddInvoice = ({ hideModel, fetchInvoices, storeId }) => {
           },
           body: JSON.stringify(invoiceObj),
         });
+        console.log(storeId);
+
         if (res.ok) {
           fetchInvoices();
           hideModel();
@@ -191,15 +193,13 @@ const AddInvoice = ({ hideModel, fetchInvoices, storeId }) => {
         <button
           style={{ backgroundColor: "rgb(233, 30, 99)" }}
           type="button"
-          onClick={instrumentsFiled}
-        >
+          onClick={instrumentsFiled}>
           <BsPlusLg /> اضافة المزيد
         </button>
         <div className={classes.note} dir="rtl">
           <textarea
             placeholder="ملاحظة عامة"
-            onChange={(e) => setNote(e.target.value)}
-          ></textarea>
+            onChange={(e) => setNote(e.target.value)}></textarea>
         </div>
         <button disabled={!formIsValid} type="submit">
           {" "}
