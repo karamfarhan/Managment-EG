@@ -16,6 +16,7 @@
 **Note**: You need to have the desktop Docker app, download it from https://docs.docker.com/get-docker/
 
 
+![Alt Text](/assets/all.png)
 ![Alt Text](/assets/p1.png)
 ![Alt Text](/assets/p2.png)
 ![Alt Text](/assets/p3.png)
